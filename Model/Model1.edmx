@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="QuanLyTiecCuoiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="QuanLyTiecCuoiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BAOCAODS">
           <Key>
             <PropertyRef Name="Thang" />
@@ -107,6 +107,7 @@
           </Key>
           <Property Name="MaNhom" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="MaChucNang" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CRUD" Type="varchar" MaxLength="4" />
         </EntityType>
         <EntityType Name="PHIEUDATTIEC">
           <Key>
@@ -356,11 +357,70 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <End Role="THUCDON" EntitySet="THUCDON" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QuanLyTiecCuoiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="QuanLyTiecCuoiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BAOCAODS" EntityType="QuanLyTiecCuoiModel.BAOCAOD" />
+          <EntitySet Name="CAs" EntityType="QuanLyTiecCuoiModel.CA" />
+          <EntitySet Name="CHITIETDVs" EntityType="QuanLyTiecCuoiModel.CHITIETDV" />
+          <EntitySet Name="CHUCNANGs" EntityType="QuanLyTiecCuoiModel.CHUCNANG" />
+          <EntitySet Name="CTBAOCAODS" EntityType="QuanLyTiecCuoiModel.CTBAOCAOD" />
+          <EntitySet Name="DICHVUs" EntityType="QuanLyTiecCuoiModel.DICHVU" />
+          <EntitySet Name="LOAISANHs" EntityType="QuanLyTiecCuoiModel.LOAISANH" />
+          <EntitySet Name="MONANs" EntityType="QuanLyTiecCuoiModel.MONAN" />
+          <EntitySet Name="NGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NGUOIDUNG" />
+          <EntitySet Name="NHOMNGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" />
+          <EntitySet Name="PHANQUYENs" EntityType="QuanLyTiecCuoiModel.PHANQUYEN" />
+          <EntitySet Name="PHIEUDATTIECs" EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" />
+          <EntitySet Name="SANHs" EntityType="QuanLyTiecCuoiModel.SANH" />
+          <EntitySet Name="THUCDONs" EntityType="QuanLyTiecCuoiModel.THUCDON" />
+          <AssociationSet Name="FK__CTBAOCAODS__4F7CD00D" Association="QuanLyTiecCuoiModel.FK__CTBAOCAODS__4F7CD00D">
+            <End Role="BAOCAOD" EntitySet="BAOCAODS" />
+            <End Role="CTBAOCAOD" EntitySet="CTBAOCAODS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PHIEUDATTI__MaCa__3E52440B" Association="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__3E52440B">
+            <End Role="CA" EntitySet="CAs" />
+            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CHITIETDV__MaDic__4AB81AF0" Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4AB81AF0">
+            <End Role="DICHVU" EntitySet="DICHVUs" />
+            <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CHITIETDV__MaPhi__49C3F6B7" Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__49C3F6B7">
+            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
+            <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PHANQUYEN__MaChu__5812160E" Association="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaChu__5812160E">
+            <End Role="CHUCNANG" EntitySet="CHUCNANGs" />
+            <End Role="PHANQUYEN" EntitySet="PHANQUYENs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SANH__MaLoaiSanh__398D8EEE" Association="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE">
+            <End Role="LOAISANH" EntitySet="LOAISANHs" />
+            <End Role="SANH" EntitySet="SANHs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__THUCDON__MaMonAn__44FF419A" Association="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__44FF419A">
+            <End Role="MONAN" EntitySet="MONANs" />
+            <End Role="THUCDON" EntitySet="THUCDONs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NGUOIDUNG__MaNho__5BE2A6F2" Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2">
+            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
+            <End Role="NGUOIDUNG" EntitySet="NGUOIDUNGs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PHANQUYEN__MaNho__571DF1D5" Association="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaNho__571DF1D5">
+            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
+            <End Role="PHANQUYEN" EntitySet="PHANQUYENs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PHIEUDATT__MaSan__3F466844" Association="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__3F466844">
+            <End Role="SANH" EntitySet="SANHs" />
+            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__THUCDON__MaPhieu__440B1D61" Association="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__440B1D61">
+            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
+            <End Role="THUCDON" EntitySet="THUCDONs" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="BAOCAOD">
           <Key>
             <PropertyRef Name="Thang" />
@@ -369,7 +429,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="Thang" Type="Int32" Nullable="false" />
           <Property Name="Nam" Type="Int32" Nullable="false" />
           <Property Name="TongDoanhThu" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="CTBAOCAODS" Relationship="Self.FK__CTBAOCAODS__4F7CD00D" FromRole="BAOCAODS" ToRole="CTBAOCAODS" />
+          <NavigationProperty Name="CTBAOCAODS" Relationship="QuanLyTiecCuoiModel.FK__CTBAOCAODS__4F7CD00D" FromRole="BAOCAOD" ToRole="CTBAOCAOD" />
         </EntityType>
         <EntityType Name="CA">
           <Key>
@@ -379,30 +439,30 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="TenCa" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="ThoiGianBatDauCa" Type="Time" Precision="7" />
           <Property Name="ThoiGianKetThucCa" Type="Time" Precision="7" />
-          <NavigationProperty Name="PHIEUDATTIECs" Relationship="Self.FK__PHIEUDATTI__MaCa__3E52440B" FromRole="CA" ToRole="PHIEUDATTIEC" />
+          <NavigationProperty Name="PHIEUDATTIECs" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__3E52440B" FromRole="CA" ToRole="PHIEUDATTIEC" />
         </EntityType>
         <EntityType Name="CHITIETDV">
           <Key>
             <PropertyRef Name="MaPhieuDat" />
             <PropertyRef Name="MaDichVu" />
           </Key>
-          <Property Name="MaPhieuDat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaDichVu" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaPhieuDat" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaDichVu" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ThanhTien" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DICHVU" Relationship="Self.FK__CHITIETDV__MaDic__4AB81AF0" FromRole="CHITIETDV" ToRole="DICHVU" />
-          <NavigationProperty Name="PHIEUDATTIEC" Relationship="Self.FK__CHITIETDV__MaPhi__49C3F6B7" FromRole="CHITIETDV" ToRole="PHIEUDATTIEC" />
+          <NavigationProperty Name="DICHVU" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4AB81AF0" FromRole="CHITIETDV" ToRole="DICHVU" />
+          <NavigationProperty Name="PHIEUDATTIEC" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__49C3F6B7" FromRole="CHITIETDV" ToRole="PHIEUDATTIEC" />
         </EntityType>
         <EntityType Name="CHUCNANG">
           <Key>
             <PropertyRef Name="MaChucNang" />
           </Key>
-          <Property Name="MaChucNang" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaChucNang" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenChucNang" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="TenManHinhDuocLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="NHOMNGUOIDUNGs" Relationship="Self.PHANQUYEN" FromRole="CHUCNANG" ToRole="NHOMNGUOIDUNG" />
+          <NavigationProperty Name="PHANQUYENs" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaChu__5812160E" FromRole="CHUCNANG" ToRole="PHANQUYEN" />
         </EntityType>
         <EntityType Name="CTBAOCAOD">
           <Key>
@@ -416,63 +476,74 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="SoLuongTiec" Type="Int32" />
           <Property Name="DoanhThu" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TiLe" Type="Decimal" Precision="5" Scale="2" />
-          <NavigationProperty Name="BAOCAOD" Relationship="Self.FK__CTBAOCAODS__4F7CD00D" FromRole="CTBAOCAODS" ToRole="BAOCAODS" />
+          <NavigationProperty Name="BAOCAOD" Relationship="QuanLyTiecCuoiModel.FK__CTBAOCAODS__4F7CD00D" FromRole="CTBAOCAOD" ToRole="BAOCAOD" />
         </EntityType>
         <EntityType Name="DICHVU">
           <Key>
             <PropertyRef Name="MaDichVu" />
           </Key>
-          <Property Name="MaDichVu" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaDichVu" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenDichVu" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CHITIETDVs" Relationship="Self.FK__CHITIETDV__MaDic__4AB81AF0" FromRole="DICHVU" ToRole="CHITIETDV" />
+          <NavigationProperty Name="CHITIETDVs" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4AB81AF0" FromRole="DICHVU" ToRole="CHITIETDV" />
         </EntityType>
         <EntityType Name="LOAISANH">
           <Key>
             <PropertyRef Name="MaLoaiSanh" />
           </Key>
-          <Property Name="MaLoaiSanh" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaLoaiSanh" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenLoaiSanh" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="DonGiaBanToiThieu" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="SANHs" Relationship="Self.FK__SANH__MaLoaiSanh__398D8EEE" FromRole="LOAISANH" ToRole="SANH" />
+          <NavigationProperty Name="SANHs" Relationship="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE" FromRole="LOAISANH" ToRole="SANH" />
         </EntityType>
         <EntityType Name="MONAN">
           <Key>
             <PropertyRef Name="MaMonAn" />
           </Key>
-          <Property Name="MaMonAn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaMonAn" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenMonAn" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="THUCDONs" Relationship="Self.FK__THUCDON__MaMonAn__44FF419A" FromRole="MONAN" ToRole="THUCDON" />
+          <NavigationProperty Name="THUCDONs" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__44FF419A" FromRole="MONAN" ToRole="THUCDON" />
         </EntityType>
         <EntityType Name="NGUOIDUNG">
           <Key>
             <PropertyRef Name="TenDangNhap" />
           </Key>
-          <Property Name="TenDangNhap" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MatKhauHash" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TenDangNhap" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MatKhauHash" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
           <Property Name="HoTen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="TrangThai" Type="Boolean" />
           <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="Self.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
+          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
         </EntityType>
         <EntityType Name="NHOMNGUOIDUNG">
           <Key>
             <PropertyRef Name="MaNhom" />
           </Key>
-          <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenNhom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="NGUOIDUNGs" Relationship="Self.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
-          <NavigationProperty Name="CHUCNANGs" Relationship="Self.PHANQUYEN" FromRole="NHOMNGUOIDUNG" ToRole="CHUCNANG" />
+          <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
+          <NavigationProperty Name="PHANQUYENs" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaNho__571DF1D5" FromRole="NHOMNGUOIDUNG" ToRole="PHANQUYEN" />
+        </EntityType>
+        <EntityType Name="PHANQUYEN">
+          <Key>
+            <PropertyRef Name="MaNhom" />
+            <PropertyRef Name="MaChucNang" />
+          </Key>
+          <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaChucNang" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CRUD" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CHUCNANG" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaChu__5812160E" FromRole="PHANQUYEN" ToRole="CHUCNANG" />
+          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaNho__571DF1D5" FromRole="PHANQUYEN" ToRole="NHOMNGUOIDUNG" />
         </EntityType>
         <EntityType Name="PHIEUDATTIEC">
           <Key>
             <PropertyRef Name="MaPhieuDat" />
           </Key>
-          <Property Name="MaPhieuDat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaPhieuDat" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenChuRe" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="TenCoDau" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DienThoai" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -491,54 +562,54 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="TienConLai" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ChiPhiPhatSinh" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TienPhat" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="CA" Relationship="Self.FK__PHIEUDATTI__MaCa__3E52440B" FromRole="PHIEUDATTIEC" ToRole="CA" />
-          <NavigationProperty Name="CHITIETDVs" Relationship="Self.FK__CHITIETDV__MaPhi__49C3F6B7" FromRole="PHIEUDATTIEC" ToRole="CHITIETDV" />
-          <NavigationProperty Name="SANH" Relationship="Self.FK__PHIEUDATT__MaSan__3F466844" FromRole="PHIEUDATTIEC" ToRole="SANH" />
-          <NavigationProperty Name="THUCDONs" Relationship="Self.FK__THUCDON__MaPhieu__440B1D61" FromRole="PHIEUDATTIEC" ToRole="THUCDON" />
+          <NavigationProperty Name="CA" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__3E52440B" FromRole="PHIEUDATTIEC" ToRole="CA" />
+          <NavigationProperty Name="CHITIETDVs" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__49C3F6B7" FromRole="PHIEUDATTIEC" ToRole="CHITIETDV" />
+          <NavigationProperty Name="SANH" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__3F466844" FromRole="PHIEUDATTIEC" ToRole="SANH" />
+          <NavigationProperty Name="THUCDONs" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__440B1D61" FromRole="PHIEUDATTIEC" ToRole="THUCDON" />
         </EntityType>
         <EntityType Name="SANH">
           <Key>
             <PropertyRef Name="MaSanh" />
           </Key>
-          <Property Name="MaSanh" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaSanh" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="MaLoaiSanh" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenSanh" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="SoLuongBanToiDa" Type="Int32" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="LOAISANH" Relationship="Self.FK__SANH__MaLoaiSanh__398D8EEE" FromRole="SANH" ToRole="LOAISANH" />
-          <NavigationProperty Name="PHIEUDATTIECs" Relationship="Self.FK__PHIEUDATT__MaSan__3F466844" FromRole="SANH" ToRole="PHIEUDATTIEC" />
+          <NavigationProperty Name="LOAISANH" Relationship="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE" FromRole="SANH" ToRole="LOAISANH" />
+          <NavigationProperty Name="PHIEUDATTIECs" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__3F466844" FromRole="SANH" ToRole="PHIEUDATTIEC" />
         </EntityType>
         <EntityType Name="THUCDON">
           <Key>
             <PropertyRef Name="MaPhieuDat" />
             <PropertyRef Name="MaMonAn" />
           </Key>
-          <Property Name="MaPhieuDat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaMonAn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaPhieuDat" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaMonAn" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ThuTuLenMon" Type="Int32" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MONAN" Relationship="Self.FK__THUCDON__MaMonAn__44FF419A" FromRole="THUCDON" ToRole="MONAN" />
-          <NavigationProperty Name="PHIEUDATTIEC" Relationship="Self.FK__THUCDON__MaPhieu__440B1D61" FromRole="THUCDON" ToRole="PHIEUDATTIEC" />
+          <NavigationProperty Name="MONAN" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__44FF419A" FromRole="THUCDON" ToRole="MONAN" />
+          <NavigationProperty Name="PHIEUDATTIEC" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__440B1D61" FromRole="THUCDON" ToRole="PHIEUDATTIEC" />
         </EntityType>
         <Association Name="FK__CTBAOCAODS__4F7CD00D">
-          <End Role="BAOCAODS" Type="Self.BAOCAOD" Multiplicity="1" />
-          <End Role="CTBAOCAODS" Type="Self.CTBAOCAOD" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.BAOCAOD" Role="BAOCAOD" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.CTBAOCAOD" Role="CTBAOCAOD" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="BAOCAODS">
+            <Principal Role="BAOCAOD">
               <PropertyRef Name="Thang" />
               <PropertyRef Name="Nam" />
             </Principal>
-            <Dependent Role="CTBAOCAODS">
+            <Dependent Role="CTBAOCAOD">
               <PropertyRef Name="Thang" />
               <PropertyRef Name="Nam" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__PHIEUDATTI__MaCa__3E52440B">
-          <End Role="CA" Type="Self.CA" Multiplicity="0..1" />
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.CA" Role="CA" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CA">
               <PropertyRef Name="MaCa" />
@@ -549,8 +620,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__CHITIETDV__MaDic__4AB81AF0">
-          <End Role="DICHVU" Type="Self.DICHVU" Multiplicity="1" />
-          <End Role="CHITIETDV" Type="Self.CHITIETDV" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.DICHVU" Role="DICHVU" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.CHITIETDV" Role="CHITIETDV" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DICHVU">
               <PropertyRef Name="MaDichVu" />
@@ -561,8 +632,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__CHITIETDV__MaPhi__49C3F6B7">
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="1" />
-          <End Role="CHITIETDV" Type="Self.CHITIETDV" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.CHITIETDV" Role="CHITIETDV" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PHIEUDATTIEC">
               <PropertyRef Name="MaPhieuDat" />
@@ -572,9 +643,21 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__PHANQUYEN__MaChu__5812160E">
+          <End Type="QuanLyTiecCuoiModel.CHUCNANG" Role="CHUCNANG" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.PHANQUYEN" Role="PHANQUYEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CHUCNANG">
+              <PropertyRef Name="MaChucNang" />
+            </Principal>
+            <Dependent Role="PHANQUYEN">
+              <PropertyRef Name="MaChucNang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__SANH__MaLoaiSanh__398D8EEE">
-          <End Role="LOAISANH" Type="Self.LOAISANH" Multiplicity="0..1" />
-          <End Role="SANH" Type="Self.SANH" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.LOAISANH" Role="LOAISANH" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.SANH" Role="SANH" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="LOAISANH">
               <PropertyRef Name="MaLoaiSanh" />
@@ -585,8 +668,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__THUCDON__MaMonAn__44FF419A">
-          <End Role="MONAN" Type="Self.MONAN" Multiplicity="1" />
-          <End Role="THUCDON" Type="Self.THUCDON" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.MONAN" Role="MONAN" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.THUCDON" Role="THUCDON" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MONAN">
               <PropertyRef Name="MaMonAn" />
@@ -597,8 +680,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__NGUOIDUNG__MaNho__5BE2A6F2">
-          <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="0..1" />
-          <End Role="NGUOIDUNG" Type="Self.NGUOIDUNG" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.NGUOIDUNG" Role="NGUOIDUNG" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NHOMNGUOIDUNG">
               <PropertyRef Name="MaNhom" />
@@ -608,9 +691,21 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__PHANQUYEN__MaNho__571DF1D5">
+          <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.PHANQUYEN" Role="PHANQUYEN" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NHOMNGUOIDUNG">
+              <PropertyRef Name="MaNhom" />
+            </Principal>
+            <Dependent Role="PHANQUYEN">
+              <PropertyRef Name="MaNhom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__PHIEUDATT__MaSan__3F466844">
-          <End Role="SANH" Type="Self.SANH" Multiplicity="0..1" />
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.SANH" Role="SANH" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SANH">
               <PropertyRef Name="MaSanh" />
@@ -621,8 +716,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__THUCDON__MaPhieu__440B1D61">
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="1" />
-          <End Role="THUCDON" Type="Self.THUCDON" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.THUCDON" Role="THUCDON" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PHIEUDATTIEC">
               <PropertyRef Name="MaPhieuDat" />
@@ -632,65 +727,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PHANQUYEN">
-          <End Role="CHUCNANG" Type="Self.CHUCNANG" Multiplicity="*" />
-          <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="*" />
-        </Association>
-        <EntityContainer Name="QuanLyTiecCuoiEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="BAOCAODS" EntityType="Self.BAOCAOD" />
-          <EntitySet Name="CAs" EntityType="Self.CA" />
-          <EntitySet Name="CHITIETDVs" EntityType="Self.CHITIETDV" />
-          <EntitySet Name="CHUCNANGs" EntityType="Self.CHUCNANG" />
-          <EntitySet Name="CTBAOCAODS" EntityType="Self.CTBAOCAOD" />
-          <EntitySet Name="DICHVUs" EntityType="Self.DICHVU" />
-          <EntitySet Name="LOAISANHs" EntityType="Self.LOAISANH" />
-          <EntitySet Name="MONANs" EntityType="Self.MONAN" />
-          <EntitySet Name="NGUOIDUNGs" EntityType="Self.NGUOIDUNG" />
-          <EntitySet Name="NHOMNGUOIDUNGs" EntityType="Self.NHOMNGUOIDUNG" />
-          <EntitySet Name="PHIEUDATTIECs" EntityType="Self.PHIEUDATTIEC" />
-          <EntitySet Name="SANHs" EntityType="Self.SANH" />
-          <EntitySet Name="THUCDONs" EntityType="Self.THUCDON" />
-          <AssociationSet Name="FK__CTBAOCAODS__4F7CD00D" Association="Self.FK__CTBAOCAODS__4F7CD00D">
-            <End Role="BAOCAODS" EntitySet="BAOCAODS" />
-            <End Role="CTBAOCAODS" EntitySet="CTBAOCAODS" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PHIEUDATTI__MaCa__3E52440B" Association="Self.FK__PHIEUDATTI__MaCa__3E52440B">
-            <End Role="CA" EntitySet="CAs" />
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__CHITIETDV__MaDic__4AB81AF0" Association="Self.FK__CHITIETDV__MaDic__4AB81AF0">
-            <End Role="DICHVU" EntitySet="DICHVUs" />
-            <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__CHITIETDV__MaPhi__49C3F6B7" Association="Self.FK__CHITIETDV__MaPhi__49C3F6B7">
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
-            <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__SANH__MaLoaiSanh__398D8EEE" Association="Self.FK__SANH__MaLoaiSanh__398D8EEE">
-            <End Role="LOAISANH" EntitySet="LOAISANHs" />
-            <End Role="SANH" EntitySet="SANHs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__THUCDON__MaMonAn__44FF419A" Association="Self.FK__THUCDON__MaMonAn__44FF419A">
-            <End Role="MONAN" EntitySet="MONANs" />
-            <End Role="THUCDON" EntitySet="THUCDONs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__5BE2A6F2" Association="Self.FK__NGUOIDUNG__MaNho__5BE2A6F2">
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
-            <End Role="NGUOIDUNG" EntitySet="NGUOIDUNGs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PHIEUDATT__MaSan__3F466844" Association="Self.FK__PHIEUDATT__MaSan__3F466844">
-            <End Role="SANH" EntitySet="SANHs" />
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
-          </AssociationSet>
-          <AssociationSet Name="FK__THUCDON__MaPhieu__440B1D61" Association="Self.FK__THUCDON__MaPhieu__440B1D61">
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
-            <End Role="THUCDON" EntitySet="THUCDONs" />
-          </AssociationSet>
-          <AssociationSet Name="PHANQUYEN" Association="Self.PHANQUYEN">
-            <End Role="CHUCNANG" EntitySet="CHUCNANGs" />
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -700,160 +736,161 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <EntitySetMapping Name="BAOCAODS">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.BAOCAOD">
               <MappingFragment StoreEntitySet="BAOCAODS">
-                <ScalarProperty Name="Thang" ColumnName="Thang" />
-                <ScalarProperty Name="Nam" ColumnName="Nam" />
                 <ScalarProperty Name="TongDoanhThu" ColumnName="TongDoanhThu" />
+                <ScalarProperty Name="Nam" ColumnName="Nam" />
+                <ScalarProperty Name="Thang" ColumnName="Thang" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CAs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CA">
               <MappingFragment StoreEntitySet="CA">
-                <ScalarProperty Name="MaCa" ColumnName="MaCa" />
-                <ScalarProperty Name="TenCa" ColumnName="TenCa" />
-                <ScalarProperty Name="ThoiGianBatDauCa" ColumnName="ThoiGianBatDauCa" />
                 <ScalarProperty Name="ThoiGianKetThucCa" ColumnName="ThoiGianKetThucCa" />
+                <ScalarProperty Name="ThoiGianBatDauCa" ColumnName="ThoiGianBatDauCa" />
+                <ScalarProperty Name="TenCa" ColumnName="TenCa" />
+                <ScalarProperty Name="MaCa" ColumnName="MaCa" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CHITIETDVs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CHITIETDV">
               <MappingFragment StoreEntitySet="CHITIETDV">
-                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
-                <ScalarProperty Name="MaDichVu" ColumnName="MaDichVu" />
-                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="ThanhTien" ColumnName="ThanhTien" />
                 <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="ThanhTien" ColumnName="ThanhTien" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="MaDichVu" ColumnName="MaDichVu" />
+                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CHUCNANGs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CHUCNANG">
               <MappingFragment StoreEntitySet="CHUCNANG">
-                <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
-                <ScalarProperty Name="TenChucNang" ColumnName="TenChucNang" />
                 <ScalarProperty Name="TenManHinhDuocLoad" ColumnName="TenManHinhDuocLoad" />
+                <ScalarProperty Name="TenChucNang" ColumnName="TenChucNang" />
+                <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CTBAOCAODS">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CTBAOCAOD">
               <MappingFragment StoreEntitySet="CTBAOCAODS">
-                <ScalarProperty Name="Ngay" ColumnName="Ngay" />
-                <ScalarProperty Name="Thang" ColumnName="Thang" />
-                <ScalarProperty Name="Nam" ColumnName="Nam" />
-                <ScalarProperty Name="SoLuongTiec" ColumnName="SoLuongTiec" />
-                <ScalarProperty Name="DoanhThu" ColumnName="DoanhThu" />
                 <ScalarProperty Name="TiLe" ColumnName="TiLe" />
+                <ScalarProperty Name="DoanhThu" ColumnName="DoanhThu" />
+                <ScalarProperty Name="SoLuongTiec" ColumnName="SoLuongTiec" />
+                <ScalarProperty Name="Nam" ColumnName="Nam" />
+                <ScalarProperty Name="Thang" ColumnName="Thang" />
+                <ScalarProperty Name="Ngay" ColumnName="Ngay" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DICHVUs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.DICHVU">
               <MappingFragment StoreEntitySet="DICHVU">
-                <ScalarProperty Name="MaDichVu" ColumnName="MaDichVu" />
-                <ScalarProperty Name="TenDichVu" ColumnName="TenDichVu" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
                 <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="TenDichVu" ColumnName="TenDichVu" />
+                <ScalarProperty Name="MaDichVu" ColumnName="MaDichVu" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LOAISANHs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.LOAISANH">
               <MappingFragment StoreEntitySet="LOAISANH">
-                <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
-                <ScalarProperty Name="TenLoaiSanh" ColumnName="TenLoaiSanh" />
                 <ScalarProperty Name="DonGiaBanToiThieu" ColumnName="DonGiaBanToiThieu" />
+                <ScalarProperty Name="TenLoaiSanh" ColumnName="TenLoaiSanh" />
+                <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MONANs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.MONAN">
               <MappingFragment StoreEntitySet="MONAN">
-                <ScalarProperty Name="MaMonAn" ColumnName="MaMonAn" />
-                <ScalarProperty Name="TenMonAn" ColumnName="TenMonAn" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
                 <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="TenMonAn" ColumnName="TenMonAn" />
+                <ScalarProperty Name="MaMonAn" ColumnName="MaMonAn" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NGUOIDUNGs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.NGUOIDUNG">
               <MappingFragment StoreEntitySet="NGUOIDUNG">
-                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
-                <ScalarProperty Name="MatKhauHash" ColumnName="MatKhauHash" />
-                <ScalarProperty Name="HoTen" ColumnName="HoTen" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
                 <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="HoTen" ColumnName="HoTen" />
+                <ScalarProperty Name="MatKhauHash" ColumnName="MatKhauHash" />
+                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NHOMNGUOIDUNGs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.NHOMNGUOIDUNG">
               <MappingFragment StoreEntitySet="NHOMNGUOIDUNG">
-                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
                 <ScalarProperty Name="TenNhom" ColumnName="TenNhom" />
+                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PHANQUYENs">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.PHANQUYEN">
+              <MappingFragment StoreEntitySet="PHANQUYEN">
+                <ScalarProperty Name="CRUD" ColumnName="CRUD" />
+                <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
+                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PHIEUDATTIECs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.PHIEUDATTIEC">
               <MappingFragment StoreEntitySet="PHIEUDATTIEC">
-                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
-                <ScalarProperty Name="TenChuRe" ColumnName="TenChuRe" />
-                <ScalarProperty Name="TenCoDau" ColumnName="TenCoDau" />
-                <ScalarProperty Name="DienThoai" ColumnName="DienThoai" />
-                <ScalarProperty Name="NgayDatTiec" ColumnName="NgayDatTiec" />
-                <ScalarProperty Name="NgayDaiTiec" ColumnName="NgayDaiTiec" />
-                <ScalarProperty Name="MaCa" ColumnName="MaCa" />
-                <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
-                <ScalarProperty Name="TienDatCoc" ColumnName="TienDatCoc" />
-                <ScalarProperty Name="SoLuongBan" ColumnName="SoLuongBan" />
-                <ScalarProperty Name="SoBanDuTru" ColumnName="SoBanDuTru" />
-                <ScalarProperty Name="NgayThanhToan" ColumnName="NgayThanhToan" />
-                <ScalarProperty Name="DonGiaBanTiec" ColumnName="DonGiaBanTiec" />
-                <ScalarProperty Name="TongTienBan" ColumnName="TongTienBan" />
-                <ScalarProperty Name="TongTienDV" ColumnName="TongTienDV" />
-                <ScalarProperty Name="TongTienHoaDon" ColumnName="TongTienHoaDon" />
-                <ScalarProperty Name="TienConLai" ColumnName="TienConLai" />
-                <ScalarProperty Name="ChiPhiPhatSinh" ColumnName="ChiPhiPhatSinh" />
                 <ScalarProperty Name="TienPhat" ColumnName="TienPhat" />
+                <ScalarProperty Name="ChiPhiPhatSinh" ColumnName="ChiPhiPhatSinh" />
+                <ScalarProperty Name="TienConLai" ColumnName="TienConLai" />
+                <ScalarProperty Name="TongTienHoaDon" ColumnName="TongTienHoaDon" />
+                <ScalarProperty Name="TongTienDV" ColumnName="TongTienDV" />
+                <ScalarProperty Name="TongTienBan" ColumnName="TongTienBan" />
+                <ScalarProperty Name="DonGiaBanTiec" ColumnName="DonGiaBanTiec" />
+                <ScalarProperty Name="NgayThanhToan" ColumnName="NgayThanhToan" />
+                <ScalarProperty Name="SoBanDuTru" ColumnName="SoBanDuTru" />
+                <ScalarProperty Name="SoLuongBan" ColumnName="SoLuongBan" />
+                <ScalarProperty Name="TienDatCoc" ColumnName="TienDatCoc" />
+                <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
+                <ScalarProperty Name="MaCa" ColumnName="MaCa" />
+                <ScalarProperty Name="NgayDaiTiec" ColumnName="NgayDaiTiec" />
+                <ScalarProperty Name="NgayDatTiec" ColumnName="NgayDatTiec" />
+                <ScalarProperty Name="DienThoai" ColumnName="DienThoai" />
+                <ScalarProperty Name="TenCoDau" ColumnName="TenCoDau" />
+                <ScalarProperty Name="TenChuRe" ColumnName="TenChuRe" />
+                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SANHs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.SANH">
               <MappingFragment StoreEntitySet="SANH">
-                <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
-                <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
-                <ScalarProperty Name="TenSanh" ColumnName="TenSanh" />
-                <ScalarProperty Name="SoLuongBanToiDa" ColumnName="SoLuongBanToiDa" />
                 <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="SoLuongBanToiDa" ColumnName="SoLuongBanToiDa" />
+                <ScalarProperty Name="TenSanh" ColumnName="TenSanh" />
+                <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
+                <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="THUCDONs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.THUCDON">
               <MappingFragment StoreEntitySet="THUCDON">
-                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
-                <ScalarProperty Name="MaMonAn" ColumnName="MaMonAn" />
-                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="ThuTuLenMon" ColumnName="ThuTuLenMon" />
                 <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="ThuTuLenMon" ColumnName="ThuTuLenMon" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="MaMonAn" ColumnName="MaMonAn" />
+                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="PHANQUYEN" TypeName="QuanLyTiecCuoiModel.PHANQUYEN" StoreEntitySet="PHANQUYEN">
-            <EndProperty Name="CHUCNANG">
-              <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
-            </EndProperty>
-            <EndProperty Name="NHOMNGUOIDUNG">
-              <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

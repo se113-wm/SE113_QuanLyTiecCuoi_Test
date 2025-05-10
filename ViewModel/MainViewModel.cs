@@ -133,9 +133,9 @@ namespace QuanLyTiecCuoi.ViewModel
         private void LoadButtonVisibility()
         {
             // Lấy danh sách chức năng của nhóm người dùng hiện tại
-            var userPermissions = DataProvider.Ins.DB.NHOMNGUOIDUNGs
-                .Where(x => x.MaNhom == _CurrentUser.MaNhom) // CurrentUser.MaNhom là mã nhóm của người dùng hiện tại
-                .SelectMany(x => x.CHUCNANGs) // Lấy danh sách chức năng
+            var userPermissions = DataProvider.Ins.DB.PHANQUYENs
+                .Where(pq => pq.MaNhom == _CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
+                .Select(pq => pq.CHUCNANG) // Lấy đối tượng CHUCNANG từ PHANQUYEN
                 .ToList();
 
             // Thiết lập Visibility dựa trên quyền

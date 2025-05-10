@@ -274,7 +274,7 @@
                                 Visibility="{Binding ButtonVisibilities[User]}"
                                 Style="{StaticResource MaterialDesignFlatButton}" 
                                
-                                Background="{Binding ButtonBackgrounds[Home]}"
+                                Background="Transparent"
                                 Foreground="White" 
                                 ToolTip="Người dùng" 
                                 HorizontalAlignment="Stretch" 
