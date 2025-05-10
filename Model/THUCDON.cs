@@ -14,8 +14,8 @@ namespace QuanLyTiecCuoi.Model
     
     public partial class THUCDON
     {
-        public string MaPhieuDat { get; set; }
-        public string MaMonAn { get; set; }
+        public int MaPhieuDat { get; set; }
+        public int MaMonAn { get; set; }
         public Nullable<int> SoLuong { get; set; }
         public Nullable<decimal> DonGia { get; set; }
         public Nullable<int> ThuTuLenMon { get; set; }

@@ -20,7 +20,7 @@ namespace QuanLyTiecCuoi.Model
             this.SANHs = new HashSet<SANH>();
         }
     
-        public string MaLoaiSanh { get; set; }
+        public int MaLoaiSanh { get; set; }
         public string TenLoaiSanh { get; set; }
         public Nullable<decimal> DonGiaBanToiThieu { get; set; }
     

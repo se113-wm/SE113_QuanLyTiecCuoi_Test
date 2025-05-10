@@ -20,7 +20,7 @@ namespace QuanLyTiecCuoi.Model
             this.THUCDONs = new HashSet<THUCDON>();
         }
     
-        public string MaMonAn { get; set; }
+        public int MaMonAn { get; set; }
         public string TenMonAn { get; set; }
         public Nullable<decimal> DonGia { get; set; }
         public string GhiChu { get; set; }

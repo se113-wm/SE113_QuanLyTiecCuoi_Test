@@ -14,8 +14,8 @@ namespace QuanLyTiecCuoi.Model
     
     public partial class CHITIETDV
     {
-        public string MaPhieuDat { get; set; }
-        public string MaDichVu { get; set; }
+        public int MaPhieuDat { get; set; }
+        public int MaDichVu { get; set; }
         public Nullable<int> SoLuong { get; set; }
         public Nullable<decimal> DonGia { get; set; }
         public Nullable<decimal> ThanhTien { get; set; }

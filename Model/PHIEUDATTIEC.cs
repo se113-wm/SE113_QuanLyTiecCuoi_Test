@@ -21,14 +21,14 @@ namespace QuanLyTiecCuoi.Model
             this.THUCDONs = new HashSet<THUCDON>();
         }
     
-        public string MaPhieuDat { get; set; }
+        public int MaPhieuDat { get; set; }
         public string TenChuRe { get; set; }
         public string TenCoDau { get; set; }
         public string DienThoai { get; set; }
         public Nullable<System.DateTime> NgayDatTiec { get; set; }
         public Nullable<System.DateTime> NgayDaiTiec { get; set; }
         public Nullable<int> MaCa { get; set; }
-        public string MaSanh { get; set; }
+        public Nullable<int> MaSanh { get; set; }
         public Nullable<decimal> TienDatCoc { get; set; }
         public Nullable<int> SoLuongBan { get; set; }
         public Nullable<int> SoBanDuTru { get; set; }

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace QuanLyTiecCuoi
 {
     /// <summary>
-    /// Interaction logic for LoaiSanhView.xaml
+    /// Interaction logic for FoodView.xaml
     /// </summary>
-    public partial class LoaiSanhView : UserControl
+    public partial class FoodView : UserControl
     {
-        public LoaiSanhView()
+        public FoodView()
         {
             InitializeComponent();
         }

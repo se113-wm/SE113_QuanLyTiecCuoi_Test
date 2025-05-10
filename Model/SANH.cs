@@ -20,8 +20,8 @@ namespace QuanLyTiecCuoi.Model
             this.PHIEUDATTIECs = new HashSet<PHIEUDATTIEC>();
         }
     
-        public string MaSanh { get; set; }
-        public string MaLoaiSanh { get; set; }
+        public int MaSanh { get; set; }
+        public Nullable<int> MaLoaiSanh { get; set; }
         public string TenSanh { get; set; }
         public Nullable<int> SoLuongBanToiDa { get; set; }
         public string GhiChu { get; set; }

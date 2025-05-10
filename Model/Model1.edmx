@@ -18,7 +18,7 @@
           <Key>
             <PropertyRef Name="MaCa" />
           </Key>
-          <Property Name="MaCa" Type="int" Nullable="false" />
+          <Property Name="MaCa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenCa" Type="nvarchar" MaxLength="40" />
           <Property Name="ThoiGianBatDauCa" Type="time" Precision="7" />
           <Property Name="ThoiGianKetThucCa" Type="time" Precision="7" />
@@ -28,8 +28,8 @@
             <PropertyRef Name="MaPhieuDat" />
             <PropertyRef Name="MaDichVu" />
           </Key>
-          <Property Name="MaPhieuDat" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="MaDichVu" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaPhieuDat" Type="int" Nullable="false" />
+          <Property Name="MaDichVu" Type="int" Nullable="false" />
           <Property Name="SoLuong" Type="int" />
           <Property Name="DonGia" Type="money" />
           <Property Name="ThanhTien" Type="money" />
@@ -60,7 +60,7 @@
           <Key>
             <PropertyRef Name="MaDichVu" />
           </Key>
-          <Property Name="MaDichVu" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaDichVu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenDichVu" Type="nvarchar" MaxLength="40" />
           <Property Name="DonGia" Type="money" />
           <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
@@ -69,15 +69,15 @@
           <Key>
             <PropertyRef Name="MaLoaiSanh" />
           </Key>
-          <Property Name="MaLoaiSanh" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TenLoaiSanh" Type="varchar" MaxLength="40" />
+          <Property Name="MaLoaiSanh" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenLoaiSanh" Type="nvarchar" MaxLength="40" />
           <Property Name="DonGiaBanToiThieu" Type="money" />
         </EntityType>
         <EntityType Name="MONAN">
           <Key>
             <PropertyRef Name="MaMonAn" />
           </Key>
-          <Property Name="MaMonAn" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaMonAn" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenMonAn" Type="nvarchar" MaxLength="40" />
           <Property Name="DonGia" Type="money" />
           <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
@@ -107,20 +107,19 @@
           </Key>
           <Property Name="MaNhom" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="MaChucNang" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="CRUD" Type="varchar" MaxLength="4" />
         </EntityType>
         <EntityType Name="PHIEUDATTIEC">
           <Key>
             <PropertyRef Name="MaPhieuDat" />
           </Key>
-          <Property Name="MaPhieuDat" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaPhieuDat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenChuRe" Type="nvarchar" MaxLength="40" />
           <Property Name="TenCoDau" Type="nvarchar" MaxLength="40" />
           <Property Name="DienThoai" Type="varchar" MaxLength="10" />
           <Property Name="NgayDatTiec" Type="smalldatetime" />
           <Property Name="NgayDaiTiec" Type="smalldatetime" />
           <Property Name="MaCa" Type="int" />
-          <Property Name="MaSanh" Type="varchar" MaxLength="10" />
+          <Property Name="MaSanh" Type="int" />
           <Property Name="TienDatCoc" Type="money" />
           <Property Name="SoLuongBan" Type="int" />
           <Property Name="SoBanDuTru" Type="int" />
@@ -137,8 +136,8 @@
           <Key>
             <PropertyRef Name="MaSanh" />
           </Key>
-          <Property Name="MaSanh" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="MaLoaiSanh" Type="varchar" MaxLength="10" />
+          <Property Name="MaSanh" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaLoaiSanh" Type="int" />
           <Property Name="TenSanh" Type="nvarchar" MaxLength="40" />
           <Property Name="SoLuongBanToiDa" Type="int" />
           <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
@@ -156,8 +155,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <PropertyRef Name="MaPhieuDat" />
             <PropertyRef Name="MaMonAn" />
           </Key>
-          <Property Name="MaPhieuDat" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="MaMonAn" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaPhieuDat" Type="int" Nullable="false" />
+          <Property Name="MaMonAn" Type="int" Nullable="false" />
           <Property Name="SoLuong" Type="int" />
           <Property Name="DonGia" Type="money" />
           <Property Name="ThuTuLenMon" Type="int" />
@@ -372,7 +371,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <EntitySet Name="MONANs" EntityType="QuanLyTiecCuoiModel.MONAN" />
           <EntitySet Name="NGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NGUOIDUNG" />
           <EntitySet Name="NHOMNGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" />
-          <EntitySet Name="PHANQUYENs" EntityType="QuanLyTiecCuoiModel.PHANQUYEN" />
           <EntitySet Name="PHIEUDATTIECs" EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" />
           <EntitySet Name="SANHs" EntityType="QuanLyTiecCuoiModel.SANH" />
           <EntitySet Name="THUCDONs" EntityType="QuanLyTiecCuoiModel.THUCDON" />
@@ -392,10 +390,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
             <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHANQUYEN__MaChu__5812160E" Association="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaChu__5812160E">
-            <End Role="CHUCNANG" EntitySet="CHUCNANGs" />
-            <End Role="PHANQUYEN" EntitySet="PHANQUYENs" />
-          </AssociationSet>
           <AssociationSet Name="FK__SANH__MaLoaiSanh__398D8EEE" Association="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE">
             <End Role="LOAISANH" EntitySet="LOAISANHs" />
             <End Role="SANH" EntitySet="SANHs" />
@@ -408,10 +402,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
             <End Role="NGUOIDUNG" EntitySet="NGUOIDUNGs" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHANQUYEN__MaNho__571DF1D5" Association="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaNho__571DF1D5">
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
-            <End Role="PHANQUYEN" EntitySet="PHANQUYENs" />
-          </AssociationSet>
           <AssociationSet Name="FK__PHIEUDATT__MaSan__3F466844" Association="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__3F466844">
             <End Role="SANH" EntitySet="SANHs" />
             <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
@@ -419,6 +409,10 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <AssociationSet Name="FK__THUCDON__MaPhieu__440B1D61" Association="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__440B1D61">
             <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
             <End Role="THUCDON" EntitySet="THUCDONs" />
+          </AssociationSet>
+          <AssociationSet Name="PHANQUYEN" Association="QuanLyTiecCuoiModel.PHANQUYEN">
+            <End Role="CHUCNANG" EntitySet="CHUCNANGs" />
+            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="BAOCAOD">
@@ -435,7 +429,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Key>
             <PropertyRef Name="MaCa" />
           </Key>
-          <Property Name="MaCa" Type="Int32" Nullable="false" />
+          <Property Name="MaCa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenCa" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="ThoiGianBatDauCa" Type="Time" Precision="7" />
           <Property Name="ThoiGianKetThucCa" Type="Time" Precision="7" />
@@ -446,8 +440,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <PropertyRef Name="MaPhieuDat" />
             <PropertyRef Name="MaDichVu" />
           </Key>
-          <Property Name="MaPhieuDat" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="MaDichVu" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaPhieuDat" Type="Int32" Nullable="false" />
+          <Property Name="MaDichVu" Type="Int32" Nullable="false" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ThanhTien" Type="Decimal" Precision="19" Scale="4" />
@@ -462,7 +456,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="MaChucNang" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenChucNang" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="TenManHinhDuocLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="PHANQUYENs" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaChu__5812160E" FromRole="CHUCNANG" ToRole="PHANQUYEN" />
+          <NavigationProperty Name="NHOMNGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.PHANQUYEN" FromRole="CHUCNANG" ToRole="NHOMNGUOIDUNG" />
         </EntityType>
         <EntityType Name="CTBAOCAOD">
           <Key>
@@ -482,7 +476,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Key>
             <PropertyRef Name="MaDichVu" />
           </Key>
-          <Property Name="MaDichVu" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaDichVu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenDichVu" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -492,8 +486,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Key>
             <PropertyRef Name="MaLoaiSanh" />
           </Key>
-          <Property Name="MaLoaiSanh" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TenLoaiSanh" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="MaLoaiSanh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenLoaiSanh" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DonGiaBanToiThieu" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="SANHs" Relationship="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE" FromRole="LOAISANH" ToRole="SANH" />
         </EntityType>
@@ -501,7 +495,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Key>
             <PropertyRef Name="MaMonAn" />
           </Key>
-          <Property Name="MaMonAn" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaMonAn" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenMonAn" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -526,31 +520,20 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenNhom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
-          <NavigationProperty Name="PHANQUYENs" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaNho__571DF1D5" FromRole="NHOMNGUOIDUNG" ToRole="PHANQUYEN" />
-        </EntityType>
-        <EntityType Name="PHANQUYEN">
-          <Key>
-            <PropertyRef Name="MaNhom" />
-            <PropertyRef Name="MaChucNang" />
-          </Key>
-          <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="MaChucNang" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="CRUD" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CHUCNANG" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaChu__5812160E" FromRole="PHANQUYEN" ToRole="CHUCNANG" />
-          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__PHANQUYEN__MaNho__571DF1D5" FromRole="PHANQUYEN" ToRole="NHOMNGUOIDUNG" />
+          <NavigationProperty Name="CHUCNANGs" Relationship="QuanLyTiecCuoiModel.PHANQUYEN" FromRole="NHOMNGUOIDUNG" ToRole="CHUCNANG" />
         </EntityType>
         <EntityType Name="PHIEUDATTIEC">
           <Key>
             <PropertyRef Name="MaPhieuDat" />
           </Key>
-          <Property Name="MaPhieuDat" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaPhieuDat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenChuRe" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="TenCoDau" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="DienThoai" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="NgayDatTiec" Type="DateTime" Precision="0" />
           <Property Name="NgayDaiTiec" Type="DateTime" Precision="0" />
           <Property Name="MaCa" Type="Int32" />
-          <Property Name="MaSanh" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaSanh" Type="Int32" />
           <Property Name="TienDatCoc" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="SoLuongBan" Type="Int32" />
           <Property Name="SoBanDuTru" Type="Int32" />
@@ -571,8 +554,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Key>
             <PropertyRef Name="MaSanh" />
           </Key>
-          <Property Name="MaSanh" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="MaLoaiSanh" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaSanh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaLoaiSanh" Type="Int32" />
           <Property Name="TenSanh" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="SoLuongBanToiDa" Type="Int32" />
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -584,8 +567,8 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <PropertyRef Name="MaPhieuDat" />
             <PropertyRef Name="MaMonAn" />
           </Key>
-          <Property Name="MaPhieuDat" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="MaMonAn" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaPhieuDat" Type="Int32" Nullable="false" />
+          <Property Name="MaMonAn" Type="Int32" Nullable="false" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ThuTuLenMon" Type="Int32" />
@@ -643,18 +626,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHANQUYEN__MaChu__5812160E">
-          <End Type="QuanLyTiecCuoiModel.CHUCNANG" Role="CHUCNANG" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.PHANQUYEN" Role="PHANQUYEN" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CHUCNANG">
-              <PropertyRef Name="MaChucNang" />
-            </Principal>
-            <Dependent Role="PHANQUYEN">
-              <PropertyRef Name="MaChucNang" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__SANH__MaLoaiSanh__398D8EEE">
           <End Type="QuanLyTiecCuoiModel.LOAISANH" Role="LOAISANH" Multiplicity="0..1" />
           <End Type="QuanLyTiecCuoiModel.SANH" Role="SANH" Multiplicity="*" />
@@ -691,18 +662,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHANQUYEN__MaNho__571DF1D5">
-          <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.PHANQUYEN" Role="PHANQUYEN" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NHOMNGUOIDUNG">
-              <PropertyRef Name="MaNhom" />
-            </Principal>
-            <Dependent Role="PHANQUYEN">
-              <PropertyRef Name="MaNhom" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__PHIEUDATT__MaSan__3F466844">
           <End Type="QuanLyTiecCuoiModel.SANH" Role="SANH" Multiplicity="0..1" />
           <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="*" />
@@ -727,7 +686,11 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="PHANQUYEN">
+          <End Type="QuanLyTiecCuoiModel.CHUCNANG" Role="CHUCNANG" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="*" />
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -834,15 +797,6 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PHANQUYENs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.PHANQUYEN">
-              <MappingFragment StoreEntitySet="PHANQUYEN">
-                <ScalarProperty Name="CRUD" ColumnName="CRUD" />
-                <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
-                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PHIEUDATTIECs">
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.PHIEUDATTIEC">
               <MappingFragment StoreEntitySet="PHIEUDATTIEC">
@@ -891,6 +845,14 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="PHANQUYEN" TypeName="QuanLyTiecCuoiModel.PHANQUYEN" StoreEntitySet="PHANQUYEN">
+            <EndProperty Name="NHOMNGUOIDUNG">
+              <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+            </EndProperty>
+            <EndProperty Name="CHUCNANG">
+              <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

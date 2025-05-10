@@ -18,7 +18,7 @@ namespace QuanLyTiecCuoi.Model
         public NHOMNGUOIDUNG()
         {
             this.NGUOIDUNGs = new HashSet<NGUOIDUNG>();
-            this.PHANQUYENs = new HashSet<PHANQUYEN>();
+            this.CHUCNANGs = new HashSet<CHUCNANG>();
         }
     
         public string MaNhom { get; set; }
@@ -27,6 +27,6 @@ namespace QuanLyTiecCuoi.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NGUOIDUNG> NGUOIDUNGs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PHANQUYEN> PHANQUYENs { get; set; }
+        public virtual ICollection<CHUCNANG> CHUCNANGs { get; set; }
     }
 }

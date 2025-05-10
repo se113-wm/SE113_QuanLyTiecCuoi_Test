@@ -20,7 +20,7 @@ namespace QuanLyTiecCuoi.Model
             this.CHITIETDVs = new HashSet<CHITIETDV>();
         }
     
-        public string MaDichVu { get; set; }
+        public int MaDichVu { get; set; }
         public string TenDichVu { get; set; }
         public Nullable<decimal> DonGia { get; set; }
         public string GhiChu { get; set; }

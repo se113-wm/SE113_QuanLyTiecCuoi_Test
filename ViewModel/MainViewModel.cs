@@ -92,7 +92,17 @@ namespace QuanLyTiecCuoi.ViewModel
             });
             //HallCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new HallView(); });
             //ShiftCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ShiftView(); });
-            //FoodCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new FoodView(); });
+            //HallTypeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            //{
+            //    CurrentView = new FoodView();
+
+            //    // Đặt màu nền cho nút "Trang chủ" là màu được chọn
+            //    ResetButtonBackgrounds();
+            //    ButtonBackgrounds["HallType"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+
+            //    // Gọi OnPropertyChanged để cập nhật giao diện
+            //    OnPropertyChanged(nameof(ButtonBackgrounds));
+            //});
             //ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ServiceView(); });
             //WeddingCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new WeddingView(); });
 
@@ -133,9 +143,9 @@ namespace QuanLyTiecCuoi.ViewModel
         private void LoadButtonVisibility()
         {
             // Lấy danh sách chức năng của nhóm người dùng hiện tại
-            var userPermissions = DataProvider.Ins.DB.PHANQUYENs
-                .Where(pq => pq.MaNhom == _CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
-                .Select(pq => pq.CHUCNANG) // Lấy đối tượng CHUCNANG từ PHANQUYEN
+            var userPermissions = DataProvider.Ins.DB.NHOMNGUOIDUNGs
+                .Where(nhom => nhom.MaNhom == _CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
+                .SelectMany(nhom => nhom.CHUCNANGs) // Lấy danh sách CHUCNANG từ NHOMNGUOIDUNG
                 .ToList();
 
             // Thiết lập Visibility dựa trên quyền
