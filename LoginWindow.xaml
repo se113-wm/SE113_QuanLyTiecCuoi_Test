@@ -17,13 +17,13 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         DataContext="{StaticResource LoginViewModel}"
-        
+
         Name="loginWindow"
         mc:Ignorable="d"
-        Title="Đăng Nhập" 
+        Title="Đăng Nhập"
         Height="645" Width="875"
         SizeToContent="Manual"
-       
+
         WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- Định nghĩa các hàng -->
@@ -77,14 +77,22 @@
                         <Border Background="#80c0ff" CornerRadius="5" Margin="6" Opacity="0.7" Padding="6">
                             <Grid>
                                 <TextBox
+                                    x:Name="UserNameBox"
                                     Text="{Binding UserName}"
                                     materialDesign:HintAssist.Hint="Tên Đăng Nhập"
-                                Style="{StaticResource MaterialDesignFilledTextBox}"
+                                    Style="{StaticResource MaterialDesignFilledTextBox}"
                                     TextWrapping="Wrap"
                                     Foreground="Black"
                                     FontSize="23"
                                     VerticalAlignment="Center"
-                                    HorizontalAlignment="Stretch"/>
+                                    HorizontalAlignment="Stretch">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction Command="{Binding UserNameChangedCommand}"
+                                                                   CommandParameter="{Binding ElementName=UserNameBox}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
                             </Grid>
                         </Border>
 
@@ -102,8 +110,8 @@
                                     HorizontalAlignment="Stretch">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PasswordChanged">
-                                            <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" 
-                                           CommandParameter="{Binding ElementName=FloatingPasswordBox}"/>
+                                            <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}"
+                                                                   CommandParameter="{Binding ElementName=FloatingPasswordBox}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </PasswordBox>
@@ -112,12 +120,12 @@
 
                     </StackPanel>
                     <Border Grid.Row="2" Background="#6a7eee" Width="250" CornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Height="46">
-                        <Button 
-                            Content="Đăng Nhập" 
-                            Background="Transparent" 
-                            Foreground="White" 
-                            FontSize="18" 
-                            BorderThickness="0" 
+                        <Button
+                            Content="Đăng Nhập"
+                            Background="Transparent"
+                            Foreground="White"
+                            FontSize="18"
+                            BorderThickness="0"
                             Command="{Binding LoginCommand}"
                             CommandParameter="{Binding ElementName=loginWindow}"
                             IsDefault="True"/>

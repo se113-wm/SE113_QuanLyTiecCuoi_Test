@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace QuanLyTiecCuoi.ViewModel
@@ -15,8 +16,8 @@ namespace QuanLyTiecCuoi.ViewModel
         private ObservableCollection<LOAISANH> _List;
         public ObservableCollection<LOAISANH> List { get => _List; set { _List = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<LOAISANH> _FilteredList;
-        public ObservableCollection<LOAISANH> FilteredList { get => _FilteredList; set { _FilteredList = value; OnPropertyChanged(); } }
+        private ObservableCollection<LOAISANH> _OriginalList;
+        public ObservableCollection<LOAISANH> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
 
         private LOAISANH _SelectedItem;
         public LOAISANH SelectedItem
@@ -74,7 +75,6 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 _SelectedSearchProperty = value;
                 OnPropertyChanged();
-                FilteredList = List;
                 PerformSearch();
             }
         }
@@ -83,21 +83,24 @@ namespace QuanLyTiecCuoi.ViewModel
         {
             try
             {
+                SelectedItem = null;
+                TenLoaiSanh = string.Empty;
+                DonGiaBanToiThieu = null;
                 if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty))
                 {
-                    List = FilteredList;
+                    List = OriginalList;
                     return;
                 }
 
                 switch (SelectedSearchProperty)
                 {
                     case "Tên loại sảnh":
-                        List = new ObservableCollection<LOAISANH>(List.Where(x => x.TenLoaiSanh != null && x.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        List = new ObservableCollection<LOAISANH>(OriginalList.Where(x => x.TenLoaiSanh != null && x.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     case "Đơn giá bàn tối thiểu":
                         if (decimal.TryParse(SearchText, out var price))
                         {
-                            List = new ObservableCollection<LOAISANH>(List.Where(x => x.DonGiaBanToiThieu == price));
+                            List = new ObservableCollection<LOAISANH>(OriginalList.Where(x => x.DonGiaBanToiThieu == price));
                         }
                         else
                         {
@@ -105,7 +108,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         }
                         break;
                     default:
-                        List = new ObservableCollection<LOAISANH>(List);
+                        List = new ObservableCollection<LOAISANH>(OriginalList);
                         break;
                 }
             }
@@ -118,7 +121,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public HallTypeViewModel()
         {
             List = new ObservableCollection<LOAISANH>(DataProvider.Ins.DB.LOAISANHs);
-            FilteredList = new ObservableCollection<LOAISANH>(List);
+            OriginalList = new ObservableCollection<LOAISANH>(List);
 
             SearchProperties = new ObservableCollection<string> { "Tên loại sảnh", "Đơn giá bàn tối thiểu" };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
@@ -148,7 +151,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     DataProvider.Ins.DB.SaveChanges();
 
                     List.Add(newHallType);
-                    FilteredList.Add(newHallType);
+                    OriginalList = List;
                     SelectedItem = null;
                     TenLoaiSanh = string.Empty;
                     DonGiaBanToiThieu = null;
@@ -187,10 +190,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         List[index] = null;
                         List[index] = hallType;
 
-                        var filteredIndex = FilteredList.IndexOf(SelectedItem);
-                        FilteredList[filteredIndex] = null;
-                        FilteredList[filteredIndex] = hallType;
-
+                        OriginalList = List;
                         SelectedItem = null;
                         TenLoaiSanh = string.Empty;
                         DonGiaBanToiThieu = null;
@@ -220,8 +220,8 @@ namespace QuanLyTiecCuoi.ViewModel
                         DataProvider.Ins.DB.SaveChanges();
 
                         List.Remove(SelectedItem);
-                        FilteredList.Remove(SelectedItem);
 
+                        OriginalList = List;
                         SelectedItem = null;
                         TenLoaiSanh = string.Empty;
                         DonGiaBanToiThieu = null;

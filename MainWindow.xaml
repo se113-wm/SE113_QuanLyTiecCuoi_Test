@@ -22,12 +22,12 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1200">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"
-                                   CommandParameter="{Binding ElementName=mainWindow}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+    <!--<i:Interaction.Triggers>
+    <i:EventTrigger EventName="Loaded">
+    <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"
+    CommandParameter="{Binding ElementName=mainWindow}"/>
+    </i:EventTrigger>
+    </i:Interaction.Triggers>-->
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <!-- Cột đầu tiên chứa NavBarUC -->
@@ -46,18 +46,25 @@
                 </Grid.RowDefinitions>
 
                 <!-- Header -->
-                <Border Grid.Row="0"
-                        Background="#80c0ff"
-                        Padding="10"
-                        CornerRadius="5"
-                        Margin="10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <materialDesign:PackIcon Kind="Storefront" Foreground="White" Margin="0,0,5,0"/>
-                        <TextBlock Text="Trung tâm tiệc cưới UIT"
-                                   FontSize="14"
-                                   FontWeight="Bold"
-                                   Foreground="White"
-                                   TextAlignment="Center"/>
+                <Border Grid.Row="0" Background="#80c0ff" Padding="10" CornerRadius="5" Margin="10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Storefront"
+                                                 Foreground="White"
+                                                 Width="48" Height="48"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <TextBlock Text="Trung Tâm"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       TextAlignment="Center"/>
+                            <TextBlock Text="Tiệc Cưới UIT"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       TextAlignment="Left"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 

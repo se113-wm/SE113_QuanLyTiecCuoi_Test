@@ -14,25 +14,26 @@ namespace QuanLyTiecCuoi.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
-        public bool IsLogin { get; set; }
+        //public bool IsLogin { get; set; }
         private string _UserName;
         public string UserName { get => _UserName; set { _UserName = value; OnPropertyChanged(); } }
         private string _Password;
         public string Password { get => _Password; set { _Password = value; OnPropertyChanged(); } }
         public ICommand LoginCommand { get; set; }
         public ICommand PasswordChangedCommand { get; set; }
-        public NGUOIDUNG _CurrentUser { get; set; }
-        public void Reset()
-        {
-            IsLogin = false;
-            UserName = string.Empty;
-            Password = string.Empty;
-            _CurrentUser = null;
-        }
+        public ICommand UserNameChangedCommand { get; set; }
+        //public NGUOIDUNG _CurrentUser { get; set; }
+        //public void Reset()
+        //{
+        //    //IsLogin = false;
+        //    UserName = string.Empty;
+        //    Password = string.Empty;
+        //    _CurrentUser = null;
+        //}
         public LoginViewModel()
         {
             var a = DataProvider.Ins.DB.NGUOIDUNGs.First();
-            IsLogin = false;
+            //IsLogin = false;
             Password = "";
             UserName = "";
 
@@ -41,6 +42,7 @@ namespace QuanLyTiecCuoi.ViewModel
             // username: Neith; pass: staff
             LoginCommand = new RelayCommand<Window>((p) => { return true; }, (p) => { Login(p); });
             PasswordChangedCommand = new RelayCommand<PasswordBox>((p) => { return true; }, (p) => { Password = p.Password; });
+            UserNameChangedCommand = new RelayCommand<TextBox>((p) => { return true; }, (p) => { UserName = p.Text; });
         }
         void Login(Window p)
         {
@@ -57,17 +59,24 @@ namespace QuanLyTiecCuoi.ViewModel
                 return;
             }
             string passEncode = MD5Hash(Base64Encode(Password));
-            var Account = DataProvider.Ins.DB.NGUOIDUNGs.Where(x => x.TenDangNhap == UserName && x.MatKhauHash == passEncode);
+            var Account = DataProvider.Ins.DB.NGUOIDUNGs
+                .ToList()
+                .Where(x => x.TenDangNhap.Equals(UserName, StringComparison.Ordinal) && x.MatKhauHash == passEncode);
             if (Account.Count() > 0)
             {
-                _CurrentUser = Account.First();
-                IsLogin = true;
+                //_CurrentUser = Account.First();
+                //IsLogin = true;
                 MessageBox.Show("Đăng nhập thành công!");
+                DataProvider.Ins.CurrentUser = Account.First();
+                // Gọi Main Window
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.DataContext = new MainViewModel();
+                mainWindow.Show();
                 p.Close();
             }
             else
             {
-                IsLogin = false;
+                //IsLogin = false;
                 MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
             }
         }

@@ -40,33 +40,31 @@ namespace QuanLyTiecCuoi.ViewModel
             get => _CurrentView;
             set { _CurrentView = value; OnPropertyChanged(); }
         }
-        public NGUOIDUNG _CurrentUser { get; set; }
-
-
         public MainViewModel()
         {
-            LoadedWindowCommand = new RelayCommand<Window>((p) => { return true; }, (p) => {
-                if (p == null)
-                    return;
-                p.Hide();
-                LoginWindow loginWindow = new LoginWindow();
-                loginWindow.ShowDialog();
+            //LoadedWindowCommand = new RelayCommand<Window>((p) => { return true; }, (p) => {
+            //    if (p == null)
+            //        return;
+            //    p.Hide();
+            //    LoginWindow loginWindow = new LoginWindow();
+            //    loginWindow.ShowDialog();
 
-                if (loginWindow.DataContext == null)
-                    return;
-                var loginVM = loginWindow.DataContext as LoginViewModel;
-                if (loginVM.IsLogin)
-                {
-                    p.Show();
-                    _CurrentUser = loginVM._CurrentUser;
-                    LoadButtonVisibility();
-                }
-                else
-                {
-                    p.Close();
-                }
-            }
-              );
+            //    if (loginWindow.DataContext == null)
+            //        return;
+            //    var loginVM = loginWindow.DataContext as LoginViewModel;
+            //    if (loginVM.IsLogin)
+            //    {
+            //        _CurrentUser = loginVM._CurrentUser;
+            //        LoadButtonVisibility();
+            //        p.Show();
+            //    }
+            //    else
+            //    {
+            //        p.Close();
+            //    }
+            //}
+            //  );
+            LoadButtonVisibility();
             #region Command
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
@@ -115,36 +113,18 @@ namespace QuanLyTiecCuoi.ViewModel
 
             LogoutCommand = new RelayCommand<Window>((p) => { return true; }, (p) =>
             {
-                if (p == null)
-                    return;
-                p.Hide();
                 LoginWindow loginWindow = new LoginWindow();
-                
-                if (loginWindow.DataContext == null)
-                    return;
-                var loginVM = loginWindow.DataContext as LoginViewModel;
-                loginVM.Reset();
-                loginWindow.ShowDialog();
-                if (loginVM.IsLogin)
-                {
-                    p.Show();
-                    _CurrentUser = loginVM._CurrentUser;
-                    LoadButtonVisibility();
-                }
-                else
-                {
-                    p.Close();
-                }
+                loginWindow.DataContext = new LoginViewModel();
+                loginWindow.Show();
+                LoadButtonVisibility();
+                p.Close();
             });
-            CurrentView = new HomeView();
-            ResetButtonBackgrounds();
-            ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue);
         }
         private void LoadButtonVisibility()
         {
             // Lấy danh sách chức năng của nhóm người dùng hiện tại
             var userPermissions = DataProvider.Ins.DB.NHOMNGUOIDUNGs
-                .Where(nhom => nhom.MaNhom == _CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
+                .Where(nhom => nhom.MaNhom == DataProvider.Ins.CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
                 .SelectMany(nhom => nhom.CHUCNANGs) // Lấy danh sách CHUCNANG từ NHOMNGUOIDUNG
                 .ToList();
 
@@ -158,6 +138,12 @@ namespace QuanLyTiecCuoi.ViewModel
 
             // Gọi OnPropertyChanged để cập nhật giao diện
             OnPropertyChanged(nameof(ButtonVisibilities));
+            ResetButtonBackgrounds();
+            // Đặt màu nền cho nút "Trang chủ" là màu được chọn
+            CurrentView = new HomeView();
+            ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue);
+            // Gọi OnPropertyChanged để cập nhật giao diện
+            OnPropertyChanged(nameof(ButtonBackgrounds));
         }
         private void ResetButtonBackgrounds()
         {
