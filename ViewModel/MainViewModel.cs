@@ -88,7 +88,18 @@ namespace QuanLyTiecCuoi.ViewModel
                 // Gọi OnPropertyChanged để cập nhật giao diện
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
-            //HallCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new HallView(); });
+            HallCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                CurrentView = new HallView();
+
+                // Đặt màu nền cho nút "Sảnh" là màu được chọn
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Hall"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+
+                // Gọi OnPropertyChanged để cập nhật giao diện
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
+
             //ShiftCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ShiftView(); });
             //HallTypeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             //{

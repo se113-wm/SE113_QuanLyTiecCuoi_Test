@@ -40,6 +40,8 @@ namespace QuanLyTiecCuoi.ViewModel
 
         private decimal? _DonGiaBanToiThieu;
         public decimal? DonGiaBanToiThieu { get => _DonGiaBanToiThieu; set { _DonGiaBanToiThieu = value; OnPropertyChanged(); } }
+        private string _Message;
+        public string Message { get => _Message; set { _Message = value; OnPropertyChanged(); } }
 
         public ICommand AddCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -128,15 +130,7 @@ namespace QuanLyTiecCuoi.ViewModel
 
             AddCommand = new RelayCommand<object>((p) =>
             {
-                if (string.IsNullOrEmpty(TenLoaiSanh))
-                    return false;
-                if (string.IsNullOrEmpty(DonGiaBanToiThieu.ToString()))
-                    return false;
-                var displayList = DataProvider.Ins.DB.LOAISANHs.Where(x => (x.TenLoaiSanh == TenLoaiSanh && x.DonGiaBanToiThieu == DonGiaBanToiThieu));
-                if (displayList == null || displayList.Count() != 0)
-                    return false;
-                return true;
-
+                return CanAddOrEdit();
             }, (p) =>
             {
                 try
@@ -151,10 +145,8 @@ namespace QuanLyTiecCuoi.ViewModel
                     DataProvider.Ins.DB.SaveChanges();
 
                     List.Add(newHallType);
-                    OriginalList = List;
-                    SelectedItem = null;
-                    TenLoaiSanh = string.Empty;
-                    DonGiaBanToiThieu = null;
+
+                    reset();
                     MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
@@ -165,13 +157,13 @@ namespace QuanLyTiecCuoi.ViewModel
 
             EditCommand = new RelayCommand<object>((p) =>
             {
-                if (SelectedItem == null || string.IsNullOrEmpty(TenLoaiSanh))
-                    return false;
-                var displayList = DataProvider.Ins.DB.LOAISANHs.Where(x => (x.TenLoaiSanh == TenLoaiSanh && x.DonGiaBanToiThieu == DonGiaBanToiThieu));
-                if (displayList == null || displayList.Count() != 0)
-                    return false;
-                return true;
-
+                //if (SelectedItem == null || string.IsNullOrEmpty(TenLoaiSanh))
+                //    return false;
+                //var displayList = DataProvider.Ins.DB.LOAISANHs.Where(x => (x.TenLoaiSanh == TenLoaiSanh));
+                //if (displayList == null || displayList.Count() != 0)
+                //    return false;
+                //return true;
+                return CanAddOrEdit();
             }, (p) =>
             {
                 try
@@ -190,10 +182,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         List[index] = null;
                         List[index] = hallType;
 
-                        OriginalList = List;
-                        SelectedItem = null;
-                        TenLoaiSanh = string.Empty;
-                        DonGiaBanToiThieu = null;
+                        reset();
                         MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
@@ -221,10 +210,7 @@ namespace QuanLyTiecCuoi.ViewModel
 
                         List.Remove(SelectedItem);
 
-                        OriginalList = List;
-                        SelectedItem = null;
-                        TenLoaiSanh = string.Empty;
-                        DonGiaBanToiThieu = null;
+                        reset();
 
                         MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -238,6 +224,46 @@ namespace QuanLyTiecCuoi.ViewModel
                     MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
+        }
+        private bool CanAddOrEdit()
+        {
+            // Kiểm tra tên loại sảnh không được để trống
+            if (string.IsNullOrWhiteSpace(TenLoaiSanh))
+            {
+                Message = "Tên loại sảnh không được để trống.";
+                return false;
+            }
+
+            // Kiểm tra đơn giá phải có và lớn hơn 0
+            if (!DonGiaBanToiThieu.HasValue || DonGiaBanToiThieu <= 0)
+            {
+                Message = "Đơn giá bàn tối thiểu phải lớn hơn 0.";
+                return false;
+            } 
+
+            // Chuẩn hóa tên loại sảnh để kiểm tra trùng (loại bỏ khoảng trắng, phân biệt hoa thường)
+            string normalizedName = TenLoaiSanh.Trim();
+
+            // Không cho phép trùng tên loại sảnh (kể cả khi sửa)
+            var query = DataProvider.Ins.DB.LOAISANHs
+                .Where(x => x.TenLoaiSanh.Trim() == normalizedName);
+
+            // Nếu đang sửa, không cho phép trùng tên với bất kỳ bản ghi nào (kể cả chính nó)
+            if (query.Any())
+            {
+                
+                return false;
+            }
+            Message = string.Empty; // Xóa thông báo lỗi nếu không có lỗi nào
+            return true;
+        }
+        private void reset()
+        {
+            SelectedItem = null;
+            TenLoaiSanh = string.Empty;
+            DonGiaBanToiThieu = null;
+            SearchText = string.Empty;
+            List = OriginalList;
         }
     }
 }

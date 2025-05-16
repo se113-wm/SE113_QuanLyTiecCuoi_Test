@@ -80,6 +80,7 @@
                                     x:Name="UserNameBox"
                                     Text="{Binding UserName}"
                                     materialDesign:HintAssist.Hint="Tên Đăng Nhập"
+                                    materialDesign:ValidationAssist.PopupPlacement="AbsolutePoint"
                                     Style="{StaticResource MaterialDesignFilledTextBox}"
                                     TextWrapping="Wrap"
                                     Foreground="Black"

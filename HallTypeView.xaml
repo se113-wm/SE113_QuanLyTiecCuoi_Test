@@ -40,7 +40,9 @@
                     <TextBox Grid.Column="1"
                              Text="{Binding DonGiaBanToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                              materialDesign:HintAssist.Hint="Đơn giá bàn tối thiểu"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             
+                     
+
                              Margin="5"/>
                 </Grid>
             </StackPanel>

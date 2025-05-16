@@ -18,6 +18,8 @@ GO
 USE QuanLyTiecCuoi;
 GO
 
+ALTER DATABASE QuanLyTiecCuoi COLLATE SQL_Latin1_General_CP1_CS_AS
+
 -- BẢNG LOAISANH
 CREATE TABLE LOAISANH (
     MaLoaiSanh INT IDENTITY(1,1) PRIMARY KEY,
@@ -199,6 +201,8 @@ INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 ('ADMIN', 'HallType')
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
+('ADMIN', 'Hall')
+INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 ('ADMIN', 'Wedding')
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 ('ADMIN', 'Permission')
@@ -210,8 +214,21 @@ INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 
 INSERT INTO LOAISANH (TenLoaiSanh, DonGiaBanToiThieu)
 VALUES 
-    (N'Sảnh A', 1000000),
-    (N'Sảnh B', 1100000),
-    (N'Sảnh C', 1200000),
-    (N'Sảnh D', 1400000),
-    (N'Sảnh E', 1600000);
+    (N'Loại A', 1000000),
+    (N'Loại B', 1100000),
+    (N'Loại C', 1200000),
+    (N'Loại D', 1400000),
+    (N'Loại E', 1600000);
+
+INSERT INTO SANH (MaLoaiSanh, TenSanh, SoLuongBanToiDa, GhiChu)
+VALUES
+    (1, N'Sảnh Ruby', 30, N'Gần cửa chính'),
+    (1, N'Sảnh Sapphire', 28, N'Có sân khấu lớn'),
+    (2, N'Sảnh Diamond', 25, N'Không gian mở'),
+    (2, N'Sảnh Gold', 22, N'Phù hợp tiệc nhỏ'),
+    (3, N'Sảnh Silver', 24, N'Thiết kế hiện đại'),
+    (3, N'Sảnh Platinum', 26, N'View đẹp'),
+    (4, N'Sảnh Emerald', 20, N'Ánh sáng tự nhiên'),
+    (4, N'Sảnh Opal', 18, N'Màu sắc ấm cúng'),
+    (5, N'Sảnh Pearl', 15, N'Cho tiệc thân mật'),
+    (5, N'Sảnh Crystal', 16, N'Thiết kế sang trọng');

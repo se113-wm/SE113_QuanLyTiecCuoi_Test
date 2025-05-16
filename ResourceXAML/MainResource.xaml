@@ -5,6 +5,7 @@
     <viewmodel:MainViewModel x:Key="MainViewModel" />
     <viewmodel:LoginViewModel x:Key="LoginViewModel" />
     <viewmodel:HallTypeViewModel x:Key="HallTypeViewModel" />
+    <viewmodel:HallViewModel x:Key="HallViewModel" />
     <!--<viewmodel:FoodViewModel x:Key="FoodViewModel" />-->
     <viewmodel:BoolToBrushConverter x:Key="BoolToBrushConverter"
                                     SelectedBrush="MediumSeaGreen"

@@ -112,6 +112,9 @@
     <Compile Include="HallTypeView.xaml.cs">
       <DependentUpon>HallTypeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HallView.xaml.cs">
+      <DependentUpon>HallView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,7 @@
     <Compile Include="ViewModel\ControlBarViewModel.cs" />
     <Compile Include="ViewModel\FoodViewModel.cs" />
     <Compile Include="ViewModel\HallTypeViewModel.cs" />
+    <Compile Include="ViewModel\HallViewModel.cs" />
     <Compile Include="ViewModel\ITabViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -193,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HallTypeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HallView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
