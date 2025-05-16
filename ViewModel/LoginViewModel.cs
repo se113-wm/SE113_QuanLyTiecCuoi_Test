@@ -61,7 +61,7 @@ namespace QuanLyTiecCuoi.ViewModel
             string passEncode = MD5Hash(Base64Encode(Password));
             var Account = DataProvider.Ins.DB.NGUOIDUNGs
                 .ToList()
-                .Where(x => x.TenDangNhap.Equals(UserName, StringComparison.Ordinal) && x.MatKhauHash == passEncode);
+                .Where(x => x.TenDangNhap == UserName && x.MatKhauHash == passEncode);
             if (Account.Count() > 0)
             {
                 //_CurrentUser = Account.First();
