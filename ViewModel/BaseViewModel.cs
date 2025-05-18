@@ -54,29 +54,4 @@ namespace QuanLyTiecCuoi.ViewModel
             remove { CommandManager.RequerySuggested -= value; }
         }
     }
-
-    public class AsyncRelayCommand<T> : ICommand
-    {
-        private readonly Func<T, Task> _execute;
-        private readonly Predicate<T> _canExecute;
-
-        public AsyncRelayCommand(Predicate<T> canExecute, Func<T, Task> execute)
-        {
-            _canExecute = canExecute;
-            _execute = execute;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute((T)parameter);
-        }
-
-        public async void Execute(object parameter)
-        {
-            await _execute((T)parameter);
-        }
-
-        public event EventHandler CanExecuteChanged;
-    }
-
 }

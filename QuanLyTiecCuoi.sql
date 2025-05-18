@@ -183,8 +183,8 @@ VALUES ('Neith', '978aae9bb6bee8fb75de3e4830a1be46', N'Đặng Phú Thiện', '2
 
 INSERT INTO CHUCNANG (MaChucNang, TenChucNang, TenManHinhDuocLoad) VALUES 
 ('Home', N'Trang chủ', N'HomeView'),
-('HallType', N'Loại sảnh', N'HallTypeView'),
-('Hall', N'Sảnh tiệc', N'HallView'),
+('HallType', N'sảnh', N'HallTypeView'),
+('Hall', N'tiệc', N'HallView'),
 ('Shift', N'Ca làm việc', N'ShiftView'),
 ('Food', N'Món ăn', N'FoodView'),
 ('Service', N'Dịch vụ', N'ServiceView'),
@@ -214,21 +214,21 @@ INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 
 INSERT INTO LOAISANH (TenLoaiSanh, DonGiaBanToiThieu)
 VALUES 
-    (N'Loại A', 1000000),
-    (N'Loại B', 1100000),
-    (N'Loại C', 1200000),
-    (N'Loại D', 1400000),
-    (N'Loại E', 1600000);
+    (N'A', 1000000),
+    (N'B', 1100000),
+    (N'C', 1200000),
+    (N'D', 1400000),
+    (N'E', 1600000);
 
 INSERT INTO SANH (MaLoaiSanh, TenSanh, SoLuongBanToiDa, GhiChu)
 VALUES
-    (1, N'Sảnh Ruby', 30, N'Gần cửa chính'),
-    (1, N'Sảnh Sapphire', 28, N'Có sân khấu lớn'),
-    (2, N'Sảnh Diamond', 25, N'Không gian mở'),
-    (2, N'Sảnh Gold', 22, N'Phù hợp tiệc nhỏ'),
-    (3, N'Sảnh Silver', 24, N'Thiết kế hiện đại'),
-    (3, N'Sảnh Platinum', 26, N'View đẹp'),
-    (4, N'Sảnh Emerald', 20, N'Ánh sáng tự nhiên'),
-    (4, N'Sảnh Opal', 18, N'Màu sắc ấm cúng'),
-    (5, N'Sảnh Pearl', 15, N'Cho tiệc thân mật'),
-    (5, N'Sảnh Crystal', 16, N'Thiết kế sang trọng');
+    (1, N'Ruby', 30, N'Gần cửa chính'),
+    (1, N'Sapphire', 28, N'Có sân khấu lớn'),
+    (2, N'Diamond', 25, N'Không gian mở'),
+    (2, N'Gold', 22, N'Phù hợp tiệc nhỏ'),
+    (3, N'Silver', 24, N'Thiết kế hiện đại'),
+    (3, N'Platinum', 26, N'View đẹp'),
+    (4, N'Emerald', 20, N'Ánh sáng tự nhiên'),
+    (4, N'Opal', 18, N'Màu sắc ấm cúng'),
+    (5, N'Pearl', 15, N'Cho tiệc thân mật'),
+    (5, N'Crystal', 16, N'Thiết kế sang trọng');

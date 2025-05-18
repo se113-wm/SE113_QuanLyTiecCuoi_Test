@@ -69,7 +69,6 @@ namespace QuanLyTiecCuoi.ViewModel
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new HomeView();
-
                 // Đặt màu nền cho nút "Trang chủ" là màu được chọn
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
@@ -79,7 +78,12 @@ namespace QuanLyTiecCuoi.ViewModel
             });
             HallTypeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                CurrentView = new HallTypeView();
+                // Giả sử HallTypeView có thuộc tính DataContext
+                CurrentView = new HallTypeView
+                {
+                    DataContext = new HallTypeViewModel()
+                };
+
 
                 // Đặt màu nền cho nút "Trang chủ" là màu được chọn
                 ResetButtonBackgrounds();
@@ -90,7 +94,10 @@ namespace QuanLyTiecCuoi.ViewModel
             });
             HallCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                CurrentView = new HallView();
+                CurrentView = new HallView()
+                {
+                    DataContext = new HallViewModel()
+                };
 
                 // Đặt màu nền cho nút "Sảnh" là màu được chọn
                 ResetButtonBackgrounds();
@@ -118,6 +125,20 @@ namespace QuanLyTiecCuoi.ViewModel
             //ReportCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ReportView(); });
             //ParameterCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ParameterView(); });
             //PermissionCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new PermissionView(); });
+            PermissionCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                CurrentView = new PermissionView()
+                {
+                    DataContext = new PermissionViewModel()
+                };
+
+                // Đặt màu nền cho nút "Sảnh" là màu được chọn
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Permission"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+
+                // Gọi OnPropertyChanged để cập nhật giao diện
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             //UserCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new UserView(); });
             //AccountCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new AccountView(); });
             #endregion
