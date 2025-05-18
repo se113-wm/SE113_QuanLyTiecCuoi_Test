@@ -1,15 +1,14 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel"
-                    xmlns:local="clr-namespace:QuanLyTiecCuoi.ResourceXAML">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:QuanLyTiecCuoi.ResourceXAML"
+    xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel">
     <viewmodel:MainViewModel x:Key="MainViewModel" />
     <viewmodel:LoginViewModel x:Key="LoginViewModel" />
-    <viewmodel:HallTypeViewModel x:Key="HallTypeViewModel" />
-    <viewmodel:HallViewModel x:Key="HallViewModel" />
-    <!--<viewmodel:FoodViewModel x:Key="FoodViewModel" />-->
-    <viewmodel:BoolToBrushConverter x:Key="BoolToBrushConverter"
-                                    SelectedBrush="MediumSeaGreen"
-                                    DefaultBrush="#888" />
-
+    <viewmodel:BoolToBrushConverter
+        x:Key="BoolToBrushConverter"
+        DefaultBrush="#888"
+        SelectedBrush="MediumSeaGreen" />
+    <viewmodel:BoolToBrushConverter x:Key="DecimalNoDecimalConverter" />
 
 </ResourceDictionary>
