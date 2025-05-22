@@ -176,6 +176,7 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\BoolToBrushConverter.cs" />
     <Compile Include="ViewModel\ChucNangStateViewModel.cs" />
+    <Compile Include="ViewModel\CurrencyFormatConverter .cs" />
     <Compile Include="ViewModel\HallTypeViewModel.cs" />
     <Compile Include="ViewModel\HallViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />

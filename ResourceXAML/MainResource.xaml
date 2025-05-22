@@ -10,5 +10,6 @@
         DefaultBrush="#888"
         SelectedBrush="MediumSeaGreen" />
     <viewmodel:BoolToBrushConverter x:Key="DecimalNoDecimalConverter" />
+    <viewmodel:CurrencyFormatConverter x:Key="CurrencyFormatConverter" />
 
 </ResourceDictionary>

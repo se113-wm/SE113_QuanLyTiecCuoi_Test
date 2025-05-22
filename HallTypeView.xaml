@@ -55,7 +55,7 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Đơn giá bàn tối thiểu"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding DonGiaBanToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, TargetNullValue=''}" />
+                        Text="{Binding DonGiaBanToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
 
 
                 </Grid>
@@ -92,7 +92,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                     </StackPanel>
 
                     <StackPanel

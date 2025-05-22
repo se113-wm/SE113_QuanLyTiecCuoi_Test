@@ -231,7 +231,7 @@
                         Text="Chi tiết phân quyền" />
                     <StackPanel Grid.Row="1" Margin="10,0,0,0">
                         <!--  Lặp qua các màn hình cố định  -->
-                        <StackPanel
+                        <!--<StackPanel
                             Margin="0,5"
                             DataContext="{Binding ChucNangStates[Home]}"
                             Orientation="Horizontal">
@@ -243,7 +243,7 @@
                                 VerticalAlignment="Center"
                                 FontSize="14"
                                 Text="HomeView" />
-                        </StackPanel>
+                        </StackPanel>-->
                         <StackPanel
                             Margin="0,5"
                             DataContext="{Binding ChucNangStates[HallType]}"
