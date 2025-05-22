@@ -30,7 +30,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (SelectedItem != null)
                 {
                     TenSanh = SelectedItem.TenSanh;
-                    SoLuongBanToiDa = SelectedItem.SoLuongBanToiDa;
+                    SoLuongBanToiDa = SelectedItem.SoLuongBanToiDa.ToString();
                     DonGiaBanToiThieu = SelectedItem.LOAISANH?.DonGiaBanToiThieu;
                     GhiChu = SelectedItem.GhiChu;
                     SelectedHallType = SelectedItem.LOAISANH;
@@ -60,8 +60,8 @@ namespace QuanLyTiecCuoi.ViewModel
         private string _TenSanh;
         public string TenSanh { get => _TenSanh; set { _TenSanh = value; OnPropertyChanged(); } }
 
-        private int? _SoLuongBanToiDa;
-        public int? SoLuongBanToiDa { get => _SoLuongBanToiDa; set { _SoLuongBanToiDa = value; OnPropertyChanged(); } }
+        private string _SoLuongBanToiDa;
+        public string SoLuongBanToiDa { get => _SoLuongBanToiDa; set { _SoLuongBanToiDa = value; OnPropertyChanged(); } }
 
         private string _GhiChu;
         public string GhiChu { get => _GhiChu; set { _GhiChu = value; OnPropertyChanged(); } }
@@ -130,26 +130,21 @@ namespace QuanLyTiecCuoi.ViewModel
                                 x.LOAISANH.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     case "Đơn giá bàn tối thiểu":
-                        if (decimal.TryParse(SearchText, out var price))
-                        {
-                            List = new ObservableCollection<SANH>(
-                                OriginalList.Where(x => x.LOAISANH != null && x.LOAISANH.DonGiaBanToiThieu == price));
-                        }
-                        else
-                        {
-                            List = new ObservableCollection<SANH>();
-                        }
+                        List = new ObservableCollection<SANH>(
+                            OriginalList.Where(x =>
+                                x.LOAISANH != null &&
+                                x.LOAISANH.DonGiaBanToiThieu != null &&
+                                x.LOAISANH.DonGiaBanToiThieu.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
+                            )
+                        );
                         break;
                     case "Số lượng bàn tối đa":
-                        if (int.TryParse(SearchText, out var sl))
-                        {
-                            List = new ObservableCollection<SANH>(
-                                OriginalList.Where(x => x.SoLuongBanToiDa == sl));
-                        }
-                        else
-                        {
-                            List = new ObservableCollection<SANH>();
-                        }
+                        List = new ObservableCollection<SANH>(
+                            OriginalList.Where(x =>
+                                x.SoLuongBanToiDa != null &&
+                                x.SoLuongBanToiDa.Value.ToString().Contains(SearchText.Trim())
+                            )
+                        );
                         break;
                     case "Ghi chú":
                         List = new ObservableCollection<SANH>(
@@ -235,7 +230,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     var newHall = new SANH()
                     {
                         TenSanh = TenSanh,
-                        SoLuongBanToiDa = SoLuongBanToiDa,
+                        SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null,
                         GhiChu = GhiChu,
                         MaLoaiSanh = SelectedHallType?.MaLoaiSanh
                     };
@@ -263,7 +258,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
                 // Không có thay đổi nào
                 if (SelectedItem.TenSanh == TenSanh
-                    && SelectedItem.SoLuongBanToiDa == SoLuongBanToiDa
+                    && SelectedItem.SoLuongBanToiDa.ToString() == SoLuongBanToiDa
                     && SelectedItem.GhiChu == GhiChu
                     && SelectedItem.MaLoaiSanh == (SelectedHallType?.MaLoaiSanh ?? 0))
                 {
@@ -276,12 +271,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Tên sảnh không được để trống";
                     return false;
                 }
-                //if (SelectedHallType == null)
-                //{
-                //    EditMessage = "Vui lòng chọn loại sảnh";
-                //    return false;
-                //}
-                if (SoLuongBanToiDa == null || SoLuongBanToiDa <= 0)
+                if (!int.TryParse(SoLuongBanToiDa, out int soLuong) || soLuong <= 0)
                 {
                     EditMessage = "Số lượng bàn tối đa phải là số nguyên dương";
                     return false;
@@ -306,7 +296,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     if (hall != null)
                     {
                         hall.TenSanh = TenSanh;
-                        hall.SoLuongBanToiDa = SoLuongBanToiDa;
+                        hall.SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null;
                         hall.GhiChu = GhiChu;
                         hall.MaLoaiSanh = SelectedHallType?.MaLoaiSanh;
                         DataProvider.Ins.DB.SaveChanges();

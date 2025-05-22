@@ -168,7 +168,7 @@ namespace QuanLyTiecCuoi.ViewModel
 
                 switch (SelectedSearchProperty)
                 {
-                    case "Tên phân quyền":
+                    case "Tên nhóm":
                         List = new ObservableCollection<NHOMNGUOIDUNG>(
                             OriginalList.Where(x => x.TenNhom != null && x.TenNhom.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
@@ -186,8 +186,12 @@ namespace QuanLyTiecCuoi.ViewModel
 
         public PermissionViewModel()
         {
-            // Load dữ liệu từ database, không hiển thị nhóm 'ADMIN'
-            List = new ObservableCollection<NHOMNGUOIDUNG>(DataProvider.Ins.DB.NHOMNGUOIDUNGs.Where(x => x.TenNhom != "Quản trị viên").ToList());
+            // Load dữ liệu từ database, không hiển thị nhóm 'ADMIN' và nhóm của người dùng hiện tại
+            List = new ObservableCollection<NHOMNGUOIDUNG>(
+                DataProvider.Ins.DB.NHOMNGUOIDUNGs
+                    .Where(x => x.TenNhom != "Quản trị viên" && x.MaNhom != DataProvider.Ins.CurrentUser.MaNhom)
+                    .ToList()
+            );
             // Lưu danh sách gốc để tìm kiếm
             OriginalList = new ObservableCollection<NHOMNGUOIDUNG>(List);
 
@@ -201,16 +205,7 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 if (e.PropertyName == nameof(SelectedItem))
                 {
-                    // Nếu người dùng hiện tại thuộc nhóm người dùng này, không cho phép chọn
-                    if (DataProvider.Ins.CurrentUser != null && DataProvider.Ins.CurrentUser.MaNhom == SelectedItem?.MaNhom)
-                    {
-                        MessageBox.Show("Không thể chọn nhóm người dùng này vì nó đang được sử dụng.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        Reset();
-                    }
-                    else
-                    {
-                        UpdateChucNangStates();
-                    }
+                    UpdateChucNangStates();
                 }
             };
 
@@ -237,7 +232,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 var exists = DataProvider.Ins.DB.NHOMNGUOIDUNGs.Any(x => x.TenNhom == TenNhom);
                 if (exists)
                 {
-                    EditMessage = "Tên nhóm đã tồn tại";
+                    AddMessage = "Tên nhóm đã tồn tại";
                     return false;
                 }
                 AddMessage = string.Empty;
@@ -247,12 +242,12 @@ namespace QuanLyTiecCuoi.ViewModel
                 try
                 {
                     // Tạo mã nhóm mới (rút gọn từ GUID, 8 ký tự)
-                    string maNhom = "NHOM" + Guid.NewGuid().ToString("N").Substring(0, 8);
+                    string maNhom = "GR" + Guid.NewGuid().ToString("N").Substring(0, 8);
 
                     // Kiểm tra trùng mã nhóm trong DB (hiếm nhưng nên có)
                     while (DataProvider.Ins.DB.NHOMNGUOIDUNGs.Any(x => x.MaNhom == maNhom))
                     {
-                        maNhom = "NHOM" + Guid.NewGuid().ToString("N").Substring(0, 8);
+                        maNhom = "GR" + Guid.NewGuid().ToString("N").Substring(0, 8);
                     }
 
                     var newPermission = new NHOMNGUOIDUNG()

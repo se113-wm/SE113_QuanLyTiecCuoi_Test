@@ -174,6 +174,12 @@ VALUES ('ADMIN', N'Quản trị viên');
 
 INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
 VALUES ('STAFF', N'Nhân viên');
+INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
+VALUES ('gr1', N'Nhân viên');
+INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
+VALUES ('gr2', N'Nhân viên');
+INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
+VALUES ('gr3', N'Nhân viên');
 
 INSERT INTO NGUOIDUNG (TenDangNhap, MatKhauHash, HoTen, Email, TrangThai, MaNhom)
 VALUES ('Fartiel', 'db69fc039dcbd2962cb4d28f5891aae1', N'Đặng Phú Thiện', '23521476@gm.uit.edu.vn', 1, 'ADMIN');

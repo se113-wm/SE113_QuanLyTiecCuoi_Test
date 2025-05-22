@@ -30,7 +30,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (SelectedItem != null)
                 {
                     TenLoaiSanh = SelectedItem.TenLoaiSanh;
-                    DonGiaBanToiThieu = SelectedItem.DonGiaBanToiThieu;
+                    DonGiaBanToiThieu = SelectedItem.DonGiaBanToiThieu?.ToString("G29") ?? string.Empty;
                 }
                 else
                 {
@@ -44,8 +44,8 @@ namespace QuanLyTiecCuoi.ViewModel
         private string _TenLoaiSanh;
         public string TenLoaiSanh { get => _TenLoaiSanh; set { _TenLoaiSanh = value; OnPropertyChanged(); } }
 
-        private decimal? _DonGiaBanToiThieu;
-        public decimal? DonGiaBanToiThieu { get => _DonGiaBanToiThieu; set { _DonGiaBanToiThieu = value; OnPropertyChanged(); } }
+        private string _DonGiaBanToiThieu;
+        public string DonGiaBanToiThieu { get => _DonGiaBanToiThieu; set { _DonGiaBanToiThieu = value; OnPropertyChanged(); } }
 
         public ICommand AddCommand { get; set; }
         private string _AddMessage;
@@ -110,14 +110,12 @@ namespace QuanLyTiecCuoi.ViewModel
                         List = new ObservableCollection<LOAISANH>(OriginalList.Where(x => x.TenLoaiSanh != null && x.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     case "Đơn giá bàn tối thiểu":
-                        if (decimal.TryParse(SearchText, out var price))
-                        {
-                            List = new ObservableCollection<LOAISANH>(OriginalList.Where(x => x.DonGiaBanToiThieu == price));
-                        }
-                        else
-                        {
-                            List = new ObservableCollection<LOAISANH>();
-                        }
+                        List = new ObservableCollection<LOAISANH>(
+                            OriginalList.Where(x =>
+                                x.DonGiaBanToiThieu != null &&
+                                x.DonGiaBanToiThieu.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
+                            )
+                        );
                         break;
                     default:
                         List = new ObservableCollection<LOAISANH>(OriginalList);
@@ -152,15 +150,20 @@ namespace QuanLyTiecCuoi.ViewModel
                     }
                         return false;
                 }
-                if (string.IsNullOrEmpty(DonGiaBanToiThieu.ToString()) || DonGiaBanToiThieu <= 0)
-                {
-                    AddMessage = "Đơn giá bàn tối thiểu không hợp lệ";
-                    return false;
-                }
                 var exists = DataProvider.Ins.DB.LOAISANHs.Any(x => x.TenLoaiSanh == TenLoaiSanh);
                 if (exists)
                 {
                     AddMessage = "Tên loại sảnh đã tồn tại";
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(DonGiaBanToiThieu) || !decimal.TryParse(DonGiaBanToiThieu, out var gia) || gia % 1 != 0)
+                {
+                    AddMessage = "Vui lòng nhập đơn giá hợp lệ";
+                    return false;
+                }
+                if (gia < 10000)
+                {
+                    AddMessage = "Đơn giá bàn tối thiểu >= 10.000";
                     return false;
                 }
                 AddMessage = string.Empty;
@@ -172,7 +175,10 @@ namespace QuanLyTiecCuoi.ViewModel
                     var newHallType = new LOAISANH()
                     {
                         TenLoaiSanh = TenLoaiSanh,
-                        DonGiaBanToiThieu = DonGiaBanToiThieu
+                        DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu)
+                                                    ? (decimal?)null
+                                                    : decimal.Parse(DonGiaBanToiThieu)
+
                     };
 
                     DataProvider.Ins.DB.LOAISANHs.Add(newHallType);
@@ -196,20 +202,16 @@ namespace QuanLyTiecCuoi.ViewModel
                 {
                     return false;
                 }
-                if (SelectedItem.TenLoaiSanh == TenLoaiSanh && SelectedItem.DonGiaBanToiThieu == DonGiaBanToiThieu)
+                if (SelectedItem.TenLoaiSanh == TenLoaiSanh && SelectedItem.DonGiaBanToiThieu?.ToString("G29") == DonGiaBanToiThieu)
                 {
                     EditMessage = "Không có thay đổi nào để cập nhật";
                     return false;
                 }
+
                 // Kiểm tra tính hợp lệ của dữ liệu
                 if (string.IsNullOrWhiteSpace(TenLoaiSanh))
                 {
                     EditMessage = "Tên loại sảnh không được để trống";
-                    return false;
-                }
-                if (DonGiaBanToiThieu == null || DonGiaBanToiThieu <= 0)
-                {
-                    EditMessage = "Đơn giá bàn tối thiểu không hợp lệ";
                     return false;
                 }
                 // Kiểm tra xem tên loại sảnh đã tồn tại chưa
@@ -217,6 +219,16 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (exists)
                 {
                     EditMessage = "Tên loại sảnh đã tồn tại";
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(DonGiaBanToiThieu) || !decimal.TryParse(DonGiaBanToiThieu, out var gia) || gia % 1 != 0)
+                {
+                    EditMessage = "Vui lòng nhập đơn giá hợp lệ";
+                    return false;
+                }
+                if (gia < 10000)
+                {
+                    EditMessage = "Đơn giá bàn tối thiểu >= 10.000";
                     return false;
                 }
                 EditMessage = string.Empty;
@@ -229,11 +241,13 @@ namespace QuanLyTiecCuoi.ViewModel
                     if (hallType != null)
                     {
                         hallType.TenLoaiSanh = TenLoaiSanh;
-                        hallType.DonGiaBanToiThieu = DonGiaBanToiThieu;
+                        hallType.DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu)
+                                                        ? (decimal?)null
+                                                        : decimal.Parse(DonGiaBanToiThieu);
                         DataProvider.Ins.DB.SaveChanges();
 
                         SelectedItem.TenLoaiSanh = TenLoaiSanh;
-                        SelectedItem.DonGiaBanToiThieu = DonGiaBanToiThieu;
+                        SelectedItem.DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu) ? (decimal?)null : decimal.Parse(DonGiaBanToiThieu);
 
                         var index = List.IndexOf(SelectedItem);
                         List[index] = null;
