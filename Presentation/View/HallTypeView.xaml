@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="QuanLyTiecCuoi.HallTypeView"
+    x:Class="QuanLyTiecCuoi.Presentation.View.HallTypeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
@@ -110,7 +110,8 @@
                                 Style="{StaticResource MaterialDesignRaisedButton}" />
                             <TextBlock
                                 Height="32"
-                                FontSize="12"
+                                VerticalAlignment="Top"
+                                FontSize="10"
                                 Foreground="Gray"
                                 Text="{Binding AddMessage}"
                                 TextWrapping="Wrap" />
@@ -125,7 +126,7 @@
                             <TextBlock
                                 Height="32"
                                 VerticalAlignment="Top"
-                                FontSize="12"
+                                FontSize="10"
                                 Foreground="Gray"
                                 Text="{Binding EditMessage}"
                                 TextWrapping="Wrap" />
@@ -140,7 +141,7 @@
                             <TextBlock
                                 Height="32"
                                 VerticalAlignment="Top"
-                                FontSize="12"
+                                FontSize="10"
                                 Foreground="Gray"
                                 Text="{Binding DeleteMessage}"
                                 TextWrapping="Wrap" />

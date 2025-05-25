@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using QuanLyTiecCuoi.Model;
+using QuanLyTiecCuoi.Presentation.View;
 
 
 namespace QuanLyTiecCuoi.ViewModel
@@ -42,28 +43,6 @@ namespace QuanLyTiecCuoi.ViewModel
         }
         public MainViewModel()
         {
-            //LoadedWindowCommand = new RelayCommand<Window>((p) => { return true; }, (p) => {
-            //    if (p == null)
-            //        return;
-            //    p.Hide();
-            //    LoginWindow loginWindow = new LoginWindow();
-            //    loginWindow.ShowDialog();
-
-            //    if (loginWindow.DataContext == null)
-            //        return;
-            //    var loginVM = loginWindow.DataContext as LoginViewModel;
-            //    if (loginVM.IsLogin)
-            //    {
-            //        _CurrentUser = loginVM._CurrentUser;
-            //        LoadButtonVisibility();
-            //        p.Show();
-            //    }
-            //    else
-            //    {
-            //        p.Close();
-            //    }
-            //}
-            //  );
             LoadButtonVisibility();
             #region Command
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
@@ -121,7 +100,20 @@ namespace QuanLyTiecCuoi.ViewModel
             //});
             //ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ServiceView(); });
             //WeddingCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new WeddingView(); });
+            WeddingCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                CurrentView = new WeddingView()
+                {
+                    //DataContext = new WeddingViewModel()
+                };
 
+                // Đặt màu nền cho nút "Sảnh" là màu được chọn
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+
+                // Gọi OnPropertyChanged để cập nhật giao diện
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             //ReportCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ReportView(); });
             //ParameterCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ParameterView(); });
             //PermissionCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new PermissionView(); });

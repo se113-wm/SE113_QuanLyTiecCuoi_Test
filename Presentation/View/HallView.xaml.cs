@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace QuanLyTiecCuoi
+namespace QuanLyTiecCuoi.Presentation.View
 {
     /// <summary>
-    /// Interaction logic for HallTypeView.xaml
+    /// Interaction logic for HallView.xaml
     /// </summary>
-    public partial class HallTypeView : UserControl
+    public partial class HallView : UserControl
     {
-        public HallTypeView()
+        public HallView()
         {
             InitializeComponent();
         }

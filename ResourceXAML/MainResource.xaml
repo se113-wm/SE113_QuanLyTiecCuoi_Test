@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:QuanLyTiecCuoi.ResourceXAML"
+    xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel">
     <viewmodel:MainViewModel x:Key="MainViewModel" />
     <viewmodel:LoginViewModel x:Key="LoginViewModel" />
@@ -11,5 +11,15 @@
         SelectedBrush="MediumSeaGreen" />
     <viewmodel:BoolToBrushConverter x:Key="DecimalNoDecimalConverter" />
     <viewmodel:CurrencyFormatConverter x:Key="CurrencyFormatConverter" />
-
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <Style x:Key="MaterialDesignOutlinedSecondaryLightSplitButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="MaterialDesign:ButtonProgressAssist.IsIndicatorVisible" Value="False" />
+        <!--  Thêm các Setter khác nếu muốn  -->
+    </Style>
 </ResourceDictionary>

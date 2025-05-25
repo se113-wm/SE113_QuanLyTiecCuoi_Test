@@ -17,6 +17,7 @@
         <EntityTypeShape EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Width="1.5" PointX="10" PointY="8.875" />
         <EntityTypeShape EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" Width="1.5" PointX="5.25" PointY="3" />
         <EntityTypeShape EntityType="QuanLyTiecCuoiModel.SANH" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.THAMSO" Width="1.5" PointX="0.75" PointY="8.5" />
         <EntityTypeShape EntityType="QuanLyTiecCuoiModel.THUCDON" Width="1.5" PointX="10.5" PointY="4.5" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CTBAOCAODS__4F7CD00D" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__3E52440B" />
@@ -24,7 +25,7 @@
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__49C3F6B7" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__44FF419A" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5CD6CB2B" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__3F466844" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__440B1D61" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.PHANQUYEN" />

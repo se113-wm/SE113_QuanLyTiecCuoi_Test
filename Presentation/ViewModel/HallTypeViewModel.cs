@@ -1,26 +1,29 @@
-﻿using QuanLyTiecCuoi.Model;
+﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+using QuanLyTiecCuoi.DataAccessLayer.Repository;
+using QuanLyTiecCuoi.DataTransferObject;
+using QuanLyTiecCuoi.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace QuanLyTiecCuoi.ViewModel
 {
     public class HallTypeViewModel : BaseViewModel
     {
-        private ObservableCollection<LOAISANH> _List;
-        public ObservableCollection<LOAISANH> List { get => _List; set { _List = value; OnPropertyChanged(); } }
+        private readonly ILoaiSanhService _loaiSanhService;
 
-        private ObservableCollection<LOAISANH> _OriginalList;
-        public ObservableCollection<LOAISANH> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
+        private ObservableCollection<LOAISANHDTO> _List;
+        public ObservableCollection<LOAISANHDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
 
-        private LOAISANH _SelectedItem;
-        public LOAISANH SelectedItem
+        private ObservableCollection<LOAISANHDTO> _OriginalList;
+        public ObservableCollection<LOAISANHDTO> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
+
+        private LOAISANHDTO _SelectedItem;
+        public LOAISANHDTO SelectedItem
         {
             get => _SelectedItem;
             set
@@ -107,10 +110,10 @@ namespace QuanLyTiecCuoi.ViewModel
                 switch (SelectedSearchProperty)
                 {
                     case "Tên loại sảnh":
-                        List = new ObservableCollection<LOAISANH>(OriginalList.Where(x => x.TenLoaiSanh != null && x.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        List = new ObservableCollection<LOAISANHDTO>(OriginalList.Where(x => x.TenLoaiSanh != null && x.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     case "Đơn giá bàn tối thiểu":
-                        List = new ObservableCollection<LOAISANH>(
+                        List = new ObservableCollection<LOAISANHDTO>(
                             OriginalList.Where(x =>
                                 x.DonGiaBanToiThieu != null &&
                                 x.DonGiaBanToiThieu.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
@@ -118,7 +121,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         );
                         break;
                     default:
-                        List = new ObservableCollection<LOAISANH>(OriginalList);
+                        List = new ObservableCollection<LOAISANHDTO>(OriginalList);
                         break;
                 }
             }
@@ -130,8 +133,10 @@ namespace QuanLyTiecCuoi.ViewModel
 
         public HallTypeViewModel()
         {
-            List = new ObservableCollection<LOAISANH>(DataProvider.Ins.DB.LOAISANHs);
-            OriginalList = new ObservableCollection<LOAISANH>(List);
+            _loaiSanhService = new LoaiSanhService();
+
+            List = new ObservableCollection<LOAISANHDTO>(_loaiSanhService.GetAll().ToList());
+            OriginalList = new ObservableCollection<LOAISANHDTO>(List);
 
             SearchProperties = new ObservableCollection<string> { "Tên loại sảnh", "Đơn giá bàn tối thiểu" };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
@@ -148,9 +153,9 @@ namespace QuanLyTiecCuoi.ViewModel
                     {
                         AddMessage = string.Empty;
                     }
-                        return false;
+                    return false;
                 }
-                var exists = DataProvider.Ins.DB.LOAISANHs.Any(x => x.TenLoaiSanh == TenLoaiSanh);
+                var exists = OriginalList.Any(x => x.TenLoaiSanh == TenLoaiSanh);
                 if (exists)
                 {
                     AddMessage = "Tên loại sảnh đã tồn tại";
@@ -172,17 +177,15 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    var newHallType = new LOAISANH()
+                    var newHallType = new LOAISANHDTO()
                     {
                         TenLoaiSanh = TenLoaiSanh,
                         DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu)
                                                     ? (decimal?)null
                                                     : decimal.Parse(DonGiaBanToiThieu)
-
                     };
 
-                    DataProvider.Ins.DB.LOAISANHs.Add(newHallType);
-                    DataProvider.Ins.DB.SaveChanges();
+                    _loaiSanhService.Create(newHallType);
 
                     List.Add(newHallType);
 
@@ -194,7 +197,6 @@ namespace QuanLyTiecCuoi.ViewModel
                     MessageBox.Show($"Lỗi khi thêm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
-
 
             EditCommand = new RelayCommand<object>((p) =>
             {
@@ -208,14 +210,12 @@ namespace QuanLyTiecCuoi.ViewModel
                     return false;
                 }
 
-                // Kiểm tra tính hợp lệ của dữ liệu
                 if (string.IsNullOrWhiteSpace(TenLoaiSanh))
                 {
                     EditMessage = "Tên loại sảnh không được để trống";
                     return false;
                 }
-                // Kiểm tra xem tên loại sảnh đã tồn tại chưa
-                var exists = DataProvider.Ins.DB.LOAISANHs.Any(x => x.TenLoaiSanh == TenLoaiSanh && x.MaLoaiSanh != SelectedItem.MaLoaiSanh);
+                var exists = OriginalList.Any(x => x.TenLoaiSanh == TenLoaiSanh && x.MaLoaiSanh != SelectedItem.MaLoaiSanh);
                 if (exists)
                 {
                     EditMessage = "Tên loại sảnh đã tồn tại";
@@ -237,25 +237,23 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    var hallType = DataProvider.Ins.DB.LOAISANHs.Where(x => x.MaLoaiSanh == SelectedItem.MaLoaiSanh).SingleOrDefault();
-                    if (hallType != null)
+                    var updateDto = new LOAISANHDTO()
                     {
-                        hallType.TenLoaiSanh = TenLoaiSanh;
-                        hallType.DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu)
-                                                        ? (decimal?)null
-                                                        : decimal.Parse(DonGiaBanToiThieu);
-                        DataProvider.Ins.DB.SaveChanges();
+                        MaLoaiSanh = SelectedItem.MaLoaiSanh,
+                        TenLoaiSanh = TenLoaiSanh,
+                        DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu)
+                                                ? (decimal?)null
+                                                : decimal.Parse(DonGiaBanToiThieu)
+                    };
 
-                        SelectedItem.TenLoaiSanh = TenLoaiSanh;
-                        SelectedItem.DonGiaBanToiThieu = string.IsNullOrWhiteSpace(DonGiaBanToiThieu) ? (decimal?)null : decimal.Parse(DonGiaBanToiThieu);
+                    _loaiSanhService.Update(updateDto);
 
-                        var index = List.IndexOf(SelectedItem);
-                        List[index] = null;
-                        List[index] = hallType;
+                    var index = List.IndexOf(SelectedItem);
+                    List[index] = null;
+                    List[index] = updateDto;
 
-                        Reset();
-                        MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
+                    Reset();
+                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -265,28 +263,26 @@ namespace QuanLyTiecCuoi.ViewModel
 
             DeleteCommand = new RelayCommand<object>((p) =>
             {
+
                 if (SelectedItem == null)
                     return false;
-                var hasReferences = DataProvider.Ins.DB.SANHs.Any(s => s.MaLoaiSanh == SelectedItem.MaLoaiSanh);
-                if (hasReferences)
+                // Tìm xem có sảnh nào có mã loại sảnh được chọn không
+                var exists = _loaiSanhService.GetAll().Any(x => x.MaLoaiSanh == SelectedItem?.MaLoaiSanh);
+                if (exists)
                 {
                     DeleteMessage = "Đối tượng đang được tham chiếu.";
                     return false;
                 }
-                else
-                {
-                    DeleteMessage = string.Empty;
-                    return true;
-                }
-                }, (p) =>
+                DeleteMessage = string.Empty;
+                return true;
+            }, (p) =>
             {
                 try
                 {
                     var result = MessageBox.Show("Bạn có chắc chắn muốn xóa loại sảnh này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        DataProvider.Ins.DB.LOAISANHs.Remove(SelectedItem);
-                        DataProvider.Ins.DB.SaveChanges();
+                        _loaiSanhService.Delete(SelectedItem.MaLoaiSanh);
 
                         List.Remove(SelectedItem);
 
@@ -305,6 +301,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             });
         }
+
         private void Reset()
         {
             SelectedItem = null;

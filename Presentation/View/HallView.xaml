@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="QuanLyTiecCuoi.HallView"
+    x:Class="QuanLyTiecCuoi.Presentation.View.HallView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -262,7 +262,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Số lượng bàn tối đa  -->
-                            <GridViewColumn Width="120" Header="Số lượng bàn tối đa">
+                            <GridViewColumn Width="200" Header="Số lượng bàn tối đa">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock

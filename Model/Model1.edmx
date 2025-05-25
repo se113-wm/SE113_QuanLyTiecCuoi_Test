@@ -142,14 +142,13 @@
           <Property Name="SoLuongBanToiDa" Type="int" />
           <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="THAMSO">
-          <Property Name="KiemTraPhat" Type="bit" />
-          <Property Name="TiLePhat" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="TiLeTienDatCocToiThieu" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="TiLeSoBanDatTruocToiThieu" Type="decimal" Precision="5" Scale="2" />
-        </EntityType>-->
+          <Key>
+            <PropertyRef Name="TenThamSo" />
+          </Key>
+          <Property Name="TenThamSo" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="GiaTri" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
         <EntityType Name="THUCDON">
           <Key>
             <PropertyRef Name="MaPhieuDat" />
@@ -200,7 +199,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGUOIDUNG__MaNho__5BE2A6F2">
+        <Association Name="FK__NGUOIDUNG__MaNho__5CD6CB2B">
           <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="0..1" />
           <End Role="NGUOIDUNG" Type="Self.NGUOIDUNG" Multiplicity="*" />
           <ReferentialConstraint>
@@ -212,7 +211,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHANQUYEN__MaChu__5812160E">
+        <Association Name="FK__PHANQUYEN__MaChu__59063A47">
           <End Role="CHUCNANG" Type="Self.CHUCNANG" Multiplicity="1" />
           <End Role="PHANQUYEN" Type="Self.PHANQUYEN" Multiplicity="*" />
           <ReferentialConstraint>
@@ -224,7 +223,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHANQUYEN__MaNho__571DF1D5">
+        <Association Name="FK__PHANQUYEN__MaNho__5812160E">
           <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="1" />
           <End Role="PHANQUYEN" Type="Self.PHANQUYEN" Multiplicity="*" />
           <ReferentialConstraint>
@@ -310,6 +309,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <EntitySet Name="PHANQUYEN" EntityType="Self.PHANQUYEN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PHIEUDATTIEC" EntityType="Self.PHIEUDATTIEC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SANH" EntityType="Self.SANH" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="THAMSO" EntityType="Self.THAMSO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="THUCDON" EntityType="Self.THUCDON" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CHITIETDV__MaDic__4AB81AF0" Association="Self.FK__CHITIETDV__MaDic__4AB81AF0">
             <End Role="DICHVU" EntitySet="DICHVU" />
@@ -323,15 +323,15 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <End Role="BAOCAODS" EntitySet="BAOCAODS" />
             <End Role="CTBAOCAODS" EntitySet="CTBAOCAODS" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__5BE2A6F2" Association="Self.FK__NGUOIDUNG__MaNho__5BE2A6F2">
+          <AssociationSet Name="FK__NGUOIDUNG__MaNho__5CD6CB2B" Association="Self.FK__NGUOIDUNG__MaNho__5CD6CB2B">
             <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNG" />
             <End Role="NGUOIDUNG" EntitySet="NGUOIDUNG" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHANQUYEN__MaChu__5812160E" Association="Self.FK__PHANQUYEN__MaChu__5812160E">
+          <AssociationSet Name="FK__PHANQUYEN__MaChu__59063A47" Association="Self.FK__PHANQUYEN__MaChu__59063A47">
             <End Role="CHUCNANG" EntitySet="CHUCNANG" />
             <End Role="PHANQUYEN" EntitySet="PHANQUYEN" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHANQUYEN__MaNho__571DF1D5" Association="Self.FK__PHANQUYEN__MaNho__571DF1D5">
+          <AssociationSet Name="FK__PHANQUYEN__MaNho__5812160E" Association="Self.FK__PHANQUYEN__MaNho__5812160E">
             <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNG" />
             <End Role="PHANQUYEN" EntitySet="PHANQUYEN" />
           </AssociationSet>
@@ -373,6 +373,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <EntitySet Name="NHOMNGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" />
           <EntitySet Name="PHIEUDATTIECs" EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" />
           <EntitySet Name="SANHs" EntityType="QuanLyTiecCuoiModel.SANH" />
+          <EntitySet Name="THAMSOes" EntityType="QuanLyTiecCuoiModel.THAMSO" />
           <EntitySet Name="THUCDONs" EntityType="QuanLyTiecCuoiModel.THUCDON" />
           <AssociationSet Name="FK__CTBAOCAODS__4F7CD00D" Association="QuanLyTiecCuoiModel.FK__CTBAOCAODS__4F7CD00D">
             <End Role="BAOCAOD" EntitySet="BAOCAODS" />
@@ -398,7 +399,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             <End Role="MONAN" EntitySet="MONANs" />
             <End Role="THUCDON" EntitySet="THUCDONs" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__5BE2A6F2" Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2">
+          <AssociationSet Name="FK__NGUOIDUNG__MaNho__5CD6CB2B" Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5CD6CB2B">
             <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
             <End Role="NGUOIDUNG" EntitySet="NGUOIDUNGs" />
           </AssociationSet>
@@ -511,7 +512,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="TrangThai" Type="Boolean" />
           <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
+          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5CD6CB2B" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
         </EntityType>
         <EntityType Name="NHOMNGUOIDUNG">
           <Key>
@@ -519,7 +520,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           </Key>
           <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenNhom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5BE2A6F2" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
+          <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__5CD6CB2B" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
           <NavigationProperty Name="CHUCNANGs" Relationship="QuanLyTiecCuoiModel.PHANQUYEN" FromRole="NHOMNGUOIDUNG" ToRole="CHUCNANG" />
         </EntityType>
         <EntityType Name="PHIEUDATTIEC">
@@ -561,6 +562,13 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="LOAISANH" Relationship="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__398D8EEE" FromRole="SANH" ToRole="LOAISANH" />
           <NavigationProperty Name="PHIEUDATTIECs" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__3F466844" FromRole="SANH" ToRole="PHIEUDATTIEC" />
+        </EntityType>
+        <EntityType Name="THAMSO">
+          <Key>
+            <PropertyRef Name="TenThamSo" />
+          </Key>
+          <Property Name="TenThamSo" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="GiaTri" Type="Decimal" Precision="5" Scale="2" />
         </EntityType>
         <EntityType Name="THUCDON">
           <Key>
@@ -650,7 +658,7 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGUOIDUNG__MaNho__5BE2A6F2">
+        <Association Name="FK__NGUOIDUNG__MaNho__5CD6CB2B">
           <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="0..1" />
           <End Type="QuanLyTiecCuoiModel.NGUOIDUNG" Role="NGUOIDUNG" Multiplicity="*" />
           <ReferentialConstraint>
@@ -830,6 +838,14 @@ warning 6013: The table/view 'QuanLyTiecCuoi.dbo.THAMSO' does not have a primary
                 <ScalarProperty Name="TenSanh" ColumnName="TenSanh" />
                 <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
                 <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="THAMSOes">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.THAMSO">
+              <MappingFragment StoreEntitySet="THAMSO">
+                <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
+                <ScalarProperty Name="TenThamSo" ColumnName="TenThamSo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

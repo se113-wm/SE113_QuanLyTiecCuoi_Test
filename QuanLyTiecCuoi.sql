@@ -133,10 +133,8 @@ CREATE TABLE CTBAOCAODS (
 
 -- BẢNG THAM SỐ
 CREATE TABLE THAMSO (
-    KiemTraPhat BIT,
-    TiLePhat DECIMAL(5,2),
-    TiLeTienDatCocToiThieu DECIMAL(5,2),
-    TiLeSoBanDatTruocToiThieu DECIMAL (5,2)
+    TenThamSo NVARCHAR(5) PRIMARY KEY,
+	GiaTri DECIMAL(5,2)
 );
 
 -- BẢNG PHÂN QUYỀN
@@ -225,6 +223,38 @@ VALUES
     (N'C', 1200000),
     (N'D', 1400000),
     (N'E', 1600000);
+
+INSERT INTO LOAISANH (TenLoaiSanh, DonGiaBanToiThieu) VALUES
+(N'F', 1800000),
+(N'G', 2000000),
+(N'H', 2200000),
+(N'I', 2400000),
+(N'J', 2600000),
+(N'K', 2800000),
+(N'L', 3000000),
+(N'M', 3200000),
+(N'N', 3400000),
+(N'O', 3600000),
+(N'P', 3800000),
+(N'Q', 4000000),
+(N'R', 4200000),
+(N'S', 4400000),
+(N'T', 4600000),
+(N'U', 4800000),
+(N'V', 5000000),
+(N'W', 5200000),
+(N'X', 5400000),
+(N'Y', 5600000),
+(N'Z', 5800000),
+(N'AA', 6000000),
+(N'AB', 6200000),
+(N'AC', 6400000),
+(N'AD', 6600000),
+(N'AE', 6800000),
+(N'AF', 7000000),
+(N'AG', 7200000),
+(N'AH', 7400000),
+(N'AI', 7600000);
 
 INSERT INTO SANH (MaLoaiSanh, TenSanh, SoLuongBanToiDa, GhiChu)
 VALUES

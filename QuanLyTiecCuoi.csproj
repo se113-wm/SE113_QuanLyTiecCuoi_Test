@@ -103,16 +103,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="HallTypeView.xaml.cs">
+    <Compile Include="BusinessLogicLayer\IService\ILoaiSanhService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\LoaiSanhService.cs" />
+    <Compile Include="DataAccessLayer\IRepository\ILoaiSanhRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\ISanhRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\LoaiSanhRepository.cs" />
+    <Compile Include="DataTransferObject\CADTO.cs" />
+    <Compile Include="DataTransferObject\CHUCNANGDTO.cs" />
+    <Compile Include="DataTransferObject\DICHVUDTO.cs" />
+    <Compile Include="DataTransferObject\LOAISANHDTO.cs" />
+    <Compile Include="DataTransferObject\MONANDTO.cs" />
+    <Compile Include="DataTransferObject\NGUOIDUNGDTO.cs" />
+    <Compile Include="DataTransferObject\NHOMNGUOIDUNGDTO.cs" />
+    <Compile Include="DataTransferObject\SANHDTO.cs" />
+    <Compile Include="Model\THAMSO.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\ViewModel\BooleanToVisibililityConverter.cs" />
+    <Compile Include="Presentation\View\HallTypeView.xaml.cs">
       <DependentUpon>HallTypeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HallView.xaml.cs">
+    <Compile Include="Presentation\View\HallView.xaml.cs">
       <DependentUpon>HallView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HomeView.xaml.cs">
+    <Compile Include="Presentation\View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginWindow.xaml.cs">
+    <Compile Include="Presentation\View\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BAOCAOD.cs">
@@ -170,35 +187,38 @@
     <Compile Include="Model\THUCDON.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="PermissionView.xaml.cs">
+    <Compile Include="Presentation\View\PermissionView.xaml.cs">
       <DependentUpon>PermissionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="ViewModel\BoolToBrushConverter.cs" />
-    <Compile Include="ViewModel\ChucNangStateViewModel.cs" />
-    <Compile Include="ViewModel\CurrencyFormatConverter .cs" />
-    <Compile Include="ViewModel\HallTypeViewModel.cs" />
-    <Compile Include="ViewModel\HallViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\PermissionViewModel.cs" />
-    <Page Include="HallTypeView.xaml">
+    <Compile Include="Presentation\ViewModel\BaseViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\BoolToBrushConverter.cs" />
+    <Compile Include="Presentation\ViewModel\ChucNangStateViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\CurrencyFormatConverter .cs" />
+    <Compile Include="Presentation\ViewModel\HallTypeViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\HallViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\LoginViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\MainViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\PermissionViewModel.cs" />
+    <Compile Include="Presentation\View\WeddingView.xaml.cs">
+      <DependentUpon>WeddingView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Presentation\View\HallTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HallView.xaml">
+    <Page Include="Presentation\View\HallView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HomeView.xaml">
+    <Page Include="Presentation\View\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginWindow.xaml">
+    <Page Include="Presentation\View\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Presentation\View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -206,15 +226,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Presentation\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PermissionView.xaml">
+    <Page Include="Presentation\View\PermissionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourceXAML\MainResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\WeddingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
