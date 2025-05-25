@@ -146,7 +146,6 @@
                                 Text="{Binding DeleteMessage}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
-
                     </StackPanel>
                 </DockPanel>
 

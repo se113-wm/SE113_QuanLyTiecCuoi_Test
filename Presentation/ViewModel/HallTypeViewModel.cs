@@ -53,6 +53,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand AddCommand { get; set; }
         private string _AddMessage;
         public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
+
         public ICommand EditCommand { get; set; }
         private string _EditMessage;
         public string EditMessage { get => _EditMessage; set { _EditMessage = value; OnPropertyChanged(); } }
