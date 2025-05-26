@@ -199,18 +199,20 @@ INSERT INTO CHUCNANG (MaChucNang, TenChucNang, TenManHinhDuocLoad) VALUES
 ('Permission', N'Phân quyền', N'PermissionView'),
 ('User', N'Người dùng', N'UserView');
 
+-- Gán toàn bộ chức năng cho nhóm ADMIN
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('ADMIN', 'Home')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('ADMIN', 'Report')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('ADMIN', 'HallType')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('ADMIN', 'Hall')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('ADMIN', 'Wedding')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('ADMIN', 'Permission')
+('ADMIN', 'Home'),
+('ADMIN', 'HallType'),
+('ADMIN', 'Hall'),
+('ADMIN', 'Shift'),
+('ADMIN', 'Food'),
+('ADMIN', 'Service'),
+('ADMIN', 'Wedding'),
+('ADMIN', 'Report'),
+('ADMIN', 'Parameter'),
+('ADMIN', 'Permission'),
+('ADMIN', 'User');
+
 
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 ('STAFF', 'Home')
