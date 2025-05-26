@@ -156,6 +156,7 @@
     <Compile Include="Model\THAMSO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Presentation\View\HallTypeView.xaml.cs">
       <DependentUpon>HallTypeView.xaml</DependentUpon>
     </Compile>
@@ -268,6 +269,9 @@
     </Compile>
     <Page Include="Presentation\View\PermissionView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\ServiceView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourceXAML\MainResource.xaml">
