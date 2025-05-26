@@ -236,6 +236,9 @@
     <Compile Include="Presentation\ViewModel\LoginViewModel.cs" />
     <Compile Include="Presentation\ViewModel\MainViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PermissionViewModel.cs" />
+    <Compile Include="Presentation\View\ServiceView.xaml.cs">
+      <DependentUpon>ServiceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\View\WeddingView.xaml.cs">
       <DependentUpon>WeddingView.xaml</DependentUpon>
     </Compile>
@@ -272,6 +275,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Presentation\View\ServiceView.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourceXAML\MainResource.xaml">
