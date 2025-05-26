@@ -11,7 +11,7 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
 
         public LoaiSanhRepository()
         {
-            _context = DataProvider.Ins.DB;
+            _context = new QuanLyTiecCuoiEntities();
         }
 
         public IEnumerable<LOAISANH> GetAll()

@@ -14,6 +14,7 @@ namespace QuanLyTiecCuoi.Model
     
     public partial class NGUOIDUNG
     {
+        public int MaNguoiDung { get; set; }
         public string TenDangNhap { get; set; }
         public string MatKhauHash { get; set; }
         public string HoTen { get; set; }

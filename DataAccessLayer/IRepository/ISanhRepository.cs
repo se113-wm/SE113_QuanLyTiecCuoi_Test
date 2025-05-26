@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using QuanLyTiecCuoi.Model;
 
 namespace QuanLyTiecCuoi.DataAccessLayer.IRepository
 {
-    internal interface ISanhRepository
+    public interface ISanhRepository
     {
+        IEnumerable<SANH> GetAll();
+        SANH GetById(int maSanh);
+        void Create(SANH sanh);
+        void Update(SANH sanh);
+        void Delete(int maSanh);
     }
 }

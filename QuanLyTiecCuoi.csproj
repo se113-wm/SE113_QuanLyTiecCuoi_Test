@@ -103,19 +103,56 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BusinessLogicLayer\IService\ICaService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IChucNangService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IDichVuService.cs" />
     <Compile Include="BusinessLogicLayer\IService\ILoaiSanhService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IMonAnService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\INguoiDungService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\INhomNguoiDungService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IPhieuDatTiecService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\ISanhService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IThucDonService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\CaService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\ChucNangService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\DichVuService.cs" />
     <Compile Include="BusinessLogicLayer\Service\LoaiSanhService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\MonAnService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\NguoiDungService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\NhomNguoiDungService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\SanhService.cs" />
+    <Compile Include="DataAccessLayer\IRepository\ICaRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IChiTietDVRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IChucNangRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IDichVuRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\ILoaiSanhRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IMonAnRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\INguoiDungRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\INhomNguoiDungRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IPhieuDatTiecRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\ISanhRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IThucDonRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\CaRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\ChucNangRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\DichVuRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\LoaiSanhRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\MonAnRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\NguoiDungRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\NhomNguoiDungRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\PhieuDatTiecRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\SanhRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\ThucDonRepository.cs" />
     <Compile Include="DataTransferObject\CADTO.cs" />
+    <Compile Include="DataTransferObject\CHITIETDVDTO.cs" />
     <Compile Include="DataTransferObject\CHUCNANGDTO.cs" />
     <Compile Include="DataTransferObject\DICHVUDTO.cs" />
     <Compile Include="DataTransferObject\LOAISANHDTO.cs" />
     <Compile Include="DataTransferObject\MONANDTO.cs" />
     <Compile Include="DataTransferObject\NGUOIDUNGDTO.cs" />
     <Compile Include="DataTransferObject\NHOMNGUOIDUNGDTO.cs" />
+    <Compile Include="DataTransferObject\PHIEUDATTIECDTO.cs" />
     <Compile Include="DataTransferObject\SANHDTO.cs" />
+    <Compile Include="DataTransferObject\THUCDONDTO.cs" />
     <Compile Include="Model\THAMSO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

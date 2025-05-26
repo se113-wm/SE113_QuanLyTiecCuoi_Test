@@ -4,6 +4,7 @@ namespace QuanLyTiecCuoi.DataTransferObject
 {
     public class NGUOIDUNGDTO
     {
+        public int MaNguoiDung { get; set; }
         public string TenDangNhap { get; set; }
         public string MatKhauHash { get; set; }
         public string HoTen { get; set; }

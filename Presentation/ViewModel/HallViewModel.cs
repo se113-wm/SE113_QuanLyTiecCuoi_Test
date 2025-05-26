@@ -1,26 +1,30 @@
-﻿using QuanLyTiecCuoi.Model;
+﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+using QuanLyTiecCuoi.DataTransferObject;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Xaml;
 
 namespace QuanLyTiecCuoi.ViewModel
 {
     public class HallViewModel : BaseViewModel
     {
-        private ObservableCollection<SANH> _List;
-        public ObservableCollection<SANH> List { get => _List; set { _List = value; OnPropertyChanged(); } }
+        private readonly ISanhService _sanhService;
+        private readonly ILoaiSanhService _loaiSanhService;
 
-        private ObservableCollection<SANH> _OriginalList;
-        public ObservableCollection<SANH> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
+        private ObservableCollection<SANHDTO> _List;
+        public ObservableCollection<SANHDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<LOAISANH> _HallTypes;
-        public ObservableCollection<LOAISANH> HallTypes { get => _HallTypes; set { _HallTypes = value; OnPropertyChanged(); } }
+        private ObservableCollection<SANHDTO> _OriginalList;
+        public ObservableCollection<SANHDTO> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
 
-        private SANH _SelectedItem;
-        public SANH SelectedItem
+        private ObservableCollection<LOAISANHDTO> _HallTypes;
+        public ObservableCollection<LOAISANHDTO> HallTypes { get => _HallTypes; set { _HallTypes = value; OnPropertyChanged(); } }
+
+        private SANHDTO _SelectedItem;
+        public SANHDTO SelectedItem
         {
             get => _SelectedItem;
             set
@@ -30,10 +34,11 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (SelectedItem != null)
                 {
                     TenSanh = SelectedItem.TenSanh;
-                    SoLuongBanToiDa = SelectedItem.SoLuongBanToiDa.ToString();
-                    DonGiaBanToiThieu = SelectedItem.LOAISANH?.DonGiaBanToiThieu;
+                    SoLuongBanToiDa = SelectedItem.SoLuongBanToiDa?.ToString();
+                    DonGiaBanToiThieu = SelectedItem.LoaiSanh?.DonGiaBanToiThieu;
                     GhiChu = SelectedItem.GhiChu;
-                    SelectedHallType = SelectedItem.LOAISANH;
+                    // Tìm loại sảnh theo ID để giữ instance trùng
+                    SelectedHallType = HallTypes?.FirstOrDefault(ht => ht.MaLoaiSanh == SelectedItem.MaLoaiSanh);
                 }
                 else
                 {
@@ -44,15 +49,14 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        private LOAISANH _SelectedHallType;
-        public LOAISANH SelectedHallType
+        private LOAISANHDTO _SelectedHallType;
+        public LOAISANHDTO SelectedHallType
         {
             get => _SelectedHallType;
             set
             {
                 _SelectedHallType = value;
                 OnPropertyChanged();
-                // Khi chọn loại sảnh, cập nhật đơn giá bàn tối thiểu (readonly ở view)
                 DonGiaBanToiThieu = _SelectedHallType?.DonGiaBanToiThieu;
             }
         }
@@ -102,6 +106,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 PerformSearch();
             }
         }
+
         private void PerformSearch()
         {
             try
@@ -120,26 +125,26 @@ namespace QuanLyTiecCuoi.ViewModel
                 switch (SelectedSearchProperty)
                 {
                     case "Tên sảnh":
-                        List = new ObservableCollection<SANH>(
+                        List = new ObservableCollection<SANHDTO>(
                             OriginalList.Where(x => !string.IsNullOrEmpty(x.TenSanh) &&
                                 x.TenSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     case "Tên loại sảnh":
-                        List = new ObservableCollection<SANH>(
-                            OriginalList.Where(x => x.LOAISANH != null && !string.IsNullOrEmpty(x.LOAISANH.TenLoaiSanh) &&
-                                x.LOAISANH.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        List = new ObservableCollection<SANHDTO>(
+                            OriginalList.Where(x => x.LoaiSanh != null && !string.IsNullOrEmpty(x.LoaiSanh.TenLoaiSanh) &&
+                                x.LoaiSanh.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     case "Đơn giá bàn tối thiểu":
-                        List = new ObservableCollection<SANH>(
+                        List = new ObservableCollection<SANHDTO>(
                             OriginalList.Where(x =>
-                                x.LOAISANH != null &&
-                                x.LOAISANH.DonGiaBanToiThieu != null &&
-                                x.LOAISANH.DonGiaBanToiThieu.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
+                                x.LoaiSanh != null &&
+                                x.LoaiSanh.DonGiaBanToiThieu != null &&
+                                x.LoaiSanh.DonGiaBanToiThieu.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
                             )
                         );
                         break;
                     case "Số lượng bàn tối đa":
-                        List = new ObservableCollection<SANH>(
+                        List = new ObservableCollection<SANHDTO>(
                             OriginalList.Where(x =>
                                 x.SoLuongBanToiDa != null &&
                                 x.SoLuongBanToiDa.Value.ToString().Contains(SearchText.Trim())
@@ -147,12 +152,12 @@ namespace QuanLyTiecCuoi.ViewModel
                         );
                         break;
                     case "Ghi chú":
-                        List = new ObservableCollection<SANH>(
+                        List = new ObservableCollection<SANHDTO>(
                             OriginalList.Where(x => !string.IsNullOrEmpty(x.GhiChu) &&
                                 x.GhiChu.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     default:
-                        List = new ObservableCollection<SANH>(OriginalList);
+                        List = new ObservableCollection<SANHDTO>(OriginalList);
                         break;
                 }
             }
@@ -172,12 +177,14 @@ namespace QuanLyTiecCuoi.ViewModel
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
-
         public HallViewModel()
         {
-            List = new ObservableCollection<SANH>(DataProvider.Ins.DB.SANHs);
-            OriginalList = new ObservableCollection<SANH>(List);
-            HallTypes = new ObservableCollection<LOAISANH>(DataProvider.Ins.DB.LOAISANHs);
+            _sanhService = new SanhService();
+            _loaiSanhService = new LoaiSanhService();
+
+            List = new ObservableCollection<SANHDTO>(_sanhService.GetAll().ToList());
+            OriginalList = new ObservableCollection<SANHDTO>(List);
+            HallTypes = new ObservableCollection<LOAISANHDTO>(_loaiSanhService.GetAll().ToList());
 
             SearchProperties = new ObservableCollection<string>
             {
@@ -188,7 +195,6 @@ namespace QuanLyTiecCuoi.ViewModel
                 "Ghi chú"
             };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
-
 
             AddCommand = new RelayCommand<object>((p) =>
             {
@@ -209,13 +215,12 @@ namespace QuanLyTiecCuoi.ViewModel
                     AddMessage = "Vui lòng chọn loại sảnh";
                     return false;
                 }
-                if (SoLuongBanToiDa == null || !int.TryParse(SoLuongBanToiDa.ToString(), out int soLuong) || soLuong <= 0)
+                if (SoLuongBanToiDa == null || !int.TryParse(SoLuongBanToiDa, out int soLuong) || soLuong <= 0)
                 {
                     AddMessage = "Số lượng bàn tối đa phải là số nguyên dương";
                     return false;
                 }
-                // Kiểm tra trùng tên sảnh trong cùng loại sảnh
-                var exists = DataProvider.Ins.DB.SANHs.Any(x => x.TenSanh == TenSanh && x.MaLoaiSanh == SelectedHallType.MaLoaiSanh);
+                var exists = OriginalList.Any(x => x.TenSanh == TenSanh && x.MaLoaiSanh == SelectedHallType.MaLoaiSanh);
                 if (exists)
                 {
                     AddMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
@@ -227,16 +232,16 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    var newHall = new SANH()
+                    var newHall = new SANHDTO()
                     {
                         TenSanh = TenSanh,
                         SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null,
                         GhiChu = GhiChu,
-                        MaLoaiSanh = SelectedHallType?.MaLoaiSanh
+                        MaLoaiSanh = SelectedHallType?.MaLoaiSanh,
+                        LoaiSanh = SelectedHallType
                     };
 
-                    DataProvider.Ins.DB.SANHs.Add(newHall);
-                    DataProvider.Ins.DB.SaveChanges();
+                    _sanhService.Create(newHall);
 
                     List.Add(newHall);
 
@@ -256,16 +261,14 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = string.Empty;
                     return false;
                 }
-                // Không có thay đổi nào
                 if (SelectedItem.TenSanh == TenSanh
-                    && SelectedItem.SoLuongBanToiDa.ToString() == SoLuongBanToiDa
+                    && SelectedItem.SoLuongBanToiDa?.ToString() == SoLuongBanToiDa
                     && SelectedItem.GhiChu == GhiChu
                     && SelectedItem.MaLoaiSanh == (SelectedHallType?.MaLoaiSanh ?? 0))
                 {
                     EditMessage = "Không có thay đổi nào để cập nhật";
                     return false;
                 }
-                // Kiểm tra tính hợp lệ của dữ liệu
                 if (string.IsNullOrWhiteSpace(TenSanh))
                 {
                     EditMessage = "Tên sảnh không được để trống";
@@ -276,8 +279,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Số lượng bàn tối đa phải là số nguyên dương";
                     return false;
                 }
-                // Kiểm tra trùng tên sảnh trong cùng loại sảnh (trừ chính nó)
-                var exists = DataProvider.Ins.DB.SANHs.Any(x =>
+                var exists = OriginalList.Any(x =>
                     x.TenSanh == TenSanh &&
                     x.MaLoaiSanh == SelectedHallType.MaLoaiSanh &&
                     x.MaSanh != SelectedItem.MaSanh);
@@ -292,22 +294,24 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    var hall = DataProvider.Ins.DB.SANHs.SingleOrDefault(x => x.MaSanh == SelectedItem.MaSanh);
-                    if (hall != null)
+                    var updateDto = new SANHDTO()
                     {
-                        hall.TenSanh = TenSanh;
-                        hall.SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null;
-                        hall.GhiChu = GhiChu;
-                        hall.MaLoaiSanh = SelectedHallType?.MaLoaiSanh;
-                        DataProvider.Ins.DB.SaveChanges();
+                        MaSanh = SelectedItem.MaSanh,
+                        TenSanh = TenSanh,
+                        SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null,
+                        GhiChu = GhiChu,
+                        MaLoaiSanh = SelectedHallType?.MaLoaiSanh,
+                        LoaiSanh = SelectedHallType
+                    };
 
-                        var index = List.IndexOf(SelectedItem);
-                        List[index] = null;
-                        List[index] = hall;
+                    _sanhService.Update(updateDto);
 
-                        Reset();
-                        MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
+                    var index = List.IndexOf(SelectedItem);
+                    List[index] = null;
+                    List[index] = updateDto;
+
+                    Reset();
+                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -325,10 +329,8 @@ namespace QuanLyTiecCuoi.ViewModel
                     var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sảnh này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        DataProvider.Ins.DB.SANHs.Remove(SelectedItem);
-                        DataProvider.Ins.DB.SaveChanges();
+                        _sanhService.Delete(SelectedItem.MaSanh);
                         List.Remove(SelectedItem);
-                        
 
                         Reset();
                         MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -340,6 +342,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             });
         }
+
         private void Reset()
         {
             SelectedItem = null;

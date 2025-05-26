@@ -267,11 +267,12 @@ namespace QuanLyTiecCuoi.ViewModel
 
                 if (SelectedItem == null)
                     return false;
-                // Tìm xem có sảnh nào có mã loại sảnh được chọn không
-                var exists = _loaiSanhService.GetAll().Any(x => x.MaLoaiSanh == SelectedItem?.MaLoaiSanh);
-                if (exists)
+                // Tìm xem có sảnh nào có mã loại sảnh này không, bằng cách gọi sảnh service để lấy danh sách sảnh
+                var sanhService = new SanhService();
+                var hasSanh = sanhService.GetAll().Any(s => s.MaLoaiSanh == SelectedItem.MaLoaiSanh);
+                if (hasSanh)
                 {
-                    DeleteMessage = "Đối tượng đang được tham chiếu.";
+                    DeleteMessage = "Đang có sảnh thuộc loại sảnh này";
                     return false;
                 }
                 DeleteMessage = string.Empty;

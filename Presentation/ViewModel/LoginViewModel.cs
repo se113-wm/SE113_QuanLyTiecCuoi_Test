@@ -14,7 +14,6 @@ namespace QuanLyTiecCuoi.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
-        //public bool IsLogin { get; set; }
         private string _UserName;
         public string UserName { get => _UserName; set { _UserName = value; OnPropertyChanged(); } }
         private string _Password;
@@ -22,22 +21,10 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand LoginCommand { get; set; }
         public ICommand PasswordChangedCommand { get; set; }
         public ICommand UserNameChangedCommand { get; set; }
-        //public NGUOIDUNG _CurrentUser { get; set; }
-        //public void Reset()
-        //{
-        //    //IsLogin = false;
-        //    UserName = string.Empty;
-        //    Password = string.Empty;
-        //    _CurrentUser = null;
-        //}
         public LoginViewModel()
         {
-            var a = DataProvider.Ins.DB.NGUOIDUNGs.First();
-            //IsLogin = false;
             Password = "";
             UserName = "";
-
-
             // username: Fartiel; pass: admin
             // username: Neith; pass: staff
             LoginCommand = new RelayCommand<Window>((p) => { return true; }, (p) => { Login(p); });
@@ -64,8 +51,6 @@ namespace QuanLyTiecCuoi.ViewModel
                 .Where(x => x.TenDangNhap == UserName && x.MatKhauHash == passEncode);
             if (Account.Count() > 0)
             {
-                //_CurrentUser = Account.First();
-                //IsLogin = true;
                 MessageBox.Show("Đăng nhập thành công!");
                 DataProvider.Ins.CurrentUser = Account.First();
                 // Gọi Main Window
@@ -76,7 +61,6 @@ namespace QuanLyTiecCuoi.ViewModel
             }
             else
             {
-                //IsLogin = false;
                 MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
             }
         }
