@@ -170,9 +170,29 @@ namespace QuanLyTiecCuoi.ViewModel
 
             AddCommand = new RelayCommand<object>((p) =>
             {
+                AddMessage = string.Empty;
+
                 if (string.IsNullOrWhiteSpace(TenDichVu))
                 {
-                    AddMessage = "Vui lòng nhập tên dịch vụ";
+                    if (SelectedItem != null)
+                    {
+                        AddMessage = "Vui lòng nhập tên dịch vụ";
+                    }
+                    else
+                    {
+                        AddMessage = string.Empty;
+                    }
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(DonGia))
+                {
+                    AddMessage = "Vui lòng nhập đơn giá";
+                    return false;
+                }
+                if (!decimal.TryParse(DonGia, out var gia) || gia < 0)
+                {
+                    AddMessage = "Vui lòng nhập đơn giá hợp lệ";
                     return false;
                 }
                 var exists = OriginalList.Any(x => x.TenDichVu == TenDichVu);
@@ -181,12 +201,6 @@ namespace QuanLyTiecCuoi.ViewModel
                     AddMessage = "Tên dịch vụ đã tồn tại";
                     return false;
                 }
-                if (!string.IsNullOrWhiteSpace(DonGia) && (!decimal.TryParse(DonGia, out var gia) || gia < 0))
-                {
-                    AddMessage = "Vui lòng nhập đơn giá hợp lệ";
-                    return false;
-                }
-                AddMessage = string.Empty;
                 return true;
             }, (p) =>
             {
@@ -195,16 +209,14 @@ namespace QuanLyTiecCuoi.ViewModel
                     var newService = new DICHVUDTO()
                     {
                         TenDichVu = TenDichVu,
-                        DonGia = string.IsNullOrWhiteSpace(DonGia) ? (decimal?)null : decimal.Parse(DonGia),
+                        DonGia = decimal.Parse(DonGia),
                         GhiChu = GhiChu
                     };
 
                     _dichVuService.Create(newService);
-
                     List.Add(newService);
-
-                    Reset();
                     MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Reset();
                 }
                 catch (Exception ex)
                 {
@@ -212,10 +224,34 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             });
 
+            // EditCommand
             EditCommand = new RelayCommand<object>((p) =>
             {
+                EditMessage = string.Empty;
                 if (SelectedItem == null)
                 {
+                    // Không cho phép sửa nếu chưa chọn
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(TenDichVu))
+                {
+                    EditMessage = "Vui lòng nhập tên dịch vụ";
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(DonGia))
+                {
+                    EditMessage = "Vui lòng nhập đơn giá";
+                    return false;
+                }
+                if (!decimal.TryParse(DonGia, out var gia) || gia < 0)
+                {
+                    EditMessage = "Vui lòng nhập đơn giá hợp lệ";
+                    return false;
+                }
+                var exists = OriginalList.Any(x => x.TenDichVu == TenDichVu && x.MaDichVu != SelectedItem.MaDichVu);
+                if (exists)
+                {
+                    EditMessage = "Tên dịch vụ đã tồn tại";
                     return false;
                 }
                 if (SelectedItem.TenDichVu == TenDichVu &&
@@ -225,24 +261,6 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Không có thay đổi nào để cập nhật";
                     return false;
                 }
-
-                if (string.IsNullOrWhiteSpace(TenDichVu))
-                {
-                    EditMessage = "Tên dịch vụ không được để trống";
-                    return false;
-                }
-                var exists = OriginalList.Any(x => x.TenDichVu == TenDichVu && x.MaDichVu != SelectedItem.MaDichVu);
-                if (exists)
-                {
-                    EditMessage = "Tên dịch vụ đã tồn tại";
-                    return false;
-                }
-                if (!string.IsNullOrWhiteSpace(DonGia) && (!decimal.TryParse(DonGia, out var gia) || gia < 0))
-                {
-                    EditMessage = "Vui lòng nhập đơn giá hợp lệ";
-                    return false;
-                }
-                EditMessage = string.Empty;
                 return true;
             }, (p) =>
             {
@@ -252,7 +270,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     {
                         MaDichVu = SelectedItem.MaDichVu,
                         TenDichVu = TenDichVu,
-                        DonGia = string.IsNullOrWhiteSpace(DonGia) ? (decimal?)null : decimal.Parse(DonGia),
+                        DonGia = decimal.Parse(DonGia),
                         GhiChu = GhiChu
                     };
 
@@ -262,20 +280,24 @@ namespace QuanLyTiecCuoi.ViewModel
                     List[index] = null;
                     List[index] = updateDto;
 
+                    EditMessage = "Cập nhật thành công";
                     Reset();
-                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    EditMessage = $"Lỗi khi cập nhật: {ex.Message}";
                 }
             });
 
+            // DeleteCommand
             DeleteCommand = new RelayCommand<object>((p) =>
             {
-                if (SelectedItem == null)
-                    return false;
                 DeleteMessage = string.Empty;
+                if (SelectedItem == null)
+                {
+                    // Không cho phép xóa nếu chưa chọn
+                    return false;
+                }
                 return true;
             }, (p) =>
             {
@@ -285,21 +307,14 @@ namespace QuanLyTiecCuoi.ViewModel
                     if (result == MessageBoxResult.Yes)
                     {
                         _dichVuService.Delete(SelectedItem.MaDichVu);
-
                         List.Remove(SelectedItem);
-
+                        DeleteMessage = "Xóa thành công";
                         Reset();
-
-                        MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hủy xóa", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    DeleteMessage = $"Lỗi khi xóa: {ex.Message}";
                 }
             });
 
