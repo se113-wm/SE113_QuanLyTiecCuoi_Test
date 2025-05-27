@@ -97,7 +97,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
                     <StackPanel

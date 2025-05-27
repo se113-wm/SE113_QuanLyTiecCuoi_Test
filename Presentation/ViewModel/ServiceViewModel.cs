@@ -105,30 +105,43 @@ namespace QuanLyTiecCuoi.ViewModel
                 TenDichVu = string.Empty;
                 DonGia = null;
                 GhiChu = string.Empty;
-                if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty))
+
+                if (string.IsNullOrWhiteSpace(SearchText) || string.IsNullOrWhiteSpace(SelectedSearchProperty))
                 {
                     List = OriginalList;
                     return;
                 }
 
+                string search = SearchText.Trim();
+
                 switch (SelectedSearchProperty)
                 {
                     case "Tên dịch vụ":
-                        List = new ObservableCollection<DICHVUDTO>(OriginalList.Where(x => x.TenDichVu != null && x.TenDichVu.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Đơn giá":
                         List = new ObservableCollection<DICHVUDTO>(
-                            OriginalList.Where(x =>
-                                x.DonGia != null &&
-                                x.DonGia.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
-                            )
-                        );
+                            OriginalList.Where(x => !string.IsNullOrWhiteSpace(x.TenDichVu) &&
+                                                    x.TenDichVu.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
+
+                    case "Đơn giá":
+                        if (decimal.TryParse(search.Replace(",", "").Trim(), out decimal searchPrice))
+                        {
+                            List = new ObservableCollection<DICHVUDTO>(
+                                OriginalList.Where(x => x.DonGia.HasValue && x.DonGia.Value == searchPrice));
+                        }
+                        else
+                        {
+                            List = new ObservableCollection<DICHVUDTO>();
+                        }
+                        break;
+
                     case "Ghi chú":
-                        List = new ObservableCollection<DICHVUDTO>(OriginalList.Where(x => x.GhiChu != null && x.GhiChu.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        List = new ObservableCollection<DICHVUDTO>(
+                            OriginalList.Where(x => !string.IsNullOrWhiteSpace(x.GhiChu) &&
+                                                    x.GhiChu.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
+
                     default:
-                        List = new ObservableCollection<DICHVUDTO>(OriginalList);
+                        List = OriginalList;
                         break;
                 }
             }
@@ -137,6 +150,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         public ServiceViewModel()
         {
