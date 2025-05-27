@@ -271,3 +271,27 @@ VALUES
     (4, N'Opal', 18, N'Màu sắc ấm cúng'),
     (5, N'Pearl', 15, N'Cho tiệc thân mật'),
     (5, N'Crystal', 16, N'Thiết kế sang trọng');
+
+
+
+INSERT INTO DICHVU (TenDichVu, DonGia, GhiChu) VALUES
+(N'Âm thanh', 2000000, N'Dịch vụ âm thanh tiêu chuẩn'),
+(N'Ánh sáng', 2500000, N'Hệ thống ánh sáng chuyên nghiệp'),
+(N'Ca sĩ biểu diễn', 5000000, N'Ca sĩ nổi tiếng biểu diễn 1 tiết mục'),
+(N'Ban nhạc sống', 7000000, N'Ban nhạc chơi trực tiếp'),
+(N'Trang trí hoa tươi', 3000000, N'Trang trí sân khấu và bàn tiệc'),
+(N'Trang trí bóng bay', 1000000, N'Trang trí theo yêu cầu'),
+(N'Nhóm múa khai tiệc', 4000000, N'Múa mở màn lễ cưới'),
+(N'MC chuyên nghiệp', 3500000, N'Dẫn chương trình toàn buổi tiệc'),
+(N'Xe hoa', 1500000, N'Xe hoa đưa đón cô dâu chú rể'),
+(N'Pháo điện', 800000, N'Tạo hiệu ứng sân khấu'),
+(N'Thiết kế phông nền', 1200000, N'Phông nền chụp hình chuyên nghiệp'),
+(N'Chụp hình cưới', 4500000, N'Nhiếp ảnh gia chuyên nghiệp'),
+(N'Quay phim lễ cưới', 5000000, N'Quay toàn bộ buổi lễ và dựng video'),
+(N'Làm album cưới', 3000000, N'Thiết kế album cưới in màu'),
+(N'Trang điểm cô dâu', 2000000, N'Trang điểm tại nhà hoặc tại tiệc'),
+(N'Cho thuê váy cưới', 2500000, N'Váy cưới cao cấp, nhiều mẫu mã'),
+(N'Dịch vụ giữ trẻ', 1000000, N'Nhân viên giữ trẻ tại tiệc'),
+(N'Bắn pháo hoa lạnh', 6000000, N'Tạo điểm nhấn hoành tráng'),
+(N'Dịch vụ rước dâu bằng voi', 10000000, N'Dịch vụ đặc biệt, cần đặt trước'),
+(N'Trang trí bàn gallery', 1500000, N'Bàn gallery đón khách sang trọng');
