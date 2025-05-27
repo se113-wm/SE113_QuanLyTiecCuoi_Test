@@ -23,6 +23,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand UserNameChangedCommand { get; set; }
         public LoginViewModel()
         {
+            var a = DataProvider.Ins.DB.NGUOIDUNGs.ToList();
             Password = "";
             UserName = "";
             // username: Fartiel; pass: admin

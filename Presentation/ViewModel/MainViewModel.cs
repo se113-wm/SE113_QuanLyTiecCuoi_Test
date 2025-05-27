@@ -100,7 +100,10 @@ namespace QuanLyTiecCuoi.ViewModel
             //});
             ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                CurrentView = new ServiceView();
+                CurrentView = new ServiceView()
+                {
+                    DataContext = new ServiceViewModel()
+                };
 
                 // Đặt màu nền cho nút "Dịch vụ" là màu được chọn
                 ResetButtonBackgrounds();

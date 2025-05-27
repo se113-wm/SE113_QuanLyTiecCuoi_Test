@@ -140,8 +140,9 @@ namespace QuanLyTiecCuoi.ViewModel
 
         public ServiceViewModel()
         {
+            //MessageBox.Show("Chào mừng bạn đến với quản lý dịch vụ!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             _dichVuService = new DichVuService();
-
+            //MessageBox.Show(_dichVuService.GetAll().First().GhiChu);
             List = new ObservableCollection<DICHVUDTO>(_dichVuService.GetAll().ToList());
             OriginalList = new ObservableCollection<DICHVUDTO>(List);
 
