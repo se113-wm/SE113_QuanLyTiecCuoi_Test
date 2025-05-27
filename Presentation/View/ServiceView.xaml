@@ -31,24 +31,30 @@
             Padding="10"
             BorderThickness="0.5">
             <StackPanel>
-                <!-- Tiêu đề + Nút Reset sát nhau -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
+                <!--  Tiêu đề + Nút Reset sát nhau  -->
+                <StackPanel
+                    Margin="0,0,0,10"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
                     <TextBlock
+                        VerticalAlignment="Center"
                         FontSize="14"
                         FontWeight="Bold"
-                        VerticalAlignment="Center"
                         Text="Thông tin chi tiết" />
 
                     <Button
-                    Width="36"
-                    Height="36"
-                    Margin="5,0,0,0"
-                    ToolTip="Reset thông tin"
-                    Command="{Binding ResetCommand}"
-                    Background="{DynamicResource PrimaryHueMidBrush}"
-                    Foreground="Purple"
-                    Style="{StaticResource MaterialDesignToolButton}">
-                        <materialDesign:PackIcon Kind="Restore" Width="20" Height="20"/>
+                        Width="36"
+                        Height="36"
+                        Margin="5,0,0,0"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Command="{Binding ResetCommand}"
+                        Foreground="Purple"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        ToolTip="Reset thông tin">
+                        <materialDesign:PackIcon
+                            Width="20"
+                            Height="20"
+                            Kind="Restore" />
                     </Button>
 
 
@@ -115,7 +121,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                     </StackPanel>
 
                     <StackPanel

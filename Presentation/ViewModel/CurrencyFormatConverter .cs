@@ -21,9 +21,9 @@ namespace QuanLyTiecCuoi.ViewModel
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var str = value?.ToString()?.Replace(",", "")?.Trim();
+            // Chỉ loại bỏ dấu phẩy, giữ lại dấu cách để kiểm tra hợp lệ ở nơi khác
+            var str = value?.ToString()?.Replace(",", "");
             return str;
         }
     }
-
 }
