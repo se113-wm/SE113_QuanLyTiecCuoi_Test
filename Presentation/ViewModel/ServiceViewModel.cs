@@ -61,6 +61,11 @@ namespace QuanLyTiecCuoi.ViewModel
 
         public ICommand DeleteCommand { get; set; }
         private string _DeleteMessage;
+
+        public ICommand ResetCommand { get; set; }
+
+
+
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
         private string _searchText;
@@ -297,6 +302,8 @@ namespace QuanLyTiecCuoi.ViewModel
                     MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
+
+            ResetCommand = new RelayCommand<object>((p) => true, (p) => Reset());
         }
 
         private void Reset()
