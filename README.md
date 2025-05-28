@@ -54,7 +54,7 @@ QuanLyTiecCuoi/
 │
 ├── BLL/                # Business Logic Layer: xử lý logic nghiệp vụ
 │
-├── DAL/                # Data Access Layer: kết nối và thao tác với SQL Server qua ADO.NET
+├── DAL/                # Data Access Layer: kết nối và thao tác với SQL Server qua Enity FrameWork
 │
 ├── DataTransferObject/ # Các lớp DTO đại diện cho dữ liệu trao đổi giữa các lớp
 │
