@@ -11,7 +11,7 @@
 - **IDE:** Visual Studio 2022  
 - **Cơ sở dữ liệu:** SQL Server 2016 hoặc mới hơn  
 - **Kiến trúc:** MVVM + 3 Layer (Presentation, BLL, DAL)  
-- **Thư viện:** Material Design in XAML Toolkit, CommunityToolkit.Mvvm (nếu dùng), ADO.NET
+- **Thư viện:** Material Design in XAML Toolkit, Enity FrameWork
 
 ---
 
