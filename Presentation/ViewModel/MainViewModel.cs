@@ -98,7 +98,20 @@ namespace QuanLyTiecCuoi.ViewModel
             //    // Gọi OnPropertyChanged để cập nhật giao diện
             //    OnPropertyChanged(nameof(ButtonBackgrounds));
             //});
-            //ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ServiceView(); });
+            ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                CurrentView = new ServiceView()
+                {
+                    DataContext = new ServiceViewModel()
+                };
+
+                // Đặt màu nền cho nút "Dịch vụ" là màu được chọn
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Service"] = new SolidColorBrush(Colors.DarkBlue);
+
+                // Gọi OnPropertyChanged để cập nhật giao diện
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             //WeddingCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new WeddingView(); });
             WeddingCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
