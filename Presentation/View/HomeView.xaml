@@ -70,7 +70,7 @@
             </Border.Triggers>
 
             <!-- Sử dụng Pack URI để đảm bảo WPF tìm đúng ảnh, và kiểm tra Build Action của ảnh là Resource -->
-            <Image Source="/Ima/wedding.jpg"
+            <Image Source="/Image/wedding.jpg"
                    Stretch="Uniform"
                    Width="460"
                    Height="320"
