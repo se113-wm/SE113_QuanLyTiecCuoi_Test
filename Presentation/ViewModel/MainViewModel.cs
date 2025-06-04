@@ -144,7 +144,31 @@ namespace QuanLyTiecCuoi.ViewModel
                 // Gọi OnPropertyChanged để cập nhật giao diện
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
-            //UserCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new UserView(); });
+
+            HallTypeCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
+                // Giả sử HallTypeView có thuộc tính DataContext
+                CurrentView = new HallTypeView {
+                    DataContext = new HallTypeViewModel()
+                };
+
+
+                // Đặt màu nền cho nút "Trang chủ" là màu được chọn
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["HallType"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+
+                // Gọi OnPropertyChanged để cập nhật giao diện
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
+
+            UserCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
+                CurrentView = new UserView() {
+                    DataContext = new UserViewModel()
+                };
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["User"] = new SolidColorBrush(Colors.DarkBlue);
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
+
             //AccountCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new AccountView(); });
             #endregion
 
