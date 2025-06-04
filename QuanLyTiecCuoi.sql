@@ -163,7 +163,6 @@ CREATE TABLE NGUOIDUNG (
     MatKhauHash VARCHAR(256) NOT NULL,
     HoTen NVARCHAR(100),
     Email VARCHAR(100),
-    TrangThai BIT DEFAULT 1,
     MaNhom VARCHAR(10),
     FOREIGN KEY (MaNhom) REFERENCES NHOMNGUOIDUNG(MaNhom)
 );
@@ -180,11 +179,11 @@ VALUES ('gr2', N'Nhân viên2');
 INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
 VALUES ('gr3', N'Nhân viên3');
 
-INSERT INTO NGUOIDUNG (TenDangNhap, MatKhauHash, HoTen, Email, TrangThai, MaNhom)
-VALUES ('Fartiel', 'db69fc039dcbd2962cb4d28f5891aae1', N'Đặng Phú Thiện', '23521476@gm.uit.edu.vn', 1, 'ADMIN');
+INSERT INTO NGUOIDUNG (TenDangNhap, MatKhauHash, HoTen, Email, MaNhom)
+VALUES ('Fartiel', 'db69fc039dcbd2962cb4d28f5891aae1', N'Đặng Phú Thiện', '23521476@gm.uit.edu.vn', 'ADMIN');
 
-INSERT INTO NGUOIDUNG (TenDangNhap, MatKhauHash, HoTen, Email, TrangThai, MaNhom)
-VALUES ('Neith', '978aae9bb6bee8fb75de3e4830a1be46', N'Đặng Phú Thiện', '23521476@gm.uit.edu.vn', 1, 'STAFF');
+INSERT INTO NGUOIDUNG (TenDangNhap, MatKhauHash, HoTen, Email, MaNhom)
+VALUES ('Neith', '978aae9bb6bee8fb75de3e4830a1be46', N'Đặng Phú Thiện', '23521476@gm.uit.edu.vn', 'STAFF');
 
 INSERT INTO CHUCNANG (MaChucNang, TenChucNang, TenManHinhDuocLoad) VALUES 
 ('Home', N'Trang chủ', N'HomeView'),

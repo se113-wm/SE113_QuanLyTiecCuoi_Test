@@ -9,7 +9,6 @@ namespace QuanLyTiecCuoi.DataTransferObject
         public string MatKhauHash { get; set; }
         public string HoTen { get; set; }
         public string Email { get; set; }
-        public bool? TrangThai { get; set; }
         public string MaNhom { get; set; }
 
         // Navigation property

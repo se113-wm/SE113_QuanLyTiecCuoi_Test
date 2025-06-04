@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using QuanLyTiecCuoi.DataTransferObject;
 
 namespace QuanLyTiecCuoi.BusinessLogicLayer.IService
 {
-    internal interface IPhieuDatTiecService
+    public interface IPhieuDatTiecService
     {
+        IEnumerable<PHIEUDATTIECDTO> GetAll();
+        PHIEUDATTIECDTO GetById(int maPhieuDat);
+        void Create(PHIEUDATTIECDTO phieuDatTiecDto);
+        void Update(PHIEUDATTIECDTO phieuDatTiecDto);
+        void Delete(int maPhieuDat);
     }
 }

@@ -91,7 +91,6 @@
           <Property Name="MatKhauHash" Type="varchar" MaxLength="256" Nullable="false" />
           <Property Name="HoTen" Type="nvarchar" MaxLength="100" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
-          <Property Name="TrangThai" Type="bit" />
           <Property Name="MaNhom" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="NHOMNGUOIDUNG">
@@ -200,7 +199,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGUOIDUNG__MaNho__6477ECF3">
+        <Association Name="FK__NGUOIDUNG__MaNho__6383C8BA">
           <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="0..1" />
           <End Role="NGUOIDUNG" Type="Self.NGUOIDUNG" Multiplicity="*" />
           <ReferentialConstraint>
@@ -324,7 +323,7 @@
             <End Role="BAOCAODS" EntitySet="BAOCAODS" />
             <End Role="CTBAOCAODS" EntitySet="CTBAOCAODS" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__6477ECF3" Association="Self.FK__NGUOIDUNG__MaNho__6477ECF3">
+          <AssociationSet Name="FK__NGUOIDUNG__MaNho__6383C8BA" Association="Self.FK__NGUOIDUNG__MaNho__6383C8BA">
             <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNG" />
             <End Role="NGUOIDUNG" EntitySet="NGUOIDUNG" />
           </AssociationSet>
@@ -400,7 +399,7 @@
             <End Role="MONAN" EntitySet="MONANs" />
             <End Role="THUCDON" EntitySet="THUCDONs" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__6477ECF3" Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6477ECF3">
+          <AssociationSet Name="FK__NGUOIDUNG__MaNho__6383C8BA" Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6383C8BA">
             <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
             <End Role="NGUOIDUNG" EntitySet="NGUOIDUNGs" />
           </AssociationSet>
@@ -512,9 +511,8 @@
           <Property Name="MatKhauHash" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
           <Property Name="HoTen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="TrangThai" Type="Boolean" />
           <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6477ECF3" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
+          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6383C8BA" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
         </EntityType>
         <EntityType Name="NHOMNGUOIDUNG">
           <Key>
@@ -522,7 +520,7 @@
           </Key>
           <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TenNhom" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6477ECF3" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
+          <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6383C8BA" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
           <NavigationProperty Name="CHUCNANGs" Relationship="QuanLyTiecCuoiModel.PHANQUYEN" FromRole="NHOMNGUOIDUNG" ToRole="CHUCNANG" />
         </EntityType>
         <EntityType Name="PHIEUDATTIEC">
@@ -660,7 +658,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGUOIDUNG__MaNho__6477ECF3">
+        <Association Name="FK__NGUOIDUNG__MaNho__6383C8BA">
           <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="0..1" />
           <End Type="QuanLyTiecCuoiModel.NGUOIDUNG" Role="NGUOIDUNG" Multiplicity="*" />
           <ReferentialConstraint>
@@ -791,7 +789,6 @@
             <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.NGUOIDUNG">
               <MappingFragment StoreEntitySet="NGUOIDUNG">
                 <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
-                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="HoTen" ColumnName="HoTen" />
                 <ScalarProperty Name="MatKhauHash" ColumnName="MatKhauHash" />

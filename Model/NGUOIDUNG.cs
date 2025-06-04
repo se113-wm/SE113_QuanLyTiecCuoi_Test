@@ -19,7 +19,6 @@ namespace QuanLyTiecCuoi.Model
         public string MatKhauHash { get; set; }
         public string HoTen { get; set; }
         public string Email { get; set; }
-        public Nullable<bool> TrangThai { get; set; }
         public string MaNhom { get; set; }
     
         public virtual NHOMNGUOIDUNG NHOMNGUOIDUNG { get; set; }

@@ -39,7 +39,6 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
                 existing.MatKhauHash = nguoiDung.MatKhauHash;
                 existing.HoTen = nguoiDung.HoTen;
                 existing.Email = nguoiDung.Email;
-                existing.TrangThai = nguoiDung.TrangThai;
                 existing.MaNhom = nguoiDung.MaNhom;
                 _context.SaveChanges();
             }

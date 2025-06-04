@@ -27,7 +27,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                     MatKhauHash = x.MatKhauHash,
                     HoTen = x.HoTen,
                     Email = x.Email,
-                    TrangThai = x.TrangThai,
                     MaNhom = x.MaNhom,
                     NhomNguoiDung = x.NHOMNGUOIDUNG != null
                         ? new NHOMNGUOIDUNGDTO
@@ -50,7 +49,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 MatKhauHash = entity.MatKhauHash,
                 HoTen = entity.HoTen,
                 Email = entity.Email,
-                TrangThai = entity.TrangThai,
                 MaNhom = entity.MaNhom,
                 NhomNguoiDung = entity.NHOMNGUOIDUNG != null
                     ? new NHOMNGUOIDUNGDTO
@@ -71,7 +69,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 MatKhauHash = nguoiDungDto.MatKhauHash,
                 HoTen = nguoiDungDto.HoTen,
                 Email = nguoiDungDto.Email,
-                TrangThai = nguoiDungDto.TrangThai,
                 MaNhom = nguoiDungDto.MaNhom
             };
             _nguoiDungRepository.Create(entity);
@@ -86,7 +83,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 MatKhauHash = nguoiDungDto.MatKhauHash,
                 HoTen = nguoiDungDto.HoTen,
                 Email = nguoiDungDto.Email,
-                TrangThai = nguoiDungDto.TrangThai,
                 MaNhom = nguoiDungDto.MaNhom
             };
             _nguoiDungRepository.Update(entity);

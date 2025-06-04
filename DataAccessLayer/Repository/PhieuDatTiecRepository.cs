@@ -28,6 +28,7 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
         {
             _context.PHIEUDATTIECs.Add(phieuDatTiec);
             _context.SaveChanges();
+            _context.Entry(phieuDatTiec).Reload(); // Reload để lấy giá trị mới nhất từ CSDL
         }
 
         public void Update(PHIEUDATTIEC phieuDatTiec)
@@ -56,6 +57,7 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
                 existing.MaCa = phieuDatTiec.MaCa;
                 existing.MaSanh = phieuDatTiec.MaSanh;
                 _context.SaveChanges();
+                _context.Entry(existing).Reload(); // Reload để lấy giá trị mới nhất từ CSDL
             }
         }
 
