@@ -39,7 +39,6 @@
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Tên đăng nhập  -->
@@ -50,25 +49,70 @@
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                         Text="{Binding TenDangNhap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     
-                    <!-- Mật khẩu -->
-                    <TextBox
-                        Grid.Column="1"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Mật khẩu"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding MatKhau, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
                     <!--  Họ tên  -->
                     <TextBox
-                        Grid.Column="2"
+                        Grid.Column="1"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Họ tên"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                         Text="{Binding HoTen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    
+
+                    <!-- Email -->
+                    <TextBox
+                        Grid.Column="2"
+                        Margin="5"
+                        materialDesign:HintAssist.Hint="Email"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" />
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <!-- Mật khẩu -->
+                    <TextBox
+                        Grid.Column="0"
+                        Margin="5"
+                        materialDesign:HintAssist.Hint="Mật khẩu mới"
+                        Text="{Binding MatKhauMoi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=PasswordCheckBox}" Value="True">
+                                        <Setter Property="IsReadOnly" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+
+                    <!-- Đối mật khẩu (CheckBox) -->
+                    <StackPanel
+                        Grid.Column="1"
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Center">
+                        <CheckBox 
+                            x:Name="PasswordCheckBox"
+                            Margin="0,0,5,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            FontSize ="10"
+                            Text="Nhập mật khẩu mới"
+                            Foreground="Gray"/>
+                    </StackPanel>
+
                     <!--  Mã nhóm (ComboBox)  -->
                     <ComboBox
-                        Grid.Column="3"
+                        Grid.Column="2"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Nhóm người dùng"
                         DisplayMemberPath="TenNhom"
@@ -76,15 +120,6 @@
                         SelectedItem="{Binding SelectedUserType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                 </Grid>
-                
-                <!-- Email -->
-                <TextBox
-                    Grid.Column="4"
-                    Margin="5"
-                    materialDesign:HintAssist.Hint="Email"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" /> 
-                
             </StackPanel>
         </materialDesign:Card>
 

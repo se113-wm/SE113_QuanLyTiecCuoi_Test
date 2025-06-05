@@ -183,6 +183,7 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 LoginWindow loginWindow = new LoginWindow();
                 loginWindow.DataContext = new LoginViewModel();
+                DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 loginWindow.Show();
                 LoadButtonVisibility();
                 DataProvider.Ins.CurrentUser = null;

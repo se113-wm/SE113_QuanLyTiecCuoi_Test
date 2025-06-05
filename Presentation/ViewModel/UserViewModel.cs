@@ -4,14 +4,15 @@ using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
 
-
 namespace QuanLyTiecCuoi.ViewModel {
-    public class UserViewModel : BaseViewModel{
+    public class UserViewModel : BaseViewModel, IDataErrorInfo{
         private readonly INguoiDungService _nguoiDungService;
         private readonly INhomNguoiDungService _nhomNguoiDungService;
 
@@ -32,7 +33,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                 OnPropertyChanged();
                 if (SelectedItem != null) {
                     TenDangNhap = SelectedItem.TenDangNhap;
-                    MatKhau = "";
+                    MatKhauMoi = "";
                     HoTen = SelectedItem.HoTen;
                     Email = SelectedItem.Email;
                     // Tìm loại nguoidung theo ID để giữ instance trùng (combobox)
@@ -54,21 +55,46 @@ namespace QuanLyTiecCuoi.ViewModel {
                 TenNhom = _SelectedUserType?.TenNhom;
             }
         }
+        public ICommand AddCommand { get; set; }
+        private string _AddMessage;
+        public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
+        public ICommand EditCommand { get; set; }
+        private string _EditMessage;
+        public string EditMessage { get => _EditMessage; set { _EditMessage = value; OnPropertyChanged(); } }
+        public ICommand DeleteCommand { get; set; }
+        private string _DeleteMessage;
+        public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
         private string _TenDangNhap;
         public string TenDangNhap { get => _TenDangNhap; set { _TenDangNhap = value; OnPropertyChanged(); } }
 
-        private string _MatKhau;
-        public string MatKhau { get => _MatKhau; set { _MatKhau = value; OnPropertyChanged(); } }
+        private string _MatKhauMoi;
+        public string MatKhauMoi { get => _MatKhauMoi; set { _MatKhauMoi = value; OnPropertyChanged(); } }
 
         private string _HoTen;
         public string HoTen { get => _HoTen; set { _HoTen = value; OnPropertyChanged(); } }
 
         private string _Email;
         public string Email { get => _Email; set { _Email = value; OnPropertyChanged(); } }
+        public string this[string columnName] {
+            get {
+                if (columnName == nameof(Email)) {
+                    if (string.IsNullOrWhiteSpace(Email))
+                        return "Email không được để trống";
+                    if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                        return "Email không đúng định dạng";
+                }
+                return null;
+            }
+        }
+
+        public string Error => null;
 
         private string _TenNhom;
         public string TenNhom { get => _TenNhom; set { _TenNhom = value; OnPropertyChanged(); } }
+
+        private bool _isChecked; //true -> Doi Mat Khau, false -> Khong doi
+        public bool isChecked { get => _isChecked; set { _isChecked = value; OnPropertyChanged(); MatKhauMoi = ""; } }
 
         private string _searchText;
         public string SearchText {
@@ -141,21 +167,14 @@ namespace QuanLyTiecCuoi.ViewModel {
             }
         }
 
-        public ICommand AddCommand { get; set; }
-        private string _AddMessage;
-        public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
-        public ICommand EditCommand { get; set; }
-        private string _EditMessage;
-        public string EditMessage { get => _EditMessage; set { _EditMessage = value; OnPropertyChanged(); } }
-        public ICommand DeleteCommand { get; set; }
-        private string _DeleteMessage;
-        public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
+        
 
         public UserViewModel() {
             _nguoiDungService = new NguoiDungService();
             _nhomNguoiDungService = new NhomNguoiDungService();
 
             var maNhomHienTai = DataProvider.Ins.CurrentUser.MaNhom;
+            isChecked = false;
 
             List = new ObservableCollection<NGUOIDUNGDTO>(_nguoiDungService.GetAll().Where(nd => nd.MaNhom != maNhomHienTai && nd.MaNhom != "ADMIN").ToList());
             OriginalList = new ObservableCollection<NGUOIDUNGDTO>(List);
@@ -181,7 +200,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     }
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(MatKhau)) {
+                if (isChecked || string.IsNullOrWhiteSpace(MatKhauMoi)) {
                     if (SelectedItem != null) {
                         AddMessage = "Vui lòng nhập mật khẩu";
                     }
@@ -203,9 +222,9 @@ namespace QuanLyTiecCuoi.ViewModel {
                     AddMessage = "Vui lòng chọn loại nhóm người dùng";
                     return false;
                 }
-                if(string.IsNullOrWhiteSpace(Email)) {
+                if(!ValidationHelper.IsValidEmail(Email)) {
                     if (SelectedItem != null) {
-                        AddMessage = "Vui lòng nhập email";
+                        AddMessage = "Vui lòng nhập email đúng định dạng";
                     }
                     else {
                         AddMessage = string.Empty;
@@ -223,7 +242,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                 try {
                     var newUser = new NGUOIDUNGDTO() {
                         TenDangNhap = TenDangNhap,
-                        MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhau)),
+                        MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhauMoi)),
                         HoTen = HoTen,
                         Email = Email,
                         MaNhom = SelectedUserType?.MaNhom,
@@ -249,7 +268,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     return false;
                 }
                 if (TenDangNhap == SelectedItem.TenDangNhap && HoTen == SelectedItem.HoTen && Email == SelectedItem.Email 
-                && SelectedUserType.MaNhom == SelectedItem.MaNhom && MatKhau == "") {
+                && SelectedUserType.MaNhom == SelectedItem.MaNhom && MatKhauMoi == "") {
                     EditMessage = "Không có thay đổi nào để cập nhật";
                     return false;
                 }
@@ -267,8 +286,12 @@ namespace QuanLyTiecCuoi.ViewModel {
                     EditMessage = "Họ tên không được để trống";
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(Email)) {
-                    EditMessage = "Email không được để trống";
+                if (!ValidationHelper.IsValidEmail(Email)) {
+                    EditMessage = "Vui lòng nhập email đúng định dạng";
+                    return false;
+                }
+                if (isChecked && string.IsNullOrWhiteSpace(MatKhauMoi)) {
+                    EditMessage = "Mật khẩu không được để trống";
                     return false;
                 }
 
@@ -279,14 +302,14 @@ namespace QuanLyTiecCuoi.ViewModel {
                     var updateDto = new NGUOIDUNGDTO() {
                         MaNguoiDung = SelectedItem.MaNguoiDung,
                         TenDangNhap = TenDangNhap,
-                        MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhau)),
+                        MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhauMoi)),
                         HoTen = HoTen,
                         Email = Email,
                         MaNhom = SelectedUserType?.MaNhom,
                         NhomNguoiDung = SelectedUserType
                     };
-                    if (!string.IsNullOrWhiteSpace(MatKhau)) {
-                        updateDto.MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhau));
+                    if (!string.IsNullOrWhiteSpace(MatKhauMoi)) {
+                        updateDto.MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhauMoi));
                     }
                     else {
                         updateDto.MatKhauHash = _nguoiDungService.GetById(SelectedItem.MaNguoiDung).MatKhauHash;
@@ -329,7 +352,7 @@ namespace QuanLyTiecCuoi.ViewModel {
         private void Reset() {
             SelectedItem = null;
             TenDangNhap = string.Empty;
-            MatKhau = string.Empty;
+            MatKhauMoi = string.Empty;
             Email = string.Empty;
             SelectedUserType = null;
             SearchText = string.Empty;
