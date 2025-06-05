@@ -248,12 +248,19 @@ namespace QuanLyTiecCuoi.ViewModel {
                     EditMessage = string.Empty;
                     return false;
                 }
+                if (TenDangNhap == SelectedItem.TenDangNhap && HoTen == SelectedItem.HoTen && Email == SelectedItem.Email 
+                && SelectedUserType.MaNhom == SelectedItem.MaNhom && MatKhau == "") {
+                    EditMessage = "Không có thay đổi nào để cập nhật";
+                    return false;
+                }
                 if (string.IsNullOrWhiteSpace(TenDangNhap)) {
                     EditMessage = "Tên đăng nhập không được để trống";
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(MatKhau)) {
-                    EditMessage = "Mật khẩu không được để trống";
+                var exists = List.Any(x =>
+                    x.TenDangNhap == TenDangNhap && x.MaNguoiDung != SelectedItem.MaNguoiDung);
+                if (exists) {
+                    EditMessage = "Tên đăng nhập này đã tồn tại";
                     return false;
                 }
                 if (string.IsNullOrWhiteSpace(HoTen)) {
@@ -264,12 +271,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     EditMessage = "Email không được để trống";
                     return false;
                 }
-                var exists = OriginalList.Any(x =>
-                    x.TenDangNhap == TenDangNhap);
-                if (exists) {
-                    EditMessage = "Người dùng này đã tồn tại";
-                    return false;
-                }
+
                 EditMessage = string.Empty;
                 return true;
             }, (p) => {
@@ -283,6 +285,12 @@ namespace QuanLyTiecCuoi.ViewModel {
                         MaNhom = SelectedUserType?.MaNhom,
                         NhomNguoiDung = SelectedUserType
                     };
+                    if (!string.IsNullOrWhiteSpace(MatKhau)) {
+                        updateDto.MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhau));
+                    }
+                    else {
+                        updateDto.MatKhauHash = _nguoiDungService.GetById(SelectedItem.MaNguoiDung).MatKhauHash;
+                    }
 
                     _nguoiDungService.Update(updateDto);
 

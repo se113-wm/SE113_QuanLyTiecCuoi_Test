@@ -169,7 +169,14 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
 
-            //AccountCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new AccountView(); });
+            AccountCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
+                CurrentView = new AccountView() {
+                    DataContext = new AccountViewModel()
+                };
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Account"] = new SolidColorBrush(Colors.DarkBlue);
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             #endregion
 
             LogoutCommand = new RelayCommand<Window>((p) => { return true; }, (p) =>
@@ -178,6 +185,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 loginWindow.DataContext = new LoginViewModel();
                 loginWindow.Show();
                 LoadButtonVisibility();
+                DataProvider.Ins.CurrentUser = null;
                 p.Close();
             });
         }
