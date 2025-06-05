@@ -159,11 +159,15 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Presentation\ViewModel\AccountViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\FoodViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ParameterViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Presentation\ViewModel\UserViewModel.cs" />
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\View\FoodView.xaml.cs">
+      <DependentUpon>FoodView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\HallTypeView.xaml.cs">
       <DependentUpon>HallTypeView.xaml</DependentUpon>
@@ -257,6 +261,10 @@
       <DependentUpon>WeddingView.xaml</DependentUpon>
     </Compile>
     <Page Include="Presentation\View\AccountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\FoodView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

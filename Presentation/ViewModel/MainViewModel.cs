@@ -178,7 +178,13 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
             #endregion
-
+            FoodCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                CurrentView = new FoodView();
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Food"] = new SolidColorBrush(Colors.DarkBlue);
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             LogoutCommand = new RelayCommand<Window>((p) => { return true; }, (p) =>
             {
                 LoginWindow loginWindow = new LoginWindow();
