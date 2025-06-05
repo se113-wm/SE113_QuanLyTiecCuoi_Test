@@ -36,6 +36,7 @@ namespace QuanLyTiecCuoi.ViewModel {
 
         public AccountViewModel() {
             var currentUser = DataProvider.Ins.CurrentUser;
+            _nguoiDungService = new NguoiDungService();
             List = new ObservableCollection<NGUOIDUNGDTO>(_nguoiDungService.GetAll().ToList());
 
             TenDangNhap = currentUser.TenDangNhap;
@@ -47,7 +48,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             OnPropertyChanged();
 
             SaveCommand = new RelayCommand<object>((p) => {
-                if (TenDangNhap == currentUser.TenDangNhap && HoTen == currentUser.HoTen && Email == currentUser.Email && MatKhau == "") {
+                if (TenDangNhap == currentUser.TenDangNhap && HoTen == currentUser.HoTen && Email == currentUser.Email && string.IsNullOrWhiteSpace(MatKhau)) {
                     SaveMessage = "Không có thay đổi nào để cập nhật";
                     return false;
                 }

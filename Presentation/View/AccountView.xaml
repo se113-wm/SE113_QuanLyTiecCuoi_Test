@@ -80,9 +80,17 @@
                     Grid.Column="1"
                     Width="180"
                     Margin="5"
+                    VerticalAlignment="Top"
                     Content="Lưu thay đổi"
-                    Command="{Binding AddCommand}"
+                    Command="{Binding SaveCommand}"
                     Style="{StaticResource MaterialDesignRaisedButton}" />
+                <TextBlock
+                    Height="32"
+                    VerticalAlignment="Top"
+                    FontSize="10"
+                    Foreground="Gray"
+                    Text="{Binding SaveMessage}"
+                    TextWrapping="Wrap" />
             </Grid>
         </materialDesign:Card>
     </Grid>

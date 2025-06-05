@@ -194,11 +194,10 @@ namespace QuanLyTiecCuoi.ViewModel
             // Lấy danh sách chức năng của nhóm người dùng hiện tại
             var userPermissions = DataProvider.Ins.DB.NHOMNGUOIDUNGs
                 .Where(nhom => nhom.MaNhom == DataProvider.Ins.CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
-                .SelectMany(nhom => nhom.CHUCNANGs) // Lấy danh sách CHUCNANG từ NHOMNGUOIDUNG
-                .ToList();
+                .SelectMany(nhom => nhom.CHUCNANGs); // Lấy danh sách CHUCNANG từ NHOMNGUOIDUNG
 
             // Thiết lập Visibility dựa trên quyền
-            var buttonKeys = new List<string> { "Home", "HallType", "Hall", "Shift", "Food", "Service", "Wedding", "Report", "Parameter", "Permission", "User" };
+            var buttonKeys = new List<string> { "Home", "HallType", "Hall", "Shift", "Food", "Service", "Wedding", "Report", "Parameter", "Permission", "User", "Account" };
 
             foreach (var key in buttonKeys)
             {
