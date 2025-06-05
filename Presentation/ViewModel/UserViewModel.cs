@@ -64,6 +64,9 @@ namespace QuanLyTiecCuoi.ViewModel {
         public ICommand DeleteCommand { get; set; }
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
+        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
+            Reset();
+        });
 
         private string _TenDangNhap;
         public string TenDangNhap { get => _TenDangNhap; set { _TenDangNhap = value; OnPropertyChanged(); } }
@@ -129,6 +132,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             try {
                 SelectedItem = null;
                 TenDangNhap = string.Empty;
+                HoTen = string.Empty;
                 Email = string.Empty;
                 SelectedUserType = null;
                 if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty)) {
@@ -352,6 +356,7 @@ namespace QuanLyTiecCuoi.ViewModel {
         private void Reset() {
             SelectedItem = null;
             TenDangNhap = string.Empty;
+            HoTen = string.Empty;
             MatKhauMoi = string.Empty;
             Email = string.Empty;
             SelectedUserType = null;

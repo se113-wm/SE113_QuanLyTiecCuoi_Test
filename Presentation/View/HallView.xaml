@@ -29,11 +29,31 @@
             Padding="10"
             BorderThickness="0.5">
             <StackPanel>
-                <TextBlock
-                    Margin="0,0,0,10"
-                    FontSize="14"
-                    FontWeight="Bold"
-                    Text="Thông tin chi tiết" />
+                <!--  Tiêu đề + Nút Reset sát nhau  -->
+                <StackPanel
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Thông tin chi tiết" />
+                    <Button
+                        Width="36"
+                        Height="36"
+                        Margin="5,0,0,0"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Command="{Binding ResetCommand}"
+                        Foreground="Purple"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        ToolTip="Reset thông tin">
+                        <materialDesign:PackIcon
+                            Width="20"
+                            Height="20"
+                            Kind="Restore" />
+                    </Button>
+                </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*" />

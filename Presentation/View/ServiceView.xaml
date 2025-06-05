@@ -33,7 +33,7 @@
             <StackPanel>
                 <!--  Tiêu đề + Nút Reset sát nhau  -->
                 <StackPanel
-                    Margin="0,0,0,10"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
                     <TextBlock
@@ -41,7 +41,6 @@
                         FontSize="14"
                         FontWeight="Bold"
                         Text="Thông tin chi tiết" />
-
                     <Button
                         Width="36"
                         Height="36"
@@ -56,9 +55,6 @@
                             Height="20"
                             Kind="Restore" />
                     </Button>
-
-
-
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>

@@ -177,6 +177,10 @@ namespace QuanLyTiecCuoi.ViewModel
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
+        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
+            Reset();
+        });
+
         public HallViewModel()
         {
             _sanhService = new SanhService();
