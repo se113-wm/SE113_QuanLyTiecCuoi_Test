@@ -126,19 +126,19 @@ CREATE TABLE CTBAOCAODS (
     Nam INT,
     SoLuongTiec INT,
     DoanhThu MONEY,
-    TiLe DECIMAL(5,2),
+    TiLe DECIMAL(7,2),
     PRIMARY KEY (Ngay, Thang, Nam),
     FOREIGN KEY (Thang, Nam) REFERENCES BAOCAODS(Thang, Nam)
 );
 
 -- BẢNG THAM SỐ
 CREATE TABLE THAMSO (
-    TenThamSo NVARCHAR(5) PRIMARY KEY,
+    TenThamSo NVARCHAR(100) PRIMARY KEY,
 	GiaTri DECIMAL(5,2)
 );
 
 INSERT INTO THAMSO (TenThamSo, GiaTri) VALUES
-('KiemTraPhat', 0),         -- BIT: 0 = tắt, 1 = bật (giá trị mặc định có thể là 0)
+('KiemTraPhat', 1),         -- BIT: 0 = tắt, 1 = bật (giá trị mặc định có thể là 0)
 ('TiLePhat', 0.01),         -- DECIMAL(5,2)
 ('TiLeTienDatCocToiThieu', 0.15), -- DECIMAL(5,2)
 ('TiLeSoBanDatTruocToiThieu', 0.85); -- DECIMAL(5,2)
@@ -174,6 +174,7 @@ CREATE TABLE NGUOIDUNG (
     FOREIGN KEY (MaNhom) REFERENCES NHOMNGUOIDUNG(MaNhom)
 );
 
+GO
 CREATE TRIGGER TRG_Update_TongTien_From_ThucDon
 ON THUCDON
 AFTER INSERT, UPDATE, DELETE
@@ -222,8 +223,8 @@ BEGIN
     JOIN LOAISANH ls ON s.MaLoaiSanh = ls.MaLoaiSanh
     WHERE p.MaPhieuDat IN (SELECT MaPhieuDat FROM @AffectedPhieuDats);
 END;
-GO
 
+GO
 CREATE TRIGGER TRG_Update_TongTien_From_ChiTietDV
 ON CHITIETDV
 AFTER INSERT, UPDATE, DELETE
@@ -261,143 +262,211 @@ BEGIN
     WHERE p.MaPhieuDat IN (SELECT MaPhieuDat FROM @AffectedPhieuDats);
 END;
 
+GO
+CREATE TRIGGER TRG_Update_TongTien_When_LoaiSanh_Changes
+ON LOAISANH
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Kiểm tra xem DonGiaBanToiThieu có thay đổi không
+    IF UPDATE(DonGiaBanToiThieu)
+    BEGIN
+        -- Cập nhật lại TongTienBan và các trường liên quan trong PHIEUDATTIEC
+        -- cho các phiếu đặt tiệc sử dụng loại sảnh bị thay đổi
+        UPDATE p
+        SET 
+            p.TongTienBan = p.SoLuongBan * i.DonGiaBanToiThieu,
+            p.TongTienHoaDon = (p.SoLuongBan * i.DonGiaBanToiThieu) + 
+                              ISNULL(p.TongTienDV, 0) + 
+                              ISNULL(p.ChiPhiPhatSinh, 0),
+            p.TienConLai = (p.SoLuongBan * i.DonGiaBanToiThieu) + 
+                           ISNULL(p.TongTienDV, 0) + 
+                           ISNULL(p.ChiPhiPhatSinh, 0) + 
+                           ISNULL(p.TienPhat, 0) - 
+                           ISNULL(p.TienDatCoc, 0)
+        FROM PHIEUDATTIEC p
+        INNER JOIN SANH s ON p.MaSanh = s.MaSanh
+        INNER JOIN inserted i ON s.MaLoaiSanh = i.MaLoaiSanh
+        INNER JOIN deleted d ON i.MaLoaiSanh = d.MaLoaiSanh
+        WHERE i.DonGiaBanToiThieu <> d.DonGiaBanToiThieu;
+    END
+END;
 
+GO
 CREATE TRIGGER TRG_Update_TongTien_PhieuDat
 ON PHIEUDATTIEC
 AFTER INSERT, UPDATE
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    -- Chỉ xử lý nếu có bản ghi thay đổi
-    IF NOT EXISTS (SELECT 1 FROM inserted)
-        RETURN;
-    
-    -- Cập nhật tất cả các bản ghi bị ảnh hưởng
+
+    -- Cập nhật Đơn giá, Tổng tiền bàn, dịch vụ, hóa đơn
     UPDATE p
     SET 
-        DonGiaBanTiec = ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
-                                                     FROM THUCDON td 
-                                                     WHERE td.MaPhieuDat = p.MaPhieuDat), 0),
-        TongTienBan = p.SoLuongBan * (ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
-                                                                   FROM THUCDON td 
-                                                                   WHERE td.MaPhieuDat = p.MaPhieuDat), 0)),
-        TongTienDV = ISNULL((SELECT SUM(ctdv.ThanhTien) 
-                           FROM CHITIETDV ctdv 
-                           WHERE ctdv.MaPhieuDat = p.MaPhieuDat), 0),
-        TongTienHoaDon = p.SoLuongBan * (ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
-                                                                      FROM THUCDON td 
-                                                                      WHERE td.MaPhieuDat = p.MaPhieuDat), 0)) +
-                     ISNULL((SELECT SUM(ctdv.ThanhTien) 
-                            FROM CHITIETDV ctdv 
-                            WHERE ctdv.MaPhieuDat = p.MaPhieuDat), 0) +
-                     ISNULL(p.ChiPhiPhatSinh, 0),
-        TienConLai = p.SoLuongBan * (ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
-                                                                   FROM THUCDON td 
-                                                                   WHERE td.MaPhieuDat = p.MaPhieuDat), 0)) +
-                     ISNULL((SELECT SUM(ctdv.ThanhTien) 
-                            FROM CHITIETDV ctdv 
-                            WHERE ctdv.MaPhieuDat = p.MaPhieuDat), 0) +
-                     ISNULL(p.ChiPhiPhatSinh, 0) +
-                     ISNULL(p.TienPhat, 0) -
-                     ISNULL(p.TienDatCoc, 0)
+        DonGiaBanTiec = ls.DonGiaBanToiThieu + ISNULL((
+            SELECT SUM(td.DonGia * td.SoLuong)
+            FROM THUCDON td
+            WHERE td.MaPhieuDat = p.MaPhieuDat
+        ), 0),
+        TongTienBan = p.SoLuongBan * (
+            ls.DonGiaBanToiThieu + ISNULL((
+                SELECT SUM(td.DonGia * td.SoLuong)
+                FROM THUCDON td
+                WHERE td.MaPhieuDat = p.MaPhieuDat
+            ), 0)
+        ),
+        TongTienDV = ISNULL((
+            SELECT SUM(ctdv.ThanhTien)
+            FROM CHITIETDV ctdv
+            WHERE ctdv.MaPhieuDat = p.MaPhieuDat
+        ), 0),
+        TongTienHoaDon = 
+            p.SoLuongBan * (
+                ls.DonGiaBanToiThieu + ISNULL((
+                    SELECT SUM(td.DonGia * td.SoLuong)
+                    FROM THUCDON td
+                    WHERE td.MaPhieuDat = p.MaPhieuDat
+                ), 0)
+            ) +
+            ISNULL((
+                SELECT SUM(ctdv.ThanhTien)
+                FROM CHITIETDV ctdv
+                WHERE ctdv.MaPhieuDat = p.MaPhieuDat
+            ), 0) +
+            ISNULL(p.ChiPhiPhatSinh, 0)
     FROM PHIEUDATTIEC p
     JOIN SANH s ON p.MaSanh = s.MaSanh
     JOIN LOAISANH ls ON s.MaLoaiSanh = ls.MaLoaiSanh
     WHERE p.MaPhieuDat IN (SELECT MaPhieuDat FROM inserted);
-    
-    -- Cập nhật tiền phạt nếu ngày thanh toán thay đổi
+
+    -- Lấy giá trị tham số phạt
+    DECLARE @TiLePhat FLOAT = ISNULL((SELECT TOP 1 GiaTri FROM THAMSO WHERE TenThamSo = 'TiLePhat'), 0);
+    DECLARE @KiemTraPhat FLOAT = ISNULL((SELECT TOP 1 GiaTri FROM THAMSO WHERE TenThamSo = 'KiemTraPhat'), 0);
+
+    -- Cập nhật Tiền phạt và Tiền còn lại
     UPDATE p
     SET 
-        TienPhat = CASE 
-                      WHEN i.NgayThanhToan > i.NgayDaiTiec THEN 
-                          DATEDIFF(DAY, i.NgayDaiTiec, i.NgayThanhToan) * 
-                          ISNULL((SELECT GiaTri FROM THAMSO WHERE TenThamSo = 'TLPh'), 0) * 
-                          (p.TongTienHoaDon - ISNULL(i.TienDatCoc, 0))
-                      ELSE 0
-                   END,
-        TienConLai = p.TongTienHoaDon + 
-                     CASE 
-                        WHEN i.NgayThanhToan > i.NgayDaiTiec THEN 
-                            DATEDIFF(DAY, i.NgayDaiTiec, i.NgayThanhToan) * 
-                            ISNULL((SELECT GiaTri FROM THAMSO WHERE TenThamSo = 'TLPh'), 0) * 
-                            (p.TongTienHoaDon - ISNULL(i.TienDatCoc, 0))
-                        ELSE 0
-                     END -
-                     ISNULL(i.TienDatCoc, 0)
+        TienPhat = 
+            CASE 
+                WHEN i.NgayThanhToan IS NOT NULL AND i.NgayThanhToan > i.NgayDaiTiec THEN
+                    DATEDIFF(DAY, i.NgayDaiTiec, i.NgayThanhToan) *
+                    @TiLePhat * @KiemTraPhat *
+                    (p.TongTienHoaDon - ISNULL(i.TienDatCoc, 0))
+                ELSE 0
+            END,
+        TienConLai =
+            p.TongTienHoaDon +
+            CASE 
+                WHEN i.NgayThanhToan IS NOT NULL AND i.NgayThanhToan > i.NgayDaiTiec THEN
+                    DATEDIFF(DAY, i.NgayDaiTiec, i.NgayThanhToan) *
+                    @TiLePhat * @KiemTraPhat *
+                    (p.TongTienHoaDon - ISNULL(i.TienDatCoc, 0))
+                ELSE 0
+            END - ISNULL(i.TienDatCoc, 0)
     FROM PHIEUDATTIEC p
     JOIN inserted i ON p.MaPhieuDat = i.MaPhieuDat
-    WHERE EXISTS (
-        SELECT 1 FROM inserted ii 
-        WHERE ii.MaPhieuDat = i.MaPhieuDat 
-        AND (ii.NgayThanhToan <> i.NgayThanhToan OR 
-             (ii.NgayThanhToan IS NULL AND i.NgayThanhToan IS NOT NULL) OR
-             (ii.NgayThanhToan IS NOT NULL AND i.NgayThanhToan IS NULL))
-    );
+    WHERE i.NgayThanhToan IS NOT NULL;
 END;
 
+GO
+CREATE TRIGGER TRG_Update_BaoCaoDS
+ON PHIEUDATTIEC
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
 
---GO
---CREATE TRIGGER TRG_Update_BaoCaoDS
---ON PHIEUDATTIEC
---AFTER INSERT, UPDATE
---AS
---BEGIN
---    SET NOCOUNT ON;
+    -- Bảng tạm lưu doanh thu (chỉ lưu thông tin tổng hợp)
+    DECLARE @TempDeleted TABLE (Ngay INT, Thang INT, Nam INT, DoanhThu MONEY, SoLuongTiec INT);
+    DECLARE @TempInserted TABLE (Ngay INT, Thang INT, Nam INT, DoanhThu MONEY, SoLuongTiec INT);
 
---    DECLARE @MaPhieuDat INT, @NgayDatTiec SMALLDATETIME, @NgayThanhToan SMALLDATETIME,
---            @TienDatCoc MONEY, @TienConLai MONEY;
+    -- XỬ LÝ DỮ LIỆU BỊ XÓA (tổng hợp theo ngày)
+    INSERT INTO @TempDeleted (Ngay, Thang, Nam, DoanhThu, SoLuongTiec)
+    SELECT 
+        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        ISNULL(SUM(ISNULL(TienDatCoc, 0) + ISNULL(TienConLai, 0)), 0),
+        COUNT(CASE WHEN NgayDaiTiec IS NOT NULL THEN 1 ELSE NULL END)
+    FROM DELETED
+    GROUP BY 
+        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec));
 
---    SELECT TOP 1
---        @MaPhieuDat = MaPhieuDat,
---        @NgayDatTiec = NgayDatTiec,
---        @NgayThanhToan = NgayThanhToan,
---        @TienDatCoc = ISNULL(TienDatCoc, 0),
---        @TienConLai = ISNULL(TienConLai, 0)
---    FROM INSERTED;
+    -- Trừ doanh thu và số lượng tiệc
+    UPDATE c
+    SET 
+        c.DoanhThu = c.DoanhThu - td.DoanhThu,
+        c.SoLuongTiec = c.SoLuongTiec - td.SoLuongTiec
+    FROM CTBAOCAODS c
+    JOIN @TempDeleted td ON c.Ngay = td.Ngay AND c.Thang = td.Thang AND c.Nam = td.Nam;
 
---    -- Doanh thu theo ngày thanh toán = tiền còn lại
---    DECLARE @NgayTT INT = DAY(@NgayThanhToan),
---            @ThangTT INT = MONTH(@NgayThanhToan),
---            @NamTT INT = YEAR(@NgayThanhToan);
+    UPDATE b
+    SET b.TongDoanhThu = b.TongDoanhThu - ISNULL((SELECT SUM(DoanhThu) FROM @TempDeleted WHERE Thang = b.Thang AND Nam = b.Nam), 0)
+    FROM BAOCAODS b
+    WHERE EXISTS (SELECT 1 FROM @TempDeleted WHERE Thang = b.Thang AND Nam = b.Nam);
 
---    IF EXISTS (SELECT * FROM CTBAOCAODS WHERE Ngay = @NgayTT AND Thang = @ThangTT AND Nam = @NamTT)
---    BEGIN
---        UPDATE CTBAOCAODS
---        SET SoLuongTiec = SoLuongTiec + 1,
---            DoanhThu = DoanhThu + @TienConLai
---        WHERE Ngay = @NgayTT AND Thang = @ThangTT AND Nam = @NamTT;
---    END
---    ELSE
---    BEGIN
---        INSERT INTO CTBAOCAODS (Ngay, Thang, Nam, SoLuongTiec, DoanhThu, TiLe)
---        VALUES (@NgayTT, @ThangTT, @NamTT, 1, @TienConLai, 0);
---    END
+    -- XỬ LÝ DỮ LIỆU MỚI (tổng hợp theo ngày)
+    INSERT INTO @TempInserted (Ngay, Thang, Nam, DoanhThu, SoLuongTiec)
+    SELECT 
+        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        ISNULL(SUM(ISNULL(TienDatCoc, 0) + ISNULL(TienConLai, 0)), 0),
+        COUNT(CASE WHEN NgayDaiTiec IS NOT NULL THEN 1 ELSE NULL END)
+    FROM INSERTED
+    GROUP BY 
+        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
+        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec));
 
---    -- Cập nhật tổng doanh thu trong bảng tháng
---    IF EXISTS (SELECT * FROM BAOCAODS WHERE Thang = @ThangTT AND Nam = @NamTT)
---    BEGIN
---        UPDATE BAOCAODS
---        SET TongDoanhThu = TongDoanhThu + @TienConLai
---        WHERE Thang = @ThangTT AND Nam = @NamTT;
---    END
---    ELSE
---    BEGIN
---        INSERT INTO BAOCAODS (Thang, Nam, TongDoanhThu)
---        VALUES (@ThangTT, @NamTT, @TienConLai);
---    END
+    -- Đảm bảo BAOCAODS tồn tại
+    MERGE BAOCAODS AS target
+    USING (
+        SELECT DISTINCT Thang, Nam FROM @TempInserted
+    ) AS source
+    ON target.Thang = source.Thang AND target.Nam = source.Nam
+    WHEN NOT MATCHED THEN
+        INSERT (Thang, Nam, TongDoanhThu)
+        VALUES (source.Thang, source.Nam, 0);
 
---    -- Cập nhật lại TiLe trong bảng chi tiết báo cáo
---    UPDATE CTBAOCAODS
---    SET TiLe = (DoanhThu * 100.0) / (
---        SELECT TongDoanhThu FROM BAOCAODS
---        WHERE Thang = @ThangTT AND Nam = @NamTT
---    )
---    WHERE Ngay = @NgayTT AND Thang = @ThangTT AND Nam = @NamTT;
---END;
+    -- Cập nhật CTBAOCAODS
+    MERGE CTBAOCAODS AS target
+    USING @TempInserted AS source
+    ON target.Ngay = source.Ngay AND target.Thang = source.Thang AND target.Nam = source.Nam
+    WHEN MATCHED THEN
+        UPDATE SET 
+            SoLuongTiec = target.SoLuongTiec + source.SoLuongTiec,
+            DoanhThu = target.DoanhThu + source.DoanhThu
+    WHEN NOT MATCHED THEN
+        INSERT (Ngay, Thang, Nam, SoLuongTiec, DoanhThu, TiLe)
+        VALUES (
+            source.Ngay, source.Thang, source.Nam,
+            source.SoLuongTiec,
+            source.DoanhThu,
+            0
+        );
 
+    -- Cập nhật BAOCAODS
+    UPDATE b
+    SET b.TongDoanhThu = b.TongDoanhThu + ISNULL((SELECT SUM(DoanhThu) FROM @TempInserted WHERE Thang = b.Thang AND Nam = b.Nam), 0)
+    FROM BAOCAODS b
+    WHERE EXISTS (SELECT 1 FROM @TempInserted WHERE Thang = b.Thang AND Nam = b.Nam);
 
+    -- Cập nhật TiLe
+    UPDATE c
+    SET TiLe = CASE 
+                WHEN b.TongDoanhThu = 0 THEN 0
+                ELSE TRY_CAST(c.DoanhThu AS FLOAT) * 100.0 / NULLIF(TRY_CAST(b.TongDoanhThu AS FLOAT), 0)
+               END
+    FROM CTBAOCAODS c
+    JOIN BAOCAODS b ON c.Thang = b.Thang AND c.Nam = b.Nam;
+END;
 
+GO
 INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
 VALUES ('ADMIN', N'Quản trị viên');
 
@@ -548,19 +617,15 @@ VALUES
 (N'Trang trí hoa tươi', 2000000, N'Trang trí sân khấu'),
 (N'Ban nhạc sống', 3000000, N'Nhạc sống trong tiệc');
 
--- THAMSO (tỷ lệ phạt)
-INSERT INTO THAMSO (TenThamSo, GiaTri)
-VALUES ('TLPh', 0.01);
-
 
 INSERT INTO PHIEUDATTIEC (
     TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec, MaCa, MaSanh,
-    TienDatCoc, SoLuongBan, SoBanDuTru, NgayThanhToan, ChiPhiPhatSinh, TongTienBan
+    TienDatCoc, SoLuongBan, SoBanDuTru, ChiPhiPhatSinh, TongTienBan
 )
 VALUES (
     N'Nguyễn Văn A', N'Trần Thị B', '0912345678',
     '2025-06-01', '2025-06-10', 1, 1,
-    10000000, 20, 2, '2025-06-15', 500000, 1000
+    10000000, 20, 2, 500000, 1000
 );
 
 
@@ -577,6 +642,14 @@ VALUES
 (1, 1, 1, 2000000, 2000000, N'Trang trí sân khấu theo chủ đề hoa'),
 (1, 2, 1, 3000000, 3000000, N'Nhạc sống nhẹ nhàng');
 
-UPDATE PHIEUDATTIEC
-SET ChiPhiPhatSinh = 2000
-WHERE PHIEUDATTIEC.MaPhieuDat = 1
+update THAMSO
+set GiaTri = 0
+where TenThamSo = 'KiemTraPhat'
+
+update LOAISANH
+set DonGiaBanToiThieu = 1000000
+where MaLoaiSanh = 1
+
+update PHIEUDATTIEC
+set NgayThanhToan = '2025-06-15'
+where MaPhieuDat = 1
