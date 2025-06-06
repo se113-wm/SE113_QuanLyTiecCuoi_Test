@@ -16,11 +16,11 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 
         Name="mainWindow"
-
         DataContext="{StaticResource MainViewModel}"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1200">
+        Title="Quản lý tiệc cưới" Height="720" Width="1200"
+        Icon="Assets/icon_window.ico">
     <!--<i:Interaction.Triggers>
     <i:EventTrigger EventName="Loaded">
     <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"

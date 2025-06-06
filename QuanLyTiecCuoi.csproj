@@ -351,6 +351,7 @@
   <ItemGroup />
   <ItemGroup>
     <Resource Include="Image\wedding.jpg" />
+    <Resource Include="Presentation\View\Assets\icon_window.ico" />
     <Content Include="Model\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
