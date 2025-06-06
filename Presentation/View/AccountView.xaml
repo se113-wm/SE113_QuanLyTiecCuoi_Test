@@ -1,9 +1,10 @@
-﻿<UserControl 
+﻿<UserControl
     x:Class="QuanLyTiecCuoi.Presentation.View.AccountView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:QuanLyTiecCuoi"
+    xmlns:helpers="clr-namespace:QuanLyTiecCuoi.Presentation.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid>
         <Grid.RowDefinitions>
@@ -29,65 +30,85 @@
             Margin="10"
             Padding="10"
             BorderThickness="0.5">
-            <Grid
-                Width="1000">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0">
-                    <TextBlock
-                        Margin="0,0,0,10"
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Text="Thông tin chi tiết" />
-                    <TextBox
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Tên đăng nhập"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding TenDangNhap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBox
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Họ tên"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding HoTen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBox
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Email"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" />
-                    <TextBox
-                        Grid.Column="4"
-                        Margin="5"
-                        FontSize="14"
-                        IsReadOnly="True"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding TenNhom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
+            <StackPanel>
+                <Grid
+                    Width="1000">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel
+                        Grid.Row="0">
+                        <StackPanel
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                FontSize="14"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="Thông tin chi tiết" />
+                            <Button
+                                Width="36"
+                                Height="36"
+                                Margin="5,0,0,0"
+                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                Command="{Binding ResetCommand}"
+                                Foreground="Purple"
+                                Style="{StaticResource MaterialDesignToolButton}"
+                                ToolTip="Reset thông tin">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    Kind="Restore" />
+                            </Button>
+                        </StackPanel>
+                        <TextBox
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tên đăng nhập"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding TenDangNhap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Họ tên"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding HoTen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Email"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" />
+                        <TextBox
+                            Grid.Column="4"
+                            Margin="5"
+                            FontSize="14"
+                            IsReadOnly="True"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding TenNhom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Margin="5">
-                    <Button
-                        Grid.Column="1"
-                        Width="180"
-                        Margin="5"
-                        VerticalAlignment="Top"
-                        Content="Lưu thay đổi"
-                        Command="{Binding SaveCommand}"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-                    <TextBlock
-                        Height="20"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Center"
-                        FontSize="10"
-                        Foreground="Gray"
-                        Text="{Binding SaveMessage}"
-                        TextWrapping="Wrap" />
-                </StackPanel>
-            </Grid>
-
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="5">
+                        <Button
+                            Grid.Column="1"
+                            Width="180"
+                            Margin="5"
+                            VerticalAlignment="Top"
+                            Content="Lưu thay đổi"
+                            Command="{Binding SaveCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}" />
+                        <TextBlock
+                            Height="20"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Center"
+                            FontSize="10"
+                            Foreground="Gray"
+                            Text="{Binding SaveMessage}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
         </materialDesign:Card>
 
         <!-- Mật khẩu -->
@@ -106,7 +127,7 @@
                     Grid.Row="0">
                     <TextBlock
                         Margin="0,0,0,10"
-                        FontSize="16"
+                        FontSize="14"
                         FontWeight="Bold"
                         Text="Đổi mật khẩu" />
                 </StackPanel>
@@ -142,7 +163,7 @@
                                             HorizontalAlignment="Right"
                                             Text="Mật khẩu hiện tại:" />
                                         <PasswordBox
-                                            x:Name="FloatingPasswordBox"
+                                            x:Name="CurrentPasswordBox"
                                             Grid.Column="1"
                                             Margin="20,5,0,0"
                                             HorizontalAlignment="Stretch"
@@ -152,10 +173,11 @@
                                             FontSize="14"
                                             Foreground="Black"
                                             Background="White"
-                                            Style="{StaticResource MaterialDesignFilledRevealPasswordBox}">
+                                            Style="{StaticResource MaterialDesignFilledRevealPasswordBox}"
+                                            helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="PasswordChanged">
-                                                    <i:InvokeCommandAction Command="{Binding CurrentPasswordChangedCommand}" CommandParameter="{Binding ElementName=FloatingPasswordBox}" />
+                                                    <i:InvokeCommandAction Command="{Binding CurrentPasswordChangedCommand}" CommandParameter="{Binding ElementName=CurrentPasswordBox}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </PasswordBox>
@@ -178,7 +200,7 @@
                                             HorizontalAlignment="Right"
                                             Text="Nhập mật khẩu mới:" />
                                         <PasswordBox
-                                            x:Name="FloatingPasswordBox1"
+                                            x:Name="NewPasswordBox"
                                             Grid.Column="1"
                                             Margin="20,5,0,0"
                                             HorizontalAlignment="Stretch"
@@ -188,10 +210,11 @@
                                             FontSize="14"
                                             Foreground="Black"
                                             Background="White"
-                                            Style="{StaticResource MaterialDesignFilledRevealPasswordBox}">
+                                            Style="{StaticResource MaterialDesignFilledRevealPasswordBox}"
+                                            helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="PasswordChanged">
-                                                    <i:InvokeCommandAction Command="{Binding NewPasswordChangedCommand}" CommandParameter="{Binding ElementName=FloatingPasswordBox1}" />
+                                                    <i:InvokeCommandAction Command="{Binding NewPasswordChangedCommand}" CommandParameter="{Binding ElementName=NewPasswordBox}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </PasswordBox>
@@ -214,7 +237,7 @@
                                             HorizontalAlignment="Right"
                                             Text="Nhập lại mật khẩu mới:" />
                                         <PasswordBox
-                                            x:Name="FloatingPasswordBox2"
+                                            x:Name="NewPassword1Box"
                                             Grid.Column="1"
                                             Margin="20,5,0,0"
                                             HorizontalAlignment="Stretch"
@@ -224,10 +247,11 @@
                                             FontSize="14"
                                             Foreground="Black"
                                             Background="White"
-                                            Style="{StaticResource MaterialDesignFilledRevealPasswordBox}">
+                                            Style="{StaticResource MaterialDesignFilledRevealPasswordBox}"
+                                            helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="PasswordChanged">
-                                                    <i:InvokeCommandAction Command="{Binding NewPassword1ChangedCommand}" CommandParameter="{Binding ElementName=FloatingPasswordBox2}" />
+                                                    <i:InvokeCommandAction Command="{Binding NewPassword1ChangedCommand}" CommandParameter="{Binding ElementName=NewPassword1Box}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </PasswordBox>
@@ -245,7 +269,7 @@
                                 Margin="5"
                                 Command="{Binding ChangePasswordCommand}"
                                 Content="Đổi mật khẩu"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                                Style="{StaticResource MaterialDesignRaisedButton}"/>
                             <TextBlock
                                 Height="20"
                                 VerticalAlignment="Top"
