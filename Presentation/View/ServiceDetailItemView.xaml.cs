@@ -15,18 +15,13 @@ using System.Windows.Shapes;
 namespace QuanLyTiecCuoi.Presentation.View
 {
     /// <summary>
-    /// Interaction logic for AddWeddingView.xaml
+    /// Interaction logic for ServiceDetailItemView.xaml
     /// </summary>
-    public partial class AddWeddingView : Window
+    public partial class ServiceDetailItemView : Window
     {
-        public AddWeddingView()
+        public ServiceDetailItemView()
         {
             InitializeComponent();
-        }
-
-        private void ComboBox_SuggestionChosen(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-
         }
     }
 }

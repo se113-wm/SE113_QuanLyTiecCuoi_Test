@@ -135,6 +135,8 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 TienPhat = dto.TienPhat
             };
             _phieuDatTiecRepository.Create(entity);
+            // enity đã đc làm mới sau khi thêm, dto = lại enity
+            dto.MaPhieuDat = entity.MaPhieuDat; // Cập nhật mã phiếu đặt mới
         }
 
         public void Update(PHIEUDATTIECDTO dto)
