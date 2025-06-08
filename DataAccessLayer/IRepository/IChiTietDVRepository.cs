@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using QuanLyTiecCuoi.Model;
 
 namespace QuanLyTiecCuoi.DataAccessLayer.IRepository
 {
-    internal interface IChiTietDVRepository
+    public interface IChiTietDVRepository
     {
+        IEnumerable<CHITIETDV> GetAll();
+        CHITIETDV GetById(int maPhieuDat, int maDichVu);
+        IEnumerable<CHITIETDV> GetByMaPhieuDat(int maPhieuDat);
+        void Create(CHITIETDV chiTietDV);
+        void Update(CHITIETDV chiTietDV);
+        void Delete(int maPhieuDat, int maDichVu);
     }
 }

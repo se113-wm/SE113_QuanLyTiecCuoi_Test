@@ -18,7 +18,6 @@ namespace QuanLyTiecCuoi.Model
         public int MaMonAn { get; set; }
         public Nullable<int> SoLuong { get; set; }
         public Nullable<decimal> DonGia { get; set; }
-        public int ThuTuLenMon { get; set; }
         public string GhiChu { get; set; }
     
         public virtual MONAN MONAN { get; set; }

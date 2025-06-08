@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
@@ -12,14 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     public class PhieuDatTiecService : IPhieuDatTiecService
     {
         private readonly IPhieuDatTiecRepository _phieuDatTiecRepository;
-        private readonly ISanhRepository _sanhRepository;
-        private readonly ICaRepository _caRepository;
 
         public PhieuDatTiecService()
         {
             _phieuDatTiecRepository = new PhieuDatTiecRepository();
-            _sanhRepository = new SanhRepository();
-            _caRepository = new CaRepository();
         }
 
         public IEnumerable<PHIEUDATTIECDTO> GetAll()

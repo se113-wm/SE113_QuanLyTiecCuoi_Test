@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using QuanLyTiecCuoi.Model;
 using QuanLyTiecCuoi.Presentation.View;
+using QuanLyTiecCuoi.Presentation.ViewModel;
 
 
 namespace QuanLyTiecCuoi.ViewModel
@@ -117,7 +118,7 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 CurrentView = new WeddingView()
                 {
-                    //DataContext = new WeddingViewModel()
+                    DataContext = new WeddingViewModel()
                 };
 
                 // Đặt màu nền cho nút "Sảnh" là màu được chọn

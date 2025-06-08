@@ -52,7 +52,7 @@ namespace QuanLyTiecCuoi.ViewModel {
         private string _NewPassword1;
         public string NewPassword1 { get => _NewPassword1; set { _NewPassword1 = value; OnPropertyChanged(); } }
         public ICommand ChangePasswordCommand { get; set; }
-        private string _ChangePasswordMessage;
+        //private string _ChangePasswordMessage;
         public string ChangePasswordMessage { get => _SaveMessage; set { _SaveMessage = value; OnPropertyChanged(); } }
         public ICommand CurrentPasswordChangedCommand { get; set; }
         public ICommand NewPasswordChangedCommand { get; set; }
