@@ -29,13 +29,34 @@
             Padding="10"
             BorderThickness="0.5">
             <StackPanel>
-                <TextBlock
-                    Margin="0,0,0,10"
-                    FontSize="14"
-                    FontWeight="Bold"
-                    Text="Bộ lọc tìm kiếm" />
+                <StackPanel
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Bộ lọc tìm kiếm" />
+                    <Button
+                        Width="36"
+                        Height="36"
+                        Margin="5,0,0,0"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Command="{Binding ResetCommand}"
+                        Foreground="Purple"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        ToolTip="Làm mới bộ lọc">
+                        <materialDesign:PackIcon
+                            Width="20"
+                            Height="20"
+                            Kind="Restore" />
+                    </Button>
+                </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -51,6 +72,8 @@
                         Grid.Column="0"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Tên chú rể"
+                        IsEditable="True"
+                        IsTextSearchEnabled="True"
                         ItemsSource="{Binding TenChuReFilterList}"
                         SelectedItem="{Binding SelectedTenChuRe, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
@@ -61,6 +84,8 @@
                         Grid.Column="1"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Tên cô dâu"
+                        IsEditable="True"
+                        IsTextSearchEnabled="True"
                         ItemsSource="{Binding TenCoDauFilterList}"
                         SelectedItem="{Binding SelectedTenCoDau, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
@@ -71,25 +96,39 @@
                         Grid.Column="2"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Tên sảnh"
+                        IsEditable="True"
+                        IsTextSearchEnabled="True"
                         ItemsSource="{Binding TenSanhFilterList}"
                         SelectedItem="{Binding SelectedTenSanh, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
                     <!--  Ngày đãi tiệc (DatePicker)  -->
+                    <!--<Border
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Margin="5"
+                        BorderBrush="Black"
+                        BorderThickness="0.7"
+                        CornerRadius="4">-->
+                    <!--  Ngày đãi tiệc (DatePicker)  -->
                     <DatePicker
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="5,5,5,5"
-                        materialDesign:HintAssist.Hint="     Ngày đãi tiệc"
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Margin="5"
+                        materialDesign:HintAssist.Hint="Ngày đãi tiệc"
+                        Language="Vi-vn"
                         SelectedDate="{Binding SelectedNgayDaiTiec, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignDatePicker}" />
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                    <!--</Border>-->
 
                     <!--  Số lượng bàn  -->
                     <ComboBox
-                        Grid.Row="1"
-                        Grid.Column="1"
+                        Grid.Row="0"
+                        Grid.Column="3"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Số lượng bàn"
+                        IsEditable="True"
+                        IsTextSearchEnabled="True"
                         ItemsSource="{Binding SoLuongBanFilterList}"
                         SelectedItem="{Binding SelectedSoLuongBan, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
@@ -143,12 +182,6 @@
                                 Command="{Binding AddCommand}"
                                 Content="Thêm"
                                 Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                FontSize="12"
-                                Foreground="Gray"
-                                Text="{Binding AddMessage}"
-                                TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Width="120" Margin="0,0,20,0">
                             <Button
@@ -157,13 +190,6 @@
                                 Command="{Binding DetailCommand}"
                                 Content="Xem chi tiết"
                                 Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
-                                FontSize="12"
-                                Foreground="Gray"
-                                Text="{Binding DetailMessage}"
-                                TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Width="110">
                             <Button
@@ -266,13 +292,13 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding SANH.TenSanh}"
+                                            Text="{Binding Sanh.TenSanh}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Wedding Date  -->
-                            <GridViewColumn Width="200" Header="Ngày đãi tiệc">
+                            <GridViewColumn Width="150" Header="Ngày đãi tiệc">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
@@ -290,7 +316,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding CA.GioBatDau}"
+                                            Text="{Binding NgayDaiTiec, StringFormat='hh:mm:ss'}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

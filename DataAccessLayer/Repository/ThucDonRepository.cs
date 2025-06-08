@@ -23,7 +23,10 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
         {
             return _context.THUCDONs.FirstOrDefault(x => x.MaPhieuDat == maPhieuDat && x.MaMonAn == maMonAn);
         }
-
+        public IEnumerable<THUCDON> GetByMaPhieuDat(int maPhieuDat)
+        {
+            return _context.THUCDONs.Where(x => x.MaPhieuDat == maPhieuDat).ToList();
+        }
         public void Create(THUCDON thucDon)
         {
             _context.THUCDONs.Add(thucDon);
