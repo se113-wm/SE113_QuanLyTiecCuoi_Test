@@ -7,9 +7,7 @@
     Width="1000"
     Height="720"
     WindowStartupLocation="CenterScreen">
-    <!--  Outer grid covers the whole window  -->
     <Grid>
-        <!--  Main content grid  -->
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -31,139 +29,135 @@
                 Grid.Row="1"
                 Margin="0,0,0,10"
                 Padding="15">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="2*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Chi tiết tiệc cưới" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <!--  Groom Name  -->
-                    <TextBox
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Tên chú rể"
-                        Text="{Binding TenChuRe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <!--  Bride Name  -->
-                    <TextBox
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Tên cô dâu"
-                        Text="{Binding TenCoDau, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <!--  Phone  -->
-                    <TextBox
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Điện thoại"
-                        Text="{Binding DienThoai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Groom Name  -->
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tên chú rể"
+                            Text="{Binding TenChuRe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Bride Name  -->
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tên cô dâu"
+                            Text="{Binding TenCoDau, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Phone  -->
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Điện thoại"
+                            Text="{Binding DienThoai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <!--  Wedding Date  -->
-                    <DatePicker
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Ngày đãi tiệc"
-                        SelectedDate="{Binding NgayDaiTiec, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <!--  Session  -->
-                    <ComboBox
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Ca"
-                        ItemsSource="{Binding CaList}"
-                        SelectedItem="{Binding SelectedCa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <!--  Hall  -->
-                    <ComboBox
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Sảnh"
-                        ItemsSource="{Binding SanhList}"
-                        SelectedItem="{Binding SelectedSanh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Wedding Date  -->
+                        <DatePicker
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Ngày đãi tiệc"
+                            SelectedDate="{Binding NgayDaiTiec, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Session  -->
+                        <ComboBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Ca"
+                            ItemsSource="{Binding CaList}"
+                            SelectedItem="{Binding SelectedCa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Hall  -->
+                        <ComboBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Sảnh"
+                            ItemsSource="{Binding SanhList}"
+                            SelectedItem="{Binding SelectedSanh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <!--  Deposit  -->
-                    <TextBox
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Tiền đặt cọc"
-                        Text="{Binding TienDatCoc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <!--  Table Count  -->
-                    <TextBox
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Số lượng bàn"
-                        Text="{Binding SoLuongBan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <!--  Reserve Table Count  -->
-                    <TextBox
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Margin="5"
-                        materialDesign:HintAssist.Hint="Số bàn dự trữ"
-                        Text="{Binding SoBanDuTru, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                        <!--  Deposit  -->
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tiền đặt cọc"
+                            Text="{Binding TienDatCoc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Table Count  -->
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Số lượng bàn"
+                            Text="{Binding SoLuongBan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  Reserve Table Count  -->
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Số bàn dự trữ"
+                            Text="{Binding SoBanDuTru, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </StackPanel>
             </materialDesign:Card>
 
             <!--  Menu & Service Details  -->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="5*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
+                <!--  Section Titles  -->
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="5,0,0,5"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Text="Chi tiết thực đơn" />
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="5,0,0,5"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Text="Chi tiết dịch vụ" />
+
+
                 <!--  Menu Section  -->
                 <materialDesign:Card
-                    Grid.Row="0"
+                    Grid.Row="2"
                     Grid.Column="0"
                     Margin="5"
                     Padding="0">
                     <StackPanel>
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock
-                                Margin="0,0,10,0"
-                                FontSize="16"
-                                FontWeight="Bold"
-                                Text="Thực đơn" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding ChonMonAnCommand}"
-                                Content="Chọn món ăn"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding AddMenuCommand}"
-                                Content="Thêm"
-                                Style="{StaticResource MaterialDesignToolButton}" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding EditMenuCommand}"
-                                Content="Sửa"
-                                Style="{StaticResource MaterialDesignToolButton}" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding DeleteMenuCommand}"
-                                Content="Xóa"
-                                Style="{StaticResource MaterialDesignToolButton}" />
-                        </StackPanel>
+
                         <!--  Menu Detail Section  -->
-                        <materialDesign:Card
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="5"
-                            Padding="0">
+                        <materialDesign:Card Margin="5" Padding="0">
                             <Grid VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -172,8 +166,8 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="0.5*" />
-                                    <ColumnDefinition Width="1.2*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Grid.Row="0"
@@ -188,25 +182,33 @@
                                     Width="auto"
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Tên món ăn"
-                                    Text="{Binding TenMonAn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    IsReadOnly="True"
+                                    Text="{Binding MonAn.TenMonAn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox
-                                    Grid.Row="1"
-                                    Grid.Column="1"
+                                    Grid.Row="2"
+                                    Grid.Column="0"
                                     Width="auto"
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Số lượng"
                                     Text="{Binding TD_SoLuong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox
                                     Grid.Row="1"
-                                    Grid.Column="2"
+                                    Grid.Column="1"
                                     Width="auto"
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Đơn giá"
-                                    Text="{Binding TD_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+                                    IsReadOnly="True"
+                                    Text="{Binding MonAn.DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="10,0,0,0"
+                                    Command="{Binding ChonMonAnCommand}"
+                                    Content="Chọn món"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
                                 <TextBox
                                     Grid.Row="2"
-                                    Grid.Column="0"
+                                    Grid.Column="1"
                                     Grid.ColumnSpan="4"
                                     Margin="5,8,5,0"
                                     materialDesign:HintAssist.Hint="Ghi chú"
@@ -215,9 +217,50 @@
                                     TextWrapping="Wrap" />
                             </Grid>
                         </materialDesign:Card>
+                        <!--  Action Block: Label left, Buttons right  -->
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--  Action Label  -->
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Thao tác" />
+                            <!--  Action Buttons  -->
+                            <StackPanel
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <Button
+                                    Margin="0,0,10,0"
+                                    Command="{Binding AddMenuCommand}"
+                                    Content="Thêm"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                <Button
+                                    Margin="0,0,10,0"
+                                    Command="{Binding EditMenuCommand}"
+                                    Content="Sửa"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                <Button
+                                    Margin="0,0,10,0"
+                                    Command="{Binding DeleteMenuCommand}"
+                                    Content="Xóa"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Text="Danh sách thực đơn" />
                         <DataGrid
                             Height="auto"
-                            Margin="0,10,0,0"
+                            Margin="0,0,0,0"
                             AutoGenerateColumns="False"
                             ItemsSource="{Binding MenuList}"
                             SelectedItem="{Binding SelectedMenuItem}">
@@ -249,44 +292,13 @@
 
                 <!--  Service Section  -->
                 <materialDesign:Card
-                    Grid.Row="0"
+                    Grid.Row="2"
                     Grid.Column="1"
                     Margin="5"
                     Padding="0">
                     <StackPanel>
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock
-                                Margin="0,0,10,0"
-                                FontSize="16"
-                                FontWeight="Bold"
-                                Text="Dịch vụ khác" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding ChonDichVuCommand}"
-                                Content="Chọn dịch vụ"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding AddServiceCommand}"
-                                Content="Thêm"
-                                Style="{StaticResource MaterialDesignToolButton}" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding EditServiceCommand}"
-                                Content="Sửa"
-                                Style="{StaticResource MaterialDesignToolButton}" />
-                            <Button
-                                Margin="10,0,0,0"
-                                Command="{Binding DeleteServiceCommand}"
-                                Content="Xóa"
-                                Style="{StaticResource MaterialDesignToolButton}" />
-                        </StackPanel>
                         <!--  Service Detail Section  -->
-                        <materialDesign:Card
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="5"
-                            Padding="0">
+                        <materialDesign:Card Margin="5" Padding="0">
                             <Grid VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -295,8 +307,8 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="0.5*" />
-                                    <ColumnDefinition Width="1.2*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Grid.Row="0"
@@ -311,24 +323,33 @@
                                     Width="auto"
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Tên dịch vụ"
-                                    Text="{Binding TenDichVu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    IsReadOnly="True"
+                                    Text="{Binding DichVu.TenDichVu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Width="auto"
+                                    Margin="5,0"
+                                    materialDesign:HintAssist.Hint="Số lượng"
+                                    Text="{Binding DV_SoLuong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="0,0,10,0"
+                                    Command="{Binding ChonDichVuCommand}"
+                                    Content="Chọn dịch vụ"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
                                 <TextBox
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     Width="auto"
                                     Margin="5,0"
-                                    materialDesign:HintAssist.Hint="Số lượng"
-                                    Text="{Binding DV_SoLuong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBox
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    Width="auto"
-                                    Margin="5,0"
                                     materialDesign:HintAssist.Hint="Đơn giá"
-                                    Text="{Binding DV_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    IsReadOnly="True"
+                                    Text="{Binding DichVu.DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox
                                     Grid.Row="2"
-                                    Grid.Column="0"
+                                    Grid.Column="1"
                                     Grid.ColumnSpan="4"
                                     Margin="5,8,5,0"
                                     materialDesign:HintAssist.Hint="Ghi chú"
@@ -337,10 +358,50 @@
                                     TextWrapping="Wrap" />
                             </Grid>
                         </materialDesign:Card>
-
+                        <!--  Action Block: Label left, Buttons right  -->
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--  Action Label  -->
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Thao tác" />
+                            <!--  Action Buttons  -->
+                            <StackPanel
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <Button
+                                    Margin="0,0,10,0"
+                                    Command="{Binding AddServiceCommand}"
+                                    Content="Thêm"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                <Button
+                                    Margin="0,0,10,0"
+                                    Command="{Binding EditServiceCommand}"
+                                    Content="Sửa"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                <Button
+                                    Margin="0,0,10,0"
+                                    Command="{Binding DeleteServiceCommand}"
+                                    Content="Xóa"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Text="Danh sách dịch vụ" />
                         <DataGrid
                             Height="auto"
-                            Margin="0,10,0,0"
+                            Margin="0,0,0,0"
                             AutoGenerateColumns="False"
                             ItemsSource="{Binding ServiceList}"
                             SelectedItem="{Binding SelectedServiceItem}">
@@ -369,11 +430,12 @@
                         </DataGrid>
                     </StackPanel>
                 </materialDesign:Card>
+
                 <!--  Nút xác nhận và hủy  -->
                 <StackPanel
-                    Grid.Row="1"
+                    Grid.Row="3"
                     Grid.Column="1"
-                    Margin="0,20,0,0"
+                    Margin="0,0,0,0"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
                     <Button
@@ -389,10 +451,6 @@
                         Style="{StaticResource MaterialDesignOutlinedButton}" />
                 </StackPanel>
             </Grid>
-
         </Grid>
-
-        <!--  You can add overlays, dialogs, etc. here as siblings to the main content grid  -->
-
     </Grid>
 </Window>
