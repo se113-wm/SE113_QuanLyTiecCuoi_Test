@@ -60,7 +60,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 MaMonAn = x.MaMonAn,
                 SoLuong = x.SoLuong,
                 DonGia = x.DonGia,
-                ThuTuLenMon = x.ThuTuLenMon,
                 GhiChu = x.GhiChu,
                 MonAn = x.MONAN != null
                     ? new MONANDTO
@@ -89,7 +88,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 MaMonAn = dto.MaMonAn,
                 SoLuong = dto.SoLuong,
                 DonGia = dto.DonGia,
-                ThuTuLenMon = dto.ThuTuLenMon ?? 0,
                 GhiChu = dto.GhiChu
             };
         }

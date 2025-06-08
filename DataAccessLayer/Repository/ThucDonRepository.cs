@@ -40,7 +40,6 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
             {
                 existing.SoLuong = thucDon.SoLuong;
                 existing.DonGia = thucDon.DonGia;
-                existing.ThuTuLenMon = thucDon.ThuTuLenMon;
                 existing.GhiChu = thucDon.GhiChu;
                 _context.SaveChanges();
             }

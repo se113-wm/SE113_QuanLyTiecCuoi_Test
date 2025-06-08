@@ -90,7 +90,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             AddCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                var addView = new Presentation.View.AddWeddingView();
+                var addView = new Presentation.View.AddWeddingView()
+                {
+                    DataContext = new AddWeddingViewModel()
+                };
                 addView.ShowDialog();
                 RefreshList();
             });

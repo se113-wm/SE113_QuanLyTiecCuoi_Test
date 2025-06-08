@@ -5,29 +5,29 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="48d4c8e6d6814f5ab2ff838551c86e65" Name="Diagram1" ZoomLevel="95">
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.BAOCAOD" Width="1.5" PointX="7.75" PointY="12.875" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CA" Width="1.5" PointX="3" PointY="1.75" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CHITIETDV" Width="1.5" PointX="7.5" PointY="4.5" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CHUCNANG" Width="1.5" PointX="7.75" PointY="8.875" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CTBAOCAOD" Width="1.5" PointX="10" PointY="12.625" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.DICHVU" Width="1.5" PointX="5.25" PointY="10.75" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.LOAISANH" Width="1.5" PointX="0.75" PointY="4.875" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.MONAN" Width="1.5" PointX="8.25" PointY="0.75" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.NGUOIDUNG" Width="1.5" PointX="12.25" PointY="8.625" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Width="1.5" PointX="10" PointY="8.875" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" Width="1.5" PointX="5.25" PointY="3" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.SANH" Width="1.5" PointX="3" PointY="4.5" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.THAMSO" Width="1.5" PointX="0.75" PointY="8.5" />
-        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.THUCDON" Width="1.5" PointX="10.5" PointY="4.5" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CTBAOCAODS__5535A963" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.BAOCAOD" Width="1.5" PointX="0.75" PointY="12" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CA" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CHITIETDV" Width="1.5" PointX="10.5" PointY="3.5" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CHUCNANG" Width="1.5" PointX="7.75" PointY="8" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.CTBAOCAOD" Width="1.5" PointX="3" PointY="11.75" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.DICHVU" Width="1.5" PointX="8.25" PointY="0.75" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.LOAISANH" Width="1.5" PointX="0.75" PointY="3.875" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.MONAN" Width="1.5" PointX="5.25" PointY="8.75" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.NGUOIDUNG" Width="1.5" PointX="12.25" PointY="7.75" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Width="1.5" PointX="10" PointY="8" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" Width="1.5" PointX="5.25" PointY="2" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.SANH" Width="1.5" PointX="3" PointY="3.5" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.THAMSO" Width="1.5" PointX="0.75" PointY="7.5" />
+        <EntityTypeShape EntityType="QuanLyTiecCuoiModel.THUCDON" Width="1.5" PointX="7.5" PointY="3.5" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CTBAOCAODS__5441852A" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__412EB0B6" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__5070F446" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__4F7CD00D" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4F7CD00D" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__4E88ABD4" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__3B75D760" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__49C3F6B7" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__6383C8BA" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__48CFD27E" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__628FA481" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__4222D4EF" />
-        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__48CFD27E" />
+        <AssociationConnector Association="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__47DBAE45" />
         <AssociationConnector Association="QuanLyTiecCuoiModel.PHANQUYEN" />
       </Diagram>
     </edmx:Diagrams>
