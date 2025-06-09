@@ -23,10 +23,5 @@ namespace QuanLyTiecCuoi.Presentation.View
         {
             InitializeComponent();
         }
-
-        private void ComboBox_SuggestionChosen(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-
-        }
     }
 }

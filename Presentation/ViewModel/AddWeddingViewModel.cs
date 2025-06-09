@@ -38,6 +38,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private DateTime? _ngayDaiTiec;
         public DateTime? NgayDaiTiec { get => _ngayDaiTiec; set { _ngayDaiTiec = value; OnPropertyChanged(); } }
 
+        public ObservableCollection<CalendarDateRange> NgayKhongChoChon { get; set; }
+
         private DateTime _ngayDatTiec = DateTime.Now;
         public DateTime NgayDatTiec { get => _ngayDatTiec; set { _ngayDatTiec = value; OnPropertyChanged(); } }
 
@@ -100,6 +102,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         public AddWeddingViewModel()
         {
+
+            NgayKhongChoChon = new ObservableCollection<CalendarDateRange>
+            {
+                new CalendarDateRange(DateTime.MinValue, DateTime.Today.AddDays(-1))
+            };
             // Initialize services
             _sanhService = new SanhService();
             _caService = new CaService();
@@ -317,24 +324,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 // 5. Lưu dữ liệu
                 try
                 {
-                    //              public string TenChuRe { get; set; }
-                    //public string TenCoDau { get; set; }
-                    //public string DienThoai { get; set; }
-                    //public DateTime? NgayDatTiec { get; set; }
-                    //public DateTime? NgayDaiTiec { get; set; }
-                    //public int? MaCa { get; set; }
-                    //public int? MaSanh { get; set; }
-                    //public decimal? TienDatCoc { get; set; }
-                    //public int? SoLuongBan { get; set; }
-                    //public int? SoBanDuTru { get; set; }
-                    //public DateTime? NgayThanhToan { get; set; }
-                    //public decimal? DonGiaBanTiec { get; set; }
-                    //public decimal? TongTienBan { get; set; }
-                    //public decimal? TongTienDV { get; set; }
-                    //public decimal? TongTienHoaDon { get; set; }
-                    //public decimal? TienConLai { get; set; }
-                    //public decimal? ChiPhiPhatSinh { get; set; }
-                    //public decimal? TienPhat { get; set; }
                     var phieuDatTiec = new PHIEUDATTIECDTO
                     {
                         TenChuRe = TenChuRe,
@@ -361,10 +350,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         var thucDon = new THUCDONDTO
                         {
                             MaPhieuDat = phieuDatTiec.MaPhieuDat,
-                            MonAn = item.MonAn,
+                            MaMonAn = item.MonAn.MaMonAn,
+                            DonGia = item.MonAn.DonGia,
                             SoLuong = item.SoLuong,
                             GhiChu = item.GhiChu,
-                            MaMonAn = item.MonAn.MaMonAn,
+                            MonAn = item.MonAn,
+                            
                         };
                         _thucDonService.Create(thucDon);
                     }
@@ -375,19 +366,20 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         var chiTietDV = new CHITIETDVDTO
                         {
                             MaPhieuDat = phieuDatTiec.MaPhieuDat,
-                            MaDichVu = item.DichVu.MaDichVu,
-                            DichVu = item.DichVu,
+                            MaDichVu = item.DichVu.MaDichVu,                            
+                            DonGia = item.DichVu.DonGia,
                             SoLuong = item.SoLuong,
+                            ThanhTien = (item.DichVu.DonGia ?? 0) * (item.SoLuong ?? 0),
                             GhiChu = item.GhiChu,
-                            ThanhTien = (item.DichVu.DonGia ?? 0) * (item.SoLuong ?? 0)
+                            DichVu = item.DichVu,
                         };
                         _chiTietDichVuService.Create(chiTietDV);
                     }
                     if (p is Window window)
                     {
+                        MessageBox.Show("Đặt tiệc cưới thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                         window.Close(); // Close the window
                     }
-                    MessageBox.Show("Đặt tiệc cưới thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
                 catch (FormatException ex)
