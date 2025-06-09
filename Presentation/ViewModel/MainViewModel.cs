@@ -42,15 +42,17 @@ namespace QuanLyTiecCuoi.ViewModel
             get => _CurrentView;
             set { _CurrentView = value; OnPropertyChanged(); }
         }
+        
         public MainViewModel()
         {
+
             LoadButtonVisibility();
             #region Command
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new HomeView()
                 {
-                    DataContext = new HomeViewModel()
+                    DataContext = new HomeViewModel(this)
                 };
                 // Đặt màu nền cho nút "Trang chủ" là màu được chọn
                 ResetButtonBackgrounds();
@@ -194,6 +196,26 @@ namespace QuanLyTiecCuoi.ViewModel
                 p.Close();
             });
         }
+        // Chuyển sang tab Đặt tiệc cưới, nếu có quyền
+        public void SwitchToWeddingTab()
+        {
+            if (ButtonVisibilities.ContainsKey("Wedding") && ButtonVisibilities["Wedding"] == Visibility.Visible)
+            {
+                
+                var dataContext = new WeddingViewModel();
+                CurrentView = new WeddingView()
+                {
+                    DataContext = dataContext
+                };
+                
+                // Đặt màu nền cho nút "Sảnh" là màu được chọn
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+                // Gọi OnPropertyChanged để cập nhật giao diện
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+                dataContext.AddCommandFunc();
+            }
+        }
         private void LoadButtonVisibility()
         {
             // Lấy danh sách chức năng của nhóm người dùng hiện tại
@@ -215,7 +237,7 @@ namespace QuanLyTiecCuoi.ViewModel
             // Đặt màu nền cho nút "Trang chủ" là màu được chọn
             CurrentView = new HomeView()
             {
-                DataContext = new HomeViewModel()
+                DataContext = new HomeViewModel(this)
             };
             ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue);
             // Gọi OnPropertyChanged để cập nhật giao diện

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+using QuanLyTiecCuoi.DataTransferObject;
+using QuanLyTiecCuoi.ViewModel;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
-using QuanLyTiecCuoi.DataTransferObject;
 
 namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
@@ -15,6 +17,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
     }
     public class HomeViewModel : INotifyPropertyChanged
     {
+
+        public ICommand DatTiecNgayCommand { get; set; }
         // Recent bookings for DataGrid
         public ObservableCollection<RecentBookingViewModel> RecentBookings { get; set; }
 
@@ -53,9 +57,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private readonly PhieuDatTiecService _phieuDatTiecService;
 
-        public HomeViewModel()
+        private MainViewModel _mainVM;
+
+        public HomeViewModel(MainViewModel mainVM)
         {
             _phieuDatTiecService = new PhieuDatTiecService();
+            _mainVM = mainVM;
 
             // Load data
             LoadRecentBookings();
@@ -68,6 +75,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             //    new SpecialDateInfo { Date = DateTime.Today.AddDays(3), Tooltip = "Cưới sau 3 ngày" }
             //};
             LoadStatisticChart();
+            DatTiecNgayCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                _mainVM.SwitchToWeddingTab();
+            });
         }
 
         private void LoadRecentBookings()

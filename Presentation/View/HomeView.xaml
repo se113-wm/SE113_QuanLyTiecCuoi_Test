@@ -49,6 +49,7 @@
             </Grid.RowDefinitions>
 
             <!--  Header  -->
+            <!--  ... phần đầu giữ nguyên ...  -->
             <StackPanel
                 Grid.Column="0"
                 Width="544"
@@ -76,7 +77,21 @@
                     Foreground="#2196F3"
                     Text="Tối ưu vận hành - Phát triển kinh doanh."
                     TextAlignment="Center" />
+                <!--  Nút Đặt Tiệc Ngay  -->
+                <Button
+                    Width="180"
+                    Height="44"
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Center"
+                    Background="{StaticResource BlueBorder}"
+                    Command="{Binding DatTiecNgayCommand}"
+                    Content="Đặt Tiệc Ngay"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
+            <!--  ... phần còn lại giữ nguyên ...  -->
 
             <!--  Ảnh cưới  -->
             <StackPanel

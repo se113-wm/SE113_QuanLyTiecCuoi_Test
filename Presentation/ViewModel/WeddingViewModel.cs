@@ -94,12 +94,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             AddCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                var addView = new Presentation.View.AddWeddingView()
-                {
-                    DataContext = new AddWeddingViewModel()
-                };
-                addView.ShowDialog();
-                RefreshList();
+                AddCommandFunc();
             });
 
             DetailCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
@@ -193,6 +188,16 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public void AddCommandFunc()
+        {
+            var addView = new Presentation.View.AddWeddingView()
+            {
+                DataContext = new AddWeddingViewModel()
+            };
+            addView.ShowDialog();
+            RefreshList();
         }
 
         private void RefreshList()
