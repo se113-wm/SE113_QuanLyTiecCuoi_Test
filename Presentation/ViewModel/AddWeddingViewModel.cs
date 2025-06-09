@@ -290,11 +290,38 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 if (soLuongBan > soLuongBanToiDa)
                 {
                     MessageBox.Show($"Số lượng bàn vượt quá số lượng tối đa của sảnh ({soLuongBanToiDa}).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Sửa lại giúp người dùng
+                    SoLuongBan = soLuongBanToiDa.ToString();
                     return;
                 }
                 if (soLuongBan < (tiLeSoBanDatTruocToiThieu * soLuongBanToiDa))
                 {
-                    MessageBox.Show($"Số lượng bàn phải lớn hơn hoặc bằng {tiLeSoBanDatTruocToiThieu * soLuongBanToiDa} (tỉ lệ đặt trước tối thiểu).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // làm tròn lên
+                    MessageBox.Show($"Số lượng bàn phải lớn hơn hoặc bằng {Math.Ceiling(tiLeSoBanDatTruocToiThieu * soLuongBanToiDa)} (tỉ lệ đặt trước tối thiểu).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Sửa lại giúp người dùng
+                    SoLuongBan = Math.Ceiling(tiLeSoBanDatTruocToiThieu * soLuongBanToiDa).ToString();
+                    //MessageBox.Show($"Số lượng bàn phải lớn hơn hoặc bằng {tiLeSoBanDatTruocToiThieu * soLuongBanToiDa} (tỉ lệ đặt trước tối thiểu).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // 4. Kiểm tra số lượng bàn dự trữ hợp lệ 
+//                Kiểm tra 0 <= Số bàn dự trữ(D1)   và
+                //Số bàn dự trữ(D1) <= Số lượng bàn tối đa của sảnh tương ứng(D3)
+                //– Số lượng bàn(D1) ?
+                var soBanDuTruToiDa = soLuongBanToiDa - soLuongBan;
+                if (!int.TryParse(SoBanDuTru, out int soBanDuTru) || soBanDuTru < 0 || soBanDuTru > soBanDuTruToiDa)
+                {
+                    MessageBox.Show($"Số bàn dự trữ phải là số nguyên dương và không vượt quá {soBanDuTruToiDa}.", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Sửa lại giúp người dùng
+                    SoBanDuTru = soBanDuTruToiDa.ToString();
+                    return;
+                }
+                // Kiểm tra formatter số điện thoại (10 số hoặc 11 số bắt đầu bằng 0 hoặc 84)
+                if (!string.IsNullOrWhiteSpace(DienThoai) && !System.Text.RegularExpressions.Regex.IsMatch(DienThoai, @"^(0|\+84)[0-9]{9,10}$"))
+                {
+                    MessageBox.Show("Số điện thoại phải là 10 hoặc 11 chữ số và bắt đầu bằng 0 hoặc +84.", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Sửa lại giúp người dùng
+                    DienThoai = "0123456789"; // Ví dụ sửa lại
                     return;
                 }
 
@@ -313,11 +340,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 if (tienDatCoc < (tiLeTienDatCocToiThieu * tongChiPhiUocTinh))
                 {
                     MessageBox.Show($"Tiền đặt cọc phải lớn hơn hoặc bằng {tiLeTienDatCocToiThieu * tongChiPhiUocTinh:N0} (tỉ lệ tối thiểu).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Sửa lại giúp người dùng
+                    TienDatCoc = (tiLeTienDatCocToiThieu * tongChiPhiUocTinh).ToString("N0");
                     return;
                 }
                 if (tienDatCoc > tongChiPhiUocTinh)
                 {
                     MessageBox.Show("Tiền đặt cọc không được vượt quá tổng chi phí ước tính.", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Sửa lại giúp người dùng
+                    TienDatCoc = tongChiPhiUocTinh.ToString("N0");
                     return;
                 }
 
