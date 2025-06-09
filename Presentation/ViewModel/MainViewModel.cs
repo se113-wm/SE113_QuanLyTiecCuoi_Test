@@ -48,7 +48,10 @@ namespace QuanLyTiecCuoi.ViewModel
             #region Command
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                CurrentView = new HomeView();
+                CurrentView = new HomeView()
+                {
+                    DataContext = new HomeViewModel()
+                };
                 // Đặt màu nền cho nút "Trang chủ" là màu được chọn
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
@@ -210,7 +213,10 @@ namespace QuanLyTiecCuoi.ViewModel
             OnPropertyChanged(nameof(ButtonVisibilities));
             ResetButtonBackgrounds();
             // Đặt màu nền cho nút "Trang chủ" là màu được chọn
-            CurrentView = new HomeView();
+            CurrentView = new HomeView()
+            {
+                DataContext = new HomeViewModel()
+            };
             ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue);
             // Gọi OnPropertyChanged để cập nhật giao diện
             OnPropertyChanged(nameof(ButtonBackgrounds));
