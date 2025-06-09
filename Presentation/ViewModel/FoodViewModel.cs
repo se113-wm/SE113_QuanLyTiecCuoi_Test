@@ -104,7 +104,9 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand EditCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         #endregion
-
+        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
+            Reset();
+        });
         #region Constructor
         public FoodViewModel()
         {

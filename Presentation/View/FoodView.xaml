@@ -21,31 +21,57 @@
                    HorizontalAlignment="Center" Margin="0 0 0 10"/>
         <materialDesign:Card Grid.Row="1" Margin="0 0 0 10" Padding="10" BorderThickness="0.5">
             <StackPanel>
-                <TextBlock Text="Thông tin chi tiết" FontSize="14" FontWeight="Bold" Margin="0 0 0 10"/>
+                <StackPanel
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Thông tin chi tiết" />
+                    <Button
+                        Width="36"
+                        Height="36"
+                        Margin="5,0,0,0"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Command="{Binding ResetCommand}"
+                        Foreground="Purple"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        ToolTip="Reset thông tin">
+                        <materialDesign:PackIcon
+                            Width="20"
+                            Height="20"
+                            Kind="Restore" />
+                    </Button>
+                </StackPanel>
+
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="1.5*"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="169*"/>
+                        <ColumnDefinition Width="107*"/>
+                        <ColumnDefinition Width="207*"/>
+                        <ColumnDefinition Width="146*"/>
+                        <ColumnDefinition Width="130*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBox Grid.Column="0"
                       Text="{Binding TenMonAn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       materialDesign:HintAssist.Hint="Tên món ăn"
                       Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                      Margin="5"/>
+                      Margin="5,5,5,5" Grid.ColumnSpan="2"/>
 
-                    <TextBox Grid.Column="1"
+                    <TextBox Grid.Column="2"
                       Text="{Binding DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       materialDesign:HintAssist.Hint="Đơn giá"
                       Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                      Margin="5"/>
+                      Margin="5,5,5,5"/>
 
-                    <TextBox Grid.Column="2"
+                    <TextBox Grid.Column="3"
                       Text="{Binding GhiChu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       materialDesign:HintAssist.Hint="Ghi chú"
                       Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                      Margin="5"/>
+                      Margin="5,5,5,5" Grid.ColumnSpan="2"/>
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -53,18 +79,23 @@
         <materialDesign:Card Grid.Row="2" Padding="10" Margin="0 0 0 10">
             <DockPanel>
                 <!-- Khu tìm kiếm -->
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                    <ComboBox Width="150"
-                      ItemsSource="{Binding SearchProperties}"
-                      SelectedItem="{Binding SelectedSearchProperty}"
-                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      materialDesign:HintAssist.Hint="Tìm theo"
-                      Margin="5"/>
-                    <TextBox Width="300"
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     materialDesign:HintAssist.Hint="Tìm kiếm..."
-                     Margin="5"/>
+                <StackPanel
+                        VerticalAlignment="Top"
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal">
+                    <ComboBox
+                            Width="200"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tìm theo"
+                            ItemsSource="{Binding SearchProperties}"
+                            SelectedItem="{Binding SelectedSearchProperty, Mode=TwoWay}"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                    <TextBox
+                            Width="300"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tìm kiếm..."
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                 </StackPanel>
 
                 <!-- Khu nút thao tác và thông báo -->
@@ -108,15 +139,30 @@
 
         <!-- Bảng món ăn -->
         <materialDesign:Card Grid.Row="3" Padding="10">
-            <StackPanel>
-                <TextBlock Text="Danh sách món ăn"
-                           FontSize="16" FontWeight="Bold"
-                           Margin="0 0 0 10"/>
-                <ListView ItemsSource="{Binding List}"
-                          SelectedItem="{Binding SelectedItem}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                   Text="Danh sách món ăn"
+                   FontSize="16" FontWeight="Bold"
+                   Margin="0 0 0 10"/>
+
+                <ListView
+                    Grid.Row="1"
+                    Margin="0"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
                     <ListView.View>
                         <GridView>
-                            <!-- Icon -->
+                            <!-- Icon cột đầu -->
                             <GridViewColumn Width="50">
                                 <GridViewColumn.HeaderTemplate>
                                     <DataTemplate>
@@ -125,28 +171,59 @@
                                 </GridViewColumn.HeaderTemplate>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <materialDesign:PackIcon Kind="RadioboxMarked"
-                                                                 Width="24"
-                                                                 Height="24"
-                                                                 VerticalAlignment="Center"
-                                                                 HorizontalAlignment="Left"
-                                                                 Foreground="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BoolToBrushConverter}}"/>
+                                        <materialDesign:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Foreground="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BoolToBrushConverter}}"
+                                            Kind="RadioboxMarked" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Tên Món Ăn" Width="200" DisplayMemberBinding="{Binding TenMonAn}"/>
-                            <GridViewColumn Header="Đơn Giá" Width="200">
+
+                            <!-- Tên Món Ăn -->
+                            <GridViewColumn Width="200" Header="Tên Món Ăn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding DonGia, StringFormat=N0}"/>
+                                        <TextBlock
+                                            Margin="20,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            Text="{Binding TenMonAn}"
+                                            TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Ghi Chú" Width="200" DisplayMemberBinding="{Binding GhiChu}"/>
+
+                            <!-- Đơn Giá -->
+                            <GridViewColumn Width="200" Header="Đơn Giá">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Margin="20,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            Text="{Binding DonGia, StringFormat=N0}"
+                                            TextAlignment="Left" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- Ghi chú -->
+                            <GridViewColumn Width="500" Header="Ghi chú">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                            Margin="20,0,0,0"
+                            HorizontalAlignment="Left"
+                            Text="{Binding GhiChu}"
+                            TextAlignment="Left" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
-            </StackPanel>
+            </Grid>
         </materialDesign:Card>
     </Grid>
 </UserControl>
