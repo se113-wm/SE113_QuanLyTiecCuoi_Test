@@ -180,7 +180,7 @@
 
     <Compile Include="Presentation\View\FoodView.xaml.cs">
       <DependentUpon>FoodView.xaml</DependentUpon>
-
+    </Compile>
     <Compile Include="Presentation\View\AddWeddingView.xaml.cs">
       <DependentUpon>AddWeddingView.xaml</DependentUpon>
     </Compile>
@@ -287,6 +287,9 @@
     </Page>
 
     <Page Include="Presentation\View\FoodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
 
     <Page Include="Presentation\View\AddWeddingView.xaml">
       <SubType>Designer</SubType>
