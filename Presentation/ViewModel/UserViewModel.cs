@@ -196,30 +196,15 @@ namespace QuanLyTiecCuoi.ViewModel {
             // Nút "Thêm"
             AddCommand = new RelayCommand<object>((p) => {
                 if (string.IsNullOrWhiteSpace(TenDangNhap)) {
-                    if (SelectedItem != null) {
-                        AddMessage = "Vui lòng nhập tên đăng nhập";
-                    }
-                    else {
-                        AddMessage = string.Empty;
-                    }
+                    AddMessage = "Vui lòng nhập tên đăng nhập";
                     return false;
-                }
-                if (isChecked || string.IsNullOrWhiteSpace(MatKhauMoi)) {
-                    if (SelectedItem != null) {
-                        AddMessage = "Vui lòng nhập mật khẩu";
                     }
-                    else {
-                        AddMessage = string.Empty;
-                    }
+                if (!isChecked || string.IsNullOrWhiteSpace(MatKhauMoi)) {
+                    AddMessage = "Vui lòng nhập mật khẩu";
                     return false;
                 }
                 if (string.IsNullOrWhiteSpace(HoTen)) {
-                    if (SelectedItem != null) {
-                        AddMessage = "Vui lòng nhập họ tên";
-                    }
-                    else {
-                        AddMessage = string.Empty;
-                    }
+                    AddMessage = "Vui lòng nhập họ tên";
                     return false;
                 }
                 if (SelectedUserType == null) {
@@ -227,12 +212,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     return false;
                 }
                 if(!ValidationHelper.IsValidEmail(Email)) {
-                    if (SelectedItem != null) {
-                        AddMessage = "Vui lòng nhập email đúng định dạng";
-                    }
-                    else {
-                        AddMessage = string.Empty;
-                    }
+                    AddMessage = "Vui lòng nhập email đúng định dạng";
                     return false;
                 }
                 var exists = OriginalList.Any(x => x.TenDangNhap == TenDangNhap);
@@ -252,9 +232,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                         MaNhom = SelectedUserType?.MaNhom,
                         NhomNguoiDung = SelectedUserType
                     };
-
                     _nguoiDungService.Create(newUser);
-
                     List.Add(newUser);
 
                     Reset();

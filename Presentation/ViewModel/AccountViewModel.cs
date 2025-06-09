@@ -22,13 +22,6 @@ namespace QuanLyTiecCuoi.ViewModel {
         private string _TenDangNhap;
         public string TenDangNhap { get => _TenDangNhap; set { _TenDangNhap = value; OnPropertyChanged(); } }
 
-        private string _CurrentPassword;
-        public string CurrentPassword { get => _CurrentPassword; set { _CurrentPassword = value; OnPropertyChanged(); } }
-        private string _NewPassword;
-        public string NewPassword { get => _NewPassword; set { _NewPassword = value; OnPropertyChanged(); } }
-        private string _NewPassword1;
-        public string NewPassword1 { get => _NewPassword1; set { _NewPassword1 = value; OnPropertyChanged(); } }
-
         private string _HoTen;
         public string HoTen { get => _HoTen; set { _HoTen = value; OnPropertyChanged(); } }
 
@@ -52,12 +45,22 @@ namespace QuanLyTiecCuoi.ViewModel {
         public ICommand SaveCommand { get; set; }
         private string _SaveMessage;
         public string SaveMessage { get => _SaveMessage; set { _SaveMessage = value; OnPropertyChanged(); } }
+        private string _CurrentPassword;
+        public string CurrentPassword { get => _CurrentPassword; set { _CurrentPassword = value; OnPropertyChanged(); } }
+        private string _NewPassword;
+        public string NewPassword { get => _NewPassword; set { _NewPassword = value; OnPropertyChanged(); } }
+        private string _NewPassword1;
+        public string NewPassword1 { get => _NewPassword1; set { _NewPassword1 = value; OnPropertyChanged(); } }
         public ICommand ChangePasswordCommand { get; set; }
-        private string _ChangePasswordMessage;
+        //private string _ChangePasswordMessage;
         public string ChangePasswordMessage { get => _SaveMessage; set { _SaveMessage = value; OnPropertyChanged(); } }
         public ICommand CurrentPasswordChangedCommand { get; set; }
         public ICommand NewPasswordChangedCommand { get; set; }
         public ICommand NewPassword1ChangedCommand { get; set; }
+        public ICommand ResetPasswordCommand { get; set; }
+        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
+            Reset();
+        });
         public AccountViewModel() {
             var currentUser = DataProvider.Ins.CurrentUser;
             _nguoiDungService = new NguoiDungService();
@@ -71,11 +74,9 @@ namespace QuanLyTiecCuoi.ViewModel {
             CurrentPassword = "";
             NewPassword = "";
             NewPassword1 = "";
-
             CurrentPasswordChangedCommand = new RelayCommand<PasswordBox>((p) => { return true; }, (p) => { CurrentPassword = p.Password; });
             NewPasswordChangedCommand = new RelayCommand<PasswordBox>((p) => { return true; }, (p) => { NewPassword = p.Password; });
             NewPassword1ChangedCommand = new RelayCommand<PasswordBox>((p) => { return true; }, (p) => { NewPassword1 = p.Password; });
-
             OnPropertyChanged();
 
             SaveCommand = new RelayCommand<object>((p) => {
@@ -115,6 +116,9 @@ namespace QuanLyTiecCuoi.ViewModel {
                         NhomNguoiDung = _nguoiDungService.GetById(currentUser.MaNguoiDung).NhomNguoiDung
                     };
                     _nguoiDungService.Update(updateDto);
+                    DataProvider.Ins.CurrentUser.Email = Email;
+                    DataProvider.Ins.CurrentUser.TenDangNhap = TenDangNhap;
+                    DataProvider.Ins.CurrentUser.HoTen = HoTen;
 
                     MessageBox.Show("Cập nhật thông tin thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -158,13 +162,26 @@ namespace QuanLyTiecCuoi.ViewModel {
                             NhomNguoiDung = _nguoiDungService.GetById(currentUser.MaNguoiDung).NhomNguoiDung
                         };
                         _nguoiDungService.Update(updateDto);
-                        MessageBox.Show("Cập nhật thông tin thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Reset();
+                        MessageBox.Show("Đổi mật khẩu thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 catch (Exception ex) {
                     MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
+        }
+        private void Reset() {
+            var currentUser = DataProvider.Ins.CurrentUser;
+            TenDangNhap = currentUser.TenDangNhap;
+            HoTen = currentUser.HoTen;
+            Email = currentUser.Email;
+            TenNhom = currentUser.NHOMNGUOIDUNG.TenNhom;
+            CurrentPassword = string.Empty;
+            NewPassword = string.Empty;
+            NewPassword1 = string.Empty;
+            ChangePasswordMessage = string.Empty;
+            OnPropertyChanged();
         }
     }
 }

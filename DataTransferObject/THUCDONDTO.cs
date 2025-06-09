@@ -8,7 +8,6 @@ namespace QuanLyTiecCuoi.DataTransferObject
         public int MaMonAn { get; set; }
         public int? SoLuong { get; set; }
         public decimal? DonGia { get; set; }
-        public int? ThuTuLenMon { get; set; }
         public string GhiChu { get; set; }
 
         // Navigation properties

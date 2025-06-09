@@ -11,6 +11,8 @@
         SelectedBrush="MediumSeaGreen" />
     <viewmodel:BoolToBrushConverter x:Key="DecimalNoDecimalConverter" />
     <viewmodel:CurrencyFormatConverter x:Key="CurrencyFormatConverter" />
+    <viewmodel:PlusOneConverter x:Key="PlusOneConverter" />
+    <viewmodel:AddConverter x:Key="AddConverter" />
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <Style x:Key="MaterialDesignOutlinedSecondaryLightSplitButton" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />

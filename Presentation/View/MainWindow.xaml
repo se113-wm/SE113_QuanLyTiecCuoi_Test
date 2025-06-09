@@ -1,26 +1,28 @@
-﻿<Window x:Class="QuanLyTiecCuoi.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:QuanLyTiecCuoi"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
-        xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-
-        Name="mainWindow"
-
-        DataContext="{StaticResource MainViewModel}"
-        WindowStartupLocation="CenterScreen"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1200">
+﻿<Window
+    x:Class="QuanLyTiecCuoi.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:QuanLyTiecCuoi"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel"
+    Name="mainWindow"
+    Title="Quản lý tiệc cưới"
+    Width="1200"
+    Height="720"
+    Background="{DynamicResource MaterialDesignPaper}"
+    DataContext="{StaticResource MainViewModel}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Icon="Assets/icon_window.ico"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <!--<i:Interaction.Triggers>
     <i:EventTrigger EventName="Loaded">
     <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"
@@ -29,312 +31,358 @@
     </i:Interaction.Triggers>-->
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
-            <!-- Cột đầu tiên chứa NavBarUC -->
+            <!--  Cột đầu tiên chứa NavBarUC  -->
             <ColumnDefinition Width="auto" />
-            <!-- Cột thứ hai chứa nội dung chính -->
+            <!--  Cột thứ hai chứa nội dung chính  -->
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- NavBarUC -->
-        <Grid Grid.Column="0" Width="200" HorizontalAlignment="Left">
+        <!--  NavBarUC  -->
+        <Grid
+            Grid.Column="0"
+            Width="200"
+            HorizontalAlignment="Left">
             <Grid Background="#6a7eee">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Header -->
-                <Border Grid.Row="0" Background="#80c0ff" Padding="10" CornerRadius="5" Margin="10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <materialDesign:PackIcon Kind="Storefront"
-                                                 Foreground="White"
-                                                 Width="48" Height="48"
-                                                 VerticalAlignment="Center"
-                                                 Margin="0,0,10,0"/>
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock Text="Trung Tâm"
-                                       FontSize="16"
-                                       FontWeight="Bold"
-                                       Foreground="White"
-                                       TextAlignment="Center"/>
-                            <TextBlock Text="Tiệc Cưới UIT"
-                                       FontSize="16"
-                                       FontWeight="Bold"
-                                       Foreground="White"
-                                       TextAlignment="Left"/>
+                <!--  Header  -->
+                <Border
+                    Grid.Row="0"
+                    Margin="10"
+                    Padding="10"
+                    Background="#80c0ff"
+                    CornerRadius="5">
+                    <StackPanel
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="48"
+                            Height="48"
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Kind="Storefront" />
+                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="Trung Tâm"
+                                TextAlignment="Center" />
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="Tiệc Cưới UIT"
+                                TextAlignment="Left" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <!-- Navigation Items -->
+                <!--  Navigation Items  -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <Grid Margin="10,0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <!-- Trang chủ -->
-                        <Button Grid.Row="0"
-                                Command="{Binding HomeCommand}"
-                                Visibility="{Binding ButtonVisibilities[Home]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Home]}"
-                                Foreground="White"
-                                ToolTip="Trang chủ"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Trang chủ  -->
+                        <Button
+                            Grid.Row="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Home]}"
+                            Command="{Binding HomeCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Trang chủ"
+                            Visibility="Visible">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Home" Margin="5"/>
-                                <TextBlock Text="Trang chủ"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Home" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Trang chủ" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Loại sảnh -->
-                        <Button Grid.Row="1"
-                                Command="{Binding HallTypeCommand}"
-                                Visibility="{Binding ButtonVisibilities[HallType]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[HallType]}"
-                                Foreground="White"
-                                ToolTip="Loại sảnh"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Loại sảnh  -->
+                        <Button
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[HallType]}"
+                            Command="{Binding HallTypeCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Loại sảnh"
+                            Visibility="{Binding ButtonVisibilities[HallType]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Domain" Margin="5"/>
-                                <TextBlock Text="Loại sảnh"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Domain" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Loại sảnh" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Sảnh -->
-                        <Button Grid.Row="2"
-                                Command="{Binding HallCommand}"
-                                Visibility="{Binding ButtonVisibilities[Hall]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Hall]}"
-                                Foreground="White"
-                                ToolTip="Sảnh"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Sảnh  -->
+                        <Button
+                            Grid.Row="2"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Hall]}"
+                            Command="{Binding HallCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Sảnh"
+                            Visibility="{Binding ButtonVisibilities[Hall]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="City" Margin="5"/>
-                                <TextBlock Text="Sảnh"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="City" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Sảnh" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Ca -->
-                        <Button Grid.Row="3"
-                                Command="{Binding ShiftCommand}"
-                                Visibility="{Binding ButtonVisibilities[Shift]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Shift]}"
-                                Foreground="White"
-                                ToolTip="Ca"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Ca  -->
+                        <Button
+                            Grid.Row="3"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Shift]}"
+                            Command="{Binding ShiftCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Ca"
+                            Visibility="{Binding ButtonVisibilities[Shift]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Clock" Margin="5"/>
-                                <TextBlock Text="Ca"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Clock" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Ca" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Món ăn -->
-                        <Button Grid.Row="4"
-                                Command="{Binding FoodCommand}"
-                                Visibility="{Binding ButtonVisibilities[Food]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Food]}"
-                                Foreground="White"
-                                ToolTip="Món ăn"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Món ăn  -->
+                        <Button
+                            Grid.Row="4"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Food]}"
+                            Command="{Binding FoodCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Món ăn"
+                            Visibility="{Binding ButtonVisibilities[Food]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Food" Margin="5"/>
-                                <TextBlock Text="Món ăn"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Food" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Món ăn" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Dịch vụ -->
-                        <Button Grid.Row="5"
-                                Command="{Binding ServiceCommand}"
-                                Visibility="{Binding ButtonVisibilities[Service]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Service]}"
-                                Foreground="White"
-                                ToolTip="Dịch vụ"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Dịch vụ  -->
+                        <Button
+                            Grid.Row="5"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Service]}"
+                            Command="{Binding ServiceCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Dịch vụ"
+                            Visibility="{Binding ButtonVisibilities[Service]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Tools" Margin="5"/>
-                                <TextBlock Text="Dịch vụ"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Tools" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Dịch vụ" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Tiệc cưới -->
-                        <Button Grid.Row="6"
-                                Command="{Binding WeddingCommand}"
-                                Visibility="{Binding ButtonVisibilities[Wedding]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Wedding]}"
-                                Foreground="White"
-                                ToolTip="Tiệc cưới"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Tiệc cưới  -->
+                        <Button
+                            Grid.Row="6"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Wedding]}"
+                            Command="{Binding WeddingCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Tiệc cưới"
+                            Visibility="{Binding ButtonVisibilities[Wedding]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Cake" Margin="5"/>
-                                <TextBlock Text="Tiệc cưới"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Cake" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Tiệc cưới" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Báo cáo -->
-                        <Button Grid.Row="7"
-                                Command="{Binding ReportCommand}"
-                                Visibility="{Binding ButtonVisibilities[Report]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Report]}"
-                                Foreground="White"
-                                ToolTip="Báo cáo"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Báo cáo  -->
+                        <Button
+                            Grid.Row="7"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Report]}"
+                            Command="{Binding ReportCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Báo cáo"
+                            Visibility="{Binding ButtonVisibilities[Report]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="FileChart" Margin="5"/>
-                                <TextBlock Text="Báo cáo"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="FileChart" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Báo cáo" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Tham số -->
-                        <Button Grid.Row="8"
-                                Command="{Binding ParameterCommand}"
-                                Visibility="{Binding ButtonVisibilities[Parameter]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Parameter]}"
-                                Foreground="White"
-                                ToolTip="Tham số"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Tham số  -->
+                        <Button
+                            Grid.Row="8"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Parameter]}"
+                            Command="{Binding ParameterCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Tham số"
+                            Visibility="{Binding ButtonVisibilities[Parameter]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Tune" Margin="5"/>
-                                <TextBlock Text="Tham số"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Tune" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Tham số" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Phân quyền -->
-                        <Button Grid.Row="9"
-                                Command="{Binding PermissionCommand}"
-                                Visibility="{Binding ButtonVisibilities[Permission]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Background="{Binding ButtonBackgrounds[Permission]}"
-                                Foreground="White"
-                                ToolTip="Phân quyền"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Phân quyền  -->
+                        <Button
+                            Grid.Row="9"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[Permission]}"
+                            Command="{Binding PermissionCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Phân quyền"
+                            Visibility="{Binding ButtonVisibilities[Permission]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ShieldAccount" Margin="5"/>
-                                <TextBlock Text="Phân quyền"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="ShieldAccount" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Phân quyền" />
                             </StackPanel>
                         </Button>
 
-                        <!-- Người dùng -->
-                        <Button Grid.Row="10"
-                                Command="{Binding UserCommand}"
-                                Visibility="{Binding ButtonVisibilities[User]}"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-
-                                Background="{Binding ButtonBackgrounds[User]}"
-                                Foreground="White"
-                                ToolTip="Người dùng"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
+                        <!--  Người dùng  -->
+                        <Button
+                            Grid.Row="10"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="{Binding ButtonBackgrounds[User]}"
+                            Command="{Binding UserCommand}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Người dùng"
+                            Visibility="{Binding ButtonVisibilities[User]}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Account" Margin="5"/>
-                                <TextBlock Text="Người dùng"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Margin="5,0"/>
+                                <materialDesign:PackIcon Margin="5" Kind="Account" />
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Người dùng" />
                             </StackPanel>
                         </Button>
 
                     </Grid>
                 </ScrollViewer>
 
-                <!-- Footer -->
-                <StackPanel Grid.Row="2" Margin="10" VerticalAlignment="Bottom">
-                    <!-- Tài khoản -->
-                    <Button Command="{Binding AccountCommand}"
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            Background="{Binding ButtonBackgrounds[Account]}"
-                            Foreground="White"
-                            ToolTip="Tài khoản"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left">
+                <!--  Footer  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Margin="10"
+                    VerticalAlignment="Bottom">
+                    <!--  Tài khoản  -->
+                    <Button
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Background="{Binding ButtonBackgrounds[Account]}"
+                        Command="{Binding AccountCommand}"
+                        Foreground="White"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Tài khoản">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="AccountCircle" Margin="5"/>
-                            <TextBlock Text="Tài khoản"
-                                       VerticalAlignment="Center"
-                                       FontSize="14"
-                                       Margin="5,0"/>
+                            <materialDesign:PackIcon Margin="5" Kind="AccountCircle" />
+                            <TextBlock
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Text="Tài khoản" />
                         </StackPanel>
                     </Button>
 
-                    <!-- Đăng xuất -->
-                    <Button Command="{Binding LogoutCommand}"
-                            CommandParameter="{Binding ElementName=mainWindow}"
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            Background="Transparent"
-                            Foreground="White"
-                            ToolTip="Đăng xuất"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left">
+                    <!--  Đăng xuất  -->
+                    <Button
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Background="Transparent"
+                        Command="{Binding LogoutCommand}"
+                        CommandParameter="{Binding ElementName=mainWindow}"
+                        Foreground="White"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Đăng xuất">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Logout" Margin="5"/>
-                            <TextBlock Text="Đăng xuất" VerticalAlignment="Center" FontSize="14" Margin="5,0"/>
+                            <materialDesign:PackIcon Margin="5" Kind="Logout" />
+                            <TextBlock
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Text="Đăng xuất" />
                         </StackPanel>
                     </Button>
 
                 </StackPanel>
             </Grid>
         </Grid>
-        <!-- Nội dung chính -->
+        <!--  Nội dung chính  -->
         <Grid Grid.Column="1" Background="White">
             <ContentControl Content="{Binding CurrentView}" />
         </Grid>

@@ -12,6 +12,7 @@
     xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel"
     Name="loginWindow"
     Title="Đăng Nhập"
+    Icon="Assets/icon_window.ico"
     Width="875"
     Height="645"
     Background="{DynamicResource MaterialDesignPaper}"

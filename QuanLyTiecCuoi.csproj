@@ -106,6 +106,7 @@
     <Compile Include="BusinessLogicLayer\Helpers\PasswordHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\ValidationHelper.cs" />
     <Compile Include="BusinessLogicLayer\IService\ICaService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IChiTietDVService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IChucNangService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IDichVuService.cs" />
     <Compile Include="BusinessLogicLayer\IService\ILoaiSanhService.cs" />
@@ -116,13 +117,16 @@
     <Compile Include="BusinessLogicLayer\IService\ISanhService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IThucDonService.cs" />
     <Compile Include="BusinessLogicLayer\Service\CaService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\ChiTietDVService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ChucNangService.cs" />
     <Compile Include="BusinessLogicLayer\Service\DichVuService.cs" />
     <Compile Include="BusinessLogicLayer\Service\LoaiSanhService.cs" />
     <Compile Include="BusinessLogicLayer\Service\MonAnService.cs" />
     <Compile Include="BusinessLogicLayer\Service\NguoiDungService.cs" />
     <Compile Include="BusinessLogicLayer\Service\NhomNguoiDungService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\PhieuDatTiecService.cs" />
     <Compile Include="BusinessLogicLayer\Service\SanhService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\ThucDonService.cs" />
     <Compile Include="DataAccessLayer\IRepository\ICaRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IChiTietDVRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IChucNangRepository.cs" />
@@ -135,6 +139,7 @@
     <Compile Include="DataAccessLayer\IRepository\ISanhRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IThucDonRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\CaRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\ChiTietDVRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ChucNangRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\DichVuRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\LoaiSanhRepository.cs" />
@@ -158,16 +163,29 @@
     <Compile Include="Model\THAMSO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Presentation\ViewModel\AccountViewModel.cs" />
     <Compile Include="Presentation\ViewModel\FoodViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\AddConverter.cs" />
+    <Compile Include="Presentation\ViewModel\AddWeddingViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\MenuItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ParameterViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\PlusOneConverter.cs" />
     <Compile Include="Presentation\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Presentation\ViewModel\UserViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\WeddingViewModel.cs" />
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
     </Compile>
+
     <Compile Include="Presentation\View\FoodView.xaml.cs">
       <DependentUpon>FoodView.xaml</DependentUpon>
+
+    <Compile Include="Presentation\View\AddWeddingView.xaml.cs">
+      <DependentUpon>AddWeddingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\View\DetailWeddingView.xaml.cs">
+      <DependentUpon>DetailWeddingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\HallTypeView.xaml.cs">
       <DependentUpon>HallTypeView.xaml</DependentUpon>
@@ -236,6 +254,9 @@
     <Compile Include="Model\THUCDON.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\View\MenuItemView.xaml.cs">
+      <DependentUpon>MenuItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\View\ParameterView.xaml.cs">
       <DependentUpon>ParameterView.xaml</DependentUpon>
     </Compile>
@@ -264,7 +285,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+
     <Page Include="Presentation\View\FoodView.xaml">
+
+    <Page Include="Presentation\View\AddWeddingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\DetailWeddingView.xaml">
+
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -296,6 +325,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Presentation\View\MenuItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Presentation\View\ParameterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -358,6 +391,7 @@
   <ItemGroup />
   <ItemGroup>
     <Resource Include="Image\wedding.jpg" />
+    <Resource Include="Presentation\View\Assets\icon_window.ico" />
     <Content Include="Model\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
