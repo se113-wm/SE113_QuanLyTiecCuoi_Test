@@ -9,7 +9,7 @@
     Title="Đặt Tiệc Cưới"
     Width="1200"
     Height="720"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="Manual">
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>
