@@ -89,6 +89,7 @@
                     FontSize="16"
                     FontWeight="Bold"
                     Foreground="White"
+                    IsDefault="True"
                     Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
             <!--  ... phần còn lại giữ nguyên ...  -->

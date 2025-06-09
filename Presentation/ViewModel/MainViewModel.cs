@@ -201,19 +201,22 @@ namespace QuanLyTiecCuoi.ViewModel
         {
             if (ButtonVisibilities.ContainsKey("Wedding") && ButtonVisibilities["Wedding"] == Visibility.Visible)
             {
-                
-                var dataContext = new WeddingViewModel();
-                CurrentView = new WeddingView()
+
+                //var dataContext = new WeddingViewModel();
+                //CurrentView = new WeddingView()
+                //{
+                //    DataContext = dataContext
+                //};
+                CurrentView = new WeddingDetailView()
                 {
-                    DataContext = dataContext
+                    DataContext = new WeddingDetailViewModel(1)
                 };
-                
                 // Đặt màu nền cho nút "Sảnh" là màu được chọn
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
                 // Gọi OnPropertyChanged để cập nhật giao diện
                 OnPropertyChanged(nameof(ButtonBackgrounds));
-                dataContext.AddCommandFunc();
+                //dataContext.AddCommandFunc();
             }
         }
         private void LoadButtonVisibility()

@@ -99,9 +99,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             DetailCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
             {
-                var detailView = new Presentation.View.DetailWeddingView();
+                //var detailView = new Presentation.View.DetailWeddingView();
                 //detailView.DataContext = new Presentation.ViewModel.DetailWeddingViewModel(SelectedItem);
-                detailView.ShowDialog();
+                //detailView.ShowDialog();
             });
 
             DeleteCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>

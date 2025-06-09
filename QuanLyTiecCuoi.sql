@@ -513,9 +513,17 @@ INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 
 
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('STAFF', 'Home')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('STAFF', 'User')
+('STAFF', 'Home'),
+('STAFF', 'HallType'),
+('STAFF', 'Hall'),
+('STAFF', 'Shift'),
+('STAFF', 'Food'),
+('STAFF', 'Service'),
+('STAFF', 'Wedding'),
+('STAFF', 'Report'),
+('STAFF', 'Parameter'),
+('STAFF', 'Permission'),
+('STAFF', 'User');
 
 INSERT INTO LOAISANH (TenLoaiSanh, DonGiaBanToiThieu)
 VALUES 

@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace QuanLyTiecCuoi.Presentation.View
 {
     /// <summary>
-    /// Interaction logic for DetailWeddingView.xaml
+    /// Interaction logic for WeddingDetailView.xaml
     /// </summary>
-    public partial class DetailWeddingView : Window
+    public partial class WeddingDetailView : UserControl
     {
-        public DetailWeddingView()
+        public WeddingDetailView()
         {
             InitializeComponent();
         }

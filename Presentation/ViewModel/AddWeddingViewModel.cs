@@ -171,6 +171,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 {
                     return false;
                 }
+                // Kiểm tra xem món ăn có tồn tại trong danh sách chưa
+                var existingItem = MenuList.FirstOrDefault(m => m.MonAn.MaMonAn == MonAn.MaMonAn);
+                if (existingItem != null && existingItem != SelectedMenuItem)
+                {
+                    // Nếu món ăn đã tồn tại và không phải là món ăn đang chỉnh sửa, không thể chỉnh sửa
+                    return false;
+                }
                 return true;
             }, (p) =>
             {
@@ -233,6 +240,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 // Nếu không có gì thay đổi, không cần chỉnh sửa
                 if (SelectedServiceItem.DichVu.TenDichVu == DichVu.TenDichVu && SelectedServiceItem.SoLuong.ToString() == DV_SoLuong && SelectedServiceItem.GhiChu == DV_GhiChu)
                 {
+                    return false;
+                }
+                // Kiểm tra xem dịch vụ có tồn tại trong danh sách chưa
+                var existingService = ServiceList.FirstOrDefault(s => s.DichVu.MaDichVu == DichVu.MaDichVu);
+                if (existingService != null && existingService != SelectedServiceItem)
+                {
+                    // Nếu dịch vụ đã tồn tại và không phải là dịch vụ đang chỉnh sửa, không thể chỉnh sửa
                     return false;
                 }
                 return true;
@@ -538,10 +552,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private bool CanConfirm()
         {
             return true;
-        }
-        private void Confirm(Window p)
-        {
-            
         }
     }
 }
