@@ -123,7 +123,7 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 CurrentView = new WeddingView()
                 {
-                    DataContext = new WeddingViewModel()
+                    DataContext = new WeddingViewModel(this)
                 };
 
                 // Đặt màu nền cho nút "Sảnh" là màu được chọn
@@ -202,15 +202,12 @@ namespace QuanLyTiecCuoi.ViewModel
             if (ButtonVisibilities.ContainsKey("Wedding") && ButtonVisibilities["Wedding"] == Visibility.Visible)
             {
 
-                //var dataContext = new WeddingViewModel();
-                //CurrentView = new WeddingView()
-                //{
-                //    DataContext = dataContext
-                //};
-                CurrentView = new WeddingDetailView()
+                var dataContext = new WeddingViewModel(this);
+                CurrentView = new WeddingView()
                 {
-                    DataContext = new WeddingDetailViewModel(1)
+                    DataContext = dataContext
                 };
+
                 // Đặt màu nền cho nút "Sảnh" là màu được chọn
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
@@ -218,6 +215,23 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged(nameof(ButtonBackgrounds));
                 //dataContext.AddCommandFunc();
             }
+        }
+        // Chuyển tab sang Chi tiết Đặt tiệc cưới
+        public void SwitchToWeddingDetailTab(int weddingId)
+        {
+            //if (ButtonVisibilities.ContainsKey("Wedding") && ButtonVisibilities["Wedding"] == Visibility.Visible)
+            //{
+                var dataContext = new WeddingDetailViewModel(weddingId);
+                CurrentView = new WeddingDetailView()
+                {
+                    DataContext = dataContext
+                };
+                // Đặt màu nền cho nút "Sảnh" là màu được chọn
+            //    ResetButtonBackgrounds();
+            //    ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
+            //    // Gọi OnPropertyChanged để cập nhật giao diện
+            //    OnPropertyChanged(nameof(ButtonBackgrounds));
+            //}
         }
         private void LoadButtonVisibility()
         {

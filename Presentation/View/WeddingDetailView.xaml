@@ -10,6 +10,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--  Title  -->
             <TextBlock
@@ -25,14 +26,49 @@
                 Padding="0,0,0,20">
                 <StackPanel>
                     <!--  Header with Edit Icon  -->
-                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <Grid Margin="0,0,0,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <!--  Title  -->
                         <TextBlock
+                            Grid.Column="0"
                             VerticalAlignment="Center"
                             FontSize="18"
                             FontWeight="Bold"
                             Text="Chi tiết tiệc cưới" />
+                        <!--  Reset Button  -->
+                        <Button
+                            Grid.Column="1"
+                            Width="24"
+                            Height="24"
+                            Margin="10,0,0,0"
+                            Background="{DynamicResource PrimaryHueMidBrush}"
+                            Command="{Binding ResetTCCommand}"
+                            Foreground="Purple"
+                            Style="{StaticResource MaterialDesignToolButton}"
+                            ToolTip="Reset thông tin">
+                            <materialDesign:PackIcon
+                                Width="15"
+                                Height="15"
+                                Kind="Restore" />
+                        </Button>
+                        <!--  "Chỉnh sửa" label  -->
+                        <TextBlock
+                            Grid.Column="3"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Gray"
+                            Text="Chỉnh sửa" />
+                        <!--  Edit Toggle  -->
                         <ToggleButton
                             x:Name="EditToggle"
+                            Grid.Column="4"
                             Width="36"
                             Height="36"
                             Margin="10,0,0,0"
@@ -45,7 +81,7 @@
                                 Foreground="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BoolToBrushConverter}}"
                                 Kind="Pencil" />
                         </ToggleButton>
-                    </StackPanel>
+                    </Grid>
 
                     <!--  Wedding Info Grid  -->
                     <Grid Margin="0,10,0,0">
@@ -239,25 +275,6 @@
                         </TextBox>
                     </Grid>
 
-                    <!--  Confirm/Cancel Buttons (only visible in edit mode)  -->
-                    <StackPanel
-                        Margin="0,10,0,0"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal"
-                        Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <Button
-                            Width="120"
-                            Margin="0,0,10,0"
-                            Command="{Binding ConfirmEditCommand}"
-                            Content="Xác nhận"
-                            Style="{StaticResource MaterialDesignRaisedButton}" />
-                        <Button
-                            Width="120"
-                            Command="{Binding CancelEditCommand}"
-                            Content="Hủy"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" />
-                    </StackPanel>
-
                 </StackPanel>
                 <!--  Menu & Service Details  -->
 
@@ -380,7 +397,8 @@
                                     Margin="10,0,0,0"
                                     Command="{Binding ChonMonAnCommand}"
                                     Content="Chọn món"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="1"
@@ -395,7 +413,10 @@
                         </materialDesign:Card>
 
                         <!--  2. Thao tác  -->
-                        <Grid Grid.Row="1" Margin="10">
+                        <Grid
+                            Grid.Row="1"
+                            Margin="10"
+                            Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
@@ -629,7 +650,8 @@
                                     Margin="0,0,10,0"
                                     Command="{Binding ChonDichVuCommand}"
                                     Content="Chọn dịch vụ"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="1"
@@ -644,7 +666,10 @@
                         </materialDesign:Card>
 
                         <!--  2. Thao tác  -->
-                        <Grid Grid.Row="1" Margin="10">
+                        <Grid
+                            Grid.Row="1"
+                            Margin="10"
+                            Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
@@ -791,6 +816,26 @@
                         </materialDesign:Card>
                     </Grid>
                 </materialDesign:Card>
+                <!--  Confirm/Cancel Buttons (only visible in edit mode)  -->
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button
+                        Width="120"
+                        Margin="0,0,10,0"
+                        Command="{Binding ConfirmEditCommand}"
+                        Content="Xác nhận"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                    <Button
+                        Width="120"
+                        Command="{Binding CancelEditCommand}"
+                        Content="Hủy"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" />
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>

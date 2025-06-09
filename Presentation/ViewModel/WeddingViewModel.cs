@@ -1,6 +1,7 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
+using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -66,8 +67,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
-        public WeddingViewModel()
+        private MainViewModel mainViewModel;
+
+        public WeddingViewModel(MainViewModel mainViewModel)
         {
+            this.mainViewModel = mainViewModel;
+            
             _phieuDatTiecService = new PhieuDatTiecService();
             _thucDonService = new ThucDonService();
             _chiTietDichVuService = new ChiTietDVService();
@@ -99,9 +104,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             DetailCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
             {
-                //var detailView = new Presentation.View.DetailWeddingView();
-                //detailView.DataContext = new Presentation.ViewModel.DetailWeddingViewModel(SelectedItem);
-                //detailView.ShowDialog();
+                mainViewModel.CurrentView = new WeddingDetailView
+                {
+                    DataContext = new WeddingDetailViewModel(SelectedItem.MaPhieuDat)
+                };
             });
 
             DeleteCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
