@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Presentation\Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Presentation\ViewModel\AccountViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\FoodViewModel.cs" />
     <Compile Include="Presentation\ViewModel\AddConverter.cs" />
     <Compile Include="Presentation\ViewModel\AddWeddingViewModel.cs" />
     <Compile Include="Presentation\ViewModel\CalendarBehavior.cs" />
@@ -186,6 +187,10 @@
     <Compile Include="Presentation\ViewModel\WeddingViewModel.cs" />
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
+    </Compile>
+
+    <Compile Include="Presentation\View\FoodView.xaml.cs">
+      <DependentUpon>FoodView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\AddWeddingView.xaml.cs">
       <DependentUpon>AddWeddingView.xaml</DependentUpon>
@@ -294,7 +299,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+
+    <Page Include="Presentation\View\FoodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+
     <Page Include="Presentation\View\AddWeddingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\DetailWeddingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
