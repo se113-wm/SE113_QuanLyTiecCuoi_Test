@@ -103,6 +103,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BusinessLogicLayer\Helpers\DatePickerHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\PasswordHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\ValidationHelper.cs" />
     <Compile Include="BusinessLogicLayer\IService\ICaService.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="BusinessLogicLayer\IService\INhomNguoiDungService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IPhieuDatTiecService.cs" />
     <Compile Include="BusinessLogicLayer\IService\ISanhService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IThamSoService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IThucDonService.cs" />
     <Compile Include="BusinessLogicLayer\Service\CaService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ChiTietDVService.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="BusinessLogicLayer\Service\NhomNguoiDungService.cs" />
     <Compile Include="BusinessLogicLayer\Service\PhieuDatTiecService.cs" />
     <Compile Include="BusinessLogicLayer\Service\SanhService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\ThamSoService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ThucDonService.cs" />
     <Compile Include="DataAccessLayer\IRepository\ICaRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IChiTietDVRepository.cs" />
@@ -137,6 +140,7 @@
     <Compile Include="DataAccessLayer\IRepository\INhomNguoiDungRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IPhieuDatTiecRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\ISanhRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IThamSoRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IThucDonRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\CaRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ChiTietDVRepository.cs" />
@@ -148,6 +152,7 @@
     <Compile Include="DataAccessLayer\Repository\NhomNguoiDungRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\PhieuDatTiecRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\SanhRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\ThamSoRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ThucDonRepository.cs" />
     <Compile Include="DataTransferObject\CADTO.cs" />
     <Compile Include="DataTransferObject\CHITIETDVDTO.cs" />
@@ -159,6 +164,7 @@
     <Compile Include="DataTransferObject\NHOMNGUOIDUNGDTO.cs" />
     <Compile Include="DataTransferObject\PHIEUDATTIECDTO.cs" />
     <Compile Include="DataTransferObject\SANHDTO.cs" />
+    <Compile Include="DataTransferObject\THAMSODTO.cs" />
     <Compile Include="DataTransferObject\THUCDONDTO.cs" />
     <Compile Include="Model\THAMSO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -168,11 +174,16 @@
     <Compile Include="Presentation\ViewModel\FoodViewModel.cs" />
     <Compile Include="Presentation\ViewModel\AddConverter.cs" />
     <Compile Include="Presentation\ViewModel\AddWeddingViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\CalendarBehavior.cs" />
+    <Compile Include="Presentation\ViewModel\FutureDateValidationRule.cs" />
+    <Compile Include="Presentation\ViewModel\HomeViewModel.cs" />
     <Compile Include="Presentation\ViewModel\MenuItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ParameterViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PlusOneConverter.cs" />
+    <Compile Include="Presentation\ViewModel\ServiceDetailItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Presentation\ViewModel\UserViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\WeddingDetailViewModel.cs" />
     <Compile Include="Presentation\ViewModel\WeddingViewModel.cs" />
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
@@ -183,9 +194,6 @@
     </Compile>
     <Compile Include="Presentation\View\AddWeddingView.xaml.cs">
       <DependentUpon>AddWeddingView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Presentation\View\DetailWeddingView.xaml.cs">
-      <DependentUpon>DetailWeddingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\HallTypeView.xaml.cs">
       <DependentUpon>HallTypeView.xaml</DependentUpon>
@@ -272,11 +280,17 @@
     <Compile Include="Presentation\ViewModel\LoginViewModel.cs" />
     <Compile Include="Presentation\ViewModel\MainViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PermissionViewModel.cs" />
+    <Compile Include="Presentation\View\ServiceDetailItemView.xaml.cs">
+      <DependentUpon>ServiceDetailItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\View\ServiceView.xaml.cs">
       <DependentUpon>ServiceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\UserView.xaml.cs">
       <DependentUpon>UserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\View\WeddingDetailView.xaml.cs">
+      <DependentUpon>WeddingDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\WeddingView.xaml.cs">
       <DependentUpon>WeddingView.xaml</DependentUpon>
@@ -296,7 +310,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Presentation\View\DetailWeddingView.xaml">
-
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -340,11 +353,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Presentation\View\ServiceDetailItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Presentation\View\ServiceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Presentation\View\UserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\WeddingDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

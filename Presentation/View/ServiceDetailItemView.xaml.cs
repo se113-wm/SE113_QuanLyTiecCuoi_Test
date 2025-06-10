@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace QuanLyTiecCuoi.Presentation.View
 {
     /// <summary>
-    /// Interaction logic for DetailWeddingView.xaml
+    /// Interaction logic for ServiceDetailItemView.xaml
     /// </summary>
-    public partial class DetailWeddingView : Window
+    public partial class ServiceDetailItemView : Window
     {
-        public DetailWeddingView()
+        public ServiceDetailItemView()
         {
             InitializeComponent();
         }

@@ -1,6 +1,7 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
+using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -13,6 +14,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
     public class WeddingViewModel : BaseViewModel
     {
         private IPhieuDatTiecService _phieuDatTiecService;
+        private IThucDonService _thucDonService;
+        private IChiTietDVService _chiTietDichVuService;
 
         private ObservableCollection<PHIEUDATTIECDTO> _List;
         public ObservableCollection<PHIEUDATTIECDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -64,9 +67,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
-        public WeddingViewModel()
+        private MainViewModel mainViewModel;
+
+        public WeddingViewModel(MainViewModel mainViewModel)
         {
+            this.mainViewModel = mainViewModel;
+            
             _phieuDatTiecService = new PhieuDatTiecService();
+            _thucDonService = new ThucDonService();
+            _chiTietDichVuService = new ChiTietDVService();
 
             var all = _phieuDatTiecService.GetAll().ToList();
             List = new ObservableCollection<PHIEUDATTIECDTO>(all);
@@ -90,19 +99,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             AddCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                var addView = new Presentation.View.AddWeddingView()
-                {
-                    DataContext = new AddWeddingViewModel()
-                };
-                addView.ShowDialog();
-                RefreshList();
+                AddCommandFunc();
             });
 
             DetailCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
             {
-                var detailView = new Presentation.View.DetailWeddingView();
-                //detailView.DataContext = new Presentation.ViewModel.DetailWeddingViewModel(SelectedItem);
-                detailView.ShowDialog();
+                mainViewModel.CurrentView = new WeddingDetailView
+                {
+                    DataContext = new WeddingDetailViewModel(SelectedItem.MaPhieuDat)
+                };
             });
 
             DeleteCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
@@ -112,10 +117,24 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     var result = MessageBox.Show("Bạn có chắc chắn muốn xóa tiệc cưới này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
+                        // Xóa thực đơn liên quan
+                        var thucDonList = _thucDonService.GetByPhieuDat(SelectedItem.MaPhieuDat).ToList();
+                        foreach (var thucDon in thucDonList)
+                        {
+                            _thucDonService.Delete(SelectedItem.MaPhieuDat, thucDon.MaMonAn);
+                        }
+                        // Xóa chi tiết dịch vụ liên quan
+                        var chiTietDVList = _chiTietDichVuService.GetByPhieuDat(SelectedItem.MaPhieuDat).ToList();
+                        foreach (var chiTietDV in chiTietDVList)
+                        {
+                            _chiTietDichVuService.Delete(SelectedItem.MaPhieuDat, chiTietDV.MaDichVu);
+                        }
+                        // Xóa phiếu đặt tiệc
+
                         _phieuDatTiecService.Delete(SelectedItem.MaPhieuDat);
                         List.Remove(SelectedItem);
                         RefreshList();
-                        DeleteMessage = "Xóa thành công";
+                        MessageBox.Show("Xóa tiệc cưới thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 catch (Exception ex)
@@ -175,6 +194,16 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public void AddCommandFunc()
+        {
+            var addView = new Presentation.View.AddWeddingView()
+            {
+                DataContext = new AddWeddingViewModel()
+            };
+            addView.ShowDialog();
+            RefreshList();
         }
 
         private void RefreshList()

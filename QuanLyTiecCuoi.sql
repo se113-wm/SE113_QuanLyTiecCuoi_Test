@@ -513,9 +513,17 @@ INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
 
 
 INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('STAFF', 'Home')
-INSERT INTO PHANQUYEN (MaNhom, MaChucNang) VALUES
-('STAFF', 'User')
+('STAFF', 'Home'),
+('STAFF', 'HallType'),
+('STAFF', 'Hall'),
+('STAFF', 'Shift'),
+('STAFF', 'Food'),
+('STAFF', 'Service'),
+('STAFF', 'Wedding'),
+('STAFF', 'Report'),
+('STAFF', 'Parameter'),
+('STAFF', 'Permission'),
+('STAFF', 'User');
 
 INSERT INTO LOAISANH (TenLoaiSanh, DonGiaBanToiThieu)
 VALUES 
@@ -678,7 +686,7 @@ VALUES
 (1, 2, 1, 3000000, 3000000, N'Nhạc sống nhẹ nhàng');
 
 update THAMSO
-set GiaTri = 0
+set GiaTri = 1
 where TenThamSo = 'KiemTraPhat'
 
 update LOAISANH
@@ -686,5 +694,5 @@ set DonGiaBanToiThieu = 1000000
 where MaLoaiSanh = 1
 
 update PHIEUDATTIEC
-set NgayThanhToan = '2025-06-15'
-where MaPhieuDat = 1
+set NgayThanhToan = '2025-06-19'
+where MaPhieuDat = 4
