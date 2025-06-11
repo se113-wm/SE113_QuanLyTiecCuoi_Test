@@ -106,9 +106,11 @@
     <Compile Include="BusinessLogicLayer\Helpers\DatePickerHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\PasswordHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\ValidationHelper.cs" />
+    <Compile Include="BusinessLogicLayer\IService\IBaoCaoDsService.cs" />
     <Compile Include="BusinessLogicLayer\IService\ICaService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IChiTietDVService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IChucNangService.cs" />
+    <Compile Include="BusinessLogicLayer\IService\ICtBaoCaoDsService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IDichVuService.cs" />
     <Compile Include="BusinessLogicLayer\IService\ILoaiSanhService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IMonAnService.cs" />
@@ -118,9 +120,11 @@
     <Compile Include="BusinessLogicLayer\IService\ISanhService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IThamSoService.cs" />
     <Compile Include="BusinessLogicLayer\IService\IThucDonService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\BaoCaoDsService.cs" />
     <Compile Include="BusinessLogicLayer\Service\CaService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ChiTietDVService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ChucNangService.cs" />
+    <Compile Include="BusinessLogicLayer\Service\CtBaoCaoDsService.cs" />
     <Compile Include="BusinessLogicLayer\Service\DichVuService.cs" />
     <Compile Include="BusinessLogicLayer\Service\LoaiSanhService.cs" />
     <Compile Include="BusinessLogicLayer\Service\MonAnService.cs" />
@@ -130,9 +134,11 @@
     <Compile Include="BusinessLogicLayer\Service\SanhService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ThamSoService.cs" />
     <Compile Include="BusinessLogicLayer\Service\ThucDonService.cs" />
+    <Compile Include="DataAccessLayer\IRepository\IBaoCaoDsRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\ICaRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IChiTietDVRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IChucNangRepository.cs" />
+    <Compile Include="DataAccessLayer\IRepository\ICtBaoCaoDsRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IDichVuRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\ILoaiSanhRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IMonAnRepository.cs" />
@@ -142,9 +148,11 @@
     <Compile Include="DataAccessLayer\IRepository\ISanhRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IThamSoRepository.cs" />
     <Compile Include="DataAccessLayer\IRepository\IThucDonRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\BaoCaoDsRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\CaRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ChiTietDVRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ChucNangRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\CtBaoCaoDsRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\DichVuRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\LoaiSanhRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\MonAnRepository.cs" />
@@ -154,9 +162,11 @@
     <Compile Include="DataAccessLayer\Repository\SanhRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ThamSoRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\ThucDonRepository.cs" />
+    <Compile Include="DataTransferObject\BAOCAODDTO.cs" />
     <Compile Include="DataTransferObject\CADTO.cs" />
     <Compile Include="DataTransferObject\CHITIETDVDTO.cs" />
     <Compile Include="DataTransferObject\CHUCNANGDTO.cs" />
+    <Compile Include="DataTransferObject\CTBAOCAODDTO.cs" />
     <Compile Include="DataTransferObject\DICHVUDTO.cs" />
     <Compile Include="DataTransferObject\LOAISANHDTO.cs" />
     <Compile Include="DataTransferObject\MONANDTO.cs" />
@@ -188,7 +198,6 @@
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
     </Compile>
-
     <Compile Include="Presentation\View\FoodView.xaml.cs">
       <DependentUpon>FoodView.xaml</DependentUpon>
     </Compile>
@@ -299,12 +308,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-
     <Page Include="Presentation\View\FoodView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-
     <Page Include="Presentation\View\AddWeddingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

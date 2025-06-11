@@ -377,55 +377,64 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Bảng tạm lưu doanh thu (chỉ lưu thông tin tổng hợp)
-    DECLARE @TempDeleted TABLE (Ngay INT, Thang INT, Nam INT, DoanhThu MONEY, SoLuongTiec INT);
-    DECLARE @TempInserted TABLE (Ngay INT, Thang INT, Nam INT, DoanhThu MONEY, SoLuongTiec INT);
+    DECLARE @Changes TABLE (
+        Ngay INT, 
+        Thang INT, 
+        Nam INT, 
+        DoanhThuChange MONEY, 
+        SoLuongTiecChange INT
+    );
 
-    -- XỬ LÝ DỮ LIỆU BỊ XÓA (tổng hợp theo ngày)
-    INSERT INTO @TempDeleted (Ngay, Thang, Nam, DoanhThu, SoLuongTiec)
+   -- Xử lý bản ghi bị xóa
+	INSERT INTO @Changes (Ngay, Thang, Nam, DoanhThuChange, SoLuongTiecChange)
+	SELECT 
+		DAY(NgayDaiTiec),
+		MONTH(NgayDaiTiec),
+		YEAR(NgayDaiTiec),
+		-1 * (
+			ISNULL(TienDatCoc, 0) +
+			CASE WHEN NgayThanhToan IS NOT NULL THEN ISNULL(TienConLai, 0) ELSE 0 END
+		),
+		-1
+	FROM DELETED
+	WHERE NgayDaiTiec IS NOT NULL;
+
+	-- Xử lý bản ghi thêm hoặc cập nhật
+	INSERT INTO @Changes (Ngay, Thang, Nam, DoanhThuChange, SoLuongTiecChange)
+	SELECT 
+		DAY(NgayDaiTiec),
+		MONTH(NgayDaiTiec),
+		YEAR(NgayDaiTiec),
+		ISNULL(TienDatCoc, 0) +
+		CASE WHEN NgayThanhToan IS NOT NULL THEN ISNULL(TienConLai, 0) ELSE 0 END,
+		1
+	FROM INSERTED
+	WHERE NgayDaiTiec IS NOT NULL;
+
+
+    -- Tổng hợp thay đổi
+    DECLARE @AggregatedChanges TABLE (
+        Ngay INT,
+        Thang INT,
+        Nam INT,
+        TotalDoanhThu MONEY,
+        TotalSoLuongTiec INT
+    );
+
+    INSERT INTO @AggregatedChanges
     SELECT 
-        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        ISNULL(SUM(ISNULL(TienDatCoc, 0) + ISNULL(TienConLai, 0)), 0),
-        COUNT(CASE WHEN NgayDaiTiec IS NOT NULL THEN 1 ELSE NULL END)
-    FROM DELETED
-    GROUP BY 
-        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec));
+        Ngay,
+        Thang,
+        Nam,
+        SUM(DoanhThuChange),
+        SUM(SoLuongTiecChange)
+    FROM @Changes
+    GROUP BY Ngay, Thang, Nam;
 
-    -- Trừ doanh thu và số lượng tiệc
-    UPDATE c
-    SET 
-        c.DoanhThu = c.DoanhThu - td.DoanhThu,
-        c.SoLuongTiec = c.SoLuongTiec - td.SoLuongTiec
-    FROM CTBAOCAODS c
-    JOIN @TempDeleted td ON c.Ngay = td.Ngay AND c.Thang = td.Thang AND c.Nam = td.Nam;
-
-    UPDATE b
-    SET b.TongDoanhThu = b.TongDoanhThu - ISNULL((SELECT SUM(DoanhThu) FROM @TempDeleted WHERE Thang = b.Thang AND Nam = b.Nam), 0)
-    FROM BAOCAODS b
-    WHERE EXISTS (SELECT 1 FROM @TempDeleted WHERE Thang = b.Thang AND Nam = b.Nam);
-
-    -- XỬ LÝ DỮ LIỆU MỚI (tổng hợp theo ngày)
-    INSERT INTO @TempInserted (Ngay, Thang, Nam, DoanhThu, SoLuongTiec)
-    SELECT 
-        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        ISNULL(SUM(ISNULL(TienDatCoc, 0) + ISNULL(TienConLai, 0)), 0),
-        COUNT(CASE WHEN NgayDaiTiec IS NOT NULL THEN 1 ELSE NULL END)
-    FROM INSERTED
-    GROUP BY 
-        DAY(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        MONTH(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec)),
-        YEAR(COALESCE(NgayDatTiec, NgayThanhToan, NgayDaiTiec));
-
-    -- Đảm bảo BAOCAODS tồn tại
+    -- Đảm bảo bản ghi BAOCAODS tồn tại
     MERGE BAOCAODS AS target
     USING (
-        SELECT DISTINCT Thang, Nam FROM @TempInserted
+        SELECT DISTINCT Thang, Nam FROM @AggregatedChanges
     ) AS source
     ON target.Thang = source.Thang AND target.Nam = source.Nam
     WHEN NOT MATCHED THEN
@@ -434,36 +443,51 @@ BEGIN
 
     -- Cập nhật CTBAOCAODS
     MERGE CTBAOCAODS AS target
-    USING @TempInserted AS source
+    USING @AggregatedChanges AS source
     ON target.Ngay = source.Ngay AND target.Thang = source.Thang AND target.Nam = source.Nam
     WHEN MATCHED THEN
         UPDATE SET 
-            SoLuongTiec = target.SoLuongTiec + source.SoLuongTiec,
-            DoanhThu = target.DoanhThu + source.DoanhThu
-    WHEN NOT MATCHED THEN
+            SoLuongTiec = target.SoLuongTiec + source.TotalSoLuongTiec,
+            DoanhThu = target.DoanhThu + source.TotalDoanhThu
+    WHEN NOT MATCHED AND source.TotalSoLuongTiec > 0 THEN
         INSERT (Ngay, Thang, Nam, SoLuongTiec, DoanhThu, TiLe)
         VALUES (
-            source.Ngay, source.Thang, source.Nam,
-            source.SoLuongTiec,
-            source.DoanhThu,
+            source.Ngay,
+            source.Thang,
+            source.Nam,
+            source.TotalSoLuongTiec,
+            source.TotalDoanhThu,
             0
         );
 
-    -- Cập nhật BAOCAODS
+    -- Cập nhật tổng doanh thu tháng
     UPDATE b
-    SET b.TongDoanhThu = b.TongDoanhThu + ISNULL((SELECT SUM(DoanhThu) FROM @TempInserted WHERE Thang = b.Thang AND Nam = b.Nam), 0)
-    FROM BAOCAODS b
-    WHERE EXISTS (SELECT 1 FROM @TempInserted WHERE Thang = b.Thang AND Nam = b.Nam);
+	SET TongDoanhThu = (
+		SELECT SUM(DoanhThu)
+		FROM CTBAOCAODS c
+		WHERE c.Thang = b.Thang AND c.Nam = b.Nam
+	)
+	FROM BAOCAODS b
+	WHERE EXISTS (
+		SELECT 1
+		FROM @AggregatedChanges ac
+		WHERE ac.Thang = b.Thang AND ac.Nam = b.Nam
+	);
 
-    -- Cập nhật TiLe
+    -- Cập nhật lại toàn bộ tỉ lệ TiLe trong tháng có thay đổi
     UPDATE c
     SET TiLe = CASE 
                 WHEN b.TongDoanhThu = 0 THEN 0
                 ELSE TRY_CAST(c.DoanhThu AS FLOAT) * 100.0 / NULLIF(TRY_CAST(b.TongDoanhThu AS FLOAT), 0)
-               END
+              END
     FROM CTBAOCAODS c
-    JOIN BAOCAODS b ON c.Thang = b.Thang AND c.Nam = b.Nam;
+    JOIN BAOCAODS b ON c.Thang = b.Thang AND c.Nam = b.Nam
+    WHERE EXISTS (
+        SELECT 1 FROM @AggregatedChanges ac
+        WHERE ac.Thang = c.Thang AND ac.Nam = c.Nam
+    );
 END;
+
 
 GO
 INSERT INTO NHOMNGUOIDUNG (MaNhom, TenNhom)
@@ -671,6 +695,15 @@ VALUES (
     10000000, 20, 2, 500000, 1000
 );
 
+INSERT INTO PHIEUDATTIEC (
+    TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec, MaCa, MaSanh,
+    TienDatCoc, SoLuongBan, SoBanDuTru, ChiPhiPhatSinh, TongTienBan
+)
+VALUES (
+    N'Nguyễn Văn A', N'Trần Thị B', '0912345678',
+    '2025-06-01', '2025-06-13', 1, 1,
+    10000000, 20, 2, 500000, 1000
+);
 
 -- Lấy MaPhieuDat mới thêm:
 -- Giả sử là 1
@@ -695,4 +728,4 @@ where MaLoaiSanh = 1
 
 update PHIEUDATTIEC
 set NgayThanhToan = '2025-06-19'
-where MaPhieuDat = 4
+where MaPhieuDat = 2

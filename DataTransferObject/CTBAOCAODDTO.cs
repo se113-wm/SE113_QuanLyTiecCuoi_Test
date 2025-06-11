@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace QuanLyTiecCuoi.DataTransferObject
+{
+    public class CTBAOCAODDTO
+    {
+        public int Ngay { get; set; }
+        public int Thang { get; set; }
+        public int Nam { get; set; }
+        public int? SoLuongTiec { get; set; }
+        public decimal? DoanhThu { get; set; }
+        public decimal? TiLe { get; set; }
+
+        // Navigation property (optional, similar to SANHDTO)
+        public BAOCAODDTO BaoCaoD { get; set; }
+    }
+}
