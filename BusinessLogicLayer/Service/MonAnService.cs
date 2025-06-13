@@ -52,6 +52,7 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 GhiChu = monAnDto.GhiChu
             };
             _monAnRepository.Create(entity);
+            monAnDto.MaMonAn = entity.MaMonAn; // Update DTO with generated ID
         }
 
         public void Update(MONANDTO monAnDto)

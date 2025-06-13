@@ -104,6 +104,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BusinessLogicLayer\Helpers\DatePickerHelper.cs" />
+    <Compile Include="BusinessLogicLayer\Helpers\ImageHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\PasswordHelper.cs" />
     <Compile Include="BusinessLogicLayer\Helpers\ValidationHelper.cs" />
     <Compile Include="BusinessLogicLayer\IService\IBaoCaoDsService.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Presentation\ViewModel\CalendarBehavior.cs" />
     <Compile Include="Presentation\ViewModel\FutureDateValidationRule.cs" />
     <Compile Include="Presentation\ViewModel\HomeViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\InvoiceViewModel.cs" />
     <Compile Include="Presentation\ViewModel\MenuItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ParameterViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PlusOneConverter.cs" />
@@ -212,6 +214,9 @@
     </Compile>
     <Compile Include="Presentation\View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\View\InvoiceView.xaml.cs">
+      <DependentUpon>InvoiceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -325,6 +330,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Presentation\View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\InvoiceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

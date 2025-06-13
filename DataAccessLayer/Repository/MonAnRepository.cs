@@ -28,6 +28,7 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
         {
             _context.MONANs.Add(monAn);
             _context.SaveChanges();
+            _context.Entry(monAn).Reload(); // Reload to get the latest values from the database
         }
 
         public void Update(MONAN monAn)

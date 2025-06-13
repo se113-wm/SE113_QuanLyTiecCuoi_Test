@@ -33,6 +33,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <!--  Title  -->
                         <TextBlock
@@ -81,6 +82,13 @@
                                 Foreground="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BoolToBrushConverter}}"
                                 Kind="Pencil" />
                         </ToggleButton>
+                        <!--  Xem hóa đơn Button  -->
+                        <Button
+                            Grid.Column="5"
+                            Margin="10,0,5,0"
+                            Command="{Binding XemHoaDonCommand}"
+                            Content="Xem hóa đơn"
+                            Style="{StaticResource MaterialDesignOutlinedButton}" />
                     </Grid>
 
                     <!--  Wedding Info Grid  -->

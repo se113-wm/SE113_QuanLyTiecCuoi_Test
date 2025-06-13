@@ -1,11 +1,17 @@
-﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+﻿using Microsoft.Win32;
+using QuanLyTiecCuoi.BusinessLogicLayer.Helpers;
+using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace QuanLyTiecCuoi.ViewModel
 {
@@ -32,15 +38,217 @@ namespace QuanLyTiecCuoi.ViewModel
                     TenDichVu = SelectedItem.TenDichVu;
                     DonGia = SelectedItem.DonGia?.ToString("G29") ?? string.Empty;
                     GhiChu = SelectedItem.GhiChu;
+                    if (!IsAdding)
+                    {
+                        UpdateImageAsync(SelectedItem.MaDichVu.ToString(), "Service");
+                    }
+                    // Clean up cache files
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                    string addCache = Path.Combine(folder, "Addcache.jpg");
+                    string editCache = Path.Combine(folder, "Editcache.jpg");
+                    if (File.Exists(addCache)) File.Delete(addCache);
+                    if (File.Exists(editCache)) File.Delete(editCache);
                 }
                 else
                 {
                     AddMessage = string.Empty;
                     EditMessage = string.Empty;
                     DeleteMessage = string.Empty;
+                    Image = null;
                 }
             }
         }
+
+        #region selecte action
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); }
+        }
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set { _isAdding = value; OnPropertyChanged(); }
+        }
+        private bool _isDeleting;
+        public bool IsDeleting
+        {
+            get => _isDeleting;
+            set { _isDeleting = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+        private string _selectedAction;
+        public string SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnPropertyChanged();
+                switch (value)
+                {
+                    case "Thêm":
+                        IsAdding = true;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        // reset ảnh về ko có ảnh
+                        Image = null;
+                        break;
+                    case "Sửa":
+                        IsAdding = false;
+                        IsEditing = true;
+                        IsDeleting = false;
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    case "Xóa":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = true;
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    default:
+                        _selectedAction = null;
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        break;
+                }
+            }
+        }
+        #endregion
+
+        #region Image Handling
+
+
+        private ImageSource _Image;
+        public ImageSource Image
+        {
+            get => _Image;
+            set { _Image = value; OnPropertyChanged(); }
+        }
+
+        private string _imageBtnToolTip;
+        public string ImageBtnToolTip
+        {
+            get => _imageBtnToolTip;
+            set { _imageBtnToolTip = value; OnPropertyChanged(); }
+        }
+
+        public ICommand SelectImageCommand => new RelayCommand<object>(
+            (p) =>
+            {
+                // Allow only when adding or editing
+                return IsAdding || IsEditing;
+            },
+            (p) =>
+            {
+                var dlg = new OpenFileDialog
+                {
+                    Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                    Title = "Chọn ảnh dịch vụ"
+                };
+                if (dlg.ShowDialog() == true)
+                {
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                    string cacheFileName = IsAdding ? "Addcache.jpg" : "Editcache.jpg";
+                    string cachePath = Path.Combine(folder, cacheFileName);
+                    if (!File.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+                    try
+                    {
+                        // Save selected image to cache file
+                        File.Copy(dlg.FileName, cachePath, true);
+                        // Show preview
+                        UpdateImageFromPath(cachePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        );
+
+        private void UpdateImageFromPath(string path)
+        {
+            if (!File.Exists(path))
+            {
+                Image = null;
+                return;
+            }
+            try
+            {
+                var bitmap = new BitmapImage();
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = stream;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                }
+                Image = bitmap;
+            }
+            catch
+            {
+                Image = null;
+            }
+        }
+
+        private void UpdateImageAsync(string id, string loai)
+        {
+            var path = ImageHelper.GetImagePath(loai, id);
+            if (!File.Exists(path))
+            {
+                Image = null;
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    BitmapImage bitmap = null;
+                    using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.StreamSource = stream;
+                        bitmap.EndInit();
+                        bitmap.Freeze();
+                    }
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Image = bitmap;
+                    });
+                }
+                catch
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Image = null;
+                    });
+                }
+            });
+        }
+        #endregion
 
         private string _TenDichVu;
         public string TenDichVu { get => _TenDichVu; set { _TenDichVu = value; OnPropertyChanged(); } }
@@ -215,6 +423,18 @@ namespace QuanLyTiecCuoi.ViewModel
 
                     _dichVuService.Create(newService);
                     List.Add(newService);
+
+                    // Move Addcache.jpg to real image
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                    string cachePath = Path.Combine(folder, "Addcache.jpg");
+                    if (File.Exists(cachePath))
+                    {
+                        string newImagePath = Path.Combine(folder, newService.MaDichVu + ".jpg");
+                        File.Copy(cachePath, newImagePath, true);
+                        File.Delete(cachePath);
+                    }
+                    SelectedAction = null; // Reset action selection
+
                     MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     Reset();
                 }
@@ -256,7 +476,8 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
                 if (SelectedItem.TenDichVu == TenDichVu &&
                     SelectedItem.DonGia?.ToString("G29") == DonGia &&
-                    SelectedItem.GhiChu == GhiChu)
+                    SelectedItem.GhiChu == GhiChu &&
+                    ImageHelper.IsEditCacheImageSameAsCurrent(SelectedItem.MaDichVu, "Service"))
                 {
                     EditMessage = "Không có thay đổi nào để cập nhật";
                     return false;
@@ -279,6 +500,18 @@ namespace QuanLyTiecCuoi.ViewModel
                     var index = List.IndexOf(SelectedItem);
                     List[index] = null;
                     List[index] = updateDto;
+
+
+                    // Move Editcache.jpg to real image
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                    string cachePath = Path.Combine(folder, "Editcache.jpg");
+                    if (File.Exists(cachePath))
+                    {
+                        string newImagePath = Path.Combine(folder, updateDto.MaDichVu + ".jpg");
+                        File.Copy(cachePath, newImagePath, true);
+                        File.Delete(cachePath);
+                    }
+                    SelectedAction = null; // Reset action selection
 
                     EditMessage = "Cập nhật thành công";
                     Reset();
@@ -306,9 +539,19 @@ namespace QuanLyTiecCuoi.ViewModel
                     var result = MessageBox.Show("Bạn có chắc chắn muốn xóa dịch vụ này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
+                        // Xóa ảnh của dịch vụ
+                        string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                        string imagePath = Path.Combine(folder, SelectedItem.MaDichVu + ".jpg");
+                        if (File.Exists(imagePath))
+                        {
+                            File.Delete(imagePath);
+                        }
+
+
                         _dichVuService.Delete(SelectedItem.MaDichVu);
                         List.Remove(SelectedItem);
-                        DeleteMessage = "Xóa thành công";
+                        //DeleteMessage = "Xóa thành công";
+                        MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                         Reset();
                     }
                 }
@@ -328,6 +571,13 @@ namespace QuanLyTiecCuoi.ViewModel
             DonGia = null;
             GhiChu = string.Empty;
             SearchText = string.Empty;
+
+            // Clean up cache files
+            string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+            string addCache = Path.Combine(folder, "Addcache.jpg");
+            string editCache = Path.Combine(folder, "Editcache.jpg");
+            if (File.Exists(addCache)) File.Delete(addCache);
+            if (File.Exists(editCache)) File.Delete(editCache);
         }
     }
 }

@@ -28,6 +28,8 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
         {
             _context.SANHs.Add(sanh);
             _context.SaveChanges();
+            // reload sanh to get the generated ID if applicable
+            _context.Entry(sanh).Reload();
         }
 
         public void Update(SANH sanh)

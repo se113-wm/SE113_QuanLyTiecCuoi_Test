@@ -1,17 +1,23 @@
-﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+﻿using Microsoft.Win32;
+using QuanLyTiecCuoi.BusinessLogicLayer.Helpers;
+using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model; // Để kiểm tra FK trực tiếp khi xoá
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace QuanLyTiecCuoi.ViewModel
 {
     /// <summary>
-    /// ViewModel quản lý bảng MONAN – viết theo cùng phong cách HallViewModel.
+    /// ViewModel quản lý bảng MONAN – viết theo cùng phong cách FoodViewModel.
     /// Hỗ trợ: giới hạn 100 món, tìm kiếm (Tên, Đơn giá, Ghi chú), Thêm / Sửa / Xoá.
     /// </summary>
     public class FoodViewModel : BaseViewModel
@@ -41,10 +47,23 @@ namespace QuanLyTiecCuoi.ViewModel
                     TenMonAn = SelectedItem.TenMonAn;
                     DonGia = SelectedItem.DonGia?.ToString("N0");
                     GhiChu = SelectedItem.GhiChu;
+                    if (!IsAdding)
+                    {
+                        UpdateImageAsync(SelectedItem.MaMonAn.ToString(), "Food");
+                    }
+                    // Clean up cache files
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                    string addCache = Path.Combine(folder, "Addcache.jpg");
+                    string editCache = Path.Combine(folder, "Editcache.jpg");
+                    if (File.Exists(addCache)) File.Delete(addCache);
+                    if (File.Exists(editCache)) File.Delete(editCache);
                 }
                 else
                 {
-                    ClearMessages();
+                    AddMessage = string.Empty;
+                    EditMessage = string.Empty;
+                    DeleteMessage = string.Empty;
+                    Image = null;
                 }
             }
         }
@@ -88,6 +107,197 @@ namespace QuanLyTiecCuoi.ViewModel
         }
         #endregion
 
+        #region selecte action
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); }
+        }
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set { _isAdding = value; OnPropertyChanged(); }
+        }
+        private bool _isDeleting;
+        public bool IsDeleting
+        {
+            get => _isDeleting;
+            set { _isDeleting = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+        private string _selectedAction;
+        public string SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnPropertyChanged();
+                switch (value)
+                {
+                    case "Thêm":
+                        IsAdding = true;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        // reset ảnh về ko có ảnh
+                        Image = null;
+                        break;
+                    case "Sửa":
+                        IsAdding = false;
+                        IsEditing = true;
+                        IsDeleting = false;
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một món ăn để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    case "Xóa":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = true;
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một món ăn để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    default:
+                        _selectedAction = null;
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        break;
+                }
+            }
+        }
+        #endregion
+
+        #region Image Handling
+
+
+        private ImageSource _Image;
+        public ImageSource Image
+        {
+            get => _Image;
+            set { _Image = value; OnPropertyChanged(); }
+        }
+
+        private string _imageBtnToolTip;
+        public string ImageBtnToolTip
+        {
+            get => _imageBtnToolTip;
+            set { _imageBtnToolTip = value; OnPropertyChanged(); }
+        }
+
+        public ICommand SelectImageCommand => new RelayCommand<object>(
+            (p) =>
+            {
+                // Allow only when adding or editing
+                return IsAdding || IsEditing;
+            },
+            (p) =>
+            {
+                var dlg = new OpenFileDialog
+                {
+                    Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                    Title = "Chọn ảnh món ăn"
+                };
+                if (dlg.ShowDialog() == true)
+                {
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                    string cacheFileName = IsAdding ? "Addcache.jpg" : "Editcache.jpg";
+                    string cachePath = Path.Combine(folder, cacheFileName);
+                    if (!File.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+                    try
+                    {
+                        // Save selected image to cache file
+                        File.Copy(dlg.FileName, cachePath, true);
+                        // Show preview
+                        UpdateImageFromPath(cachePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        );
+
+        private void UpdateImageFromPath(string path)
+        {
+            if (!File.Exists(path))
+            {
+                Image = null;
+                return;
+            }
+            try
+            {
+                var bitmap = new BitmapImage();
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = stream;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                }
+                Image = bitmap;
+            }
+            catch
+            {
+                Image = null;
+            }
+        }
+
+        private void UpdateImageAsync(string id, string loai)
+        {
+            var path = ImageHelper.GetImagePath(loai, id);
+            if (!File.Exists(path))
+            {
+                Image = null;
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    BitmapImage bitmap = null;
+                    using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.StreamSource = stream;
+                        bitmap.EndInit();
+                        bitmap.Freeze();
+                    }
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Image = bitmap;
+                    });
+                }
+                catch
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Image = null;
+                    });
+                }
+            });
+        }
+        #endregion
+
         #region Messages & Commands
         private string _AddMessage;
         public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
@@ -103,10 +313,11 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand AddCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
-        #endregion
         public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
             Reset();
         });
+        #endregion
+
         #region Constructor
         public FoodViewModel()
         {
@@ -172,6 +383,17 @@ namespace QuanLyTiecCuoi.ViewModel
                 OriginalList.Add(dto); // Thêm vào danh sách gốc
                 List = new ObservableCollection<MONANDTO>(OriginalList); // Cập nhật lại danh sách hiển thị
 
+                // Move Addcache.jpg to real image
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                string cachePath = Path.Combine(folder, "Addcache.jpg");
+                if (File.Exists(cachePath))
+                {
+                    string newImagePath = Path.Combine(folder, dto.MaMonAn + ".jpg");
+                    File.Copy(cachePath, newImagePath, true);
+                    File.Delete(cachePath);
+                }
+                SelectedAction = null; // Reset action selection
+
                 Reset();
                 MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -197,7 +419,8 @@ namespace QuanLyTiecCuoi.ViewModel
                 SelectedItem.TenMonAn == TenMonAn?.Trim() &&
                 SelectedItem.GhiChu == GhiChu &&
                 decimal.TryParse(DonGia?.Replace(".", "").Replace(",", ""), out var newPrice) &&
-                SelectedItem.DonGia == newPrice
+                SelectedItem.DonGia == newPrice &&
+                ImageHelper.IsEditCacheImageSameAsCurrent(SelectedItem.MaMonAn, "Food")
             )
             {
                 EditMessage = "Chưa có thông tin nào thay đổi";
@@ -249,6 +472,16 @@ namespace QuanLyTiecCuoi.ViewModel
 
                 var idx = List.IndexOf(SelectedItem);
                 List[idx] = dto; OriginalList[idx] = dto;
+                // Move Editcache.jpg to real image
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                string cachePath = Path.Combine(folder, "Editcache.jpg");
+                if (File.Exists(cachePath))
+                {
+                    string newImagePath = Path.Combine(folder, dto.MaMonAn + ".jpg");
+                    File.Copy(cachePath, newImagePath, true);
+                    File.Delete(cachePath);
+                }
+                SelectedAction = null; // Reset action selection
                 Reset();
                 MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -281,6 +514,14 @@ namespace QuanLyTiecCuoi.ViewModel
                         MessageBox.Show("Món ăn đang được sử dụng trong thực đơn – không thể xoá.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+                }
+
+                // Xóa ảnh của món ăn
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                string imagePath = Path.Combine(folder, SelectedItem.MaMonAn + ".jpg");
+                if (File.Exists(imagePath))
+                {
+                    File.Delete(imagePath);
                 }
 
                 _foodService.Delete(SelectedItem.MaMonAn);
@@ -323,6 +564,13 @@ namespace QuanLyTiecCuoi.ViewModel
             DonGia = string.Empty;
             GhiChu = string.Empty;
             SearchText = string.Empty;
+
+            // Clean up cache files
+            string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+            string addCache = Path.Combine(folder, "Addcache.jpg");
+            string editCache = Path.Combine(folder, "Editcache.jpg");
+            if (File.Exists(addCache)) File.Delete(addCache);
+            if (File.Exists(editCache)) File.Delete(editCache);
         }
 
         private Exception GetInnermost(Exception ex)

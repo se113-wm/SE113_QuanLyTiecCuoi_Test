@@ -54,8 +54,10 @@ namespace QuanLyTiecCuoi.ViewModel
                 MessageBox.Show("Đăng nhập thành công!");
                 DataProvider.Ins.CurrentUser = Account.First();
                 // Gọi Main Window
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.DataContext = new MainViewModel();
+                MainWindow mainWindow = new MainWindow()
+                {
+                    DataContext = MainViewModel.Instance
+                };
                 mainWindow.Show();
                 p.Close();
             }

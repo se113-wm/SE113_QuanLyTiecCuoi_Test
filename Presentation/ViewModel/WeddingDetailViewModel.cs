@@ -100,6 +100,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand EditServiceCommand { get; set; }
         public ICommand DeleteServiceCommand { get; set; }
 
+        public ICommand XemHoaDonCommand { get; set; }
+
         private int _maPhieuDat;
 
         public WeddingDetailViewModel(int maPhieuDat)
@@ -294,6 +296,14 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 ServiceList.Remove(SelectedServiceItem);
                 SelectedServiceItem = null;
+            });
+
+            XemHoaDonCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                MainViewModel.Instance.CurrentView = new InvoiceView 
+                {
+                    DataContext = new InvoiceViewModel(_maPhieuDat)
+                };
             });
 
         }

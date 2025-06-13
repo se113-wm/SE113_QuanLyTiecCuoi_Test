@@ -71,6 +71,8 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 GhiChu = sanhDto.GhiChu
             };
             _sanhRepository.Create(entity);
+            // Reload the entity to get the generated ID if applicable
+            sanhDto.MaSanh = entity.MaSanh; // Assuming MaSanh is an auto-generated ID
         }
 
         public void Update(SANHDTO sanhDto)

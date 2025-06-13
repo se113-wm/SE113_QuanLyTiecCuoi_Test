@@ -36,13 +36,16 @@ namespace QuanLyTiecCuoi.ViewModel
         public Dictionary<string, Brush> ButtonBackgrounds { get; set; } = new Dictionary<string, Brush>();
 
 
+        private static MainViewModel _instance;
+        public static MainViewModel Instance => _instance ?? (_instance = new MainViewModel());
+
         private object _CurrentView;
         public object CurrentView
         {
             get => _CurrentView;
             set { _CurrentView = value; OnPropertyChanged(); }
         }
-        
+
         public MainViewModel()
         {
 
@@ -239,6 +242,17 @@ namespace QuanLyTiecCuoi.ViewModel
             //    OnPropertyChanged(nameof(ButtonBackgrounds));
             //}
         }
+        // Tắt tất cả các view và view model khác (trừ main và view model hiện tại)
+        public void CloseAllViewsExceptCurrent()
+        {
+            // Đặt CurrentView về null để tắt tất cả các view khác
+            CurrentView = null;
+            // Reset màu nền của tất cả các nút
+            ResetButtonBackgrounds();
+            OnPropertyChanged(nameof(ButtonBackgrounds));
+        }
+
+
         private void LoadButtonVisibility()
         {
             // Lấy danh sách chức năng của nhóm người dùng hiện tại
