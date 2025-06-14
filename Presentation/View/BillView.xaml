@@ -39,20 +39,6 @@
                             FontSize="16"
                             FontWeight="Bold"
                             Text="Chi tiết hóa đơn" />
-                        <Button
-                            Width="36"
-                            Height="36"
-                            Margin="5,0,0,0"
-                            Background="{DynamicResource PrimaryHueMidBrush}"
-                            Command="{Binding ResetWeddingCommand}"
-                            Foreground="Purple"
-                            Style="{StaticResource MaterialDesignToolButton}"
-                            ToolTip="Reset thông tin">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Kind="Restore" />
-                        </Button>
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>
@@ -101,7 +87,7 @@
                                     Width="100"
                                     Margin="5"
                                     Command="{Binding ExportCommand}"
-                                    Content="Xuất"
+                                    Content="Xuất PDF"
                                     Style="{StaticResource MaterialDesignRaisedButton}" />
                             </StackPanel>
                         </StackPanel>

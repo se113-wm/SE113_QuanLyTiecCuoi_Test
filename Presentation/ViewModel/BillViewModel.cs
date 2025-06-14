@@ -16,8 +16,6 @@ using System.Windows.Input;
 namespace QuanLyTiecCuoi.ViewModel {
     public class BillViewModel : BaseViewModel {
         private IPhieuDatTiecService _phieuDatTiecService;
-        private IThucDonService _thucDonService;
-        private IChiTietDVService _chiTietDichVuService;
 
         private ObservableCollection<PHIEUDATTIECDTO> _List;
         public ObservableCollection<PHIEUDATTIECDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -55,21 +53,14 @@ namespace QuanLyTiecCuoi.ViewModel {
         public ObservableCollection<string> SearchProperties { get; set; }
         public string SelectedSearchProperty { get => _selectedSearchProperty; set { _selectedSearchProperty = value; OnPropertyChanged(); PerformSearch(); } }
         private string _selectedSearchProperty;
-
         public string SearchText { get => _searchText; set { _searchText = value; OnPropertyChanged(); PerformSearch(); } }
         private string _searchText;
 
         // Command properties
-        public ICommand CancelCommand { get; set; }
         public ICommand ExportCommand { get; set; }
 
-        private MainViewModel mainViewModel;
-
         public BillViewModel() {
-
             _phieuDatTiecService = new PhieuDatTiecService();
-            _thucDonService = new ThucDonService();
-            _chiTietDichVuService = new ChiTietDVService();
 
             var all = _phieuDatTiecService.GetAll().ToList();
             List = new ObservableCollection<PHIEUDATTIECDTO>(all);
@@ -96,9 +87,8 @@ namespace QuanLyTiecCuoi.ViewModel {
                     if (SelectedItem == null) {
                         return;
                     }
-                    int maPhieuDat = SelectedItem.MaPhieuDat;
                     var dialog = new Microsoft.Win32.SaveFileDialog {
-                        FileName = $"HoaDon_{maPhieuDat}",
+                        FileName = $"HoaDon_{SelectedItem.MaPhieuDat}",
                         DefaultExt = ".pdf",
                         Filter = "PDF documents (.pdf)|*.pdf"
                     };
@@ -112,15 +102,6 @@ namespace QuanLyTiecCuoi.ViewModel {
                 }
                 catch (Exception ex) {
                     MessageBox.Show($"Lỗi khi xuất hóa đơn: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            CancelCommand = new RelayCommand<Window>((p) => true, (p) => {
-                MessageBoxResult result = MessageBox.Show("Bạn có chắc chắn muốn hủy không?", "Xác nhận hủy", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes) {
-                    if (p is Window window) {
-                        window.Close();
-                    }
                 }
             });
         }
