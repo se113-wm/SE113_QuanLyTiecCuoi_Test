@@ -9,7 +9,8 @@
     Title="Đặt Tiệc Cưới"
     Width="1200"
     Height="720"
-    WindowStartupLocation="Manual">
+    WindowStartupLocation="Manual"
+    Icon="Assets/icon_addwedding.ico">
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>

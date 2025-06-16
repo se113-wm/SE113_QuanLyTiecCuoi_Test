@@ -13,9 +13,24 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
+using iText.IO.Font;
+using iText.IO.Font.Constants;
+using iText.IO.Image;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Layout.Borders;
+using iText.Kernel.Colors;
+using iText.Kernel.Pdf.Canvas.Draw;
+using System.Globalization;
+
 namespace QuanLyTiecCuoi.ViewModel {
     public class BillViewModel : BaseViewModel {
         private IPhieuDatTiecService _phieuDatTiecService;
+        private ICaService _caService;
+        private ISanhService _sanhService;
 
         private ObservableCollection<PHIEUDATTIECDTO> _List;
         public ObservableCollection<PHIEUDATTIECDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -61,6 +76,8 @@ namespace QuanLyTiecCuoi.ViewModel {
 
         public BillViewModel() {
             _phieuDatTiecService = new PhieuDatTiecService();
+            _caService = new CaService();
+            _sanhService = new SanhService();
 
             var all = _phieuDatTiecService.GetAll().ToList();
             List = new ObservableCollection<PHIEUDATTIECDTO>(all);
@@ -95,8 +112,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     bool? result = dialog.ShowDialog();
                     if (result == true) {
                         string filePath = dialog.FileName;
-                        // Xuất PDF ở filePath
-                        PdfExportHelper.ExportInvoice(SelectedItem, filePath);
+                        ExportInvoice(SelectedItem, filePath);
                         MessageBox.Show("Xuất hóa đơn thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
@@ -105,7 +121,77 @@ namespace QuanLyTiecCuoi.ViewModel {
                 }
             });
         }
+        private void ExportInvoice(PHIEUDATTIECDTO bill, string outputPath) {
+            var regularFont = PDFFont.RegularFont;
+            var boldFont = PDFFont.BoldFont;
+            var italicFont = PDFFont.ItalicFont;
+            var textAlignmentR = iText.Layout.Properties.TextAlignment.RIGHT;
+            var textAlignmentL = iText.Layout.Properties.TextAlignment.LEFT;
+            var textAlignmentC = iText.Layout.Properties.TextAlignment.CENTER;
 
+            var writer = new PdfWriter(outputPath);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf, iText.Kernel.Geom.PageSize.A4);
+            document.SetMargins(40, 30, 40, 30);
+
+            /* Logo (nếu có)
+            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logo.png");
+            if (File.Exists(logoPath)) {
+                var logo = new Image(ImageDataFactory.Create(logoPath)).ScaleToFit(80, 80).SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                document.Add(logo);
+            }*/
+
+            // Tiêu đề
+            var header = new Paragraph("HÓA ĐƠN THANH TOÁN TIỆC CƯỚI")
+                .SetFontSize(20)
+                .SetFont(PDFFont.BoldFont)
+                .SetTextAlignment(textAlignmentC)
+                .SetMarginBottom(10);
+            document.Add(header);
+
+            // Dòng kẻ
+            document.Add(new LineSeparator(new SolidLine(1f)).SetMarginBottom(15));
+
+            // Thông tin tiệc cưới
+            document.Add(PdfExportHelper.CreateInfoTable(new[] {
+                ("Tên chú rể:", bill.TenChuRe ?? ""),
+                ("Tên cô dâu:", bill.TenCoDau ?? ""),
+                ("Ngày đãi tiệc:", bill.NgayDaiTiec?.ToString("dd'/'MM'/'yyyy") ?? ""),
+                ("Số lượng bàn:", bill.SoLuongBan?.ToString() ?? ""),
+                ("Ca:", _caService.GetById(bill.MaCa ?? 1).TenCa),
+                ("Sảnh:", _sanhService.GetById(bill.MaSanh ?? 1).TenSanh),
+            }, regularFont));
+            document.Add(new Paragraph("\n")); // Line break
+
+            // Thông tin thanh toán
+            var paymentTable = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
+            paymentTable.AddHeaderCell(PdfExportHelper.CreateCell("TỔNG HÓA ĐƠN:", boldFont, true, ColorConstants.LIGHT_GRAY, textAlignmentL));
+            PdfExportHelper.AddPaymentRow(paymentTable, "Tổng tiền bàn:", bill.TongTienBan, regularFont);
+            PdfExportHelper.AddPaymentRow(paymentTable, "Tổng tiền dịch vụ:", bill.TongTienDV, regularFont);
+            PdfExportHelper.AddPaymentRow(paymentTable, "Chi phí phát sinh:", bill.ChiPhiPhatSinh, regularFont);
+            PdfExportHelper.AddPaymentRow(paymentTable, "Tiền phạt:", bill.TienPhat, regularFont);
+            PdfExportHelper.AddPaymentRow(paymentTable, "Tổng hóa đơn:", bill.TongTienHoaDon, regularFont);
+            PdfExportHelper.AddPaymentRow(paymentTable, "Tiền đặt cọc:", bill.TienDatCoc, regularFont);
+            PdfExportHelper.AddPaymentRow(paymentTable, "Số tiền còn lại:", bill.TienConLai, regularFont, isHighlight: true);
+
+            document.Add(paymentTable);
+
+            // Dòng kẻ dưới
+            document.Add(new LineSeparator(new SolidLine(1f)).SetMarginTop(15).SetMarginBottom(15));
+
+            // Footer ngày lập hóa đơn
+            document.Add(new Paragraph("Ngày lập hóa đơn: " + DateTime.Now.ToString("dd'/'MM'/'yyyy"))
+                .SetFont(italicFont)
+                .SetFontSize(11)
+                .SetTextAlignment(textAlignmentR)
+                .SetMarginBottom(40));
+
+            // Footer chữ ký
+            document.Add(new Paragraph("Người lập hóa đơn").SetFont(regularFont).SetTextAlignment(textAlignmentR).SetFontSize(11));
+            document.Add(new Paragraph("(Ký tên)").SetFont(italicFont).SetTextAlignment(textAlignmentR).SetFontSize(10));
+
+            document.Close();
+        }
         private void PerformSearch() {
             try {
                 var filtered = OriginalList.AsEnumerable();

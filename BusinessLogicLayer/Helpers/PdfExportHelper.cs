@@ -18,90 +18,22 @@ using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 
 namespace QuanLyTiecCuoi.Helpers {
     public static class PdfExportHelper {
-        public static void ExportInvoice(PHIEUDATTIECDTO bill, string outputPath) {
-            var sanhService = new SanhService();
-            var caService = new CaService();
-
-            var writer = new PdfWriter(outputPath);
-            var pdf = new PdfDocument(writer);
-            var document = new Document(pdf, iText.Kernel.Geom.PageSize.A4);
-            document.SetMargins(40, 30, 40, 30);
-
-            /*// Logo (nếu có)
-            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logo.png");
-            if (File.Exists(logoPath)) {
-                var logo = new Image(ImageDataFactory.Create(logoPath)).ScaleToFit(80, 80).SetHorizontalAlignment(HorizontalAlignment.CENTER);
-                document.Add(logo);
-            }*/
-
-            // Tiêu đề
-            var header = new Paragraph("HÓA ĐƠN THANH TOÁN TIỆC CƯỚI")
-                .SetFontSize(20)
-                .SetFont(PDFFont.BoldFont)
-                .SetTextAlignment(TextAlignment.CENTER)
-                .SetMarginBottom(10);
-            document.Add(header);
-
-            // Dòng kẻ
-            document.Add(new LineSeparator(new SolidLine(1f)).SetMarginBottom(15));
-
-            // Thông tin tiệc cưới
-            document.Add(CreateInfoTable(new[] {
-                ("Tên chú rể:", bill.TenChuRe ?? ""),
-                ("Tên cô dâu:", bill.TenCoDau ?? ""),
-                ("Ngày đãi tiệc:", bill.NgayDaiTiec?.ToString("dd'/'MM'/'yyyy") ?? ""),
-                ("Số lượng bàn:", bill.SoLuongBan?.ToString() ?? ""),
-                ("Ca:", caService.GetById(bill.MaCa ?? 1).TenCa),
-                ("Sảnh:", sanhService.GetById(bill.MaSanh ?? 1).TenSanh),
-            }));
-            document.Add(new Paragraph("\n")); // Line break
-
-            // Thông tin thanh toán
-            var paymentTable = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
-            paymentTable.AddHeaderCell(CreateCell("TỔNG HÓA ĐƠN:", PDFFont.BoldFont, true, ColorConstants.LIGHT_GRAY, TextAlignment.LEFT));
-            AddPaymentRow(paymentTable, "Tổng tiền bàn:", bill.TongTienBan);
-            AddPaymentRow(paymentTable, "Tổng tiền dịch vụ:", bill.TongTienDV);
-            AddPaymentRow(paymentTable, "Chi phí phát sinh:", bill.ChiPhiPhatSinh);
-            AddPaymentRow(paymentTable, "Tiền phạt:", bill.TienPhat);
-            AddPaymentRow(paymentTable, "Tổng hóa đơn:", bill.TongTienHoaDon);
-            AddPaymentRow(paymentTable, "Tiền đặt cọc:", bill.TienDatCoc);
-            AddPaymentRow(paymentTable, "Số tiền còn lại:", bill.TienConLai, isHighlight: true);
-
-            document.Add(paymentTable);
-
-            // Dòng kẻ dưới
-            document.Add(new LineSeparator(new SolidLine(1f)).SetMarginTop(15).SetMarginBottom(15));
-
-            // Footer ngày lập hóa đơn
-            document.Add(new Paragraph("Ngày lập hóa đơn: " + DateTime.Now.ToString("dd'/'MM'/'yyyy"))
-                .SetFont(PDFFont.ItalicFont)
-                .SetFontSize(11)
-                .SetTextAlignment(TextAlignment.RIGHT)
-                .SetMarginBottom(40));
-
-            // Footer chữ ký
-            document.Add(new Paragraph("Người lập hóa đơn").SetFont(PDFFont.RegularFont).SetTextAlignment(TextAlignment.RIGHT).SetFontSize(11));
-            document.Add(new Paragraph("(Ký tên)").SetFont(PDFFont.ItalicFont).SetTextAlignment(TextAlignment.RIGHT).SetFontSize(10));
-
-            document.Close();
-        }
-
-        private static Table CreateInfoTable((string Label, string Value)[] data) {
+        public static Table CreateInfoTable((string Label, string Value)[] data, PdfFont font) {
             var table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
             foreach (var item in data) {
-                table.AddCell(CreateCell(item.Label, PDFFont.RegularFont, true, ColorConstants.LIGHT_GRAY, TextAlignment.LEFT));
-                table.AddCell(CreateCell(item.Value, PDFFont.RegularFont, false, ColorConstants.WHITE, TextAlignment.LEFT));
+                table.AddCell(CreateCell(item.Label, font, true, ColorConstants.LIGHT_GRAY, TextAlignment.LEFT));
+                table.AddCell(CreateCell(item.Value, font, false, ColorConstants.WHITE, TextAlignment.LEFT));
             }
             return table;
         }
 
-        private static void AddPaymentRow(Table table, string label, decimal? value, bool isHighlight = false) {
+        public static void AddPaymentRow(Table table, string label, decimal? value, PdfFont font, bool isHighlight = false) {
             var bgColor = isHighlight ? ColorConstants.YELLOW : ColorConstants.WHITE;
-            table.AddCell(CreateCell(label, PDFFont.RegularFont, true, ColorConstants.LIGHT_GRAY, TextAlignment.LEFT));
-            table.AddCell(CreateCell(FormatCurrency(value), PDFFont.RegularFont, false, bgColor, TextAlignment.RIGHT));
+            table.AddCell(CreateCell(label, font, true, ColorConstants.LIGHT_GRAY, TextAlignment.LEFT));
+            table.AddCell(CreateCell(FormatCurrency(value), font, false, bgColor, TextAlignment.RIGHT));
         }
 
-        private static Cell CreateCell(string text, PdfFont font, bool isHeader = false, Color backgroundColor = null, TextAlignment align = TextAlignment.LEFT) {
+        public static Cell CreateCell(string text, PdfFont font, bool isHeader = false, Color backgroundColor = null, TextAlignment align = TextAlignment.LEFT) {
             var cell = new Cell().Add(new Paragraph(text).SetFont(font).SetFontSize(isHeader ? 11 : 10));
             cell.SetPadding(5);
             cell.SetTextAlignment(align);
@@ -111,7 +43,7 @@ namespace QuanLyTiecCuoi.Helpers {
             return cell;
         }
 
-        private static string FormatCurrency(decimal? amount) {
+        public static string FormatCurrency(decimal? amount) {
             return (amount ?? 0).ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) + " VNĐ";
         }
     }

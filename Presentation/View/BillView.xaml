@@ -1,15 +1,18 @@
 ﻿<Window 
     x:Class="QuanLyTiecCuoi.Presentation.View.BillView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helper="clr-namespace:QuanLyTiecCuoi.BusinessLogicLayer.Helpers"
     xmlns:local="clr-namespace:QuanLyTiecCuoi.Presentation.ViewModel"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     Name="HoaDon"
     Title="Hóa Đơn"
-    Width="1200"
-    Height="720"
-    WindowStartupLocation="Manual">
+    Width="1000"
+    Height="700"
+    WindowStartupLocation="CenterScreen"
+    Icon="Assets/icon_invoice.ico">
+
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>
