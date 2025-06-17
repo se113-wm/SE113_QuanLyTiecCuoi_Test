@@ -86,7 +86,7 @@
                         <Button
                             Grid.Column="5"
                             Margin="10,0,5,0"
-                            Command="{Binding XemHoaDonCommand}"
+                            Command="{Binding ShowInvoiceCommand}"
                             Content="Xem hóa đơn"
                             Style="{StaticResource MaterialDesignOutlinedButton}" />
                     </Grid>
@@ -800,7 +800,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding DichVu.DonGia, StringFormat=N0}"
+                                                            Text="{Binding DichVu.DonGia}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>

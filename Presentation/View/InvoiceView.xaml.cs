@@ -18,7 +18,7 @@ namespace QuanLyTiecCuoi.Presentation.View
     /// <summary>
     /// Interaction logic for InvoiceView.xaml
     /// </summary>
-    public partial class InvoiceView : UserControl
+    public partial class InvoiceView : Window
     {
         public InvoiceView()
         {

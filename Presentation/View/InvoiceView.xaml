@@ -1,19 +1,389 @@
-﻿<UserControl
+﻿<Window 
     x:Class="QuanLyTiecCuoi.Presentation.View.InvoiceView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:QuanLyTiecCuoi.Presentation.View"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    Background="white"
-    mc:Ignorable="d">
-    <Grid>
-        <TextBlock
-            Margin="0,0,10,0"
-            FontSize="88"
-            FontWeight="Bold"
-            Text="{Binding GhiChu}" />
-    </Grid>
-</UserControl>
+    xmlns:helper="clr-namespace:QuanLyTiecCuoi.BusinessLogicLayer.Helpers"
+    xmlns:converter="clr-namespace:QuanLyTiecCuoi.Presentation.Helpers"
+    xmlns:local="clr-namespace:QuanLyTiecCuoi.Presentation.ViewModel"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Name="HoaDon"
+    Title="Hóa Đơn"
+    Width="1000"
+    Height="700"
+    WindowStartupLocation="CenterScreen"
+    Icon="Assets/icon_invoice.ico">
+    <Window.Resources>
+        <converter:MultiplyConverter x:Key="MultiplyConverter" />
+        <converter:CurrencyConverter x:Key="CurrencyConverter"/>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Ten hoa don -->
+                <StackPanel
+                Grid.Row="0"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center">
+                    <TextBlock
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="HOÁ ĐƠN " />
+                    <TextBlock
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="{Binding InvoiceId}" />
+                </StackPanel>
+
+                <!-- Chi tiet tiec cuoi -->
+                <materialDesign:Card
+                Grid.Row="1"
+                Margin="0,0,0,10"
+                Padding="10"
+                BorderThickness="0.5">
+                    <StackPanel>
+                        <StackPanel
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                            <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Chi tiết tiệc cưới" />
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBox
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tên chú rễ"
+                            IsReadOnly="True"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding SelectedInvoice.TenChuRe, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tên cô dâu"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            IsReadOnly="True"
+                            Text="{Binding SelectedInvoice.TenCoDau, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Ngày thanh toán"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            IsReadOnly="true"
+                            Text="{Binding PaymentDate, StringFormat={}{0:dd/MM/yyyy},UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Số lượng bàn"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding TableQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="5"
+                            FontSize="10"
+                            Text="{Binding TableQuantityMessage}"/>
+                            <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Đơn giá bàn"
+                            IsReadOnly="True"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding SelectedInvoice.DonGiaBanTiec, Converter={StaticResource CurrencyConverter},UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="5"
+                            materialDesign:HintAssist.Hint="Tổng tiền bàn"
+                            IsReadOnly="True"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                <TextBox.Text>
+                                    <MultiBinding Converter="{StaticResource MultiplyConverter}" 
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="0"
+                                    TargetNullValue="0"
+                                    ValidatesOnExceptions="False"
+                                    NotifyOnValidationError="False">
+                                        <Binding Path="TableQuantity" />
+                                        <Binding Path="SelectedInvoice.DonGiaBanTiec" />
+                                    </MultiBinding>
+                                </TextBox.Text>
+                            </TextBox>
+                        </Grid>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Danh sach dich vu -->
+                <materialDesign:Card
+                Grid.Row="2"
+                Padding="5"
+                Margin="0,0,0,10"
+                VerticalAlignment="Stretch"
+                BorderThickness="0.5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                        Grid.Row="0"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Danh sách dịch vụ"/>
+
+                        <ListView
+                        Grid.Row="1"
+                        Margin="0"
+                        VerticalAlignment="Stretch"
+                        AlternationCount="1000"
+                        HorizontalContentAlignment="Left"
+                        ItemsSource="{Binding ServiceList}">
+                            <ListView.View>
+                                <GridView>
+                                    <!--  Index  -->
+                                    <GridViewColumn Width="90" Header="STT">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                Margin="20,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource AddConverter}, ConverterParameter=1}"
+                                                TextAlignment="Left" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <!--  Name  -->
+                                    <GridViewColumn Width="150" Header="Tên dịch vụ">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                Margin="20,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding DichVu.TenDichVu}"
+                                                TextAlignment="Left" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <!--  Price  -->
+                                    <GridViewColumn Width="150" Header="Đơn giá">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                Margin="20,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding DichVu.DonGia, Converter={StaticResource CurrencyConverter}, StringFormat={}{0:N0}}"
+                                                TextAlignment="Left" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <!--  Quantity  -->
+                                    <GridViewColumn Width="150" Header="Số lượng">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                Margin="20,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding SoLuong}"
+                                                TextAlignment="Left" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <!--  Note  -->
+                                    <GridViewColumn Width="Auto" Header="Ghi chú">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                Margin="20,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding GhiChu}"
+                                                TextAlignment="Left" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Tien -->
+                <materialDesign:Card
+                Grid.Row="3"
+                Padding="10"
+                VerticalAlignment="Stretch"
+                BorderThickness="0.5">
+                    <StackPanel Orientation="Vertical">
+                        <!-- Tổng tiền dịch vụ -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tổng tiền dịch vụ:" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+                            <TextBox 
+                            Grid.Column="1" 
+                            FontSize="16" 
+                            HorizontalAlignment="Stretch" 
+                            Margin="10,0,0,0" 
+                            IsReadOnly="True"
+                            Text="{Binding SelectedInvoice.TongTienDV,Converter={StaticResource CurrencyConverter}}"/>
+                        </Grid>
+                        <Border Height="1" Background="Gray" Margin="0,5" />
+
+                        <!-- Chi phí thiết bị hỏng hóc -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock 
+                            Text="Chi phí thiết bị hỏng hóc trong tiệc:" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" 
+                                 FontSize="16" 
+                                 HorizontalAlignment="Stretch" 
+                                 Margin="10,0,0,0">
+                                <TextBox.Text>
+                                    <Binding Path="DamageEquipmentCost"
+                                         Mode="TwoWay"
+                                         Converter="{StaticResource CurrencyConverter}"
+                                         UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <converter:DecimalValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                        </Grid>
+                        <Border Height="1" Background="Gray" Margin="0,5" />
+                        <!-- Tổng tiền hóa đơn -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tổng tiền hóa đơn:" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" 
+                                 FontSize="16" 
+                                 HorizontalAlignment="Stretch" 
+                                 Margin="10,0,0,0" 
+                                 IsReadOnly="True"
+                                 Text="{Binding TotalInvoiceAmount, Converter={StaticResource CurrencyConverter},Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                        <Border Height="1" Background="Gray" Margin="0,5" />
+                        <!-- Tien phat -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock 
+                                Text="Tiền phạt (thanh toán trễ):" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" 
+                                FontSize="16" 
+                                HorizontalAlignment="Stretch" 
+                                Margin="10,0,0,0"
+                                IsReadOnly="True"
+                                Text="{Binding Fine, Converter={StaticResource CurrencyConverter},UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                        <Border Height="1" Background="Gray" Margin="0,5" />
+                        <!-- Tiền đặt cọc -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tiền đặt cọc:" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" 
+                                 FontSize="16" 
+                                 HorizontalAlignment="Stretch" 
+                                 Margin="10,0,0,0" 
+                                 IsReadOnly="True"
+                                 Text="{Binding Deposit, Mode=TwoWay, Converter={StaticResource CurrencyConverter},UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                        <Border Height="1" Background="Gray" Margin="0,5" />
+                        <!-- Còn lại -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Còn lại:" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" 
+                                 FontSize="16" 
+                                 HorizontalAlignment="Stretch" 
+                                 Margin="10,0,0,0" 
+                                 IsReadOnly="True"
+                                 Text="{Binding RemainingAmount,Converter={StaticResource CurrencyConverter}}"/>
+                        </Grid>
+                        <Border Height="1" Background="Gray" Margin="0,5" />
+                        <Grid Margin="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel
+                                Grid.Row="0"
+                                Orientation="Vertical">
+                                <Button
+                                    Grid.Column="0"
+                                    Width="180"
+                                    Margin="0,0,10,0"
+                                    Command="{Binding ConfirmPaymentCommand}"
+                                    Content="Xác nhận thanh toán"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Margin="5"
+                                    Foreground="Gray"
+                                    FontSize="10"
+                                    HorizontalAlignment="Center"
+                                    Text="{Binding ConfirmMessage,UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <Button
+                                VerticalAlignment="Top"
+                                Grid.Column="2"
+                                Width="120"
+                                Command="{Binding ExportCommand}"
+                                Content="Xuất PDF"
+                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                        </Grid>
+                    </StackPanel>
+                </materialDesign:Card>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</Window>
+

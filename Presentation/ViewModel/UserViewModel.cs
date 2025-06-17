@@ -211,7 +211,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     AddMessage = "Vui lòng chọn loại nhóm người dùng";
                     return false;
                 }
-                if(!ValidationHelper.IsValidEmail(Email)) {
+                if(!EmailValidationHelper.IsValidEmail(Email)) {
                     AddMessage = "Vui lòng nhập email đúng định dạng";
                     return false;
                 }
@@ -268,7 +268,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     EditMessage = "Họ tên không được để trống";
                     return false;
                 }
-                if (!ValidationHelper.IsValidEmail(Email)) {
+                if (!EmailValidationHelper.IsValidEmail(Email)) {
                     EditMessage = "Vui lòng nhập email đúng định dạng";
                     return false;
                 }

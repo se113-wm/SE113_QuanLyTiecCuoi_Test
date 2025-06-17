@@ -98,7 +98,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     SaveMessage = "Họ tên không được để trống";
                     return false;
                 }
-                if (!ValidationHelper.IsValidEmail(Email)) {
+                if (!EmailValidationHelper.IsValidEmail(Email)) {
                     SaveMessage = "Vui lòng nhập đúng định dạng email";
                     return false;
                 }
