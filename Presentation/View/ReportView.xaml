@@ -1,30 +1,85 @@
-﻿<UserControl 
-	x:Class="QuanLyTiecCuoi.Presentation.View.ReportView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:local="clr-namespace:QuanLyTiecCuoi"
-    xmlns:helpers="clr-namespace:QuanLyTiecCuoi.Presentation.Helpers"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-		<TextBlock
-			Grid.Row="0"
-			Margin="0,0,10,0"
-			FontSize="14"
-			FontWeight="Bold"
-			Text="Danh sách tiệc cưới" />
-		<StackPanel
-			Grid.Row="1">
-			<Button
-                Width="100"
-                Margin="0,100,0,0"
-                Command="{Binding BillCommand}"
-                Content="Hóa đơn"
-                Style="{StaticResource MaterialDesignRaisedButton}" />
-		</StackPanel>
+﻿<UserControl x:Class="QuanLyTiecCuoi.Presentation.View.ReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:QuanLyTiecCuoi.Presentation.View"
+             mc:Ignorable="d"
+             Background="White">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tiêu đề -->
+            <RowDefinition Height="Auto"/>
+            <!-- Bộ lọc -->
+            <RowDefinition Height="Auto"/>
+            <!-- Tổng doanh thu -->
+            <RowDefinition Height="*"/>
+            <!-- Bảng chi tiết -->
+            <RowDefinition Height="Auto"/>
+            <!-- Nút thao tác -->
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <TextBlock Grid.Row="0" Text="BÁO CÁO DOANH SỐ" 
+                   FontSize="26" FontWeight="Bold" 
+                   Foreground="DarkSlateBlue" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,20"/>
+
+        <!-- Bộ lọc -->
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,15">
+            <!-- Dòng đầu tiên: Tiêu đề -->
+            <TextBlock Text="Thao tác" 
+               FontWeight="Bold" 
+               FontSize="16" 
+               Margin="0,0,0,10"/>
+
+            <!-- Dòng thứ hai: Các điều khiển chọn tháng, năm, nút xem -->
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Tháng:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ComboBox Width="80" ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonth}" Margin="0,0,15,0"/>
+
+                <TextBlock Text="Năm:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ComboBox Width="100" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0,0,15,0"/>
+
+                <Button Content="Xem báo cáo" Width="120" Command="{Binding LoadReportCommand}"/>
+            </StackPanel>
+        </StackPanel>
+
+
+        <!-- Tổng doanh thu -->
+        <TextBlock Grid.Row="2" 
+                   Text="{Binding TongDoanhThu, StringFormat=Tổng Doanh Thu: {0:N0} VNĐ}" 
+                   FontSize="16" FontWeight="SemiBold" Foreground="DarkGreen" 
+                   Margin="0,0,0,10"/>
+
+        <!-- Bảng chi tiết -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding ReportList}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  HeadersVisibility="Column"
+                  FontSize="14"
+                  GridLinesVisibility="All"
+                  Margin="0"
+                  VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="STT" Binding="{Binding STT}" Width="100"/>
+                <DataGridTextColumn Header="Ngày" Binding="{Binding Ngay}" Width="*"/>
+                <DataGridTextColumn Header="Số Lượng Tiệc" Binding="{Binding SoLuongTiec}" Width="*"/>
+                <DataGridTextColumn Header="Doanh Thu" Binding="{Binding DoanhThu, StringFormat={}{0:N0} VNĐ}" Width="*"/>
+                <DataGridTextColumn Header="Tỉ Lệ (%)" Binding="{Binding TiLe}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Nút thao tác -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Xuất PDF" Width="100" Margin="5" Command="{Binding ExportPdfCommand}"/>
+            <Button Content="Xuất Excel" Width="100" Margin="5" Command="{Binding ExportExcelCommand}"/>
+            <Button Content="Xem biểu đồ" Width="120" Margin="5" Command="{Binding ShowChartCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
