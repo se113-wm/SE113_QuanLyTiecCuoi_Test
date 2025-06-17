@@ -1,7 +1,4 @@
-﻿using QuanLyTiecCuoi.BusinessLogicLayer.Service;
-using QuanLyTiecCuoi.Presentation.ViewModel;
-using QuanLyTiecCuoi.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,14 +15,13 @@ using System.Windows.Shapes;
 namespace QuanLyTiecCuoi.Presentation.View
 {
     /// <summary>
-    /// Interaction logic for ReportView.xaml
+    /// Interaction logic for ChartView.xaml
     /// </summary>
-    public partial class ReportView : UserControl
+    public partial class ChartView : Window
     {
-        public ReportView()
+        public ChartView()
         {
             InitializeComponent();
-            DataContext = new ReportViewModel(new CtBaoCaoDsService());
         }
     }
 }

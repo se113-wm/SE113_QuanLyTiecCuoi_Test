@@ -101,10 +101,9 @@ namespace QuanLyTiecCuoi.ViewModel
                 ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); 
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
-            ReportCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
-                CurrentView = new ReportView() {
-                    DataContext = new ReportViewModel()
-                };
+            ReportCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                CurrentView = new ReportView(); // <- ViewModel được binding ở ContentControl
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Report"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
