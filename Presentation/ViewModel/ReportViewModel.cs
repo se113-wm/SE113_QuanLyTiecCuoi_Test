@@ -84,7 +84,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void LoadReport()
         {
             ReportList.Clear();
-            var data = _ctBaoCaoService.GetByMonthYear(SelectedMonth, SelectedYear);
+            //var data = _ctBaoCaoService.GetByMonthYear(SelectedMonth, SelectedYear);
+            var data = _ctBaoCaoService.GetByMonthYear(SelectedMonth, SelectedYear)
+                .Where(x => x.SoLuongTiec > 0 && (x.DoanhThu ?? 0) > 0)
+                .ToList();
             Console.WriteLine($"Đã load dòng dữ liệu.");
 
             decimal total = data.Sum(x => x.DoanhThu ?? 0); // Tính tổng doanh thu một lần chính xác
