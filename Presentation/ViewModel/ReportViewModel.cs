@@ -125,13 +125,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     worksheet.Cell(1, 3).Value = "Số lượng tiệc";
                     worksheet.Cell(1, 4).Value = "Doanh thu";
                     worksheet.Cell(1, 5).Value = "Tỉ lệ";
-                    // Format tiêu đề
-                    var headerRange = worksheet.Range("A1:E1");
-                    headerRange.Style.Font.Bold = true;
-                    headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
-                    headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
                     int row = 2;
                     int stt = 1;
@@ -140,13 +133,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         worksheet.Cell(row, 1).Value = stt;
                         worksheet.Cell(row, 2).Value = $"{item.Ngay}/{item.Thang}/{item.Nam}";
                         worksheet.Cell(row, 3).Value = item.SoLuongTiec ?? 0;
-                        // Format dòng dữ liệu
-                        for (int col = 1; col <= 5; col++)
-                        {
-                            worksheet.Cell(row, col).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                            worksheet.Cell(row, col).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                            worksheet.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                        }
+
                         // Format doanh thu kiểu tiền tệ
                         worksheet.Cell(row, 4).Value = item.DoanhThu ?? 0;
                         worksheet.Cell(row, 4).Style.NumberFormat.Format = "#,##0 \"VNĐ\"";
