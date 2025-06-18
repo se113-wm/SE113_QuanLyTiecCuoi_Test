@@ -9,10 +9,91 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        
+        <TextBlock
+            Grid.Row="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            FontSize="20"
+            FontWeight="Bold"
+            Text="Quản lý tham số" />
+
+        <!--  Nút & tìm kiếm  -->
+        <materialDesign:Card
+            Grid.Row="1"
+            Margin="10"
+            Padding="10"
+            BorderThickness="0.5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Chỉnh sửa" />
+                    <Button Width="36"
+                        Height="36"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Command="{Binding ResetCommand}"
+                        Foreground="Purple"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        ToolTip="Reset thông tin">
+                        <materialDesign:PackIcon Width="20" Height="20" Kind="Restore" />
+                    </Button>
+                </StackPanel>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedComboBox}" MinWidth="100" Height="64" Margin="0 0 10 10" Text="{Binding KiemTraPhatText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Kiểm tra phạt">
+                        <ComboBoxItem Content="Có" />
+                        <ComboBoxItem Content="Không" />
+                    </ComboBox>
+
+                    <TextBox Grid.Column="1"
+                        Margin="0 0 10 10"
+                        MinWidth="200"
+                        materialDesign:HintAssist.Hint="Tỉ lệ phạt"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        Text="{Binding TiLePhat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBox Grid.Column="2"
+                        Margin="0 0 10 10"
+                        MinWidth="200"
+                        materialDesign:HintAssist.Hint="Tỉ lệ tiền đặt cọc tối thiểu"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        Text="{Binding TiLeTienDatCocToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBox Grid.Column="3"
+                        Margin="0 0 10 10"
+                        MinWidth="200"
+                        materialDesign:HintAssist.Hint="Tỉ lệ số bàn đặt trước tối thiểu"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        Text="{Binding TiLeSoBanDatTruocToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <StackPanel MinWidth="110" Grid.Column="4">
+                        <Button
+                                Margin="5"
+                                Command="{Binding EditCommand}"
+                                Content="Sửa"
+                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                        <TextBlock
+                                Height="32"
+                                VerticalAlignment="Top"
+                                FontSize="10"
+                                Foreground="Red"
+                                Text="{Binding EditMessage}"
+                                TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </materialDesign:Card>
+
     </Grid>
 </UserControl>

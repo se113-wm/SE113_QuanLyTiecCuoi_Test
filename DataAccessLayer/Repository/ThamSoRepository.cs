@@ -24,28 +24,12 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
             return _context.THAMSOes.FirstOrDefault(ts => ts.TenThamSo == tenThamSo);
         }
 
-        public void Create(THAMSO thamSo)
-        {
-            _context.THAMSOes.Add(thamSo);
-            _context.SaveChanges();
-        }
-
         public void Update(THAMSO thamSo)
         {
             var existing = _context.THAMSOes.FirstOrDefault(ts => ts.TenThamSo == thamSo.TenThamSo);
             if (existing != null)
             {
                 existing.GiaTri = thamSo.GiaTri;
-                _context.SaveChanges();
-            }
-        }
-
-        public void Delete(string tenThamSo)
-        {
-            var thamSo = _context.THAMSOes.FirstOrDefault(ts => ts.TenThamSo == tenThamSo);
-            if (thamSo != null)
-            {
-                _context.THAMSOes.Remove(thamSo);
                 _context.SaveChanges();
             }
         }
