@@ -317,6 +317,7 @@
     <Compile Include="Presentation\ViewModel\ReportViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ServiceDetailItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ServiceViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\ShiftViewModel.cs" />
     <Compile Include="Presentation\ViewModel\UserViewModel.cs" />
     <Compile Include="Presentation\ViewModel\WeddingDetailViewModel.cs" />
     <Compile Include="Presentation\ViewModel\WeddingViewModel.cs" />
@@ -429,6 +430,9 @@
     <Compile Include="Presentation\View\ServiceView.xaml.cs">
       <DependentUpon>ServiceView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\View\ShiftView.xaml.cs">
+      <DependentUpon>ShiftView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\View\UserView.xaml.cs">
       <DependentUpon>UserView.xaml</DependentUpon>
     </Compile>
@@ -507,6 +511,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Presentation\View\ServiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\ShiftView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

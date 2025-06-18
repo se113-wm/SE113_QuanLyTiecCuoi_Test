@@ -7,8 +7,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.IService
     {
         IEnumerable<THAMSODTO> GetAll();
         THAMSODTO GetByName(string tenThamSo);
-        void Create(THAMSODTO thamSoDto);
         void Update(THAMSODTO thamSoDto);
-        void Delete(string tenThamSo);
     }
 }

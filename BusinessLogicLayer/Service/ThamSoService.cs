@@ -38,16 +38,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
             };
         }
 
-        public void Create(THAMSODTO thamSoDto)
-        {
-            var entity = new THAMSO
-            {
-                TenThamSo = thamSoDto.TenThamSo,
-                GiaTri = thamSoDto.GiaTri
-            };
-            _thamSoRepository.Create(entity);
-        }
-
         public void Update(THAMSODTO thamSoDto)
         {
             var entity = new THAMSO
@@ -56,11 +46,6 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 GiaTri = thamSoDto.GiaTri
             };
             _thamSoRepository.Update(entity);
-        }
-
-        public void Delete(string tenThamSo)
-        {
-            _thamSoRepository.Delete(tenThamSo);
         }
     }
 }
