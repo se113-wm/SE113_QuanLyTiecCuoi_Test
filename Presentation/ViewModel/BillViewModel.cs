@@ -122,6 +122,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             });
         }
         private void ExportInvoice(PHIEUDATTIECDTO bill, string outputPath) {
+
             var regularFont = PDFFont.RegularFont;
             var boldFont = PDFFont.BoldFont;
             var italicFont = PDFFont.ItalicFont;
