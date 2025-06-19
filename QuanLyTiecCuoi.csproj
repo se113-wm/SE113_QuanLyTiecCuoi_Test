@@ -265,7 +265,6 @@
     <Compile Include="Presentation\ViewModel\MenuItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ParameterViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PlusOneConverter.cs" />
-    <Compile Include="Presentation\ViewModel\ReportViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ServiceDetailItemViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Presentation\ViewModel\UserViewModel.cs" />
@@ -368,9 +367,6 @@
     <Compile Include="Presentation\ViewModel\LoginViewModel.cs" />
     <Compile Include="Presentation\ViewModel\MainViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PermissionViewModel.cs" />
-    <Compile Include="Presentation\View\ReportView.xaml.cs">
-      <DependentUpon>ReportView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Presentation\View\ServiceDetailItemView.xaml.cs">
       <DependentUpon>ServiceDetailItemView.xaml</DependentUpon>
     </Compile>
@@ -439,10 +435,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Presentation\View\PermissionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Presentation\View\ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
