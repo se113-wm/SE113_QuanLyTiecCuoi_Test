@@ -298,7 +298,6 @@
     </Compile>
     <Compile Include="Presentation\Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Presentation\ViewModel\AccountViewModel.cs" />
-    <Compile Include="Presentation\ViewModel\BillViewModel.cs" />
     <Compile Include="Presentation\ViewModel\ChartViewModel.cs" />
     <Compile Include="Presentation\ViewModel\FoodViewModel.cs" />
     <Compile Include="Presentation\ViewModel\AddConverter.cs" />
@@ -318,9 +317,6 @@
     <Compile Include="Presentation\ViewModel\WeddingViewModel.cs" />
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Presentation\View\BillView.xaml.cs">
-      <DependentUpon>BillView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
@@ -438,10 +434,6 @@
       <DependentUpon>WeddingView.xaml</DependentUpon>
     </Compile>
     <Page Include="Presentation\View\AccountView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Presentation\View\BillView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
