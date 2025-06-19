@@ -303,7 +303,7 @@
     <Compile Include="Presentation\Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Presentation\Helpers\Validators.cs" />
     <Compile Include="Presentation\ViewModel\AccountViewModel.cs" />
-    <Compile Include="Presentation\ViewModel\BillViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\ChartViewModel.cs" />
     <Compile Include="Presentation\ViewModel\FoodViewModel.cs" />
     <Compile Include="Presentation\ViewModel\AddConverter.cs" />
     <Compile Include="Presentation\ViewModel\AddWeddingViewModel.cs" />
@@ -324,8 +324,8 @@
     <Compile Include="Presentation\View\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Presentation\View\BillView.xaml.cs">
-      <DependentUpon>BillView.xaml</DependentUpon>
+    <Compile Include="Presentation\View\ChartView.xaml.cs">
+      <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\View\FoodView.xaml.cs">
       <DependentUpon>FoodView.xaml</DependentUpon>
@@ -446,7 +446,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Presentation\View\BillView.xaml">
+    <Page Include="Presentation\View\ChartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
