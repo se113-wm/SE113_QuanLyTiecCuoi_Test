@@ -4,6 +4,8 @@ namespace QuanLyTiecCuoi.DataTransferObject
 {
     public class CTBAOCAODDTO
     {
+        //add STT
+        public int STT { get; set; }
         public int Ngay { get; set; }
         public int Thang { get; set; }
         public int Nam { get; set; }

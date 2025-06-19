@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using ClosedXML.Excel;
+using Microsoft.Win32;
 using QuanLyTiecCuoi.BusinessLogicLayer.Helpers;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
@@ -127,8 +128,14 @@ namespace QuanLyTiecCuoi.ViewModel
             get => _isDeleting;
             set { _isDeleting = value; OnPropertyChanged(); }
         }
-
-        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+        //Add ExportingExcel
+        private bool _isExporting;
+        public bool IsExporting
+        {
+            get => _isExporting;
+            set { _isExporting = value; OnPropertyChanged(); }
+        }
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Xuất Excel", "Chọn thao tác" };
         private string _selectedAction;
         public string SelectedAction
         {
@@ -143,6 +150,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = true;
                         IsEditing = false;
                         IsDeleting = false;
+                        IsExporting = false;
                         Reset(); // reset các trường nhập liệu
                         // reset ảnh về ko có ảnh
                         Image = null;
@@ -151,6 +159,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = false;
                         IsEditing = true;
                         IsDeleting = false;
+                        IsExporting = false;
                         //if (SelectedItem == null)
                         //{
                         //    MessageBox.Show("Vui lòng chọn một món ăn để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -161,11 +170,19 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = true;
+                        IsExporting = false;
                         //if (SelectedItem == null)
                         //{
                         //    MessageBox.Show("Vui lòng chọn một món ăn để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                         //    return;
                         //}
+                        break;
+                    case "Xuất Excel":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        IsExporting = true;
+                        Reset();
                         break;
                     default:
                         _selectedAction = null;
@@ -313,6 +330,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand AddCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
+        public ICommand ExportToExcelCommand { get; set; }
         public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
             Reset();
         });
@@ -343,7 +361,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 (p) => CanDelete(),
                 (p) => DeleteFood()
             );
-
+            ExportToExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
         }
         #endregion
 
@@ -536,6 +554,78 @@ namespace QuanLyTiecCuoi.ViewModel
         }
         #endregion
 
+        #region ExportToExcel
+        private void ExportToExcel()
+        {
+            if (List == null || List.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Danh sách Món ăn");
+
+            // Tiêu đề cột
+            worksheet.Cell(1, 1).Value = "Tên món ăn";
+            worksheet.Cell(1, 2).Value = "Đơn giá";
+            worksheet.Cell(1, 3).Value = "Ghi chú";
+
+            // Format tiêu đề
+            var headerRange = worksheet.Range("A1:C1");
+            headerRange.Style.Font.Bold = true;
+            headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+            headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+            // Ghi dữ liệu
+            int row = 2;
+            foreach (var item in List)
+            {
+                worksheet.Cell(row, 1).Value = item.TenMonAn;
+                worksheet.Cell(row, 2).Value = item.DonGia;
+                worksheet.Cell(row, 3).Value = item.GhiChu;
+
+                // Format dòng dữ liệu
+                for (int col = 1; col <= 3; col++)
+                {
+                    worksheet.Cell(row, col).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(row, col).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                }
+
+                worksheet.Cell(row, 2).Style.NumberFormat.Format = "#,##0"; // Format tiền
+                row++;
+            }
+
+            // Tự động điều chỉnh độ rộng
+            worksheet.Columns().AdjustToContents();
+
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                FileName = $"DanhSachMonAn_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                workbook.SaveAs(dialog.FileName);
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = dialog.FileName,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Không thể mở file: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+#endregion ExportToExcel
         #region Helpers
         private void PerformSearch()
         {

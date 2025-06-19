@@ -1,4 +1,5 @@
-﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+﻿using ClosedXML.Excel;
+using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
@@ -44,6 +45,91 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); }
+        }
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set { _isAdding = value; OnPropertyChanged(); }
+        }
+        private bool _isDeleting;
+        public bool IsDeleting
+        {
+            get => _isDeleting;
+            set { _isDeleting = value; OnPropertyChanged(); }
+        }
+        //Add ExportingExcel
+        private bool _isExporting;
+        public bool IsExporting
+        {
+            get => _isExporting;
+            set { _isExporting = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Xuất Excel", "Chọn thao tác" };
+        private string _selectedAction;
+        public string SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnPropertyChanged();
+                switch (value)
+                {
+                    case "Thêm":
+                        IsAdding = true;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        IsExporting = false;
+                        Reset(); // reset các trường nhập liệu
+                        break;
+                    case "Sửa":
+                        IsAdding = false;
+                        IsEditing = true;
+                        IsDeleting = false;
+                        IsExporting = false;
+                        Reset();
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một sảnh để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    case "Xóa":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = true;
+                        IsExporting = false;
+                        Reset();
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một sảnh để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    case "Xuất Excel":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        IsExporting = true;
+                        Reset();
+                        break;
+                    default:
+                        _selectedAction = null;
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        break;
+                }
+            }
+        }
         private string _TenLoaiSanh;
         public string TenLoaiSanh { get => _TenLoaiSanh; set { _TenLoaiSanh = value; OnPropertyChanged(); } }
 
@@ -60,6 +146,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand DeleteCommand { get; set; }
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
+        public ICommand ExportToExcelCommand { get; set; }
 
         public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
             Reset();
@@ -306,8 +393,77 @@ namespace QuanLyTiecCuoi.ViewModel
                     MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
+            ExportToExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
         }
+        //Exporting excel function
+        private void ExportToExcel()
+        {
+            if (List == null || List.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Danh sách loại sảnh");
+
+            // Tiêu đề cột
+            worksheet.Cell(1, 1).Value = "Tên loại sảnh";
+            worksheet.Cell(1, 2).Value = "Đơn giá bàn tối thiểu";
+
+            // Format tiêu đề
+            var headerRange = worksheet.Range("A1:B1");
+            headerRange.Style.Font.Bold = true;
+            headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+            headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+            // Ghi dữ liệu
+            int row = 2;
+            foreach (var item in List)
+            {
+                worksheet.Cell(row, 1).Value = item.TenLoaiSanh;
+                worksheet.Cell(row, 2).Value = item.DonGiaBanToiThieu;
+
+                // Format dòng dữ liệu
+                for (int col = 1; col <= 2; col++)
+                {
+                    worksheet.Cell(row, col).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(row, col).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                }
+
+                worksheet.Cell(row, 2).Style.NumberFormat.Format = "#,##0"; // Format tiền
+                row++;
+            }
+
+            // Tự động điều chỉnh độ rộng
+            worksheet.Columns().AdjustToContents();
+
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                FileName = $"DanhSachLoaiSanh_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                workbook.SaveAs(dialog.FileName);
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = dialog.FileName,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Không thể mở file: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
         private void Reset()
         {
             SelectedItem = null;
