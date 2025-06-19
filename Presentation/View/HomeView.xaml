@@ -48,8 +48,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--  Header  -->
-            <!--  ... phần đầu giữ nguyên ...  -->
+            <!-- Header -->
             <StackPanel
                 Grid.Column="0"
                 Width="544"
@@ -77,7 +76,7 @@
                     Foreground="#2196F3"
                     Text="Tối ưu vận hành - Phát triển kinh doanh."
                     TextAlignment="Center" />
-                <!--  Nút Đặt Tiệc Ngay  -->
+                <!-- Nút Đặt Tiệc Ngay -->
                 <Button
                     Width="180"
                     Height="44"
@@ -92,47 +91,50 @@
                     IsDefault="True"
                     Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
-            <!--  ... phần còn lại giữ nguyên ...  -->
 
-            <!--  Ảnh cưới  -->
+            <!-- Ảnh cưới -->
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="0,32,0,0"
+                Width="572"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
+
                 <Border
-                    Width="260"
+                    Width="283"
                     Height="200"
-                    Margin="0,0,32,0"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="18"
                     Effect="{StaticResource ShadowEffect}">
                     <Image
-                        Margin="-2,-2,-24,-32"
+                        Margin="0,-2,-6,-2"
                         ClipToBounds="True"
                         Source="/Image/wedding.jpg"
                         Stretch="UniformToFill" />
                 </Border>
+
                 <Border
-                    Width="260"
+                    Width="230"
                     Height="200"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="18"
-                    Effect="{StaticResource ShadowEffect}">
+                    Effect="{StaticResource ShadowEffect}"
+                    Margin="16,0,0,0">
                     <Image
-                        Margin="-2,-2,-49,-31"
+                        Margin="-10,-10,-10,-10"
                         ClipToBounds="True"
-                        Source="/Image/wedding2.jpg"
-                        Stretch="UniformToFill" />
+                        Source="/Image/anhcuoi.png"
+                        Stretch="UniformToFill" HorizontalAlignment="Center" Width="240" />
+
                 </Border>
             </StackPanel>
 
-            <!--  Đặt tiệc gần đây  -->
+            <!-- Đặt tiệc gần đây -->
             <StackPanel
                 Grid.Row="2"
                 Margin="0,61,0,0"
@@ -192,8 +194,7 @@
                 </Border>
             </StackPanel>
 
-            <!--  Lịch và biểu đồ  -->
-            <!--  ... phần đầu giữ nguyên ...  -->
+            <!-- Lịch và biểu đồ -->
             <StackPanel
                 Grid.Row="0"
                 Grid.RowSpan="3"
@@ -233,9 +234,7 @@
                             </Style>
                         </Grid.Resources>
                         <Calendar
-                            Margin="0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Top"
+                            VerticalAlignment="Center"
                             local:CalendarBehavior.HighlightedDates="{Binding WeddingDays}"
                             materialDesign:CalendarAssist.HeaderBackground="#A2E9FF"
                             materialDesign:CalendarAssist.HeaderForeground="Black"
@@ -256,8 +255,8 @@
                     Foreground="#1976D2"
                     Text="Thống kê tháng gần nhất" />
                 <Border
-                    Width="265"
-                    Height="100"
+                    Width="395"
+                    Height="97"
                     Margin="0,4,0,0"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
@@ -270,7 +269,6 @@
                         Content="{Binding StatisticChartControl}" />
                 </Border>
             </StackPanel>
-            <!--  ... phần còn lại giữ nguyên ...  -->
         </Grid>
     </Grid>
 </UserControl>
