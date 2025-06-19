@@ -80,7 +80,16 @@ namespace QuanLyTiecCuoi.ViewModel
                 ButtonBackgrounds["Hall"] = new SolidColorBrush(Colors.DarkBlue); 
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
-            //ShiftCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ShiftView(); });
+            ShiftCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                CurrentView = new ShiftView()
+                {
+                    DataContext = new ShiftViewModel()
+                };
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Shift"] = new SolidColorBrush(Colors.DarkBlue);
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new ServiceView()
