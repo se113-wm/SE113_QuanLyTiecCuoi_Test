@@ -99,8 +99,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand AddServiceCommand { get; set; }
         public ICommand EditServiceCommand { get; set; }
         public ICommand DeleteServiceCommand { get; set; }
-
-        public ICommand XemHoaDonCommand { get; set; }
+        public ICommand ShowInvoiceCommand { get; set; }
 
         private int _maPhieuDat;
 
@@ -298,12 +297,17 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 SelectedServiceItem = null;
             });
 
-            XemHoaDonCommand = new RelayCommand<object>((p) => true, (p) =>
+            ShowInvoiceCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                MainViewModel.Instance.CurrentView = new InvoiceView 
-                {
-                    DataContext = new InvoiceViewModel(_maPhieuDat)
-                };
+                try {
+                    var invoiceView = new InvoiceView() {
+                        DataContext = new InvoiceViewModel(_maPhieuDat)
+                    };
+                    invoiceView.ShowDialog();
+                }
+                catch (Exception e) {
+                    MessageBox.Show(e.Message);
+                }
             });
 
         }

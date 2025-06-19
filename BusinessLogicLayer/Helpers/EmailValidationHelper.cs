@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public static class ValidationHelper {
+public static class EmailValidationHelper {
     public static bool IsValidEmail(string email) {
         if (string.IsNullOrWhiteSpace(email))
             return false;

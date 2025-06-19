@@ -11,20 +11,6 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
-		<TextBlock
-			Grid.Row="0"
-			Margin="0,0,10,0"
-			FontSize="14"
-			FontWeight="Bold"
-			Text="Danh sách tiệc cưới" />
-		<StackPanel
-			Grid.Row="1">
-			<Button
-                Width="100"
-                Margin="0,100,0,0"
-                Command="{Binding BillCommand}"
-                Content="Hóa đơn"
-                Style="{StaticResource MaterialDesignRaisedButton}" />
-		</StackPanel>
+		
     </Grid>
 </UserControl>

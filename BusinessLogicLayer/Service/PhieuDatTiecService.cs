@@ -136,7 +136,27 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
             };
             _phieuDatTiecRepository.Create(entity);
             // enity đã đc làm mới sau khi thêm, dto = lại enity
-            dto.MaPhieuDat = entity.MaPhieuDat; // Cập nhật mã phiếu đặt mới
+            dto = new PHIEUDATTIECDTO {
+                MaPhieuDat = entity.MaPhieuDat,
+                TenChuRe = entity.TenChuRe,
+                TenCoDau = entity.TenCoDau,
+                DienThoai = entity.DienThoai,
+                NgayDatTiec = entity.NgayDatTiec,
+                NgayDaiTiec = entity.NgayDaiTiec,
+                MaCa = entity.MaCa,
+                MaSanh = entity.MaSanh,
+                TienDatCoc = entity.TienDatCoc,
+                SoLuongBan = entity.SoLuongBan,
+                SoBanDuTru = entity.SoBanDuTru,
+                NgayThanhToan = entity.NgayThanhToan,
+                DonGiaBanTiec = entity.DonGiaBanTiec,
+                TongTienBan = entity.TongTienBan,
+                TongTienDV = entity.TongTienDV,
+                TongTienHoaDon = entity.TongTienHoaDon,
+                TienConLai = entity.TienConLai,
+                ChiPhiPhatSinh = entity.ChiPhiPhatSinh,
+                TienPhat = entity.TienPhat
+            };
         }
 
         public void Update(PHIEUDATTIECDTO dto)
