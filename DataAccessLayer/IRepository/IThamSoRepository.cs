@@ -7,8 +7,6 @@ namespace QuanLyTiecCuoi.DataAccessLayer.IRepository
     {
         IEnumerable<THAMSO> GetAll();
         THAMSO GetByName(string tenThamSo);
-        void Create(THAMSO thamSo);
         void Update(THAMSO thamSo);
-        void Delete(string tenThamSo);
     }
 }
