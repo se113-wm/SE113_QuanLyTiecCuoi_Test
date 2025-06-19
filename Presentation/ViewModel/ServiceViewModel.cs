@@ -41,14 +41,17 @@ namespace QuanLyTiecCuoi.ViewModel
                     GhiChu = SelectedItem.GhiChu;
                     if (!IsAdding)
                     {
-                        UpdateImageAsync(SelectedItem.MaDichVu.ToString(), "Service");
+                        RenderImageAsync(SelectedItem.MaDichVu.ToString(), "Service");
                     }
-                    // Clean up cache files
-                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
-                    string addCache = Path.Combine(folder, "Addcache.jpg");
-                    string editCache = Path.Combine(folder, "Editcache.jpg");
-                    if (File.Exists(addCache)) File.Delete(addCache);
-                    if (File.Exists(editCache)) File.Delete(editCache);
+                    if (IsEditing)
+                    {
+                        // Clean up cache files
+                        string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                        string addCache = Path.Combine(folder, "Addcache.jpg");
+                        string editCache = Path.Combine(folder, "Editcache.jpg");
+                        if (File.Exists(addCache)) File.Delete(addCache);
+                        if (File.Exists(editCache)) File.Delete(editCache);
+                    }
                 }
                 else
                 {
@@ -56,11 +59,19 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = string.Empty;
                     DeleteMessage = string.Empty;
                     Image = null;
+
                 }
             }
         }
 
         #region selecte action
+
+        private bool _nullImage;
+        public bool nullImage
+        {
+            get => _nullImage;
+            set { _nullImage = value; OnPropertyChanged(); }
+        }
 
         private bool _isEditing;
         public bool IsEditing
@@ -112,6 +123,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsEditing = true;
                         IsDeleting = false;
                         IsExporting = false;
+                        Reset(); // reset các trường nhập liệu
                         //if (SelectedItem == null)
                         //{
                         //    MessageBox.Show("Vui lòng chọn một dịch vụ để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -123,6 +135,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsEditing = false;
                         IsDeleting = true;
                         IsExporting = false;
+                        Reset(); // reset các trường nhập liệu
                         //if (SelectedItem == null)
                         //{
                         //    MessageBox.Show("Vui lòng chọn một dịch vụ để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -141,6 +154,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
                         break;
                 }
             }
@@ -154,7 +168,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public ImageSource Image
         {
             get => _Image;
-            set { _Image = value; OnPropertyChanged(); }
+            set { _Image = value; OnPropertyChanged(); nullImage = Image == null ? true : false; }
         }
 
         private string _imageBtnToolTip;
@@ -167,35 +181,159 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand SelectImageCommand => new RelayCommand<object>(
             (p) =>
             {
-                // Allow only when adding or editing
-                return IsAdding || IsEditing;
+                //// Allow only when adding or editing
+                //return IsAdding || IsEditing;
+                if (IsAdding)
+                {
+                    return true;
+                }
+                if (IsEditing && SelectedItem != null)
+                {
+                    return true;
+                }
+                return false;
             },
             (p) =>
             {
-                var dlg = new OpenFileDialog
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+
+                if (IsEditing && SelectedItem != null)
                 {
-                    Filter = "Image Files|*.jpg;*.jpeg;*.png",
-                    Title = "Chọn ảnh dịch vụ"
-                };
-                if (dlg.ShowDialog() == true)
+                    string currentImagePath = Path.Combine(folder, SelectedItem.MaDichVu + ".jpg");
+                    string cachePath = Path.Combine(folder, "Editcache.jpg");
+
+                    if (File.Exists(currentImagePath) || File.Exists(cachePath))
+                    {
+                        var result = MessageBox.Show(
+                            "Bạn đã chọn ảnh. Bạn muốn đổi ảnh (Yes) hay xóa ảnh (No)?",
+                            "Ảnh dịch vụ",
+                            MessageBoxButton.YesNoCancel,
+                            MessageBoxImage.Question,
+                            MessageBoxResult.Cancel);
+
+                        if (result == MessageBoxResult.Yes) // Đổi ảnh
+                        {
+                            var dlg = new OpenFileDialog
+                            {
+                                Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                                Title = "Chọn ảnh dịch vụ"
+                            };
+                            if (dlg.ShowDialog() == true)
+                            {
+                                try
+                                {
+                                    File.Copy(dlg.FileName, cachePath, true);
+                                    UpdateImageFromPath(cachePath);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
+                        }
+                        else if (result == MessageBoxResult.No) // Xóa ảnh
+                        {
+                            try
+                            {
+                                //if (File.Exists(currentImagePath)) File.Delete(currentImagePath);
+                                if (File.Exists(cachePath)) File.Delete(cachePath);
+                                Image = null;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Không thể xóa ảnh: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        // Cancel: do nothing
+                    }
+                    else // Chưa có ảnh, chọn ảnh như bình thường
+                    {
+                        var dlg = new OpenFileDialog
+                        {
+                            Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                            Title = "Chọn ảnh dịch vụ"
+                        };
+                        if (dlg.ShowDialog() == true)
+                        {
+                            try
+                            {
+                                File.Copy(dlg.FileName, cachePath, true);
+                                UpdateImageFromPath(cachePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                }
+                else if (IsAdding)
                 {
-                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
-                    string cacheFileName = IsAdding ? "Addcache.jpg" : "Editcache.jpg";
-                    string cachePath = Path.Combine(folder, cacheFileName);
-                    if (!File.Exists(folder))
+                    string cachePath = Path.Combine(folder, "Addcache.jpg");
+                    if (File.Exists(cachePath))
                     {
-                        Directory.CreateDirectory(folder);
+                        var result = MessageBox.Show(
+                            "Bạn đã chọn ảnh. Bạn muốn đổi ảnh (Yes) hay xóa ảnh (No)?",
+                            "Ảnh dịch vụ",
+                            MessageBoxButton.YesNoCancel,
+                            MessageBoxImage.Question,
+                            MessageBoxResult.Cancel);
+
+                        if (result == MessageBoxResult.Yes) // Đổi ảnh
+                        {
+                            var dlg = new OpenFileDialog
+                            {
+                                Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                                Title = "Chọn ảnh dịch vụ"
+                            };
+                            if (dlg.ShowDialog() == true)
+                            {
+                                try
+                                {
+                                    File.Copy(dlg.FileName, cachePath, true);
+                                    UpdateImageFromPath(cachePath);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
+                        }
+                        else if (result == MessageBoxResult.No) // Xóa ảnh
+                        {
+                            try
+                            {
+                                File.Delete(cachePath);
+                                Image = null;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Không thể xóa ảnh: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        // Cancel: do nothing
                     }
-                    try
+                    else // Chưa có ảnh, chọn ảnh như bình thường
                     {
-                        // Save selected image to cache file
-                        File.Copy(dlg.FileName, cachePath, true);
-                        // Show preview
-                        UpdateImageFromPath(cachePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        var dlg = new OpenFileDialog
+                        {
+                            Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                            Title = "Chọn ảnh dịch vụ"
+                        };
+                        if (dlg.ShowDialog() == true)
+                        {
+                            try
+                            {
+                                File.Copy(dlg.FileName, cachePath, true);
+                                UpdateImageFromPath(cachePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Không thể lưu ảnh tạm: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
                     }
                 }
             }
@@ -210,7 +348,43 @@ namespace QuanLyTiecCuoi.ViewModel
             }
             try
             {
-                var bitmap = new BitmapImage();
+                // Load original image
+                BitmapImage original = new BitmapImage();
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    original.BeginInit();
+                    original.CacheOption = BitmapCacheOption.OnLoad;
+                    original.StreamSource = stream;
+                    original.EndInit();
+                    original.Freeze();
+                }
+
+                int cropSize = Math.Min(original.PixelWidth, original.PixelHeight);
+
+                // Calculate crop rectangle (centered)
+                int x = (original.PixelWidth - cropSize) / 2;
+                int y = (original.PixelHeight - cropSize) / 2;
+
+                // Crop to square
+                var cropped = new CroppedBitmap(original, new Int32Rect(x, y, cropSize, cropSize));
+
+                // Resize to 100x100
+                var targetSize = 500;
+                var resized = new TransformedBitmap(cropped, new ScaleTransform(
+                    (double)targetSize / cropSize,
+                    (double)targetSize / cropSize
+                ));
+
+                // Encode and overwrite the file
+                var encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(resized));
+                using (var outStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+                    encoder.Save(outStream);
+                }
+
+                // Reload the resized image for display
+                BitmapImage bitmap = new BitmapImage();
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     bitmap.BeginInit();
@@ -227,7 +401,7 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        private void UpdateImageAsync(string id, string loai)
+        private void RenderImageAsync(string id, string loai)
         {
             var path = ImageHelper.GetImagePath(loai, id);
             if (!File.Exists(path))
@@ -250,7 +424,6 @@ namespace QuanLyTiecCuoi.ViewModel
                         bitmap.EndInit();
                         bitmap.Freeze();
                     }
-
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         Image = bitmap;
@@ -491,9 +664,13 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Tên dịch vụ đã tồn tại";
                     return false;
                 }
+                var folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
+                var imagePath = Path.Combine(folder, SelectedItem.MaDichVu + ".jpg");
+                var imageExists = File.Exists(imagePath);
                 if (SelectedItem.TenDichVu == TenDichVu &&
                     SelectedItem.DonGia?.ToString("G29") == DonGia &&
                     SelectedItem.GhiChu == GhiChu &&
+                    !(imageExists && Image == null) &&
                     ImageHelper.IsEditCacheImageSameAsCurrent(SelectedItem.MaDichVu, "Service"))
                 {
                     EditMessage = "Không có thay đổi nào để cập nhật";
@@ -504,6 +681,17 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                    if (Image == null)
+                    {
+                        string imagePath = Path.Combine(folder, SelectedItem.MaDichVu + ".jpg");
+
+                        if (File.Exists(imagePath))
+                        {
+                            File.Delete(imagePath);
+                        }
+                    }
+
                     var updateDto = new DICHVUDTO()
                     {
                         MaDichVu = SelectedItem.MaDichVu,
@@ -520,7 +708,6 @@ namespace QuanLyTiecCuoi.ViewModel
 
 
                     // Move Editcache.jpg to real image
-                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
                     string cachePath = Path.Combine(folder, "Editcache.jpg");
                     if (File.Exists(cachePath))
                     {

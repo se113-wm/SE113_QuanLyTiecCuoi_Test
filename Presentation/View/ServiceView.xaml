@@ -101,9 +101,19 @@
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Command="{Binding SelectImageCommand}"
-                                ToolTip="{Binding ImageBtnToolTip}" />
+                                ToolTip="{Binding ImageBtnToolTip}">
+                                <materialDesign:PackIcon
+                                    Width="36"
+                                    Height="36"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#888"
+                                    Kind="Camera"
+                                    Visibility="{Binding nullImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </Button>
                         </Grid>
                     </Border>
+
 
 
                     <TextBox
