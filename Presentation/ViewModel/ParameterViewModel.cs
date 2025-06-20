@@ -66,6 +66,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Vui lòng nhập đúng định dạng số.";
                     return false;
                 }
+                EditMessage = string.Empty;
                 return true;
             }, (p) =>
             {
