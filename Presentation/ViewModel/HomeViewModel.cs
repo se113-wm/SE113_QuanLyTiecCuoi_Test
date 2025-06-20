@@ -144,10 +144,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             var chartVM = new ChartViewModel(latestMonthReports);
 
             // Tạo ChartView và truyền ViewModel vào DataContext
-            var chartView = new ChartView { DataContext = chartVM };
+            var HomeChart = new HomeChart { DataContext = chartVM };
 
             // Gán ChartView vào ContentControl
-            StatisticChartControl = chartView;
+            StatisticChartControl = HomeChart;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
