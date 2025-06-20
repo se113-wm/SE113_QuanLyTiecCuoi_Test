@@ -118,6 +118,16 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
             //ParameterCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ParameterView(); });
+            ParameterCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                CurrentView = new ParameterView()
+                {
+                    DataContext = new ParameterViewModel()
+                };
+                ResetButtonBackgrounds();
+                ButtonBackgrounds["Parameter"] = new SolidColorBrush(Colors.DarkBlue);
+                OnPropertyChanged(nameof(ButtonBackgrounds));
+            });
             PermissionCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new PermissionView() {
