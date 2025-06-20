@@ -48,7 +48,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Header -->
+            <!-- Header giữ nguyên -->
             <StackPanel
                 Grid.Column="0"
                 Width="544"
@@ -76,7 +76,6 @@
                     Foreground="#2196F3"
                     Text="Tối ưu vận hành - Phát triển kinh doanh."
                     TextAlignment="Center" />
-                <!-- Nút Đặt Tiệc Ngay -->
                 <Button
                     Width="180"
                     Height="44"
@@ -92,7 +91,7 @@
                     Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
 
-            <!-- Ảnh cưới -->
+            <!-- Ảnh cưới căn chỉnh đẹp -->
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="0"
@@ -102,39 +101,39 @@
                 Orientation="Horizontal">
 
                 <Border
-                    Width="283"
+                    Width="250"
                     Height="200"
+                    Margin="0,0,8,0"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="18"
                     Effect="{StaticResource ShadowEffect}">
                     <Image
-                        Margin="0,-2,-6,-2"
+                        Margin="0"
                         ClipToBounds="True"
                         Source="/Image/wedding.jpg"
                         Stretch="UniformToFill" />
                 </Border>
 
                 <Border
-                    Width="230"
+                    Width="250"
                     Height="200"
+                    Margin="8,0,0,0"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="18"
-                    Effect="{StaticResource ShadowEffect}"
-                    Margin="16,0,0,0">
+                    Effect="{StaticResource ShadowEffect}">
                     <Image
-                        Margin="-10,-10,-10,-10"
+                        Margin="0"
                         ClipToBounds="True"
                         Source="/Image/anhcuoi.png"
-                        Stretch="UniformToFill" HorizontalAlignment="Center" Width="240" />
-
+                        Stretch="UniformToFill" />
                 </Border>
             </StackPanel>
 
-            <!-- Đặt tiệc gần đây -->
+            <!-- Đặt tiệc gần đây giữ nguyên -->
             <StackPanel
                 Grid.Row="2"
                 Margin="0,61,0,0"
@@ -154,7 +153,7 @@
                     CornerRadius="14"
                     Effect="{StaticResource ShadowEffect}">
                     <DataGrid
-                        Width="572"
+                        Width="518"
                         Height="87"
                         AutoGenerateColumns="False"
                         Background="Transparent"
@@ -194,7 +193,7 @@
                 </Border>
             </StackPanel>
 
-            <!-- Lịch và biểu đồ -->
+            <!-- Lịch và biểu đồ giữ nguyên lịch -->
             <StackPanel
                 Grid.Row="0"
                 Grid.RowSpan="3"
@@ -255,7 +254,7 @@
                     Foreground="#1976D2"
                     Text="Thống kê tháng gần nhất" />
                 <Border
-                    Width="395"
+                    Width="401"
                     Height="97"
                     Margin="0,4,0,0"
                     Background="#F8FBFF"

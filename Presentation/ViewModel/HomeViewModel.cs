@@ -1,5 +1,6 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
+using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
     }
     public class HomeViewModel : INotifyPropertyChanged
     {
-
+        private readonly CtBaoCaoDsService _baoCaoService = new CtBaoCaoDsService();
         public ICommand DatTiecNgayCommand { get; set; }
         // Recent bookings for DataGrid
         public ObservableCollection<RecentBookingViewModel> RecentBookings { get; set; }
@@ -119,9 +120,34 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private void LoadStatisticChart()
         {
-            // TODO: Replace with your actual chart control or ViewModel
-            // For demo, just set to null or a placeholder string
-            StatisticChartControl = null;
+            var allReports = _baoCaoService.GetAll()
+                    .OrderByDescending(x => x.Nam)
+                    .ThenByDescending(x => x.Thang)
+                    .ThenByDescending(x => x.Ngay)
+                    .ToList();
+
+            if (allReports.Count == 0)
+            {
+                StatisticChartControl = null;
+                return;
+            }
+
+            var latestMonth = allReports.First().Thang;
+            var latestYear = allReports.First().Nam;
+
+            var latestMonthReports = allReports
+                .Where(x => x.Thang == latestMonth && x.Nam == latestYear)
+                .OrderBy(x => x.Ngay)
+                .ToList();
+
+            // Tạo ViewModel cho biểu đồ
+            var chartVM = new ChartViewModel(latestMonthReports);
+
+            // Tạo ChartView và truyền ViewModel vào DataContext
+            var chartView = new ChartView { DataContext = chartVM };
+
+            // Gán ChartView vào ContentControl
+            StatisticChartControl = chartView;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
