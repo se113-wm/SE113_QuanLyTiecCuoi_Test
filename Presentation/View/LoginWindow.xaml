@@ -12,12 +12,12 @@
     xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel"
     Name="loginWindow"
     Title="Đăng Nhập"
-    Icon="Assets/icon_window.ico"
     Width="875"
     Height="645"
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{StaticResource LoginViewModel}"
     FontFamily="{DynamicResource MaterialDesignFont}"
+    Icon="Assets/icon_window.ico"
     SizeToContent="Manual"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
@@ -38,7 +38,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="1.25*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.Effect>
                 <DropShadowEffect
@@ -48,50 +48,63 @@
             </Grid.Effect>
             <Border Background="#6a7eee" ClipToBounds="True">
                 <Grid>
-                    <!--  Canvas chứa các Ellipse được đặt trước để nằm dưới  -->
-                    <Canvas>
-                        <Ellipse
-                            Width="500"
-                            Height="500"
-                            Fill="#80c0ff"
-                            Opacity="0.6" />
-                        <Ellipse
-                            Width="300"
-                            Height="300"
-                            Fill="#83c2ff"
-                            Opacity="0.3" />
-                        <Ellipse
-                            Width="400"
-                            Height="400"
-                            Fill="#84c3ff"
-                            Opacity="0.3" />
-                        <Ellipse
-                            Width="250"
-                            Height="250"
-                            Fill="#81c2ff" />
-                        <Ellipse
-                            Width="400"
-                            Height="400"
-                            Fill="#87c5ff"
-                            Opacity="0.8" />
-                    </Canvas>
-
-                    <!--  StackPanel chứa các TextBlock được đặt sau để nằm trên  -->
-                    <StackPanel Margin="0,50,0,0" VerticalAlignment="Center">
+                    <StackPanel Margin="0,120,0,0" VerticalAlignment="Top">
                         <TextBlock
-                            FontSize="35"
+                            FontSize="46"
                             FontWeight="Light"
                             Foreground="White"
-                            Text="Trung tâm Tiệc cưới"
+                            Text="Xin Chào"
                             TextAlignment="Center" />
                         <TextBlock
-                            Height="23"
                             FontSize="18"
                             FontWeight="Light"
                             Foreground="White"
-                            Text="Đăng Nhập"
+                            Text="Đăng nhập"
                             TextAlignment="Center" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Light"
+                            Foreground="White"
+                            Text="Trung tâm tiệc cưới UIT"
+                            TextAlignment="Center" />
+
                     </StackPanel>
+
+                    <Ellipse
+                        Width="500"
+                        Height="500"
+                        Margin="50,0,0,-200"
+                        VerticalAlignment="Bottom"
+                        Fill="#80c0ff"
+                        Opacity="0.6" />
+                    <Ellipse
+                        Width="300"
+                        Height="300"
+                        Margin="-450,0,0,30"
+                        VerticalAlignment="Bottom"
+                        Fill="#83c2ff"
+                        Opacity="0.3" />
+                    <Ellipse
+                        Width="400"
+                        Height="400"
+                        Margin="-320,0,0,-120"
+                        VerticalAlignment="Bottom"
+                        Fill="#84c3ff"
+                        Opacity="0.3" />
+                    <Ellipse
+                        Width="250"
+                        Height="250"
+                        Margin="-380,0,0,-120"
+                        VerticalAlignment="Bottom"
+                        Fill="#81c2ff" />
+                    <Ellipse
+                        Width="400"
+                        Height="400"
+                        Margin="280,0,0,-70"
+                        VerticalAlignment="Bottom"
+                        Fill="#87c5ff"
+                        Opacity="0.8" />
+
                 </Grid>
             </Border>
             <Border Grid.Column="1" Background="White">
@@ -110,7 +123,7 @@
                         <Border
                             Margin="6"
                             Padding="6"
-                            Background="#80c0ff"
+                            Background="Transparent"
                             CornerRadius="5"
                             Opacity="0.7">
                             <Grid>
@@ -138,7 +151,7 @@
                         <Border
                             Margin="6"
                             Padding="6"
-                            Background="#80c0ff"
+                            Background="Transparent"
                             CornerRadius="5"
                             Opacity="0.7">
                             <Grid>
