@@ -34,6 +34,11 @@ namespace QuanLyTiecCuoi.ViewModel
         private string _editMessage;
         public string EditMessage { get => _editMessage; set { _editMessage = value; OnPropertyChanged(); } }
 
+        private bool isInBounds(decimal value, decimal min, decimal max)
+        {
+            return value >= min && value <= max;
+        }
+
         public ParameterViewModel()
         {
             _thamSoService = new ThamSoService();
@@ -64,6 +69,11 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (!decimal.TryParse(TiLePhat, out _) || !decimal.TryParse(TiLeTienDatCocToiThieu, out _) || !decimal.TryParse(TiLeSoBanDatTruocToiThieu, out _))
                 {
                     EditMessage = "Vui lòng nhập đúng định dạng số.";
+                    return false;
+                }
+                if (!isInBounds(decimal.Parse(TiLePhat), 0, 1) || !isInBounds(decimal.Parse(TiLeTienDatCocToiThieu), 0, 1) || !isInBounds(decimal.Parse(TiLeSoBanDatTruocToiThieu), 0, 1))
+                {
+                    EditMessage = "Vui lòng nhập số trong khoảng từ 0 đến 1.";
                     return false;
                 }
                 EditMessage = string.Empty;
