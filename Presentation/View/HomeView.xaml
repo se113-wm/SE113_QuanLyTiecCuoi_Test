@@ -48,7 +48,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--  Header giữ nguyên  -->
+            <!-- Header -->
             <StackPanel
                 Grid.Column="0"
                 Width="544"
@@ -91,7 +91,7 @@
                     Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
 
-            <!--  Ảnh cưới căn chỉnh đẹp  -->
+            <!-- Hình ảnh -->
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="0"
@@ -133,7 +133,7 @@
                 </Border>
             </StackPanel>
 
-            <!--  Đặt tiệc gần đây giữ nguyên  -->
+            <!-- Đặt tiệc gần đây -->
             <StackPanel
                 Grid.Row="2"
                 Margin="0,61,0,0"
@@ -153,7 +153,7 @@
                     CornerRadius="14"
                     Effect="{StaticResource ShadowEffect}">
                     <DataGrid
-                        Width="700"
+                        Width="645"
                         Height="170"
                         AutoGenerateColumns="False"
                         Background="Transparent"
@@ -193,7 +193,7 @@
                 </Border>
             </StackPanel>
 
-            <!--  Lịch và biểu đồ giữ nguyên lịch  -->
+            <!-- Lịch và thống kê -->
             <StackPanel
                 Grid.Row="0"
                 Grid.RowSpan="3"
@@ -254,18 +254,21 @@
                     Foreground="#1976D2"
                     Text="Thống kê tháng gần nhất" />
                 <Border
-                    Width="401"
-                    Height="300"
-                    Margin="0,4,0,0"
+                    Width="500"
+                    Height="350"
+                    Margin="0,8,0,0"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="14"
+                    Padding="12"
                     Effect="{StaticResource ShadowEffect}">
-                    <ContentControl
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="{Binding StatisticChartControl}" />
+                    <Viewbox Stretch="Uniform">
+                        <ContentControl
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Content="{Binding StatisticChartControl}" />
+                    </Viewbox>
                 </Border>
             </StackPanel>
         </Grid>
