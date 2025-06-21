@@ -15,7 +15,6 @@
     Icon="Assets/icon_invoice.ico">
     <Window.Resources>
         <converter:MultiplyConverter x:Key="MultiplyConverter" />
-        <converter:CurrencyConverter x:Key="CurrencyConverter"/>
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -24,6 +23,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -99,13 +99,26 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Số lượng bàn"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            IsReadOnly="{Binding IsPaid}"
                             Text="{Binding TableQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Margin="5"
-                            FontSize="10"
-                            Text="{Binding TableQuantityMessage}"/>
+                            <StackPanel
+                                Margin="5"
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Orientation="Vertical">
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Margin="5"
+                                    FontSize="10"
+                                    Text="{Binding TableQuantityMessage}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Margin="5"
+                                    FontSize="10"
+                                    Text="{Binding TableQuantityMax}"/>
+                            </StackPanel>
                             <TextBox
                             Grid.Row="1"
                             Grid.Column="1"
@@ -113,7 +126,7 @@
                             materialDesign:HintAssist.Hint="Đơn giá bàn"
                             IsReadOnly="True"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding SelectedInvoice.DonGiaBanTiec, Converter={StaticResource CurrencyConverter},UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding SelectedInvoice.DonGiaBanTiec, Converter={StaticResource CurrencyFormatConverter},UpdateSourceTrigger=PropertyChanged}" />
                             <TextBox
                             Grid.Row="1"
                             Grid.Column="2"
@@ -196,7 +209,7 @@
                                                 <TextBlock
                                                 Margin="20,0,0,0"
                                                 HorizontalAlignment="Left"
-                                                Text="{Binding DichVu.DonGia, Converter={StaticResource CurrencyConverter}, StringFormat={}{0:N0}}"
+                                                Text="{Binding DichVu.DonGia, Converter={StaticResource CurrencyFormatConverter}, StringFormat={}{0:N0}}"
                                                 TextAlignment="Left" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -252,7 +265,7 @@
                             HorizontalAlignment="Stretch" 
                             Margin="10,0,0,0" 
                             IsReadOnly="True"
-                            Text="{Binding SelectedInvoice.TongTienDV,Converter={StaticResource CurrencyConverter}}"/>
+                            Text="{Binding SelectedInvoice.TongTienDV,Converter={StaticResource CurrencyFormatConverter}}"/>
                         </Grid>
                         <Border Height="1" Background="Gray" Margin="0,5" />
 
@@ -268,11 +281,12 @@
                             <TextBox Grid.Column="1" 
                                  FontSize="16" 
                                  HorizontalAlignment="Stretch" 
-                                 Margin="10,0,0,0">
+                                 Margin="10,0,0,0"
+                                 IsReadOnly="{Binding IsPaid}">
                                 <TextBox.Text>
                                     <Binding Path="DamageEquipmentCost"
                                          Mode="TwoWay"
-                                         Converter="{StaticResource CurrencyConverter}"
+                                         Converter="{StaticResource CurrencyFormatConverter}"
                                          UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
                                             <converter:DecimalValidationRule />
@@ -295,7 +309,7 @@
                                  HorizontalAlignment="Stretch" 
                                  Margin="10,0,0,0" 
                                  IsReadOnly="True"
-                                 Text="{Binding TotalInvoiceAmount, Converter={StaticResource CurrencyConverter},Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding TotalInvoiceAmount, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <Border Height="1" Background="Gray" Margin="0,5" />
                         <!-- Tien phat -->
@@ -312,7 +326,7 @@
                                 HorizontalAlignment="Stretch" 
                                 Margin="10,0,0,0"
                                 IsReadOnly="True"
-                                Text="{Binding Fine, Converter={StaticResource CurrencyConverter},UpdateSourceTrigger=PropertyChanged}"/>
+                                Text="{Binding Fine, Converter={StaticResource CurrencyFormatConverter},UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <Border Height="1" Background="Gray" Margin="0,5" />
                         <!-- Tiền đặt cọc -->
@@ -328,7 +342,7 @@
                                  HorizontalAlignment="Stretch" 
                                  Margin="10,0,0,0" 
                                  IsReadOnly="True"
-                                 Text="{Binding Deposit, Mode=TwoWay, Converter={StaticResource CurrencyConverter},UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding Deposit, Mode=TwoWay, Converter={StaticResource CurrencyFormatConverter},UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <Border Height="1" Background="Gray" Margin="0,5" />
                         <!-- Còn lại -->
@@ -344,7 +358,7 @@
                                  HorizontalAlignment="Stretch" 
                                  Margin="10,0,0,0" 
                                  IsReadOnly="True"
-                                 Text="{Binding RemainingAmount,Converter={StaticResource CurrencyConverter}}"/>
+                                 Text="{Binding RemainingAmount, Mode=OneWay,Converter={StaticResource CurrencyFormatConverter}}"/>
                         </Grid>
                         <Border Height="1" Background="Gray" Margin="0,5" />
                         <Grid Margin="20">
@@ -361,7 +375,7 @@
                                     Width="180"
                                     Margin="0,0,10,0"
                                     Command="{Binding ConfirmPaymentCommand}"
-                                    Content="Xác nhận thanh toán"
+                                    Content="{Binding PaymentText, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource MaterialDesignRaisedButton}" />
                                 <TextBlock
                                     Grid.Row="2"

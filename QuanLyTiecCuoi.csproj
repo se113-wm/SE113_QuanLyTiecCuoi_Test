@@ -296,7 +296,6 @@
     <Compile Include="Model\THAMSO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Presentation\Helpers\CurrencyConverter.cs" />
     <Compile Include="Presentation\Helpers\MultiplyConverter.cs" />
     <Compile Include="Presentation\Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Presentation\Helpers\Validators.cs" />
