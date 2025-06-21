@@ -134,6 +134,9 @@ namespace QuanLyTiecCuoi.ViewModel {
                 decimal? tiLePhat = _thamSoService.GetByName("TiLePhat").GiaTri;
                 decimal? kiemTraPhat = _thamSoService.GetByName("KiemTraPhat").GiaTri;
                 int dayDiff = (DateTime.Now - SelectedInvoice.NgayDaiTiec.GetValueOrDefault()).Days;
+                if (dayDiff < 0) {
+                    dayDiff = 0; // Không phạt nếu ngày đãi tiệc chưa đến
+                }
                 Fine = tiLePhat * kiemTraPhat * (tmpTotalInvoiceAmount - SelectedInvoice.TienDatCoc) * (decimal)dayDiff;
             }
             ExportCommand = new RelayCommand<Window>((p) => { return CanExport; }, (p) => {
@@ -184,6 +187,12 @@ namespace QuanLyTiecCuoi.ViewModel {
                 if (string.IsNullOrWhiteSpace(DamageEquipmentCost)) {
                     CanExport = false;
                     ConfirmMessage = "Nhập chi phí thiết bị hỏng hóc";
+                    return false;
+                }
+                // Chỉ cho phép thanh toán nếu ngày hiện tại lớn hơn hoặc bằng ngày đãi tiệc
+                if (SelectedInvoice.NgayDaiTiec.HasValue && DateTime.Now < SelectedInvoice.NgayDaiTiec.Value) {
+                    CanExport = false;
+                    ConfirmMessage = "Không thể thanh toán trước ngày đãi tiệc";
                     return false;
                 }
                 ConfirmMessage = string.Empty;

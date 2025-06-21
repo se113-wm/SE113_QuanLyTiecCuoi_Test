@@ -18,7 +18,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         // Services
         private readonly ISanhService _sanhService;
         private readonly ICaService _caService;
-        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private IPhieuDatTiecService _phieuDatTiecService;
         private readonly IMonAnService _monAnService;
         private readonly IDichVuService _dichVuService;
         private readonly IThucDonService _thucDonService;
@@ -97,6 +97,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public THUCDONDTO SelectedMenuItem { get => _selectedMenuItem; set { _selectedMenuItem = value; OnPropertyChanged(); LoadMenuDetail(); } }
 
         public MONANDTO MonAn { get; set; } = new MONANDTO();
+
+        private string _td_DonGia;
+        public string TD_DonGia { get => _td_DonGia; set { _td_DonGia = value; OnPropertyChanged(); } }
+
         private string _td_SoLuong;
         public string TD_SoLuong { get => _td_SoLuong; set { _td_SoLuong = value; OnPropertyChanged(); } }
         private string _td_GhiChu;
@@ -108,6 +112,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public CHITIETDVDTO SelectedServiceItem { get => _selectedServiceItem; set { _selectedServiceItem = value; OnPropertyChanged(); LoadServiceDetail(); } }
 
         public DICHVUDTO DichVu { get; set; } = new DICHVUDTO();
+
+        private string _dv_DonGia;
+        public string DV_DonGia { get => _dv_DonGia; set { _dv_DonGia = value; OnPropertyChanged(); } }
+
         private string _dv_SoLuong;
         public string DV_SoLuong { get => _dv_SoLuong; set { _dv_SoLuong = value; OnPropertyChanged(); } }
         private string _dv_GhiChu;
@@ -232,12 +240,14 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 MenuList.Add(new THUCDONDTO
                 {
                     MonAn = MonAn,
+                    DonGia = MonAn.DonGia,
                     SoLuong = int.Parse(TD_SoLuong),
                     GhiChu = TD_GhiChu
                 });
                 // Reset input fields after adding
                 TD_SoLuong = string.Empty;
                 TD_GhiChu = string.Empty;
+                TD_DonGia = string.Empty;
                 MonAn = new MONANDTO();
                 OnPropertyChanged(nameof(MonAn));
             });
@@ -268,6 +278,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 var NewMenuItem = new THUCDONDTO
                 {
                     MonAn = MonAn,
+                    DonGia = MonAn.DonGia,
                     SoLuong = int.Parse(TD_SoLuong),
                     GhiChu = TD_GhiChu
                 };
@@ -304,11 +315,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 ServiceList.Add(new CHITIETDVDTO
                 {
                     DichVu = DichVu,
+                    DonGia = DichVu.DonGia,
                     SoLuong = int.Parse(DV_SoLuong),
                     GhiChu = DV_GhiChu
                 });
                 DV_SoLuong = string.Empty;
                 DV_GhiChu = string.Empty;
+                DV_DonGia = string.Empty;
                 DichVu = new DICHVUDTO();
                 OnPropertyChanged(nameof(DichVu));
             });
@@ -339,6 +352,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 var NewServiceItem = new CHITIETDVDTO
                 {
                     DichVu = DichVu,
+                    DonGia = DichVu.DonGia,
                     SoLuong = int.Parse(DV_SoLuong),
                     GhiChu = DV_GhiChu
                 };
@@ -365,6 +379,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         DataContext = new InvoiceViewModel(_maPhieuDat)
                     };
                     invoiceView.ShowDialog();
+                    
+                    IsEditing = false; // Reset editing mode after showing invoice
+                    LoadWeddingDetail(maPhieuDat); // Reload wedding details to reflect any changes
                 }
                 catch (Exception e) {
                     MessageBox.Show(e.Message);
@@ -376,6 +393,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         // Load wedding detail by ID (if needed)
         private void LoadWeddingDetail(int maPhieuDat)
         {
+            _phieuDatTiecService = new PhieuDatTiecService(); // Refresh service to get updated data
             var wedding = _phieuDatTiecService.GetById(maPhieuDat);
             if (wedding != null)
             {
@@ -401,6 +419,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             if (SelectedMenuItem != null)
             {
                 MonAn = SelectedMenuItem.MonAn;
+                TD_DonGia = SelectedMenuItem.DonGia?.ToString("N0"); // Format as currency
                 TD_SoLuong = SelectedMenuItem.SoLuong?.ToString();
                 TD_GhiChu = SelectedMenuItem.GhiChu;
                 OnPropertyChanged(nameof(MonAn));
@@ -408,6 +427,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             else
             {
                 MonAn = new MONANDTO();
+                TD_DonGia = string.Empty;
                 TD_SoLuong = string.Empty;
                 TD_GhiChu = string.Empty;
                 OnPropertyChanged(nameof(MonAn));
@@ -417,6 +437,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void ResetTD()
         {
             MonAn = new MONANDTO();
+            TD_DonGia = string.Empty;
             TD_SoLuong = string.Empty;
             TD_GhiChu = string.Empty;
             SelectedMenuItem = null;
@@ -480,6 +501,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             if (monAnDialog.ShowDialog() == true)
             {
                 MonAn = viewModel.SelectedFood;
+                TD_DonGia = MonAn.DonGia?.ToString("N0"); // Format as currency
                 TD_SoLuong = "1";
                 OnPropertyChanged(nameof(MonAn));
             }
@@ -491,6 +513,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             if (SelectedServiceItem != null)
             {
                 DichVu = SelectedServiceItem.DichVu;
+                DV_DonGia = SelectedServiceItem.DonGia?.ToString("N0"); // Format as currency
                 DV_SoLuong = SelectedServiceItem.SoLuong?.ToString();
                 DV_GhiChu = SelectedServiceItem.GhiChu;
                 OnPropertyChanged(nameof(DichVu));
@@ -498,6 +521,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             else
             {
                 DichVu = new DICHVUDTO();
+                DV_DonGia = string.Empty;
                 DV_SoLuong = string.Empty;
                 DV_GhiChu = string.Empty;
                 OnPropertyChanged(nameof(DichVu));
@@ -507,6 +531,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void ResetCTDV()
         {
             DichVu = new DICHVUDTO();
+            DV_DonGia = string.Empty;
             DV_SoLuong = string.Empty;
             DV_GhiChu = string.Empty;
             SelectedServiceItem = null;
@@ -569,6 +594,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             if (dichVuDialog.ShowDialog() == true)
             {
                 DichVu = viewModel.SelectedService;
+                DV_DonGia = DichVu.DonGia?.ToString("N0"); // Format as currency
                 DV_SoLuong = "1";
                 OnPropertyChanged(nameof(DichVu));
             }
@@ -602,6 +628,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 MaPhieuDat = _maPhieuDat,
                 MonAn = m.MonAn,
+                DonGia = m.DonGia,
                 SoLuong = m.SoLuong,
                 GhiChu = m.GhiChu
             }).ToList();
@@ -609,6 +636,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             var updatedServices = ServiceList.Select(s => new CHITIETDVDTO
             {
                 MaPhieuDat = _maPhieuDat,
+                DonGia = s.DonGia,
                 DichVu = s.DichVu,
                 SoLuong = s.SoLuong,
                 GhiChu = s.GhiChu
@@ -682,8 +710,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             }
 
             // 5. Kiểm tra tiền đặt cọc hợp lệ
-            var tongDonGiaMonAn = MenuList.Sum(m => (m.MonAn.DonGia ?? 0) * (m.SoLuong ?? 0));
-            var tongDonGiaDichVu = ServiceList.Sum(s => (s.DichVu.DonGia ?? 0) * (s.SoLuong ?? 0));
+            var tongDonGiaMonAn = MenuList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
+            var tongDonGiaDichVu = ServiceList.Sum(s => (s.DonGia ?? 0) * (s.SoLuong ?? 0));
             var donGiaBanToiThieu = _sanhService.GetById(SelectedSanh.MaSanh)?.LoaiSanh.DonGiaBanToiThieu ?? 0;
             var tongChiPhiUocTinh = soLuongBan * (donGiaBanToiThieu + tongDonGiaMonAn) + tongDonGiaDichVu;
             var tiLeTienDatCocToiThieu = _thamSoService.GetByName("TiLeTienDatCocToiThieu")?.GiaTri ?? 0.3m;
@@ -742,7 +770,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     {
                         MaPhieuDat = _maPhieuDat,
                         MaMonAn = item.MonAn.MaMonAn,
-                        DonGia = item.MonAn.DonGia,
+                        DonGia = item.DonGia,
                         SoLuong = item.SoLuong,
                         GhiChu = item.GhiChu,
                         MonAn = item.MonAn
@@ -760,9 +788,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     {
                         MaPhieuDat = _maPhieuDat,
                         MaDichVu = item.DichVu.MaDichVu,
-                        DonGia = item.DichVu.DonGia,
+                        DonGia = item.DonGia,
                         SoLuong = item.SoLuong,
-                        ThanhTien = (item.DichVu.DonGia ?? 0) * (item.SoLuong ?? 0),
+                        ThanhTien = (item.DonGia ?? 0) * (item.SoLuong ?? 0),
                         GhiChu = item.GhiChu,
                         DichVu = item.DichVu
                     };

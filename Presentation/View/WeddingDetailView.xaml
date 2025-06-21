@@ -472,7 +472,7 @@
                                     materialDesign:HintAssist.Hint="Đơn giá"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding MonAn.DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding TD_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                                 <Button
                                     Grid.Row="1"
                                     Grid.Column="2"
@@ -620,7 +620,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding MonAn.DonGia, StringFormat=N0}"
+                                                            Text="{Binding DonGia, StringFormat=N0}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -725,7 +725,7 @@
                                     materialDesign:HintAssist.Hint="Đơn giá"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding DichVu.DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding DV_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                                 <Button
                                     Grid.Row="1"
                                     Grid.Column="2"
@@ -874,7 +874,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding DichVu.DonGia}"
+                                                            Text="{Binding DonGia, StringFormat=N0}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
