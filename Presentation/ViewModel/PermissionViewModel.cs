@@ -93,12 +93,14 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (SelectedItem != null)
                 {
                     TenNhom = SelectedItem.TenNhom;
+                    IsSelected = true;
                 }
                 else
                 {
                     AddMessage = string.Empty;
                     EditMessage = string.Empty;
                     DeleteMessage = string.Empty;
+                    IsSelected = false;
                 }
             }
         }
@@ -187,7 +189,82 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
+        private bool _isSeledted;
 
+        public bool IsSelected
+        {
+            get => _isSeledted;
+            set { _isSeledted = value; OnPropertyChanged(); }
+        }
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); }
+        }
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set { _isAdding = value; OnPropertyChanged(); }
+        }
+        private bool _isDeleting;
+        public bool IsDeleting
+        {
+            get => _isDeleting;
+            set { _isDeleting = value; OnPropertyChanged(); }
+        }
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+        private string _selectedAction;
+        public string SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnPropertyChanged();
+                switch (value)
+                {
+                    case "Thêm":
+                        IsAdding = true;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        // reset ảnh về ko có ảnh
+                        break;
+                    case "Sửa":
+                        IsAdding = false;
+                        IsEditing = true;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    case "Xóa":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = true;
+                        Reset(); // reset các trường nhập liệu
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    default:
+                        _selectedAction = null;
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        break;
+                }
+            }
+        }
         public PermissionViewModel()
         {
             // Load dữ liệu từ database, không hiển thị nhóm 'ADMIN' và nhóm của người dùng hiện tại

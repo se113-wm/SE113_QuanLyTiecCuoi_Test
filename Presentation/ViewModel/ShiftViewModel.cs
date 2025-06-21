@@ -222,6 +222,16 @@ namespace QuanLyTiecCuoi.ViewModel
                     AddMessage = "Thời gian bắt đầu ca phải sau 7h30 và trước 12h đêm.";
                     return false;
                 }
+                if (ThoiGianKetThucCa < new TimeSpan(7, 30, 0) || ThoiGianKetThucCa >= new TimeSpan(24, 0, 0))
+                {
+                    AddMessage = "Thời gian kết thúc ca phải sau 7h30 và trước 12h đêm.";
+                    return false;
+                }
+                if (ThoiGianKetThucCa <= ThoiGianBatDauCa)
+                {
+                    AddMessage = "Thời gian kết thúc ca phải sau thời gian bắt đầu ca.";
+                    return false;
+                }
                 var exists = OriginalList.Any(x => x.TenCa == TenCa);
                 if (exists)
                 {
@@ -276,6 +286,16 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (ThoiGianBatDauCa.Value < new TimeSpan(7, 30, 0) || ThoiGianBatDauCa.Value >= new TimeSpan(24, 0, 0))
                 {
                     EditMessage = "Thời gian bắt đầu ca phải sau 7h30 và trước 12h đêm.";
+                    return false;
+                }
+                if (ThoiGianKetThucCa < new TimeSpan(7, 30, 0) || ThoiGianKetThucCa >= new TimeSpan(24, 0, 0))
+                {
+                    EditMessage = "Thời gian kết thúc ca phải sau 7h30 và trước 12h đêm.";
+                    return false;
+                }
+                if (ThoiGianKetThucCa <= ThoiGianBatDauCa)
+                {
+                    EditMessage = "Thời gian kết thúc ca phải sau thời gian bắt đầu ca.";
                     return false;
                 }
                 var exists = OriginalList.Any(x => x.TenCa == TenCa && x.MaCa != SelectedItem.MaCa);

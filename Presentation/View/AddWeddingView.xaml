@@ -9,8 +9,8 @@
     Title="Đặt Tiệc Cưới"
     Width="1200"
     Height="720"
-    WindowStartupLocation="Manual"
-    Icon="Assets/icon_addwedding.ico">
+    Icon="Assets/icon_addwedding.ico"
+    WindowStartupLocation="Manual">
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>
@@ -170,20 +170,47 @@
                             Grid.Column="0"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Ca"
-                            DisplayMemberPath="TenCa"
                             ItemsSource="{Binding CaList}"
                             SelectedItem="{Binding SelectedCa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding TenCa}" />
+                                        <TextBlock Foreground="Gray" Text=" (" />
+                                        <TextBlock Foreground="Gray" Text="{Binding ThoiGianBatDauCa}" />
+                                        <TextBlock Foreground="Gray" Text=" - " />
+                                        <TextBlock Foreground="Gray" Text="{Binding ThoiGianKetThucCa}" />
+                                        <TextBlock Foreground="Gray" Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <!--  Hall  -->
                         <ComboBox
                             Grid.Row="1"
                             Grid.Column="1"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Sảnh"
-                            DisplayMemberPath="TenSanh"
                             ItemsSource="{Binding SanhList}"
                             SelectedItem="{Binding SelectedSanh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding TenSanh}" />
+                                        <TextBlock Foreground="Gray" Text=" | " />
+                                        <TextBlock Foreground="Gray" Text="Tối đa: " />
+                                        <TextBlock Foreground="Gray" Text="{Binding SoLuongBanToiDa}" />
+                                        <TextBlock Foreground="Gray" Text=" bàn | " />
+                                        <TextBlock Foreground="Gray" Text="Đơn giá: " />
+                                        <TextBlock Foreground="Gray" Text="{Binding LoaiSanh.DonGiaBanToiThieu, StringFormat=N0}" />
+                                        <TextBlock Foreground="Gray" Text="đ" />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <!--  Deposit  -->
                         <TextBox
                             Grid.Row="1"

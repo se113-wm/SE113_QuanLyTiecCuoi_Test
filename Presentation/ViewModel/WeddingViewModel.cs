@@ -110,7 +110,28 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 };
             });
 
-            DeleteCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
+            DeleteCommand = new RelayCommand<object>((p) =>
+            {
+                if (SelectedItem == null)
+                {
+                    DeleteMessage = "Vui lòng chọn một tiệc cưới để xóa.";
+                    return false;
+                }
+                if (SelectedItem.NgayThanhToan.HasValue)
+                {
+                    DeleteMessage = "Không thể xóa tiệc cưới đã thanh toán.";
+                    return false;
+                }
+                // chỉ cho xóa những tiệc cưới vào ngày mai hoặc tương lai
+                if (SelectedItem.NgayDaiTiec.HasValue && SelectedItem.NgayDaiTiec.Value.Date < DateTime.Today.AddDays(1))
+                {
+                    DeleteMessage = "Chỉ có thể xóa tiệc cưới vào ngày mai hoặc tương lai.";
+                    return false;
+                }
+                DeleteMessage = string.Empty; // Reset delete message
+                return true;
+            }
+            , (p) =>
             {
                 try
                 {

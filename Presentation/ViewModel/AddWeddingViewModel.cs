@@ -105,7 +105,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             NgayKhongChoChon = new ObservableCollection<CalendarDateRange>
             {
-                new CalendarDateRange(DateTime.MinValue, DateTime.Today.AddDays(-1))
+                new CalendarDateRange(DateTime.MinValue, DateTime.Today)
             };
             // Initialize services
             _sanhService = new SanhService();

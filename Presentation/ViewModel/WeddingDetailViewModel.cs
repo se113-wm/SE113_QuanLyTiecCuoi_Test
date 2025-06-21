@@ -37,7 +37,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private DateTime? _ngayDaiTiec;
         public DateTime? NgayDaiTiec { get => _ngayDaiTiec; set { _ngayDaiTiec = value; OnPropertyChanged(); } }
-
+        public ObservableCollection<CalendarDateRange> NgayKhongChoChon { get; set; }
         private DateTime _ngayDatTiec = DateTime.Now;
         public DateTime NgayDatTiec { get => _ngayDatTiec; set { _ngayDatTiec = value; OnPropertyChanged(); } }
 
@@ -61,7 +61,35 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         // Edit mode
         private bool _isEditing;
-        public bool IsEditing { get => _isEditing; set { _isEditing = value; OnPropertyChanged(); } }
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                if (value == _isEditing) return;
+
+                // Kiểm tra điều kiện trước khi cho phép chỉnh sửa
+                if (value) // Chỉ kiểm tra khi chuyển sang chế độ chỉnh sửa
+                {
+                    // Đã thanh toán hoặc đã qua ngày đãi tiệc thì không cho chỉnh sửa
+                    if (CurrentWedding?.NgayThanhToan != null)
+                    {
+                        MessageBox.Show("Tiệc cưới đã thanh toán, không thể chỉnh sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                    if (NgayDaiTiec != null && DateTime.Now > NgayDaiTiec)
+                    {
+                        MessageBox.Show("Đã qua ngày đãi tiệc, không thể chỉnh sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+                _isEditing = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Thêm property để lấy thông tin tiệc hiện tại (nếu chưa có)
+        public PHIEUDATTIECDTO CurrentWedding => _phieuDatTiecService.GetById(_maPhieuDat);
 
         // Menu Section
         public ObservableCollection<THUCDONDTO> MenuList { get; set; } = new ObservableCollection<THUCDONDTO>();
@@ -125,8 +153,36 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 LoadWeddingDetail(maPhieuDat);
             }
-            // Commands
-            
+            var from = new DateTime(2000, 1, 1);
+            var to = DateTime.Today;
+
+            // Nếu có ngày đãi tiệc, kiểm tra kỹ
+            //if (NgayDaiTiec.HasValue)
+            //{
+            //    var date = NgayDaiTiec.Value.Date;
+
+            //    // Nếu ngày đãi tiệc nằm trong phạm vi hợp lệ và lớn hơn "from"
+            //    if (date >= from && date <= to)
+            //    {
+            //        to = date;
+            //    }
+            //}
+
+            //// Không được để from > to
+            //if (from > to)
+            //{
+            //    // Log để kiểm tra
+            //    MessageBox.Show($"LỖI PHẠM VI: from = {from}, to = {to}");
+            //    // Đặt lại to = from để tránh lỗi
+            //    to = from;
+            if (from > to)
+            {
+                // Đặt lại to = from để tránh lỗi
+                to = from;
+            }
+            NgayKhongChoChon = new ObservableCollection<CalendarDateRange>();
+
+
             ResetTCCommand = new RelayCommand<object>((p) => true, (p) => 
             {
                 // Lấy lại thông tin ban đầu
@@ -291,7 +347,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 ServiceList[index] = NewServiceItem; // Add the updated item back
 
             });
-            DeleteServiceCommand = new RelayCommand<object>((p) => SelectedServiceItem != null, (p) =>
+            DeleteServiceCommand = new RelayCommand<object>((p) =>
+            {
+                // Nếu SelectedServiceItem là null, không thể xóa
+                return SelectedServiceItem != null;
+            }
+            , (p) =>
             {
                 ServiceList.Remove(SelectedServiceItem);
                 SelectedServiceItem = null;
@@ -525,6 +586,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin bắt buộc và chọn thực đơn, dịch vụ.", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            // Kiểm tra ngày đãi tiệc phải là ngày mai hoặc ngày sau đó
+            if (NgayDaiTiec.Value.Date < DateTime.Today.AddDays(1))
+            {
+                MessageBox.Show("Ngày đãi tiệc phải là ngày mai hoặc ngày sau đó.", "Lỗi ngày", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             // Kiểm tra nếu không có gì thay đổi (bao gồm cả menu và dịch vụ) thì không cần cập nhật
             var existingWedding = _phieuDatTiecService.GetById(_maPhieuDat);
@@ -653,7 +720,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 phieuDatTiec.TenChuRe = TenChuRe;
                 phieuDatTiec.TenCoDau = TenCoDau;
                 phieuDatTiec.DienThoai = DienThoai;
-                phieuDatTiec.NgayDaiTiec = NgayDaiTiec;
+                //phieuDatTiec.NgayDaiTiec = NgayDaiTiec;
+                // giờ đãi tiệc là thời gian bắt đầu của ca
+                phieuDatTiec.NgayDaiTiec = NgayDaiTiec.Value.Date.Add(SelectedCa.ThoiGianBatDauCa.Value);
                 phieuDatTiec.NgayDatTiec = NgayDatTiec;
                 phieuDatTiec.MaCa = SelectedCa.MaCa;
                 phieuDatTiec.MaSanh = SelectedSanh.MaSanh;
