@@ -309,6 +309,7 @@
     <Compile Include="Presentation\ViewModel\AddWeddingViewModel.cs" />
     <Compile Include="Presentation\ViewModel\CalendarBehavior.cs" />
     <Compile Include="Presentation\ViewModel\FutureDateValidationRule.cs" />
+    <Compile Include="Presentation\ViewModel\HomeChartViewModel.cs" />
     <Compile Include="Presentation\ViewModel\HomeViewModel.cs" />
     <Compile Include="Presentation\ViewModel\InvoiceViewModel.cs" />
     <Compile Include="Presentation\ViewModel\MenuItemViewModel.cs" />

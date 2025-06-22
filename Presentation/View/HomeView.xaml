@@ -284,7 +284,6 @@
                 <Border
                     Width="487"
                     Height="350"
-                    Padding="12"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"

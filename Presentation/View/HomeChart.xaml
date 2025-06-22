@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:QuanLyTiecCuoi.Presentation.View"
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="#f2f6fc"
     mc:Ignorable="d">
 
     <Border
@@ -34,47 +33,22 @@
                 FontFamily="Segoe UI"
                 FontSize="12"
                 FontWeight="Bold"
-                Foreground="DarkSlateBlue"
-                Text="📊 BIỂU ĐỒ DOANH THU" />
+                Foreground="Green"
+                Text="📈 BIỂU ĐỒ DOANH THU" />
 
-            <!--  Biểu đồ cột  -->
+            <!--  Biểu đồ đường/miền  -->
             <lvc:CartesianChart
                 Grid.Row="1"
                 Background="#FAFAFA"
-                Foreground="DarkSlateBlue"
+                Foreground="Green"
                 LegendLocation="Right"
                 Series="{Binding SeriesCollection}">
 
                 <!--  Trục X: ngày  -->
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis
-                        Title="Ngày"
-                        FontSize="12"
-                        FontWeight="SemiBold"
-                        Foreground="#455A64"
-                        Labels="{Binding Labels}">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator
-                                Step="1"
-                                Stroke="#B0BEC5"
-                                StrokeThickness="0.8" />
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
+
 
                 <!--  Trục Y: doanh thu  -->
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis
-                        Title="Doanh thu (VNĐ)"
-                        FontSize="12"
-                        FontWeight="SemiBold"
-                        Foreground="#455A64"
-                        LabelFormatter="{Binding Formatter}">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator Stroke="#CFD8DC" StrokeThickness="1" />
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisY>
+
             </lvc:CartesianChart>
         </Grid>
     </Border>

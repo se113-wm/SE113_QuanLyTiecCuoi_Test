@@ -98,7 +98,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             PreviousImageCommand = new RelayCommand<object>((p) => true, (p) => PreviousImage());
 
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1); // 3 giây dễ quan sát hơn
+            _timer.Interval = TimeSpan.FromSeconds(3); // 3 giây dễ quan sát hơn
             _timer.Tick += (s, e) => NextImage();
             _timer.Start();
         }
@@ -171,7 +171,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 .OrderBy(x => x.Ngay)
                 .ToList();
 
-            var chartVM = new ChartViewModel(latestMonthReports);
+            var chartVM = new HomeChartViewModel(latestMonthReports);
 
             var homeChart = new HomeChart
             {
