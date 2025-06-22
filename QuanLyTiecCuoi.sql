@@ -83,7 +83,7 @@ CREATE TABLE THUCDON (
     MaPhieuDat INT,
     MaMonAn INT,
     SoLuong INT,
-    DonGia MONEY,
+    DonGia MONEY, 
     GhiChu NVARCHAR(100),
     PRIMARY KEY (MaPhieuDat, MaMonAn),
     FOREIGN KEY (MaPhieuDat) REFERENCES PHIEUDATTIEC(MaPhieuDat),
@@ -103,7 +103,7 @@ CREATE TABLE CHITIETDV (
     MaPhieuDat INT,
     MaDichVu INT,
     SoLuong INT,
-    DonGia MONEY,
+    DonGia MONEY, 
     ThanhTien MONEY,
     GhiChu NVARCHAR(100),
     PRIMARY KEY (MaPhieuDat, MaDichVu),
@@ -192,23 +192,20 @@ BEGIN
     -- Cập nhật lại các phiếu đặt tiệc liên quan
     UPDATE p
     SET 
-        DonGiaBanTiec = ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
-                                                     FROM THUCDON td 
-                                                     WHERE td.MaPhieuDat = p.MaPhieuDat), 0),
-        TongTienBan = p.SoLuongBan * (ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
+        TongTienBan = p.SoLuongBan * (p.DonGiaBanTiec + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
                                                                    FROM THUCDON td 
                                                                    WHERE td.MaPhieuDat = p.MaPhieuDat), 0)),
         TongTienDV = ISNULL((SELECT SUM(ctdv.ThanhTien) 
                            FROM CHITIETDV ctdv 
                            WHERE ctdv.MaPhieuDat = p.MaPhieuDat), 0),
-        TongTienHoaDon = p.SoLuongBan * (ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
+        TongTienHoaDon = p.SoLuongBan * (p.DonGiaBanTiec + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
                                                                       FROM THUCDON td 
                                                                       WHERE td.MaPhieuDat = p.MaPhieuDat), 0)) +
                        ISNULL((SELECT SUM(ctdv.ThanhTien) 
                               FROM CHITIETDV ctdv 
                               WHERE ctdv.MaPhieuDat = p.MaPhieuDat), 0) +
                        ISNULL(p.ChiPhiPhatSinh, 0),
-        TienConLai = p.SoLuongBan * (ls.DonGiaBanToiThieu + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
+        TienConLai = p.SoLuongBan * (p.DonGiaBanTiec + ISNULL((SELECT SUM(td.DonGia * td.SoLuong) 
                                                                   FROM THUCDON td 
                                                                   WHERE td.MaPhieuDat = p.MaPhieuDat), 0)) +
                     ISNULL((SELECT SUM(ctdv.ThanhTien) 
@@ -261,37 +258,40 @@ BEGIN
     WHERE p.MaPhieuDat IN (SELECT MaPhieuDat FROM @AffectedPhieuDats);
 END;
 
-GO
-CREATE TRIGGER TRG_Update_TongTien_When_LoaiSanh_Changes
-ON LOAISANH
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
+--GO
+--CREATE TRIGGER TRG_Update_TongTien_When_LoaiSanh_Changes
+--ON LOAISANH
+--AFTER UPDATE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
     
-    -- Kiểm tra xem DonGiaBanToiThieu có thay đổi không
-    IF UPDATE(DonGiaBanToiThieu)
-    BEGIN
-        -- Cập nhật lại TongTienBan và các trường liên quan trong PHIEUDATTIEC
-        -- cho các phiếu đặt tiệc sử dụng loại sảnh bị thay đổi
-        UPDATE p
-        SET 
-            p.TongTienBan = p.SoLuongBan * i.DonGiaBanToiThieu,
-            p.TongTienHoaDon = (p.SoLuongBan * i.DonGiaBanToiThieu) + 
-                              ISNULL(p.TongTienDV, 0) + 
-                              ISNULL(p.ChiPhiPhatSinh, 0),
-            p.TienConLai = (p.SoLuongBan * i.DonGiaBanToiThieu) + 
-                           ISNULL(p.TongTienDV, 0) + 
-                           ISNULL(p.ChiPhiPhatSinh, 0) + 
-                           ISNULL(p.TienPhat, 0) - 
-                           ISNULL(p.TienDatCoc, 0)
-        FROM PHIEUDATTIEC p
-        INNER JOIN SANH s ON p.MaSanh = s.MaSanh
-        INNER JOIN inserted i ON s.MaLoaiSanh = i.MaLoaiSanh
-        INNER JOIN deleted d ON i.MaLoaiSanh = d.MaLoaiSanh
-        WHERE i.DonGiaBanToiThieu <> d.DonGiaBanToiThieu;
-    END
-END;
+--    -- Kiểm tra xem DonGiaBanToiThieu có thay đổi không
+--    IF UPDATE(DonGiaBanToiThieu)
+--    BEGIN
+--        -- Cập nhật lại TongTienBan và các trường liên quan trong PHIEUDATTIEC
+--        -- cho các phiếu đặt tiệc còn ở tương lai
+--        UPDATE p
+--        SET 
+--            p.TongTienBan = p.SoLuongBan * i.DonGiaBanToiThieu,
+--            p.TongTienHoaDon = (p.SoLuongBan * i.DonGiaBanToiThieu) + 
+--                              ISNULL(p.TongTienDV, 0) + 
+--                              ISNULL(p.ChiPhiPhatSinh, 0),
+--            p.TienConLai = (p.SoLuongBan * i.DonGiaBanToiThieu) + 
+--                           ISNULL(p.TongTienDV, 0) + 
+--                           ISNULL(p.ChiPhiPhatSinh, 0) + 
+--                           ISNULL(p.TienPhat, 0) - 
+--                           ISNULL(p.TienDatCoc, 0)
+--        FROM PHIEUDATTIEC p
+--        INNER JOIN SANH s ON p.MaSanh = s.MaSanh
+--        INNER JOIN inserted i ON s.MaLoaiSanh = i.MaLoaiSanh
+--        INNER JOIN deleted d ON i.MaLoaiSanh = d.MaLoaiSanh
+--        WHERE 
+--            i.DonGiaBanToiThieu <> d.DonGiaBanToiThieu
+--            AND p.NgayDaiTiec >= CAST(GETDATE() AS DATE);  -- Chỉ cập nhật nếu ngày đãi tiệc chưa tới
+--    END
+--END;
+
 
 GO
 CREATE TRIGGER TRG_Update_TongTien_PhieuDat
@@ -304,13 +304,8 @@ BEGIN
     -- Cập nhật Đơn giá, Tổng tiền bàn, dịch vụ, hóa đơn
     UPDATE p
     SET 
-        DonGiaBanTiec = ls.DonGiaBanToiThieu + ISNULL((
-            SELECT SUM(td.DonGia * td.SoLuong)
-            FROM THUCDON td
-            WHERE td.MaPhieuDat = p.MaPhieuDat
-        ), 0),
         TongTienBan = p.SoLuongBan * (
-            ls.DonGiaBanToiThieu + ISNULL((
+            p.DonGiaBanTiec + ISNULL((
                 SELECT SUM(td.DonGia * td.SoLuong)
                 FROM THUCDON td
                 WHERE td.MaPhieuDat = p.MaPhieuDat
@@ -323,7 +318,7 @@ BEGIN
         ), 0),
         TongTienHoaDon = 
             p.SoLuongBan * (
-                ls.DonGiaBanToiThieu + ISNULL((
+                p.DonGiaBanTiec + ISNULL((
                     SELECT SUM(td.DonGia * td.SoLuong)
                     FROM THUCDON td
                     WHERE td.MaPhieuDat = p.MaPhieuDat

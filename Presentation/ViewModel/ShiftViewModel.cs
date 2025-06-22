@@ -12,6 +12,7 @@ namespace QuanLyTiecCuoi.ViewModel
     public class ShiftViewModel : BaseViewModel
     {
         private readonly ICaService _caService;
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
 
         private ObservableCollection<CADTO> _List;
         public ObservableCollection<CADTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -260,6 +261,7 @@ namespace QuanLyTiecCuoi.ViewModel
         public ShiftViewModel()
         {
             _caService = new CaService();
+            _phieuDatTiecService = new PhieuDatTiecService();
             List = new ObservableCollection<CADTO>(_caService.GetAll().ToList());
             OriginalList = new ObservableCollection<CADTO>(List);
 
@@ -408,11 +410,19 @@ namespace QuanLyTiecCuoi.ViewModel
 
             DeleteCommand = new RelayCommand<object>((p) =>
             {
-                DeleteMessage = string.Empty;
+                // Kiểm tra nếu không có ca nào được chọn
                 if (SelectedItem == null)
                 {
                     return false;
                 }
+                // Kiểm tra nếu ca này đang được sử dụng trong phiếu đặt tiệc
+                if (_phieuDatTiecService.GetAll().Any(x => x.MaCa == SelectedItem.MaCa))
+                {
+                    DeleteMessage = "Không thể xóa ca này vì nó đang được sử dụng trong phiếu đặt tiệc";
+                    return false;
+                }
+                // Nếu đã chọn ca và không có vấn đề gì thì cho phép xóa
+                DeleteMessage = string.Empty;
                 return true;
             }, (p) =>
             {

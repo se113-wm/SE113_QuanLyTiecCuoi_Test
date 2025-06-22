@@ -19,6 +19,7 @@ namespace QuanLyTiecCuoi.ViewModel
     public class ServiceViewModel : BaseViewModel
     {
         private readonly IDichVuService _dichVuService;
+        private readonly IChiTietDVService _chiTietDVService;
 
         private ObservableCollection<DICHVUDTO> _List;
         public ObservableCollection<DICHVUDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -560,6 +561,7 @@ namespace QuanLyTiecCuoi.ViewModel
         {
             //MessageBox.Show("Chào mừng bạn đến với quản lý dịch vụ!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             _dichVuService = new DichVuService();
+            _chiTietDVService = new ChiTietDVService();
             //MessageBox.Show(_dichVuService.GetAll().First().GhiChu);
             List = new ObservableCollection<DICHVUDTO>(_dichVuService.GetAll().ToList());
             OriginalList = new ObservableCollection<DICHVUDTO>(List);
@@ -730,12 +732,20 @@ namespace QuanLyTiecCuoi.ViewModel
             // DeleteCommand
             DeleteCommand = new RelayCommand<object>((p) =>
             {
-                DeleteMessage = string.Empty;
+                // Không cho phép xóa nếu chưa chọn
                 if (SelectedItem == null)
                 {
-                    // Không cho phép xóa nếu chưa chọn
+                    DeleteMessage = "Vui lòng chọn một dịch vụ để xóa.";
                     return false;
                 }
+                // Không cho phép xóa nếu dịch vụ đã được sử dụng trong phiếu đặt tiệc
+                var existsInPhieuDatTiec = _chiTietDVService.GetAll().Any(ct => ct.MaDichVu == SelectedItem.MaDichVu);
+                if (existsInPhieuDatTiec)
+                {
+                    DeleteMessage = "Dịch vụ này đang được sử dụng trong phiếu đặt tiệc, không thể xóa.";
+                    return false;
+                }
+                DeleteMessage = string.Empty;
                 return true;
             }, (p) =>
             {

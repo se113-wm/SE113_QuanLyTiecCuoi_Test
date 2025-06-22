@@ -36,6 +36,7 @@ namespace QuanLyTiecCuoi.ViewModel {
         private readonly ICaService _caService;
         private readonly ISanhService _sanhService;
         private readonly IChiTietDVService _chiTietDichVuService;
+        private readonly IThucDonService _thucDonService;
         private readonly IThamSoService _thamSoService;
 
         private PHIEUDATTIECDTO _SelectedInvoice;
@@ -43,8 +44,8 @@ namespace QuanLyTiecCuoi.ViewModel {
         private int _InvoiceId;
         public int InvoiceId { get => _InvoiceId; set { _InvoiceId = value; OnPropertyChanged(); } }
 
-        private decimal? _TotalTableAmount;
-        public decimal? TotalTableAmount { get => _TotalTableAmount; set { _TotalTableAmount = value; OnPropertyChanged(); } }
+        private decimal? _DonGiaBan;
+        public decimal? DonGiaBan { get => _DonGiaBan; set { _DonGiaBan = value; OnPropertyChanged(); } }
         private bool _IsPaid = false;
         public bool IsPaid { get => _IsPaid; set { _IsPaid = value; OnPropertyChanged(); } }
         private DateTime? _PaymentDate = DateTime.Now;
@@ -78,16 +79,27 @@ namespace QuanLyTiecCuoi.ViewModel {
         public decimal? Deposit { get => _Deposit; set { _Deposit = value; OnPropertyChanged(); } }
         private decimal? _Fine;
         public decimal? Fine { get => _Fine; set { _Fine = value; OnPropertyChanged(); OnPropertyChanged(nameof(RemainingAmount)); } }
-        public decimal? TotalInvoiceAmount {
-            get {
+        public decimal? TotalInvoiceAmount
+        {
+            get
+            {
                 if (SelectedInvoice != null && int.TryParse(TableQuantity, out int quantity))
+                {
+                    // Lấy tổng tiền các món trong thực đơn
+                    var thucDonList = _thucDonService.GetByPhieuDat(SelectedInvoice.MaPhieuDat);
+                    decimal tongTienMonAn = thucDonList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
+
+                    decimal tongTienBan = quantity * ((SelectedInvoice.DonGiaBanTiec ?? 0) + tongTienMonAn);
+
                     if (decimal.TryParse(DamageEquipmentCost, out decimal dmgcost))
-                        return (quantity * SelectedInvoice.DonGiaBanTiec + SelectedInvoice.TongTienDV + dmgcost);
-                    else 
-                        return (quantity * SelectedInvoice.DonGiaBanTiec + SelectedInvoice.TongTienDV);
+                        return tongTienBan + (SelectedInvoice.TongTienDV ?? 0) + dmgcost;
+                    else
+                        return tongTienBan + (SelectedInvoice.TongTienDV ?? 0);
+                }
                 return 0;
             }
-            set {
+            set
+            {
                 TotalInvoiceAmount = value;
             }
         }
@@ -108,6 +120,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             _caService = new CaService();
             _sanhService = new SanhService();
             _chiTietDichVuService = new ChiTietDVService();
+            _thucDonService = new ThucDonService();
             _thamSoService = new ThamSoService();
             SelectedInvoice = _phieuDatTiecService.GetById(invoiceId);
             ServiceList = new ObservableCollection<CHITIETDVDTO>(_chiTietDichVuService.GetByPhieuDat(invoiceId));
@@ -116,6 +129,11 @@ namespace QuanLyTiecCuoi.ViewModel {
             TableQuantityMessage += $"{SelectedInvoice.SoLuongBan}";
             TableQuantityMax += SelectedInvoice.Sanh.SoLuongBanToiDa.ToString();
             Deposit = SelectedInvoice.TienDatCoc;
+
+            // Lấy tổng tiền các món trong thực đơn
+            var thucDonList = _thucDonService.GetByPhieuDat(invoiceId);
+            decimal tongTienMonAn = thucDonList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
+            DonGiaBan = (SelectedInvoice.DonGiaBanTiec ?? 0) + tongTienMonAn;
 
             if (SelectedInvoice.NgayThanhToan != null) {
                 IsPaid = true;
@@ -210,9 +228,14 @@ namespace QuanLyTiecCuoi.ViewModel {
             int tableQuantity = 0;
             decimal totalTableAmount = 0;
             decimal damageEquipmentCost = 0;
-            if (int.TryParse(TableQuantity, out int _tableQuantiy)) {
+            if (int.TryParse(TableQuantity, out int _tableQuantiy))
+            {
                 tableQuantity = _tableQuantiy;
-                totalTableAmount = tableQuantity * SelectedInvoice.DonGiaBanTiec.GetValueOrDefault();
+                // Lấy tổng tiền các món trong thực đơn
+                var thucDonList = _thucDonService.GetByPhieuDat(SelectedInvoice.MaPhieuDat);
+                decimal tongTienMonAn = thucDonList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
+                // Tổng tiền bàn = số bàn * (đơn giá bàn tiệc + tổng tiền món ăn)
+                totalTableAmount = tableQuantity * ((SelectedInvoice.DonGiaBanTiec ?? 0) + tongTienMonAn);
             }
             damageEquipmentCost = decimal.Parse(DamageEquipmentCost);
             try {
@@ -231,7 +254,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     SoBanDuTru = SelectedInvoice.SoBanDuTru,
                     MaCa = SelectedInvoice.MaCa,
                     MaSanh = SelectedInvoice.MaSanh,
-                    DonGiaBanTiec = SelectedInvoice.DonGiaBanTiec,
+                    //DonGiaBanTiec = SelectedInvoice.DonGiaBanTiec,
                     TongTienDV = SelectedInvoice.TongTienDV,
                     NgayThanhToan = DateTime.Now,
                     SoLuongBan = tableQuantity,
