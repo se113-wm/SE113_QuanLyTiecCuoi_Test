@@ -9,7 +9,6 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     d:DesignHeight="720"
     d:DesignWidth="1200"
-    Background="#E3F0FF"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -32,7 +31,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="20">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="689*" />
             <ColumnDefinition Width="271*" />
@@ -48,14 +47,13 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Header -->
+            <!--  Header  -->
             <StackPanel
                 Grid.Column="0"
                 Width="544"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center">
                 <TextBlock
-                    Margin="0,0,0,8"
                     HorizontalAlignment="Center"
                     FontSize="38"
                     FontWeight="Bold"
@@ -63,7 +61,6 @@
                     Text="Quản Lý Tiệc Cưới"
                     TextAlignment="Center" />
                 <TextBlock
-                    Margin="0,0,0,2"
                     HorizontalAlignment="Center"
                     FontSize="22"
                     Foreground="{StaticResource BlueText}"
@@ -79,7 +76,7 @@
                 <Button
                     Width="180"
                     Height="44"
-                    Margin="0,16,0,0"
+                    Margin="10"
                     HorizontalAlignment="Center"
                     Background="{StaticResource BlueBorder}"
                     Command="{Binding DatTiecNgayCommand}"
@@ -91,59 +88,81 @@
                     Style="{StaticResource MaterialDesignRaisedButton}" />
             </StackPanel>
 
-            <!-- Hình ảnh -->
-            <StackPanel
+            <!--  Hình ảnh  -->
+            <!--  Hình ảnh (Carousel)  -->
+            <Grid
                 Grid.Row="1"
                 Grid.Column="0"
-                Width="572"
-                Margin="0,32,0,0"
+                Width="630"
+                Height="300"
                 HorizontalAlignment="Center"
-                Orientation="Horizontal">
+                VerticalAlignment="Center">
 
+                <!--  Ảnh bo góc  -->
                 <Border
-                    Width="250"
-                    Height="200"
-                    Margin="0,0,8,0"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
-                    CornerRadius="18"
-                    Effect="{StaticResource ShadowEffect}"
-                    Padding="0">
+                    ClipToBounds="True"
+                    Effect="{StaticResource ShadowEffect}">
                     <Image
-                        Margin="-2,-2,-2,-2"
-                        ClipToBounds="True"
-                        Source="/Image/wedding.jpg"
-                        Stretch="Fill"
-                        SnapsToDevicePixels="True" />
+                        Width="630"
+                        Height="300"
+                        Margin="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Source="{Binding CurrentImage}"
+                        Stretch="UniformToFill" />
                 </Border>
 
-                <Border
-                    Width="250"
-                    Height="200"
+
+                <!--  Nút trái  -->
+                <Button
+                    Width="40"
+                    Height="64"
                     Margin="8,0,0,0"
-                    Background="#F8FBFF"
-                    BorderBrush="{StaticResource BlueBorder}"
-                    BorderThickness="2"
-                    CornerRadius="18"
-                    Effect="{StaticResource ShadowEffect}"
-                    Padding="0">
-                    <Image
-                        Margin="-2,-2,-2,-2"
-                        ClipToBounds="True"
-                        Source="/Image/anhcuoi.png"
-                        Stretch="Fill"
-                        SnapsToDevicePixels="True" />
-                </Border>
-            </StackPanel>
+                    Padding="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Background="#80FFFFFF"
+                    BorderThickness="0"
+                    Command="{Binding PreviousImageCommand}"
+                    Cursor="Hand"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    ToolTip="Ảnh trước">
+                    <materialDesign:PackIcon
+                        Width="28"
+                        Height="28"
+                        Foreground="#1976D2"
+                        Kind="ChevronLeft" />
+                </Button>
 
-            <!-- Đặt tiệc gần đây -->
-            <StackPanel
-                Grid.Row="2"
-                Margin="0,61,0,0"
-                HorizontalAlignment="Center">
+                <!--  Nút phải  -->
+                <Button
+                    Width="40"
+                    Height="64"
+                    Margin="0,0,8,0"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Background="#80FFFFFF"
+                    BorderThickness="0"
+                    Command="{Binding NextImageCommand}"
+                    Cursor="Hand"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    ToolTip="Ảnh sau">
+                    <materialDesign:PackIcon
+                        Width="28"
+                        Height="28"
+                        Foreground="#1976D2"
+                        Kind="ChevronRight" />
+                </Button>
+            </Grid>
+
+
+            <!--  Đặt tiệc gần đây  -->
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center">
                 <TextBlock
-                    Margin="0,0,0,8"
                     HorizontalAlignment="Left"
                     FontSize="18"
                     FontWeight="Bold"
@@ -165,17 +184,17 @@
                         CanUserDeleteRows="False"
                         CanUserResizeRows="False"
                         ColumnHeaderHeight="50"
-                        FontSize="16"
+                        FontSize="14"
                         Foreground="{StaticResource BlueText}"
                         HeadersVisibility="Column"
                         ItemsSource="{Binding RecentBookings}"
                         RenderTransformOrigin="0.501,0.546"
                         RowHeight="38">
-                        <!-- Thêm style căn giữa header -->
+                        <!--  Thêm style căn giữa header  -->
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
@@ -204,12 +223,11 @@
                 </Border>
             </StackPanel>
 
-            <!-- Lịch và thống kê -->
+            <!--  Lịch và thống kê  -->
             <StackPanel
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 Grid.Column="1"
-                Margin="32,0,0,0"
                 VerticalAlignment="Top">
                 <TextBlock
                     Width="247"
@@ -218,7 +236,6 @@
                     Foreground="{StaticResource BlueText}"
                     Text="Các tiệc cưới sắp diễn ra" />
                 <Border
-                    Margin="0,0,0,10"
                     Padding="6"
                     HorizontalAlignment="Stretch"
                     Background="#F8FBFF"
@@ -267,12 +284,11 @@
                 <Border
                     Width="487"
                     Height="350"
-                    Margin="0,8,0,0"
+                    Padding="12"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="14"
-                    Padding="12"
                     Effect="{StaticResource ShadowEffect}">
                     <ContentControl
                         HorizontalAlignment="Stretch"

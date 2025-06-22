@@ -4,10 +4,9 @@ using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
@@ -16,17 +15,14 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public DateTime Date { get; set; }
         public string Tooltip { get; set; }
     }
-    public class HomeViewModel : INotifyPropertyChanged
+
+    public class HomeViewModel : BaseViewModel
     {
         private readonly CtBaoCaoDsService _baoCaoService = new CtBaoCaoDsService();
         public ICommand DatTiecNgayCommand { get; set; }
-        // Recent bookings for DataGrid
         public ObservableCollection<RecentBookingViewModel> RecentBookings { get; set; }
-
-        // Highlighted wedding days for Calendar
         public ObservableCollection<SpecialDateInfo> WeddingDays { get; set; }
 
-        // Selected date in Calendar
         private DateTime? _selectedDate;
         public DateTime? SelectedDate
         {
@@ -36,12 +32,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 if (_selectedDate != value)
                 {
                     _selectedDate = value;
-                    OnPropertyChanged(nameof(SelectedDate));
+                    OnPropertyChanged();
                 }
             }
         }
 
-        // Statistic chart control (can be a UserControl or ViewModel)
         private object _statisticChartControl;
         public object StatisticChartControl
         {
@@ -51,40 +46,77 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 if (_statisticChartControl != value)
                 {
                     _statisticChartControl = value;
-                    OnPropertyChanged(nameof(StatisticChartControl));
+                    OnPropertyChanged();
                 }
             }
         }
 
         private readonly PhieuDatTiecService _phieuDatTiecService;
-
         private MainViewModel _mainVM;
+
+        private ObservableCollection<string> _imagePaths = new ObservableCollection<string>
+        {
+            "/Image/wedding.jpg",
+            "/Image/anhcuoi.png",
+             "/Image/1.jpg",
+              "/Image/2.jpg",
+               "/Image/3.jpg",
+            // Thêm các đường dẫn ảnh khác nếu có
+        };
+
+        private int _currentImageIndex;
+        private string _currentImage;
+        private DispatcherTimer _timer;
+
+        public string CurrentImage
+        {
+            get => _currentImage;
+            set { _currentImage = value; OnPropertyChanged(); }
+        }
+
+        public ICommand NextImageCommand { get; }
+        public ICommand PreviousImageCommand { get; }
 
         public HomeViewModel(MainViewModel mainVM)
         {
             _phieuDatTiecService = new PhieuDatTiecService();
             _mainVM = mainVM;
 
-            // Load data
             LoadRecentBookings();
             LoadWeddingDays();
-            // thử dữ liệu tĩnh cho ngày cưới
-            //WeddingDays = new ObservableCollection<SpecialDateInfo>
-            //{
-            //    new SpecialDateInfo { Date = DateTime.Today.AddDays(1), Tooltip = "Cưới ngày mai" },
-            //    new SpecialDateInfo { Date = DateTime.Today.AddDays(2), Tooltip = "Cưới ngày kia" },
-            //    new SpecialDateInfo { Date = DateTime.Today.AddDays(3), Tooltip = "Cưới sau 3 ngày" }
-            //};
             LoadStatisticChart();
+
             DatTiecNgayCommand = new RelayCommand<object>((p) => true, (p) =>
             {
                 _mainVM.SwitchToWeddingTab();
             });
+
+            _currentImageIndex = 0;
+            CurrentImage = _imagePaths[_currentImageIndex];
+
+            NextImageCommand = new RelayCommand<object>((p) => true, (p) => NextImage());
+            PreviousImageCommand = new RelayCommand<object>((p) => true, (p) => PreviousImage());
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1); // 3 giây dễ quan sát hơn
+            _timer.Tick += (s, e) => NextImage();
+            _timer.Start();
+        }
+
+        private void NextImage()
+        {
+            _currentImageIndex = (_currentImageIndex + 1) % _imagePaths.Count;
+            CurrentImage = _imagePaths[_currentImageIndex];
+        }
+
+        private void PreviousImage()
+        {
+            _currentImageIndex = (_currentImageIndex - 1 + _imagePaths.Count) % _imagePaths.Count;
+            CurrentImage = _imagePaths[_currentImageIndex];
         }
 
         private void LoadRecentBookings()
         {
-            // Lấy 5 phiếu đặt tiệc gần nhất (theo ngày đặt tiệc giảm dần)
             var bookings = _phieuDatTiecService.GetAll()
                 .Where(x => x.NgayDatTiec.HasValue)
                 .OrderByDescending(x => x.NgayDatTiec.Value)
@@ -103,7 +135,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private void LoadWeddingDays()
         {
-            // Lấy các ngày đãi tiệc sắp tới (trong tương lai)
             var now = DateTime.Today;
             var weddings = _phieuDatTiecService.GetAll()
                 .Where(x => x.NgayDaiTiec.HasValue && x.NgayDaiTiec.Value >= now)
@@ -140,10 +171,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 .OrderBy(x => x.Ngay)
                 .ToList();
 
-            // Tạo ViewModel cho biểu đồ
             var chartVM = new ChartViewModel(latestMonthReports);
 
-            // Tạo ChartView và truyền ViewModel vào DataContext
             var homeChart = new HomeChart
             {
                 DataContext = chartVM,
@@ -152,13 +181,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             };
             StatisticChartControl = homeChart;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    // ViewModel for DataGrid row
     public class RecentBookingViewModel
     {
         public string BrideGroom { get; set; }

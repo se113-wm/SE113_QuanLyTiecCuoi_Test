@@ -595,6 +595,9 @@
     <Resource Include="Image\wedding.jpg" />
     <Resource Include="Presentation\View\Assets\icon_window.ico" />
     <Resource Include="Image\anhcuoi.png" />
+    <Resource Include="Image\1.jpg" />
+    <Resource Include="Image\2.jpg" />
+    <Resource Include="Image\3.jpg" />
     <Content Include="Model\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
