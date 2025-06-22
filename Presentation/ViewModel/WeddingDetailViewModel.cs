@@ -468,18 +468,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             ShowInvoiceCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                try {
-                    var invoiceView = new InvoiceView() {
-                        DataContext = new InvoiceViewModel(_maPhieuDat)
-                    };
-                    invoiceView.ShowDialog();
+
+                var invoiceView = new InvoiceView() {
+                    DataContext = new InvoiceViewModel(_maPhieuDat)
+                };
+                invoiceView.ShowDialog();
                     
-                    IsEditing = false; // Reset editing mode after showing invoice
-                    LoadWeddingDetail(maPhieuDat); // Reload wedding details to reflect any changes
-                }
-                catch (Exception e) {
-                    MessageBox.Show(e.Message);
-                }
+                IsEditing = false; // Reset editing mode after showing invoice
+                LoadWeddingDetail(maPhieuDat); // Reload wedding details to reflect any changes
+              
             });
 
         }

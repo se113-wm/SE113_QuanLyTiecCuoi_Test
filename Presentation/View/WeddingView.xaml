@@ -60,6 +60,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -132,6 +133,15 @@
                         ItemsSource="{Binding SoLuongBanFilterList}"
                         SelectedItem="{Binding SelectedSoLuongBan, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="5"
+                        Margin="5"
+                        materialDesign:HintAssist.Hint="Trạng thái"
+                        IsEditable="False"
+                        ItemsSource="{Binding TrangThaiFilterList}"
+                        SelectedItem="{Binding SelectedTrangThai, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -191,7 +201,7 @@
                                 Content="Xem chi tiết"
                                 Style="{StaticResource MaterialDesignRaisedButton}" />
                         </StackPanel>
-                        <StackPanel Width="110">
+                        <StackPanel Width="150">
                             <Button
                                 Width="100"
                                 Margin="5"
@@ -201,7 +211,7 @@
                             <TextBlock
                                 Height="32"
                                 VerticalAlignment="Top"
-                                FontSize="12"
+                                FontSize="10"
                                 Foreground="Gray"
                                 Text="{Binding DeleteMessage}"
                                 TextWrapping="Wrap" />
@@ -330,6 +340,27 @@
                                             HorizontalAlignment="Left"
                                             Text="{Binding SoLuongBan}"
                                             TextAlignment="Left" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <!--  Status Column  -->
+                            <GridViewColumn Width="150" Header="Trạng thái">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Margin="20,0,0,0"
+                                            Padding="6,2"
+                                            BorderBrush="{Binding TrangThaiBrush}"
+                                            BorderThickness="1.2"
+                                            CornerRadius="6">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontWeight="Bold"
+                                                Foreground="{Binding TrangThaiBrush}"
+                                                Text="{Binding TrangThai}"
+                                                TextAlignment="Center" />
+                                        </Border>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

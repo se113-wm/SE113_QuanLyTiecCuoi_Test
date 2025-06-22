@@ -28,19 +28,47 @@
                 </Grid.RowDefinitions>
 
                 <!--  Ten hoa don  -->
-                <StackPanel
-                    Grid.Row="0"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Text="HOÁ ĐƠN " />
-                    <TextBlock
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Text="{Binding InvoiceId}" />
-                </StackPanel>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Centered Invoice Title and ID  -->
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Text="HOÁ ĐƠN " />
+                        <TextBlock
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Text="{Binding InvoiceId}" />
+                    </StackPanel>
+
+                    <!--  Status on the right with colored border  -->
+                    <Border
+                        Grid.Column="2"
+                        Margin="0,0,10,0"
+                        Padding="8,2"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        BorderBrush="{Binding SelectedInvoice.TrangThaiBrush}"
+                        BorderThickness="2"
+                        CornerRadius="6">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="{Binding SelectedInvoice.TrangThaiBrush}"
+                            Text="{Binding SelectedInvoice.TrangThai}"
+                            TextAlignment="Center" />
+                    </Border>
+                </Grid>
 
                 <!--  Chi tiet tiec cuoi  -->
                 <materialDesign:Card

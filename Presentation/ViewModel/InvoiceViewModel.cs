@@ -1,4 +1,17 @@
-﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using iText.IO.Font;
+using iText.IO.Font.Constants;
+using iText.IO.Image;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Draw;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using MaterialDesignThemes.Wpf.Converters;
+using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Helpers;
@@ -8,26 +21,13 @@ using QuanLyTiecCuoi.Presentation.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
-
-using iText.IO.Font;
-using iText.IO.Font.Constants;
-using iText.IO.Image;
-using iText.Kernel.Font;
-using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Element;
-using iText.Layout.Properties;
-using iText.Layout.Borders;
-using iText.Kernel.Colors;
-using iText.Kernel.Pdf.Canvas.Draw;
 using System.Windows.Controls;
-using System.ComponentModel.DataAnnotations;
-using MaterialDesignThemes.Wpf.Converters;
-using System.Linq.Expressions;
+using System.Windows.Input;
 
 namespace QuanLyTiecCuoi.ViewModel {
     public class InvoiceViewModel : BaseViewModel {
@@ -216,12 +216,14 @@ namespace QuanLyTiecCuoi.ViewModel {
                 ConfirmMessage = string.Empty;
                 return true;
             }, (p) => {
-                try {
-                    ConfirmPayment();
+
+                if (p is Window window)
+                {
+                    MessageBox.Show("Đặt tiệc cưới thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //window.Close(); // Close the window
                 }
-                catch (Exception e) {
-                    MessageBox.Show(e.Message);
-                }
+                ConfirmPayment();
+               
             });
         }
         private void ConfirmPayment() {
@@ -267,6 +269,13 @@ namespace QuanLyTiecCuoi.ViewModel {
 
                 Deposit = invoice.TienDatCoc.GetValueOrDefault();
                 Fine = invoice.TienPhat.GetValueOrDefault();
+                SelectedInvoice = invoice;
+                // Thông báo thành công
+                Window owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+                if (owner != null)
+                    MessageBox.Show(owner, "Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                else
+                    MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 OnPropertyChanged();
                 IsPaid = true;
