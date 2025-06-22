@@ -108,12 +108,14 @@
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="18"
-                    Effect="{StaticResource ShadowEffect}">
+                    Effect="{StaticResource ShadowEffect}"
+                    Padding="0">
                     <Image
-                        Margin="0"
+                        Margin="-2,-2,-2,-2"
                         ClipToBounds="True"
                         Source="/Image/wedding.jpg"
-                        Stretch="UniformToFill" />
+                        Stretch="Fill"
+                        SnapsToDevicePixels="True" />
                 </Border>
 
                 <Border
@@ -124,12 +126,14 @@
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="18"
-                    Effect="{StaticResource ShadowEffect}">
+                    Effect="{StaticResource ShadowEffect}"
+                    Padding="0">
                     <Image
-                        Margin="0"
+                        Margin="-2,-2,-2,-2"
                         ClipToBounds="True"
                         Source="/Image/anhcuoi.png"
-                        Stretch="UniformToFill" />
+                        Stretch="Fill"
+                        SnapsToDevicePixels="True" />
                 </Border>
             </StackPanel>
 
@@ -154,7 +158,7 @@
                     Effect="{StaticResource ShadowEffect}">
                     <DataGrid
                         Width="645"
-                        Height="170"
+                        Height="200"
                         AutoGenerateColumns="False"
                         Background="Transparent"
                         CanUserAddRows="False"
@@ -167,9 +171,16 @@
                         ItemsSource="{Binding RecentBookings}"
                         RenderTransformOrigin="0.501,0.546"
                         RowHeight="38">
+                        <!-- Thêm style căn giữa header -->
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                                Width="200"
+                                Width="250"
                                 Binding="{Binding BrideGroom}"
                                 ElementStyle="{StaticResource CenterCellStyle}"
                                 Header="Tên Cô Dâu - Chú Rể" />
@@ -254,7 +265,7 @@
                     Foreground="#1976D2"
                     Text="Thống kê tháng gần nhất" />
                 <Border
-                    Width="500"
+                    Width="487"
                     Height="350"
                     Margin="0,8,0,0"
                     Background="#F8FBFF"
@@ -263,12 +274,10 @@
                     CornerRadius="14"
                     Padding="12"
                     Effect="{StaticResource ShadowEffect}">
-                    <Viewbox Stretch="Uniform">
-                        <ContentControl
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Content="{Binding StatisticChartControl}" />
-                    </Viewbox>
+                    <ContentControl
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="{Binding StatisticChartControl}" />
                 </Border>
             </StackPanel>
         </Grid>
