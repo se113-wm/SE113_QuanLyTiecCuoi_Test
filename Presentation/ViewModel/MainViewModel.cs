@@ -35,10 +35,6 @@ namespace QuanLyTiecCuoi.ViewModel
         public Dictionary<string, Visibility> ButtonVisibilities { get; set; } = new Dictionary<string, Visibility>();
         public Dictionary<string, Brush> ButtonBackgrounds { get; set; } = new Dictionary<string, Brush>();
 
-
-        private static MainViewModel _instance;
-        public static MainViewModel Instance => _instance ?? (_instance = new MainViewModel());
-
         private object _CurrentView;
         public object CurrentView
         {
