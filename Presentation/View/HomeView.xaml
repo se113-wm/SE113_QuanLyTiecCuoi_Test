@@ -154,7 +154,7 @@
                     CornerRadius="14"
                     Effect="{StaticResource ShadowEffect}">
                     <DataGrid
-                        Width="572"
+                        Width="auto"
                         Height="87"
                         AutoGenerateColumns="False"
                         Background="Transparent"
