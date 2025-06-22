@@ -52,7 +52,8 @@
                 Grid.Column="0"
                 Width="544"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Margin="0,0,0,16">
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontSize="38"
@@ -96,7 +97,8 @@
                 Width="630"
                 Height="300"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Margin="0,0,0,24">
 
                 <!--  Ảnh bo góc  -->
                 <Border
@@ -108,9 +110,7 @@
                     <Image
                         Width="630"
                         Height="300"
-                        Margin="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
+                        Margin="0,0,-4,-4"
                         Source="{Binding CurrentImage}"
                         Stretch="UniformToFill" />
                 </Border>
@@ -161,7 +161,7 @@
 
 
             <!--  Đặt tiệc gần đây  -->
-            <StackPanel Grid.Row="2" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,16,0,0">
                 <TextBlock
                     HorizontalAlignment="Left"
                     FontSize="18"
@@ -169,14 +169,14 @@
                     Foreground="{StaticResource BlueText}"
                     Text="Đặt tiệc gần đây" />
                 <Border
-                    Padding="4"
+                    Padding="8"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="14"
                     Effect="{StaticResource ShadowEffect}">
                     <DataGrid
-                        Width="645"
+                        Width="618"
                         Height="200"
                         AutoGenerateColumns="False"
                         Background="Transparent"
@@ -228,21 +228,24 @@
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 Grid.Column="1"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                Margin="32,0,0,0">
                 <TextBlock
                     Width="247"
                     FontSize="16"
                     FontWeight="Bold"
                     Foreground="{StaticResource BlueText}"
-                    Text="Các tiệc cưới sắp diễn ra" />
+                    Text="Các tiệc cưới sắp diễn ra"
+                    Margin="0,0,0,8"/>
                 <Border
-                    Padding="6"
+                    Padding="10"
                     HorizontalAlignment="Stretch"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="14"
-                    Effect="{StaticResource ShadowEffect}">
+                    Effect="{StaticResource ShadowEffect}"
+                    Margin="0,0,0,18">
                     <Grid>
                         <Grid.Resources>
                             <Style
@@ -272,7 +275,7 @@
                             FontSize="14"
                             Foreground="Black"
                             Language="vi-VN"
-                            SelectedDate="{Binding SelectedDate}" />
+                            SelectedDate="{Binding SelectedDate}" Margin="0,0,10,0" />
                     </Grid>
                 </Border>
                 <TextBlock
@@ -280,19 +283,18 @@
                     FontSize="18"
                     FontWeight="SemiBold"
                     Foreground="#1976D2"
-                    Text="Thống kê tháng gần nhất" />
+                    Text="Thống kê tháng gần nhất"
+                    Margin="0,0,0,2"/>
                 <Border
-                    Width="487"
-                    Height="350"
+                    Width="507"
+                    Height="388"
                     Background="#F8FBFF"
                     BorderBrush="{StaticResource BlueBorder}"
                     BorderThickness="2"
                     CornerRadius="14"
                     Effect="{StaticResource ShadowEffect}">
                     <ContentControl
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Content="{Binding StatisticChartControl}" />
+                        Content="{Binding StatisticChartControl}" Margin="0,8,0,8" HorizontalAlignment="Center" Width="507" />
                 </Border>
             </StackPanel>
         </Grid>
