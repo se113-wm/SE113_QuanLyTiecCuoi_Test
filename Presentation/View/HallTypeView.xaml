@@ -74,7 +74,6 @@
                         Grid.Column="1"
                         Margin="5"
                         materialDesign:HintAssist.Hint="Đơn giá bàn tối thiểu"
-                        IsReadOnly="{Binding canedit}"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                         Text="{Binding DonGiaBanToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
 
@@ -177,7 +176,7 @@
 
                             <!--  Nút Xóa  -->
                             <StackPanel
-                                Width="110"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 Visibility="{Binding IsDeleting, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Button

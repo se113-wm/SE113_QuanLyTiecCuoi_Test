@@ -10,9 +10,9 @@
     Name="HoaDon"
     Title="Hóa Đơn"
     Width="1000"
-    Height="700"
+    Height="800"
     Icon="Assets/icon_invoice.ico"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="Manual">
     <Window.Resources>
         <converter:MultiplyConverter x:Key="MultiplyConverter" />
     </Window.Resources>
@@ -124,7 +124,7 @@
                                 materialDesign:HintAssist.Hint="Đơn giá bàn"
                                 IsReadOnly="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding SelectedInvoice.DonGiaBanTiec, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding DonGiaBan, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="2"
@@ -141,7 +141,7 @@
                                         UpdateSourceTrigger="PropertyChanged"
                                         ValidatesOnExceptions="False">
                                         <Binding Path="TableQuantity" />
-                                        <Binding Path="SelectedInvoice.DonGiaBanTiec" />
+                                        <Binding Path="DonGiaBan" />
                                     </MultiBinding>
                                 </TextBox.Text>
                             </TextBox>

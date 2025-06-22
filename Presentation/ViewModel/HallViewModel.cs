@@ -707,7 +707,15 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
                     return false;
                 }
-                // nếu đang có phiếu đặt tiệc chưa có ngày thanh toán thì ko cho đổi giá tiền
+                // Nếu có phiếu đặt tiệc nào đã đặt sảnh này, thì không cho sửa số lượng bàn tối đa
+                if (_phieuDatTiecService.GetAll().Any(t => t.MaSanh == SelectedItem.MaSanh))
+                {
+                    if (int.TryParse(SoLuongBanToiDa, out int newMax) && SelectedItem.SoLuongBanToiDa != newMax)
+                    {
+                        EditMessage = "Đang có tiệc chưa tổ chức, không sửa số lượng bàn tối đa";
+                        return false;
+                    }
+                }
                 EditMessage = string.Empty;
                 return true;
             }, (p) =>
@@ -765,7 +773,19 @@ namespace QuanLyTiecCuoi.ViewModel
 
             DeleteCommand = new RelayCommand<object>((p) =>
             {
-                return SelectedItem != null;
+                // Chỉ cho phép xóa khi có sảnh được chọn
+                if (SelectedItem == null)
+                {
+                    return false;
+                }
+                // Kiểm tra xem sảnh có đang được sử dụng trong phiếu đặt tiệc nào không
+                if (_phieuDatTiecService.GetAll().Any(t => t.MaSanh == SelectedItem.MaSanh))
+                {
+                    DeleteMessage = "Không thể xóa sảnh này vì đang có phiếu đặt tiệc sử dụng nó.";
+                    return false;
+                }
+                DeleteMessage = string.Empty;
+                return true;
             }, (p) =>
             {
                 try

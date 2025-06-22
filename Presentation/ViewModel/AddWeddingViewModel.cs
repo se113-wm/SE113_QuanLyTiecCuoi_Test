@@ -378,6 +378,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         NgayDatTiec = NgayDatTiec,
                         Ca = SelectedCa,
                         Sanh = SelectedSanh,
+                        DonGiaBanTiec = SelectedSanh.LoaiSanh.DonGiaBanToiThieu,
                         TienDatCoc = tienDatCoc,
                         SoLuongBan = soLuongBan,
                         SoBanDuTru = int.Parse(SoBanDuTru),
