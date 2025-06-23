@@ -1,4 +1,5 @@
-﻿using QuanLyTiecCuoi.DataAccessLayer.IRepository;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using QuanLyTiecCuoi.DataAccessLayer.IRepository;
 using QuanLyTiecCuoi.Model;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
         {
             _context.DICHVUs.Add(dichVu);
             _context.SaveChanges();
+            _context.Entry(dichVu).Reload(); // Reload to get the latest values from the database
         }
 
         public void Update(DICHVU dichVu)

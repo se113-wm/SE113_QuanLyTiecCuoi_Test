@@ -12,7 +12,7 @@
     Width="1000"
     Height="820"
     Icon="Assets/icon_invoice.ico"
-    WindowStartupLocation="Manual">
+    WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converter:MultiplyConverter x:Key="MultiplyConverter" />
     </Window.Resources>

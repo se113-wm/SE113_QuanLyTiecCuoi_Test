@@ -6,6 +6,7 @@ using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,10 +20,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private readonly ISanhService _sanhService;
         private readonly ICaService _caService;
         private IPhieuDatTiecService _phieuDatTiecService;
-        private readonly IMonAnService _monAnService;
-        private readonly IDichVuService _dichVuService;
-        private readonly IThucDonService _thucDonService;
-        private readonly IChiTietDVService _chiTietDichVuService;
+        private IMonAnService _monAnService;
+        private IDichVuService _dichVuService;
+        private IThucDonService _thucDonService;
+        private IChiTietDVService _chiTietDichVuService;
         private readonly IThamSoService _thamSoService;
 
         // Wedding Info
@@ -104,18 +105,68 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public PHIEUDATTIECDTO CurrentWedding => _phieuDatTiecService.GetById(_maPhieuDat);
 
         // Menu Section
-        private ObservableCollection<THUCDONDTO> _menuList;
+        private ObservableCollection<THUCDONDTO> _menuList; 
         public ObservableCollection<THUCDONDTO> MenuList
         {
-            get => _menuList;
-            set
+            get => _menuList; set
             {
                 if (_menuList != value)
                 {
+                    if (_menuList != null) _menuList.CollectionChanged -= MenuList_CollectionChanged;
                     _menuList = value;
+                    if (_menuList != null)
+                        _menuList.CollectionChanged += MenuList_CollectionChanged;
+
+                    UpdateMenuTotal();
                     OnPropertyChanged();
                 }
             }
+        }
+
+        private decimal _menuTotal;
+        public decimal MenuTotal
+        {
+            get => _menuTotal;
+            set
+            {
+                if (_menuTotal != value)
+                {
+                    _menuTotal = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void MenuList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (THUCDONDTO item in e.NewItems)
+                {
+                    if (item is INotifyPropertyChanged notifyItem)
+                        notifyItem.PropertyChanged += MenuItem_PropertyChanged;
+                }
+            }
+            if (e.OldItems != null)
+            {
+                foreach (THUCDONDTO item in e.OldItems)
+                {
+                    if (item is INotifyPropertyChanged notifyItem)
+                        notifyItem.PropertyChanged -= MenuItem_PropertyChanged;
+                }
+            }
+            UpdateMenuTotal();
+        }
+
+        private void MenuItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(THUCDONDTO.SoLuong) || e.PropertyName == nameof(THUCDONDTO.DonGia))
+                UpdateMenuTotal();
+        }
+
+        private void UpdateMenuTotal()
+        {
+            MenuTotal = MenuList?.Where(item => item != null).Sum(item => (item.SoLuong ?? 0) * (item.DonGia ?? 0)) ?? 0;
         }
 
         private THUCDONDTO _selectedMenuItem;
@@ -140,10 +191,63 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 if (_serviceList != value)
                 {
+                    if (_serviceList != null)
+                        _serviceList.CollectionChanged -= ServiceList_CollectionChanged;
                     _serviceList = value;
+                    if (_serviceList != null)
+                        _serviceList.CollectionChanged += ServiceList_CollectionChanged;
+
+                    UpdateServiceTotal();
                     OnPropertyChanged();
                 }
             }
+        }
+
+        private decimal _serviceTotal;
+        public decimal ServiceTotal
+        {
+            get => _serviceTotal;
+            set
+            {
+                if (_serviceTotal != value)
+                {
+                    _serviceTotal = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void ServiceList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (CHITIETDVDTO item in e.NewItems)
+                {
+                    if (item is INotifyPropertyChanged notifyItem)
+                        notifyItem.PropertyChanged += ServiceItem_PropertyChanged;
+                }
+            }
+            if (e.OldItems != null)
+            {
+                foreach (CHITIETDVDTO item in e.OldItems)
+                {
+                    if (item is INotifyPropertyChanged notifyItem)
+                        notifyItem.PropertyChanged -= ServiceItem_PropertyChanged;
+                }
+            }
+            UpdateServiceTotal();
+        }
+
+        private void ServiceItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CHITIETDVDTO.SoLuong) || e.PropertyName == nameof(CHITIETDVDTO.DonGia))
+                UpdateServiceTotal();
+        }
+
+        private void UpdateServiceTotal()
+        {
+            ServiceTotal = ServiceList?.Where(item => item != null)
+                .Sum(item => (item.SoLuong ?? 0) * (item.DonGia ?? 0)) ?? 0;
         }
 
         private CHITIETDVDTO _selectedServiceItem;
@@ -247,7 +351,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     SoBanDuTru = wedding.SoBanDuTru.ToString();
                     
                     // Load menu and service details
+                    _thucDonService = new ThucDonService();
                     MenuList = new ObservableCollection<THUCDONDTO>(_thucDonService.GetByPhieuDat(_maPhieuDat));
+                    _chiTietDichVuService = new ChiTietDVService();
                     ServiceList = new ObservableCollection<CHITIETDVDTO>(_chiTietDichVuService.GetByPhieuDat(_maPhieuDat));
                 }
             });
@@ -259,6 +365,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             ChonMonAnCommand = new RelayCommand<object>((p) => IsEditing, (p) => ChonMonAn());
             AddMenuCommand = new RelayCommand<object>((p) =>
             {
+                if (!IsEditing) return false;
                 // Nếu MonAn là null hoặc không có tên món ăn, không thể thêm
                 if (MonAn == null || string.IsNullOrWhiteSpace(MonAn.TenMonAn) || !int.TryParse(TD_SoLuong, out int sl) || sl <= 0)
                 {
@@ -271,12 +378,14 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     // Nếu món ăn đã tồn tại, không thể thêm
                     return false;
                 }
-                return true;
+                return true ;
             }
             , (p) =>
             {
                 MenuList.Add(new THUCDONDTO
                 {
+                    MaMonAn = MonAn.MaMonAn,
+                    MaPhieuDat = _maPhieuDat,
                     MonAn = MonAn,
                     DonGia = MonAn.DonGia,
                     SoLuong = int.Parse(TD_SoLuong),
@@ -291,6 +400,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             });
             EditMenuCommand = new RelayCommand<object>((p) =>
             {
+                if (!IsEditing) return false;
                 // Nếu SelectedMenuItem là null, không thể chỉnh sửa
                 if (SelectedMenuItem == null) return false;
                 // Kiểm tra tính hợp lệ của dữ liệu
@@ -339,14 +449,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
                 var NewMenuItem = new THUCDONDTO
                 {
+                    MaPhieuDat = _maPhieuDat,
+                    MaMonAn = MonAn.MaMonAn,
                     MonAn = MonAn,
                     DonGia = MonAn.DonGia,
                     SoLuong = int.Parse(TD_SoLuong),
                     GhiChu = TD_GhiChu
                 };
                 int index = MenuList.IndexOf(SelectedMenuItem);
-                MenuList[index] = null; // Remove the old item to trigger UI update
-                MenuList[index] = NewMenuItem; // Add the updated item back
+                MenuList[index] = NewMenuItem;
             });
             DeleteMenuCommand = new RelayCommand<object>((p) => SelectedMenuItem != null, (p) =>
             {
@@ -357,6 +468,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             ChonDichVuCommand = new RelayCommand<object>((p) => true, (p) => ChonDichVu());
             AddServiceCommand = new RelayCommand<object>((p) =>
             {
+                if (!IsEditing) return false;
                 // Nếu DichVu là null hoặc không có tên dịch vụ, không thể thêm
                 if (DichVu == null || string.IsNullOrWhiteSpace(DichVu.TenDichVu) || !int.TryParse(DV_SoLuong, out int sl) || sl <= 0)
                 {
@@ -376,6 +488,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             {
                 ServiceList.Add(new CHITIETDVDTO
                 {
+                    MaPhieuDat = _maPhieuDat,
+                    MaDichVu = DichVu.MaDichVu,
                     DichVu = DichVu,
                     DonGia = DichVu.DonGia,
                     SoLuong = int.Parse(DV_SoLuong),
@@ -389,6 +503,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             });
             EditServiceCommand = new RelayCommand<object>((p) =>
             {
+                if (!IsEditing) return false;
                 // Nếu SelectedServiceItem là null, không thể chỉnh sửa
                 if (SelectedServiceItem == null) return false;
                 // Kiểm tra tính hợp lệ của dữ liệu
@@ -409,18 +524,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     
                     return false;
                 }
-                //// Nếu không có gì thay đổi, không cần chỉnh sửa
-                               //if (
-                //    SelectedMenuItem.MonAn.TenMonAn == MonAn.TenMonAn &&
-                //    SelectedMenuItem.SoLuong?.ToString() == TD_SoLuong &&
-                //    SelectedMenuItem.GhiChu == TD_GhiChu &&
-                //    (
-                //        (SelectedMenuItem.MonAn.DonGia ?? 0) == (decimal.TryParse(TD_DonGia.Replace(",", "").Replace(".", ""), out var tdDonGia) ? tdDonGia : 0)
-                //    )
-                //)
-                //{
-                //    return false;
-                //}
+
                 // Kiểm tra xem dịch vụ có tồn tại trong danh sách chưa
                 var existingService = ServiceList.FirstOrDefault(s => s.DichVu.MaDichVu == DichVu.MaDichVu);
                 if (existingService != null && existingService != SelectedServiceItem)
@@ -445,14 +549,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
                 var NewServiceItem = new CHITIETDVDTO
                 {
+                    MaPhieuDat = _maPhieuDat,
+                    MaDichVu = DichVu.MaDichVu,
                     DichVu = DichVu,
                     DonGia = DichVu.DonGia,
                     SoLuong = int.Parse(DV_SoLuong),
                     GhiChu = DV_GhiChu
                 };
                 int index = ServiceList.IndexOf(SelectedServiceItem);
-                ServiceList[index] = null; // Remove the old item to trigger UI update
-                ServiceList[index] = NewServiceItem; // Add the updated item back
+                ServiceList[index] = NewServiceItem; // Cập nhật trực tiếp
 
             });
             DeleteServiceCommand = new RelayCommand<object>((p) =>
@@ -485,6 +590,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void LoadWeddingDetail(int maPhieuDat)
         {
             _phieuDatTiecService = new PhieuDatTiecService(); // Refresh service to get updated data
+            _thucDonService = new ThucDonService(); // Refresh service to get updated data
+            _chiTietDichVuService = new ChiTietDVService(); // Refresh service to get updated data
             var wedding = _phieuDatTiecService.GetById(maPhieuDat);
             if (wedding != null)
             {
@@ -526,7 +633,21 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 SoBanDuTru = wedding.SoBanDuTru.ToString();
                 // Load menu and service details
                 MenuList = new ObservableCollection<THUCDONDTO>(_thucDonService.GetByPhieuDat(maPhieuDat));
+
+                var allMonAn = _monAnService.GetAll().ToList();
+                foreach (var td in MenuList)
+                {
+                    if (td.MonAn == null)
+                        td.MonAn = allMonAn.FirstOrDefault(m => m.MaMonAn == td.MaMonAn);
+                }
                 ServiceList = new ObservableCollection<CHITIETDVDTO>(_chiTietDichVuService.GetByPhieuDat(maPhieuDat));
+
+                var allDichVu = _dichVuService.GetAll().ToList();
+                foreach (var dv in ServiceList)
+                {
+                    if (dv.DichVu == null)
+                        dv.DichVu = allDichVu.FirstOrDefault(d => d.MaDichVu == dv.MaDichVu);
+                }
             }
         }
 
@@ -559,55 +680,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             TD_GhiChu = string.Empty;
             SelectedMenuItem = null;
             OnPropertyChanged(nameof(MonAn));
-        }
-
-        private bool CanAddMenu()
-        {
-            return MonAn != null && !string.IsNullOrWhiteSpace(MonAn.TenMonAn)
-                && int.TryParse(TD_SoLuong, out int sl) && sl > 0
-                && MenuList.All(m => m.MonAn.MaMonAn != MonAn.MaMonAn);
-        }
-
-        private void AddMenu()
-        {
-            MenuList.Add(new THUCDONDTO
-            {
-                MonAn = MonAn,
-                SoLuong = int.Parse(TD_SoLuong),
-                GhiChu = TD_GhiChu
-            });
-            ResetTD();
-        }
-
-        private bool CanEditMenu()
-        {
-            if (SelectedMenuItem == null) return false;
-            if (MonAn == null || string.IsNullOrWhiteSpace(MonAn.TenMonAn) || !int.TryParse(TD_SoLuong, out int sl) || sl <= 0)
-                return false;
-            var existing = MenuList.FirstOrDefault(m => m.MonAn.MaMonAn == MonAn.MaMonAn);
-            if (existing != null && existing != SelectedMenuItem) return false;
-            return true;
-        }
-
-        private void EditMenu()
-        {
-            if (SelectedMenuItem == null) return;
-            SelectedMenuItem.MonAn = MonAn;
-            SelectedMenuItem.SoLuong = int.Parse(TD_SoLuong);
-            SelectedMenuItem.GhiChu = TD_GhiChu;
-            // Force UI update
-            var idx = MenuList.IndexOf(SelectedMenuItem);
-            MenuList[idx] = SelectedMenuItem;
-            ResetTD();
-        }
-
-        private void DeleteMenu()
-        {
-            if (SelectedMenuItem != null)
-            {
-                MenuList.Remove(SelectedMenuItem);
-                ResetTD();
-            }
         }
 
         private void ChonMonAn()
@@ -655,53 +727,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             OnPropertyChanged(nameof(DichVu));
         }
 
-        private bool CanAddService()
-        {
-            return DichVu != null && !string.IsNullOrWhiteSpace(DichVu.TenDichVu)
-                && int.TryParse(DV_SoLuong, out int sl) && sl > 0
-                && ServiceList.All(s => s.DichVu.MaDichVu != DichVu.MaDichVu);
-        }
-
-        private void AddService()
-        {
-            ServiceList.Add(new CHITIETDVDTO
-            {
-                DichVu = DichVu,
-                SoLuong = int.Parse(DV_SoLuong),
-                GhiChu = DV_GhiChu
-            });
-            ResetCTDV();
-        }
-
-        private bool CanEditService()
-        {
-            if (SelectedServiceItem == null) return false;
-            if (DichVu == null || string.IsNullOrWhiteSpace(DichVu.TenDichVu) || !int.TryParse(DV_SoLuong, out int sl) || sl <= 0)
-                return false;
-            var existing = ServiceList.FirstOrDefault(s => s.DichVu.MaDichVu == DichVu.MaDichVu);
-            if (existing != null && existing != SelectedServiceItem) return false;
-            return true;
-        }
-
-        private void EditService()
-        {
-            if (SelectedServiceItem == null) return;
-            SelectedServiceItem.DichVu = DichVu;
-            SelectedServiceItem.SoLuong = int.Parse(DV_SoLuong);
-            SelectedServiceItem.GhiChu = DV_GhiChu;
-            var idx = ServiceList.IndexOf(SelectedServiceItem);
-            ServiceList[idx] = SelectedServiceItem;
-            ResetCTDV();
-        }
-
-        private void DeleteService()
-        {
-            if (SelectedServiceItem != null)
-            {
-                ServiceList.Remove(SelectedServiceItem);
-                ResetCTDV();
-            }
-        }
 
         private void ChonDichVu()
         {
@@ -735,6 +760,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 MessageBox.Show("Ngày đãi tiệc phải là ngày mai hoặc ngày sau đó.", "Lỗi ngày", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            _phieuDatTiecService = new PhieuDatTiecService(); // Refresh service to get updated data
+            _thucDonService = new ThucDonService(); // Refresh service to get updated data
+            _chiTietDichVuService = new ChiTietDVService(); // Refresh service to get updated data
 
             // Kiểm tra nếu không có gì thay đổi (bao gồm cả menu và dịch vụ) thì không cần cập nhật
             var existingWedding = _phieuDatTiecService.GetById(_maPhieuDat);
@@ -897,6 +925,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 _phieuDatTiecService.Update(phieuDatTiec);
 
                 // Cập nhật thực đơn
+                _thucDonService = new ThucDonService(); // Refresh service to get updated data
                 var oldMenus = _thucDonService.GetByPhieuDat(_maPhieuDat).ToList();
                 foreach (var old in oldMenus)
                     _thucDonService.Delete(_maPhieuDat, old.MaMonAn);
@@ -915,6 +944,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 }
 
                 // Cập nhật dịch vụ
+                _chiTietDichVuService = new ChiTietDVService(); // Refresh service to get updated data
                 var oldServices = _chiTietDichVuService.GetByPhieuDat(_maPhieuDat).ToList();
                 foreach (var old in oldServices)
                     _chiTietDichVuService.Delete(_maPhieuDat, old.MaDichVu);

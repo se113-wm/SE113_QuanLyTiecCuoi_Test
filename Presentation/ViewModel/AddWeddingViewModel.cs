@@ -63,6 +63,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         // Menu Section
         public ObservableCollection<THUCDONDTO> MenuList { get; set; } = new ObservableCollection<THUCDONDTO>();
+        private decimal _menuTotal;
+        public decimal MenuTotal { get => _menuTotal; set { _menuTotal = value; OnPropertyChanged(); } }
+
         private THUCDONDTO _selectedMenuItem;
         public THUCDONDTO SelectedMenuItem { get => _selectedMenuItem; set { _selectedMenuItem = value; OnPropertyChanged(); LoadMenuDetail(); } }
 
@@ -74,6 +77,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         // Service Section
         public ObservableCollection<CHITIETDVDTO> ServiceList { get; set; } = new ObservableCollection<CHITIETDVDTO>();
+        private decimal _serviceTotal;
+        public decimal ServiceTotal { get => _serviceTotal; set { _serviceTotal = value; OnPropertyChanged(); } }
         private CHITIETDVDTO _selectedServiceItem;
         public CHITIETDVDTO SelectedServiceItem { get => _selectedServiceItem; set { _selectedServiceItem = value; OnPropertyChanged(); LoadServiceDetail(); } }
 
@@ -156,6 +161,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 TD_GhiChu = string.Empty;
                 MonAn = new MONANDTO();
                 OnPropertyChanged(nameof(MonAn));
+                // Update total price
+                MenuTotal = MenuList.Sum(m => (m.MonAn.DonGia ?? 0) * (m.SoLuong ?? 0));
             });
             EditMenuCommand = new RelayCommand<object>((p) =>
             {
@@ -190,11 +197,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 int index = MenuList.IndexOf(SelectedMenuItem);
                 MenuList[index] = null; // Remove the old item to trigger UI update
                 MenuList[index] = NewMenuItem; // Add the updated item back
+                // Update total price
+                MenuTotal = MenuList.Sum(m => (m.MonAn.DonGia ?? 0) * (m.SoLuong ?? 0));
             });
             DeleteMenuCommand = new RelayCommand<object>((p) => SelectedMenuItem != null, (p) =>
             {
                 MenuList.Remove(SelectedMenuItem);
                 SelectedMenuItem = null;
+                // Update total price
+                MenuTotal = MenuList.Sum(m => (m.MonAn.DonGia ?? 0) * (m.SoLuong ?? 0));
             });
             // Service commands
             ChonDichVuCommand = new RelayCommand<object>((p) => true, (p) => ChonDichVu());
@@ -227,6 +238,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 DV_GhiChu = string.Empty;
                 DichVu = new DICHVUDTO();
                 OnPropertyChanged(nameof(DichVu));
+                // Update total price
+                ServiceTotal = ServiceList.Sum(s => (s.DichVu.DonGia ?? 0) * (s.SoLuong ?? 0));
             });
             EditServiceCommand = new RelayCommand<object>((p) =>
             {
@@ -261,12 +274,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 int index = ServiceList.IndexOf(SelectedServiceItem);
                 ServiceList[index] = null; // Remove the old item to trigger UI update
                 ServiceList[index] = NewServiceItem; // Add the updated item back
-
+                // Update total price
+                ServiceTotal = ServiceList.Sum(s => (s.DichVu.DonGia ?? 0) * (s.SoLuong ?? 0));
             });
             DeleteServiceCommand = new RelayCommand<object>((p) => SelectedServiceItem != null, (p) => 
             {
                 ServiceList.Remove(SelectedServiceItem);
                 SelectedServiceItem = null;
+                // Update total price
+                ServiceTotal = ServiceList.Sum(s => (s.DichVu.DonGia ?? 0) * (s.SoLuong ?? 0));
             });
 
             // Confirm/Cancel

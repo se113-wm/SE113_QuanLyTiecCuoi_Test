@@ -684,7 +684,7 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");
+                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Service");
                     if (Image == null)
                     {
                         string imagePath = Path.Combine(folder, SelectedItem.MaDichVu + ".jpg");

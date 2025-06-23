@@ -549,6 +549,14 @@
                                     FontSize="14"
                                     FontWeight="SemiBold"
                                     Text="Danh sách thực đơn" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    Foreground="DarkGreen"
+                                    Text="{Binding MenuTotal, StringFormat=' {0:N0} đ'}" />
                                 <ListView
                                     Grid.Row="1"
                                     Margin="0"
@@ -803,6 +811,14 @@
                                     FontSize="14"
                                     FontWeight="SemiBold"
                                     Text="Danh sách dịch vụ" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    Foreground="DarkGreen"
+                                    Text="{Binding ServiceTotal, StringFormat=' {0:N0} đ'}" />
                                 <ListView
                                     Grid.Row="1"
                                     Margin="0"

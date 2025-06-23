@@ -607,7 +607,6 @@ namespace QuanLyTiecCuoi.ViewModel
         {
             if (SelectedItem == null)
             {
-                EditMessage = "Vui lòng chọn món ăn";
                 return false;
             }
             var folder = Path.Combine(ImageHelper.BaseImagePath, "Food");

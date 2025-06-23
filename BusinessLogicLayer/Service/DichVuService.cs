@@ -52,6 +52,7 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 GhiChu = dichVuDto.GhiChu
             };
             _dichVuRepository.Create(entity);
+            dichVuDto.MaDichVu = entity.MaDichVu; // Update DTO with generated ID
         }
 
         public void Update(DICHVUDTO dichVuDto)
