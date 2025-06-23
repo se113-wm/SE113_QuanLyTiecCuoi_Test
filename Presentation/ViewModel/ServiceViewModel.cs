@@ -720,7 +720,8 @@ namespace QuanLyTiecCuoi.ViewModel
                     }
                     SelectedAction = null; // Reset action selection
 
-                    EditMessage = "Cập nhật thành công";
+                    // thông báo cập nhật thành công
+                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     Reset();
                 }
                 catch (Exception ex)

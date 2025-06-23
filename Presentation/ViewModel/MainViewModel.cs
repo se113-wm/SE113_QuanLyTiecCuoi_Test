@@ -126,6 +126,7 @@ namespace QuanLyTiecCuoi.ViewModel
             });
             PermissionCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
+                DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 CurrentView = new PermissionView() {
                     DataContext = new PermissionViewModel()
                 };
@@ -142,6 +143,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
             UserCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
+                DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 CurrentView = new UserView() {
                     DataContext = new UserViewModel()
                 };
@@ -150,6 +152,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
             AccountCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
+                DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 CurrentView = new AccountView() {
                     DataContext = new AccountViewModel()
                 };

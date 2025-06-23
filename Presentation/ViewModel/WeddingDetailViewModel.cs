@@ -844,7 +844,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             // 5. Kiểm tra tiền đặt cọc hợp lệ
             var tongDonGiaMonAn = MenuList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
             var tongDonGiaDichVu = ServiceList.Sum(s => (s.DonGia ?? 0) * (s.SoLuong ?? 0));
-            var donGiaBanToiThieu = _sanhService.GetById(SelectedSanh.MaSanh)?.LoaiSanh.DonGiaBanToiThieu ?? 0;
+            var donGiaBanToiThieu = existingWedding.DonGiaBanTiec ?? 0;
             var tongChiPhiUocTinh = soLuongBan * (donGiaBanToiThieu + tongDonGiaMonAn) + tongDonGiaDichVu;
             var tiLeTienDatCocToiThieu = _thamSoService.GetByName("TiLeTienDatCocToiThieu")?.GiaTri ?? 0.3m;
 
