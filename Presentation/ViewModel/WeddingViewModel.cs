@@ -4,6 +4,7 @@ using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -31,6 +32,30 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         }
 
         // Filter properties
+        public List<string> TrangThaiFilterList { get; } = new List<string>
+        {
+            "Tất cả",
+            "Chưa tổ chức",
+            "Chưa thanh toán",
+            "Trễ thanh toán",
+            "Đã thanh toán"
+        };
+
+        private string _selectedTrangThai = "Tất cả";
+        public string SelectedTrangThai
+        {
+            get => _selectedTrangThai;
+            set
+            {
+                if (_selectedTrangThai != value)
+                {
+                    _selectedTrangThai = value;
+                    OnPropertyChanged();
+                    // Call your filter method here
+                    PerformSearch();
+                }
+            }
+        }
         public ObservableCollection<string> TenChuReFilterList { get; set; }
         public string SelectedTenChuRe { get => _selectedTenChuRe; set { _selectedTenChuRe = value; OnPropertyChanged(); PerformSearch(); } }
         private string _selectedTenChuRe;
@@ -93,7 +118,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 "Tên cô dâu",
                 "Tên sảnh",
                 "Ngày đãi tiệc",
-                "Số lượng bàn"
+                "Số lượng bàn",
+                "Trạng thái"
             };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
 
@@ -110,7 +136,28 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 };
             });
 
-            DeleteCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
+            DeleteCommand = new RelayCommand<object>((p) =>
+            {
+                if (SelectedItem == null)
+                {
+                    DeleteMessage = "Vui lòng chọn một tiệc cưới để xóa.";
+                    return false;
+                }
+                if (SelectedItem.NgayThanhToan.HasValue)
+                {
+                    DeleteMessage = "Không thể xóa tiệc cưới đã thanh toán.";
+                    return false;
+                }
+                // chỉ cho xóa những tiệc cưới vào ngày mai hoặc tương lai
+                if (SelectedItem.NgayDaiTiec.HasValue && SelectedItem.NgayDaiTiec.Value.Date < DateTime.Today.AddDays(1))
+                {
+                    DeleteMessage = "Không thể xóa tiệc cưới tổ chức vào hôm nay và đã tổ chức.";
+                    return false;
+                }
+                DeleteMessage = string.Empty; // Reset delete message
+                return true;
+            }
+            , (p) =>
             {
                 try
                 {
@@ -162,6 +209,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 if (SelectedSoLuongBan.HasValue)
                     filtered = filtered.Where(x => x.SoLuongBan == SelectedSoLuongBan);
 
+                // Filter by Trạng thái
+                if (!string.IsNullOrEmpty(SelectedTrangThai) && SelectedTrangThai != "Tất cả")
+                    filtered = filtered.Where(x => x.TrangThai == SelectedTrangThai);
+
                 // Search by text
                 if (!string.IsNullOrEmpty(SearchText) && !string.IsNullOrEmpty(SelectedSearchProperty))
                 {
@@ -182,6 +233,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                             break;
                         case "Số lượng bàn":
                             filtered = filtered.Where(x => x.SoLuongBan.HasValue && x.SoLuongBan.Value.ToString().Contains(search));
+                            break;
+                        case "Trạng thái":
+                            filtered = filtered.Where(x => !string.IsNullOrEmpty(x.TrangThai) && x.TrangThai.ToLower().Contains(search));
                             break;
                         default:
                             break;

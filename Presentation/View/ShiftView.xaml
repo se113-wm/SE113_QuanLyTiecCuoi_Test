@@ -89,6 +89,7 @@
             </StackPanel>
         </materialDesign:Card>
         <!--  Nút & tìm kiếm  -->
+        <!--  Nút & tìm kiếm  -->
         <materialDesign:Card
             Grid.Row="2"
             Margin="10"
@@ -127,53 +128,82 @@
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right"
                         Orientation="Horizontal">
-                        <StackPanel Width="110" Margin="0,0,20,0">
-                            <Button
-                                Width="100"
-                                Margin="5"
-                                Command="{Binding AddCommand}"
-                                Content="Thêm"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
-                                FontSize="10"
-                                Foreground="Gray"
-                                Text="{Binding AddMessage}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Width="110" Margin="0,0,20,0">
-                            <Button
-                                Width="100"
-                                Margin="5"
-                                Command="{Binding EditCommand}"
-                                Content="Sửa"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
-                                FontSize="10"
-                                Foreground="Gray"
-                                Text="{Binding EditMessage}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Width="110">
-                            <Button
-                                Width="100"
-                                Margin="5"
-                                Command="{Binding DeleteCommand}"
-                                Content="Xóa"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
-                                FontSize="10"
-                                Foreground="Gray"
-                                Text="{Binding DeleteMessage}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
+                        <!--  ComboBox chọn thao tác  -->
+                        <ComboBox
+                            Width="200"
+                            Margin="0,0,5,14"
+                            materialDesign:HintAssist.Hint="Chọn thao tác"
+                            ItemsSource="{Binding ActionList}"
+                            SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <!--  Nút Thêm  -->
+                            <StackPanel
+                                Width="110"
+                                Margin="0,0,0,0"
+                                Visibility="{Binding IsAdding, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button
+                                    Width="100"
+                                    Margin="5"
+                                    Command="{Binding AddCommand}"
+                                    Content="Thêm"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Height="32"
+                                    FontSize="10"
+                                    Foreground="Gray"
+                                    Text="{Binding AddMessage}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <!--  Nút Sửa  -->
+                            <StackPanel
+                                Width="110"
+                                Margin="0,0,0,0"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button
+                                    Width="100"
+                                    Margin="5"
+                                    Command="{Binding EditCommand}"
+                                    Content="Sửa"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Height="32"
+                                    VerticalAlignment="Top"
+                                    FontSize="10"
+                                    Foreground="Gray"
+                                    Text="{Binding EditMessage}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <!--  Nút Xóa  -->
+                            <StackPanel
+                                Width="150"
+                                Margin="0,0,0,0"
+                                Visibility="{Binding IsDeleting, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button
+                                    Width="100"
+                                    Margin="5"
+                                    Command="{Binding DeleteCommand}"
+                                    Content="Xóa"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Height="32"
+                                    VerticalAlignment="Top"
+                                    FontSize="10"
+                                    Foreground="Gray"
+                                    Text="{Binding DeleteMessage}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </DockPanel>
+
             </StackPanel>
         </materialDesign:Card>
 
@@ -197,7 +227,7 @@
                     Grid.Row="0"
                     Margin="0,0,10,0"
                     FontSize="14"
-					FontWeight="Bold"
+                    FontWeight="Bold"
                     Text="Danh sách ca" />
 
                 <ListView
@@ -249,7 +279,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-											Text="{Binding ThoiGianBatDauCa}"
+                                            Text="{Binding ThoiGianBatDauCa}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

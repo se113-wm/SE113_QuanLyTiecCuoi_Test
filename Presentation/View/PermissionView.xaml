@@ -112,51 +112,80 @@
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right"
                         Orientation="Horizontal">
-                        <StackPanel Width="110" Margin="0,0,20,0">
-                            <Button
-                                Width="100"
-                                Margin="5"
-                                Command="{Binding AddCommand}"
-                                Content="Thêm"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                FontSize="12"
-                                Foreground="Gray"
-                                Text="{Binding AddMessage}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Width="110" Margin="0,0,20,0">
-                            <Button
-                                Width="100"
-                                Margin="5"
-                                Command="{Binding EditCommand}"
-                                Content="Sửa"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
-                                FontSize="12"
-                                Foreground="Gray"
-                                Text="{Binding EditMessage}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Width="110">
-                            <Button
-                                Width="100"
-                                Margin="5"
-                                Command="{Binding DeleteCommand}"
-                                Content="Xóa"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
-                            <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
-                                FontSize="12"
-                                Foreground="Gray"
-                                Text="{Binding DeleteMessage}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
 
+                        <!--  ComboBox chọn thao tác  -->
+                        <ComboBox
+                            Width="200"
+                            Margin="0,0,5,14"
+                            materialDesign:HintAssist.Hint="Chọn thao tác"
+                            ItemsSource="{Binding ActionList}"
+                            SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <!--  Nút Thêm  -->
+                            <StackPanel
+                                Width="110"
+                                Margin="0,0,0,0"
+                                Visibility="{Binding IsAdding, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button
+                                    Width="100"
+                                    Margin="5"
+                                    Command="{Binding AddCommand}"
+                                    Content="Thêm"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Height="32"
+                                    FontSize="10"
+                                    Foreground="Gray"
+                                    Text="{Binding AddMessage}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <!--  Nút Sửa  -->
+                            <StackPanel
+                                Width="110"
+                                Margin="0,0,0,0"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button
+                                    Width="100"
+                                    Margin="5"
+                                    Command="{Binding EditCommand}"
+                                    Content="Sửa"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Height="32"
+                                    VerticalAlignment="Top"
+                                    FontSize="10"
+                                    Foreground="Gray"
+                                    Text="{Binding EditMessage}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <!--  Nút Xóa  -->
+                            <StackPanel
+                                Width="110"
+                                Margin="0,0,0,0"
+                                Visibility="{Binding IsDeleting, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button
+                                    Width="100"
+                                    Margin="5"
+                                    Command="{Binding DeleteCommand}"
+                                    Content="Xóa"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                <TextBlock
+                                    Height="32"
+                                    VerticalAlignment="Top"
+                                    FontSize="10"
+                                    Foreground="Gray"
+                                    Text="{Binding DeleteMessage}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </DockPanel>
 
@@ -237,7 +266,7 @@
                 </Grid>
 
                 <!--  Cột phải: Danh sách chức năng với checkbox  -->
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="1" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -275,7 +304,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="HallTypeView" />
+                                Text="Màn hình quản lý danh sách các loại sảnh" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -288,7 +317,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="HallView" />
+                                Text="Màn hình quản lý danh sách các sảnh" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -301,7 +330,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="ShiftView" />
+                                Text="Màn hình quản lý danh sách các ca" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -314,7 +343,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="FoodView" />
+                                Text="Màn hình quản lý danh sách các món ăn" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -327,7 +356,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="ServiceView" />
+                                Text="Màn hình quản lý danh sách các dịch vụ" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -340,7 +369,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="WeddingView" />
+                                Text="Màn hình quản lý danh sách các tiệc cưới" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -353,7 +382,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="ReportView" />
+                                Text="Màn hình báo cáo doanh thu" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -366,7 +395,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="ParameterView" />
+                                Text="Màn hình chỉnh sửa tham số qui định" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -379,7 +408,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="PermissionView" />
+                                Text="Màn hình quản lý phân quyền" />
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
@@ -392,7 +421,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="UserView" />
+                                Text="Màn hình quản lý danh sách các người dùng" />
                         </StackPanel>
                     </StackPanel>
 

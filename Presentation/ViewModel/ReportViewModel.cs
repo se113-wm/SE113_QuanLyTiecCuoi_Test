@@ -63,13 +63,14 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             Months = new ObservableCollection<int>();
             Years = new ObservableCollection<int>();
             ReportList = new ObservableCollection<CTBAOCAODDTO>();
-
+         
             LoadReportCommand = new RelayCommand(_ => LoadReport());
             ExportPdfCommand = new RelayCommand(_ => ExportPdf());
             ExportExcelCommand = new RelayCommand(_ => ExportExcel());
             ShowChartCommand = new RelayCommand(_ => ShowChart());
 
             InitializeTimeOptions();
+            LoadReport();
         }
 
         private void InitializeTimeOptions()

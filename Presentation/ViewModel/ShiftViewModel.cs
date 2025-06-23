@@ -12,6 +12,7 @@ namespace QuanLyTiecCuoi.ViewModel
     public class ShiftViewModel : BaseViewModel
     {
         private readonly ICaService _caService;
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
 
         private ObservableCollection<CADTO> _List;
         public ObservableCollection<CADTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -189,10 +190,78 @@ namespace QuanLyTiecCuoi.ViewModel
                 MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); }
+        }
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set { _isAdding = value; OnPropertyChanged(); }
+        }
+        private bool _isDeleting;
+        public bool IsDeleting
+        {
+            get => _isDeleting;
+            set { _isDeleting = value; OnPropertyChanged(); }
+        }
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+        private string _selectedAction;
+        public string SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnPropertyChanged();
+                switch (value)
+                {
+                    case "Thêm":
+                        IsAdding = true;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        // reset ảnh về ko có ảnh
+                        break;
+                    case "Sửa":
+                        IsAdding = false;
+                        IsEditing = true;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    case "Xóa":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = true;
+                        Reset(); // reset các trường nhập liệu
+                        //if (SelectedItem == null)
+                        //{
+                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //    return;
+                        //}
+                        break;
+                    default:
+                        _selectedAction = null;
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        Reset(); // reset các trường nhập liệu
+                        break;
+                }
+            }
+        }
         public ShiftViewModel()
         {
             _caService = new CaService();
+            _phieuDatTiecService = new PhieuDatTiecService();
             List = new ObservableCollection<CADTO>(_caService.GetAll().ToList());
             OriginalList = new ObservableCollection<CADTO>(List);
 
@@ -220,6 +289,16 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (ThoiGianBatDauCa.Value < new TimeSpan(7, 30, 0) || ThoiGianBatDauCa.Value >= new TimeSpan(24, 0, 0))
                 {
                     AddMessage = "Thời gian bắt đầu ca phải sau 7h30 và trước 12h đêm.";
+                    return false;
+                }
+                if (ThoiGianKetThucCa < new TimeSpan(7, 30, 0) || ThoiGianKetThucCa >= new TimeSpan(24, 0, 0))
+                {
+                    AddMessage = "Thời gian kết thúc ca phải sau 7h30 và trước 12h đêm.";
+                    return false;
+                }
+                if (ThoiGianKetThucCa <= ThoiGianBatDauCa)
+                {
+                    AddMessage = "Thời gian kết thúc ca phải sau thời gian bắt đầu ca.";
                     return false;
                 }
                 var exists = OriginalList.Any(x => x.TenCa == TenCa);
@@ -278,6 +357,16 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Thời gian bắt đầu ca phải sau 7h30 và trước 12h đêm.";
                     return false;
                 }
+                if (ThoiGianKetThucCa < new TimeSpan(7, 30, 0) || ThoiGianKetThucCa >= new TimeSpan(24, 0, 0))
+                {
+                    EditMessage = "Thời gian kết thúc ca phải sau 7h30 và trước 12h đêm.";
+                    return false;
+                }
+                if (ThoiGianKetThucCa <= ThoiGianBatDauCa)
+                {
+                    EditMessage = "Thời gian kết thúc ca phải sau thời gian bắt đầu ca.";
+                    return false;
+                }
                 var exists = OriginalList.Any(x => x.TenCa == TenCa && x.MaCa != SelectedItem.MaCa);
                 if (exists)
                 {
@@ -321,11 +410,19 @@ namespace QuanLyTiecCuoi.ViewModel
 
             DeleteCommand = new RelayCommand<object>((p) =>
             {
-                DeleteMessage = string.Empty;
+                // Kiểm tra nếu không có ca nào được chọn
                 if (SelectedItem == null)
                 {
                     return false;
                 }
+                // Kiểm tra nếu ca này đang được sử dụng trong phiếu đặt tiệc
+                if (_phieuDatTiecService.GetAll().Any(x => x.MaCa == SelectedItem.MaCa))
+                {
+                    DeleteMessage = "Không thể xóa ca này vì nó đang được sử dụng trong phiếu đặt tiệc";
+                    return false;
+                }
+                // Nếu đã chọn ca và không có vấn đề gì thì cho phép xóa
+                DeleteMessage = string.Empty;
                 return true;
             }, (p) =>
             {

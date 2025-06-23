@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace QuanLyTiecCuoi.DataTransferObject
 {
@@ -28,5 +29,45 @@ namespace QuanLyTiecCuoi.DataTransferObject
         // Navigation properties
         public CADTO Ca { get; set; }
         public SANHDTO Sanh { get; set; }
+
+        public string TrangThai
+        {
+            get
+            {
+                if (NgayThanhToan != null)
+                    return "Đã thanh toán";
+                if (NgayDaiTiec == null)
+                    return "";
+                var ngayDaiTiecDate = NgayDaiTiec.Value.Date;
+                var today = DateTime.Now.Date;
+                if (ngayDaiTiecDate > today)
+                    return "Chưa tổ chức";
+                if (ngayDaiTiecDate == today)
+                    return "Chưa thanh toán";
+                if (ngayDaiTiecDate < today)
+                    return "Trễ thanh toán";
+                return "";
+            }
+        }
+
+        public Brush TrangThaiBrush
+        {
+            get
+            {
+                if (NgayThanhToan != null)
+                    return Brushes.Green;
+                if (NgayDaiTiec == null)
+                    return Brushes.Black;
+                var ngayDaiTiecDate = NgayDaiTiec.Value.Date;
+                var today = DateTime.Now.Date;
+                if (ngayDaiTiecDate > today)
+                    return Brushes.Blue;
+                if (ngayDaiTiecDate == today)
+                    return Brushes.Orange;
+                if (ngayDaiTiecDate < today)
+                    return Brushes.Red;
+                return Brushes.Black;
+            }
+        }
     }
 }

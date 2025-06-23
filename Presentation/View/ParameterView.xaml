@@ -86,12 +86,26 @@
                         <TextBlock
                                 Height="32"
                                 VerticalAlignment="Top"
+                            HorizontalAlignment="Center"
                                 FontSize="10"
                                 Foreground="Red"
                                 Text="{Binding EditMessage}"
                                 TextWrapping="Wrap" />
                     </StackPanel>
                 </Grid>
+                
+                <ScrollViewer
+                    Margin="0 10 0 0"
+                    FontSize="15"
+                    Foreground="Gray"
+                    VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Giải thích cách nhập các tỉ lệ: "/>
+                        <TextBlock Text="   Mỗi giá trị có thể được nhập trong khoảng từ 0 đến 1. Tỉ lệ nhập vào được tính bằng phần trăm ban đầu chia cho 100."/>
+                        <TextBlock Text="   VD: Tỉ lệ 15% được tính thành: 15 / 100 = 0.15"/>
+                    </StackPanel>
+                </ScrollViewer>
+
             </StackPanel>
         </materialDesign:Card>
 

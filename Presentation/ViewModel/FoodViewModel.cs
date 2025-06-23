@@ -25,6 +25,7 @@ namespace QuanLyTiecCuoi.ViewModel
     {
         #region Service & Collections
         private readonly IMonAnService _foodService;
+        private readonly IThucDonService _thucDonService;
 
         private ObservableCollection<MONANDTO> _List;
         public ObservableCollection<MONANDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -202,6 +203,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = false;
+                        IsExporting = false;
                         Reset(); // reset các trường nhập liệu
                         break;
                 }
@@ -512,6 +514,7 @@ namespace QuanLyTiecCuoi.ViewModel
         {
             Image = null;
             _foodService = new MonAnService();
+            _thucDonService = new ThucDonService();
 
             List = new ObservableCollection<MONANDTO>(_foodService.GetAll().ToList());
             OriginalList = new ObservableCollection<MONANDTO>(List);
@@ -704,7 +707,23 @@ namespace QuanLyTiecCuoi.ViewModel
         #endregion
 
         #region Delete
-        private bool CanDelete() => SelectedItem != null;
+        private bool CanDelete()
+        {
+            // Kiểm tra xem có món ăn nào được chọn không
+            if (SelectedItem == null)
+            {
+                return false;
+            }
+            // Kiểm tra có thực đơn nào sử dụng món ăn này không, THUCDONDTO
+            var existsInMenu = _thucDonService.GetAll().Any(t => t.MaMonAn == SelectedItem.MaMonAn);
+            if (existsInMenu)
+            {
+                DeleteMessage = "Món ăn này đang được sử dụng trong phiếu đặt tiệc";
+                return false;
+            }
+            DeleteMessage = string.Empty;
+            return true;
+        }
 
         private void DeleteFood()
         {
@@ -714,15 +733,15 @@ namespace QuanLyTiecCuoi.ViewModel
             try
             {
                 // Kiểm tra khoá ngoại trực tiếp
-                using (var ctx = new QuanLyTiecCuoiEntities())
-                {
-                    bool isUsed = ctx.THUCDONs.Any(t => t.MaMonAn == SelectedItem.MaMonAn);
-                    if (isUsed)
-                    {
-                        MessageBox.Show("Món ăn đang được sử dụng trong thực đơn – không thể xoá.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                }
+                //using (var ctx = new QuanLyTiecCuoiEntities())
+                //{
+                //    bool isUsed = ctx.THUCDONs.Any(t => t.MaMonAn == SelectedItem.MaMonAn);
+                //    if (isUsed)
+                //    {
+                //        MessageBox.Show("Món ăn đang được sử dụng trong thực đơn – không thể xoá.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                //        return;
+                //    }
+                //}
 
                 // Xóa ảnh của món ăn
                 string folder = Path.Combine(ImageHelper.BaseImagePath, "Food");

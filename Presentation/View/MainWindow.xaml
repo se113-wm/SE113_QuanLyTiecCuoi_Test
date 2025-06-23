@@ -104,6 +104,7 @@
                         <!--  Trang chủ  -->
                         <Button
                             Grid.Row="0"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Home]}"
@@ -125,6 +126,7 @@
                         <!--  Loại sảnh  -->
                         <Button
                             Grid.Row="1"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[HallType]}"
@@ -146,6 +148,7 @@
                         <!--  Sảnh  -->
                         <Button
                             Grid.Row="2"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Hall]}"
@@ -167,6 +170,7 @@
                         <!--  Ca  -->
                         <Button
                             Grid.Row="3"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Shift]}"
@@ -188,6 +192,7 @@
                         <!--  Món ăn  -->
                         <Button
                             Grid.Row="4"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Food]}"
@@ -209,6 +214,7 @@
                         <!--  Dịch vụ  -->
                         <Button
                             Grid.Row="5"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Service]}"
@@ -230,6 +236,7 @@
                         <!--  Tiệc cưới  -->
                         <Button
                             Grid.Row="6"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Wedding]}"
@@ -251,6 +258,7 @@
                         <!--  Báo cáo  -->
                         <Button
                             Grid.Row="7"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Report]}"
@@ -272,6 +280,7 @@
                         <!--  Tham số  -->
                         <Button
                             Grid.Row="8"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Parameter]}"
@@ -293,6 +302,7 @@
                         <!--  Phân quyền  -->
                         <Button
                             Grid.Row="9"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[Permission]}"
@@ -314,6 +324,7 @@
                         <!--  Người dùng  -->
                         <Button
                             Grid.Row="10"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="{Binding ButtonBackgrounds[User]}"

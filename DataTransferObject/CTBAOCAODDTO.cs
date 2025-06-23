@@ -12,7 +12,7 @@ namespace QuanLyTiecCuoi.DataTransferObject
         public int? SoLuongTiec { get; set; }
         public decimal? DoanhThu { get; set; }
         public decimal? TiLe { get; set; }
-
+        public string NgayHienThi => $"{Ngay:D2}/{Thang:D2}/{Nam}";
         // Navigation property (optional, similar to SANHDTO)
         public BAOCAODDTO BaoCaoD { get; set; }
     }
