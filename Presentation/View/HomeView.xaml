@@ -51,7 +51,7 @@
                 VerticalAlignment="Center">
                 <TextBlock
                     HorizontalAlignment="Center"
-                    FontFamily="Georgia"
+                    FontFamily="Times New Roman"
                     FontSize="38"
                     FontWeight="Bold"
                     Foreground="{StaticResource TextColor}"

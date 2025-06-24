@@ -16,7 +16,7 @@
     <Window.Resources>
         <converter:MultiplyConverter x:Key="MultiplyConverter" />
     </Window.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Disabled">
+    <ScrollViewer VerticalScrollBarVisibility="Visible">
         <Grid>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
