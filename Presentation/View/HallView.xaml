@@ -322,7 +322,7 @@
                     Margin="0,0,10,0"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Danh sách loại sảnh" />
+                    Text="Danh sách sảnh" />
 
                 <ListView
                     Grid.Row="1"
