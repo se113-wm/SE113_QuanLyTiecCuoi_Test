@@ -328,7 +328,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding NgayDaiTiec, StringFormat='hh:mm:ss'}"
+                                            Text="{Binding NgayDaiTiec, StringFormat='HH:mm:ss'}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

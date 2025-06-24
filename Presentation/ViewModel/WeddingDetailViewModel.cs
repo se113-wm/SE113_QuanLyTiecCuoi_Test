@@ -90,7 +90,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         MessageBox.Show("Tiệc cưới đã thanh toán, không thể chỉnh sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-                    if (NgayDaiTiec != null && DateTime.Now > NgayDaiTiec)
+                    if (NgayDaiTiec != null && DateTime.Now.Date >= NgayDaiTiec.Value.Date)
                     {
                         MessageBox.Show("Đã qua ngày đãi tiệc, không thể chỉnh sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;

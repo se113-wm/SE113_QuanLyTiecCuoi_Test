@@ -189,13 +189,13 @@ namespace QuanLyTiecCuoi.ViewModel
                 {
                     DataContext = dataContext
                 };
-
+                
                 // Đặt màu nền cho nút "Sảnh" là màu được chọn
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); // Màu khi được chọn
                 // Gọi OnPropertyChanged để cập nhật giao diện
                 OnPropertyChanged(nameof(ButtonBackgrounds));
-                //dataContext.AddCommandFunc();
+                dataContext.AddCommandFunc();
             }
         }
         // Chuyển tab sang Chi tiết Đặt tiệc cưới

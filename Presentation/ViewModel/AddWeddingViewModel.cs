@@ -391,7 +391,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         TenChuRe = TenChuRe,
                         TenCoDau = TenCoDau,
                         DienThoai = DienThoai,
-                        NgayDaiTiec = NgayDaiTiec.Value,
+                        NgayDaiTiec = NgayDaiTiec.Value.Date.Add(SelectedCa.ThoiGianBatDauCa.Value),
                         NgayDatTiec = NgayDatTiec,
                         Ca = SelectedCa,
                         Sanh = SelectedSanh,
