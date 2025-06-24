@@ -346,23 +346,24 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 var tongChiPhiUocTinh = soLuongBan * (donGiaBanToiThieu + tongDonGiaMonAn) + tongDonGiaDichVu;
                 var tiLeTienDatCocToiThieu = thamSoService.GetByName("TiLeTienDatCocToiThieu")?.GiaTri ?? 0.3m;
 
+                var minDeposit = (decimal)Math.Ceiling(tiLeTienDatCocToiThieu * tongChiPhiUocTinh);
+                var maxDeposit = (decimal)Math.Ceiling(tongChiPhiUocTinh);
+
                 if (!decimal.TryParse(TienDatCoc, out decimal tienDatCoc))
                 {
                     MessageBox.Show("Tiền đặt cọc phải là số hợp lệ.", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                if (tienDatCoc < (tiLeTienDatCocToiThieu * tongChiPhiUocTinh))
+                if (tienDatCoc < minDeposit)
                 {
-                    MessageBox.Show($"Tiền đặt cọc phải lớn hơn hoặc bằng {tiLeTienDatCocToiThieu * tongChiPhiUocTinh:N0} (tỉ lệ tối thiểu).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    // Sửa lại giúp người dùng
-                    TienDatCoc = (tiLeTienDatCocToiThieu * tongChiPhiUocTinh).ToString("N0");
+                    MessageBox.Show($"Tiền đặt cọc phải lớn hơn hoặc bằng {minDeposit:N0} (tỉ lệ tối thiểu).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    TienDatCoc = minDeposit.ToString("N0");
                     return;
                 }
-                if (tienDatCoc > tongChiPhiUocTinh)
+                if (tienDatCoc > maxDeposit)
                 {
                     MessageBox.Show("Tiền đặt cọc không được vượt quá tổng chi phí ước tính.", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    // Sửa lại giúp người dùng
-                    TienDatCoc = tongChiPhiUocTinh.ToString("N0");
+                    TienDatCoc = maxDeposit.ToString("N0");
                     return;
                 }
 

@@ -7,8 +7,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    d:DesignHeight="720"
-    d:DesignWidth="1200"
+    d:DesignHeight="820"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -23,7 +23,7 @@
             <GradientStop Offset="0.0" Color="#B5D8FF" />
             <GradientStop Offset="1.0" Color="#E3F0FF" />
         </LinearGradientBrush>
-        <SolidColorBrush x:Key="BlueText" Color="#1976D2" />
+        <SolidColorBrush x:Key="TextColor" Color="#434343" />
         <SolidColorBrush x:Key="BlueBorder" Color="#2196F3" />
         <Style x:Key="CenterCellStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -33,88 +33,53 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="689*" />
-            <ColumnDefinition Width="271*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="2.5*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="2.5*" />
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Margin="10,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="0.4*" />
+                <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
             <!--  Header  -->
             <StackPanel
+                Grid.Row="0"
                 Grid.Column="0"
-                Width="544"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Margin="0,0,0,16">
+                Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
                 <TextBlock
                     HorizontalAlignment="Center"
+                    FontFamily="Georgia"
                     FontSize="38"
                     FontWeight="Bold"
-                    Foreground="{StaticResource BlueText}"
-                    Text="Quản Lý Tiệc Cưới"
-                    TextAlignment="Center" />
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    FontSize="22"
-                    Foreground="{StaticResource BlueText}"
-                    Text="Quản lý dịch vụ, món ăn và địa điểm tổ chức."
-                    TextAlignment="Center" />
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    FontSize="18"
-                    FontStyle="Italic"
-                    Foreground="#2196F3"
-                    Text="Tối ưu vận hành - Phát triển kinh doanh."
+                    Foreground="{StaticResource TextColor}"
+                    Text="Hệ thống quản lý tiệc cưới"
                     TextAlignment="Center" />
                 <Button
                     Width="180"
                     Height="44"
                     Margin="10"
                     HorizontalAlignment="Center"
-                    Background="{StaticResource BlueBorder}"
                     Command="{Binding DatTiecNgayCommand}"
                     Content="Đặt Tiệc Ngay"
                     FontSize="16"
                     FontWeight="Bold"
-                    Foreground="White"
                     IsDefault="True"
-                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                    Style="{StaticResource MaterialDesignOutlinedButton}" />
             </StackPanel>
 
-            <!--  Hình ảnh  -->
             <!--  Hình ảnh (Carousel)  -->
             <Grid
                 Grid.Row="1"
                 Grid.Column="0"
-                Width="630"
-                Height="300"
+                Margin="0,0,0,24"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Margin="0,0,0,24">
+                VerticalAlignment="Center">
 
                 <!--  Ảnh bo góc  -->
-                <Border
-                    Background="#F8FBFF"
-                    BorderBrush="{StaticResource BlueBorder}"
-                    BorderThickness="2"
-                    ClipToBounds="True"
-                    Effect="{StaticResource ShadowEffect}">
-                    <Image
-                        Width="630"
-                        Height="300"
-                        Margin="0,0,-4,-4"
-                        Source="{Binding CurrentImage}"
-                        Stretch="UniformToFill" />
-                </Border>
-
+                <Image Source="{Binding CurrentImage}" Stretch="UniformToFill" />
 
                 <!--  Nút trái  -->
                 <Button
@@ -159,144 +124,144 @@
                 </Button>
             </Grid>
 
-
             <!--  Đặt tiệc gần đây  -->
-            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,16,0,0">
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="0,0,0,10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <TextBlock
-                    HorizontalAlignment="Left"
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
                     FontSize="18"
                     FontWeight="Bold"
-                    Foreground="{StaticResource BlueText}"
+                    Foreground="{StaticResource TextColor}"
                     Text="Đặt tiệc gần đây" />
-                <Border
-                    Padding="8"
-                    Background="#F8FBFF"
-                    BorderBrush="{StaticResource BlueBorder}"
-                    BorderThickness="2"
-                    CornerRadius="14"
-                    Effect="{StaticResource ShadowEffect}">
-                    <DataGrid
-                        Width="618"
-                        Height="200"
-                        AutoGenerateColumns="False"
-                        Background="Transparent"
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserResizeRows="False"
-                        ColumnHeaderHeight="50"
-                        FontSize="14"
-                        Foreground="{StaticResource BlueText}"
-                        HeadersVisibility="Column"
-                        ItemsSource="{Binding RecentBookings}"
-                        RenderTransformOrigin="0.501,0.546"
-                        RowHeight="38">
-                        <!--  Thêm style căn giữa header  -->
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                <Setter Property="VerticalContentAlignment" Value="Center" />
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Width="250"
-                                Binding="{Binding BrideGroom}"
-                                ElementStyle="{StaticResource CenterCellStyle}"
-                                Header="Tên Cô Dâu - Chú Rể" />
-                            <DataGridTextColumn
-                                Width="130"
-                                Binding="{Binding Hall}"
-                                ElementStyle="{StaticResource CenterCellStyle}"
-                                Header="Tên Sảnh" />
-                            <DataGridTextColumn
-                                Width="105"
-                                Binding="{Binding TableCount}"
-                                ElementStyle="{StaticResource CenterCellStyle}"
-                                Header="Số Lượng" />
-                            <DataGridTextColumn
-                                Width="150"
-                                Binding="{Binding BookingDate, StringFormat=dd/MM/yyyy}"
-                                ElementStyle="{StaticResource CenterCellStyle}"
-                                Header="Ngày Đặt" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>
-            </StackPanel>
-
-            <!--  Lịch và thống kê  -->
-            <StackPanel
-                Grid.Row="0"
-                Grid.RowSpan="3"
-                Grid.Column="1"
-                VerticalAlignment="Top"
-                Margin="32,0,0,0">
-                <TextBlock
-                    Width="247"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource BlueText}"
-                    Text="Các tiệc cưới sắp diễn ra"
-                    Margin="0,0,0,8"/>
-                <Border
-                    Padding="10"
+                <DataGrid
+                    Grid.Row="1"
                     HorizontalAlignment="Stretch"
-                    Background="#F8FBFF"
-                    BorderBrush="{StaticResource BlueBorder}"
-                    BorderThickness="2"
-                    CornerRadius="14"
-                    Effect="{StaticResource ShadowEffect}"
-                    Margin="0,0,0,18">
-                    <Grid>
-                        <Grid.Resources>
-                            <Style
-                                x:Key="CustomCalendarDayButton"
-                                BasedOn="{StaticResource MaterialDesignCalendarDayButton}"
-                                TargetType="CalendarDayButton">
-                                <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#B2F39B" />
-                                <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
-                            </Style>
-                            <Style
-                                x:Key="CustomCalendarButton"
-                                BasedOn="{StaticResource MaterialDesignCalendarButton}"
-                                TargetType="CalendarButton">
-                                <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#B2F39B" />
-                                <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
-                            </Style>
-                        </Grid.Resources>
-                        <Calendar
-                            VerticalAlignment="Center"
-                            local:CalendarBehavior.HighlightedDates="{Binding WeddingDays}"
-                            materialDesign:CalendarAssist.HeaderBackground="#A2E9FF"
-                            materialDesign:CalendarAssist.HeaderForeground="Black"
-                            materialDesign:CalendarAssist.Orientation="Horizontal"
-                            Background="White"
-                            BorderBrush="LightBlue"
-                            BorderThickness="1"
-                            FontSize="14"
-                            Foreground="Black"
-                            Language="vi-VN"
-                            SelectedDate="{Binding SelectedDate}" Margin="0,0,10,0" />
-                    </Grid>
-                </Border>
+                    VerticalAlignment="Stretch"
+                    AutoGenerateColumns="False"
+                    Background="Transparent"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserResizeRows="False"
+                    ColumnHeaderHeight="50"
+                    FontSize="12"
+                    Foreground="{StaticResource TextColor}"
+                    HeadersVisibility="Column"
+                    ItemsSource="{Binding RecentBookings}"
+                    RenderTransformOrigin="0.501,0.546"
+                    RowHeight="38">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="2*"
+                            Binding="{Binding BrideGroom}"
+                            ElementStyle="{StaticResource CenterCellStyle}"
+                            Header="Tên Cô Dâu - Chú Rể" />
+                        <DataGridTextColumn
+                            Width="1*"
+                            Binding="{Binding Hall}"
+                            ElementStyle="{StaticResource CenterCellStyle}"
+                            Header="Tên Sảnh" />
+                        <DataGridTextColumn
+                            Width="1*"
+                            Binding="{Binding TableCount}"
+                            ElementStyle="{StaticResource CenterCellStyle}"
+                            Header="Số Lượng" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding BookingDate, StringFormat=dd/MM/yyyy}"
+                            ElementStyle="{StaticResource CenterCellStyle}"
+                            Header="Ngày Đặt" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1.5*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Width="247"
+                Margin="0,0,0,8"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="{StaticResource TextColor}"
+                Text="Các tiệc cưới sắp diễn ra" />
+            <Grid Grid.Row="0" Margin="0,0,10,10">
+                <Grid.Resources>
+                    <Style
+                        x:Key="CustomCalendarDayButton"
+                        BasedOn="{StaticResource MaterialDesignCalendarDayButton}"
+                        TargetType="CalendarDayButton">
+                        <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#B2F39B" />
+                        <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
+                    </Style>
+                    <Style
+                        x:Key="CustomCalendarButton"
+                        BasedOn="{StaticResource MaterialDesignCalendarButton}"
+                        TargetType="CalendarButton">
+                        <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#B2F39B" />
+                        <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="29*" />
+                    <ColumnDefinition Width="44*" />
+                </Grid.ColumnDefinitions>
+
+                <Calendar
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    local:CalendarBehavior.HighlightedDates="{Binding WeddingDays}"
+                    materialDesign:CalendarAssist.HeaderBackground="#A2E9FF"
+                    materialDesign:CalendarAssist.HeaderForeground="Black"
+                    materialDesign:CalendarAssist.Orientation="Horizontal"
+                    Background="White"
+                    BorderBrush="LightBlue"
+                    BorderThickness="1"
+                    FontSize="14"
+                    Foreground="Black"
+                    Language="vi-VN"
+                    SelectedDate="{Binding SelectedDate}" />
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <TextBlock
+                    Grid.Row="0"
                     Width="258"
+                    Margin="0,0,0,2"
+                    HorizontalAlignment="Center"
                     FontSize="18"
                     FontWeight="SemiBold"
-                    Foreground="#1976D2"
-                    Text="Thống kê tháng gần nhất"
-                    Margin="0,0,0,2"/>
-                <Border
-                    Width="507"
-                    Height="388"
-                    Background="#F8FBFF"
-                    BorderBrush="{StaticResource BlueBorder}"
-                    BorderThickness="2"
-                    CornerRadius="14"
-                    Effect="{StaticResource ShadowEffect}">
-                    <ContentControl
-                        Content="{Binding StatisticChartControl}" Margin="0,8,0,8" HorizontalAlignment="Center" Width="507" />
-                </Border>
-            </StackPanel>
+                    Foreground="{StaticResource TextColor}"
+                    Text="Thống kê tháng gần nhất" />
+                <ContentControl
+                    Grid.Row="1"
+                    Margin="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Content="{Binding StatisticChartControl}" />
+            </Grid>
+
         </Grid>
     </Grid>
 </UserControl>

@@ -158,23 +158,31 @@ namespace QuanLyTiecCuoi.ViewModel {
                 Fine = tiLePhat * kiemTraPhat * (tmpTotalInvoiceAmount - SelectedInvoice.TienDatCoc) * (decimal)dayDiff;
             }
             ExportCommand = new RelayCommand<Window>((p) => { return CanExport; }, (p) => {
-                try {
-                    if (SelectedInvoice == null) {
+                try
+                {
+                    if (SelectedInvoice == null)
+                    {
                         return;
                     }
-                    var dialog = new Microsoft.Win32.SaveFileDialog {
+                    var dialog = new Microsoft.Win32.SaveFileDialog
+                    {
                         FileName = $"HoaDon_{SelectedInvoice.MaPhieuDat}",
                         DefaultExt = ".pdf",
                         Filter = "PDF documents (.pdf)|*.pdf"
                     };
                     bool? result = dialog.ShowDialog();
-                    if (result == true) {
+                    if (result == true)
+                    {
                         string filePath = dialog.FileName;
                         ExportInvoice(SelectedInvoice, filePath);
                         MessageBox.Show("Xuất hóa đơn thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        // Mở file PDF vừa xuất
+                        System.Diagnostics.Process.Start(filePath);
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show($"Lỗi khi xuất hóa đơn: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
@@ -217,13 +225,40 @@ namespace QuanLyTiecCuoi.ViewModel {
                 return true;
             }, (p) => {
 
-                if (p is Window window)
+                var window = p as Window;
+                try
                 {
-                    MessageBox.Show("Đặt tiệc cưới thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    //window.Close(); // Close the window
+                    var result = window != null
+                        ? MessageBox.Show(window, "Bạn có chắc chắn muốn thanh toán không? Lưu ý: Thanh toán chỉ được thực hiện 1 lần duy nhất.", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question)
+                        : MessageBox.Show("Bạn có chắc chắn muốn thanh toán không? Lưu ý: Thanh toán chỉ được thực hiện 1 lần duy nhất.", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            ConfirmPayment();
+                            SelectedInvoice = _phieuDatTiecService.GetById(_InvoiceId);
+                            if (window != null)
+                                MessageBox.Show(window, "Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                            else
+                                MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (window != null)
+                                MessageBox.Show(window, $"Có lỗi khi thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            else
+                                MessageBox.Show($"Có lỗi khi thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
                 }
-                ConfirmPayment();
-               
+                catch (Exception ex)
+                {
+                    if (window != null)
+                        MessageBox.Show(window, $"Có lỗi khi xác nhận thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    else
+                        MessageBox.Show($"Có lỗi khi xác nhận thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
         }
         private void ConfirmPayment() {
@@ -269,14 +304,7 @@ namespace QuanLyTiecCuoi.ViewModel {
 
                 Deposit = invoice.TienDatCoc.GetValueOrDefault();
                 Fine = invoice.TienPhat.GetValueOrDefault();
-                SelectedInvoice = invoice;
-                // Thông báo thành công
-                Window owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
-                if (owner != null)
-                    MessageBox.Show(owner, "Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                else
-                    MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                //SelectedInvoice = invoice;
                 OnPropertyChanged();
                 IsPaid = true;
             }

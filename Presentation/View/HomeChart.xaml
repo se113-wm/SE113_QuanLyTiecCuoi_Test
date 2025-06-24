@@ -7,49 +7,27 @@
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-    <Border
-        Background="White"
-        BorderBrush="#C5CAE9"
-        BorderThickness="1.5"
-        CornerRadius="12">
-        <Border.Effect>
-            <DropShadowEffect
-                BlurRadius="10"
-                Direction="270"
-                Opacity="0.4"
-                ShadowDepth="4"
-                Color="Gray" />
-        </Border.Effect>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <!--  Tiêu đề  -->
 
-            <!--  Tiêu đề  -->
-            <TextBlock
-                HorizontalAlignment="Center"
-                FontFamily="Segoe UI"
-                FontSize="12"
-                FontWeight="Bold"
-                Foreground="Green"
-                Text="📈 BIỂU ĐỒ DOANH THU" />
+        <!--  Biểu đồ đường/miền  -->
+        <lvc:CartesianChart
+            Grid.Row="1"
+            Background="#FAFAFA"
+            Foreground="Green"
+            LegendLocation="Right"
+            Series="{Binding SeriesCollection}">
 
-            <!--  Biểu đồ đường/miền  -->
-            <lvc:CartesianChart
-                Grid.Row="1"
-                Background="#FAFAFA"
-                Foreground="Green"
-                LegendLocation="Right"
-                Series="{Binding SeriesCollection}">
-
-                <!--  Trục X: ngày  -->
+            <!--  Trục X: ngày  -->
 
 
-                <!--  Trục Y: doanh thu  -->
+            <!--  Trục Y: doanh thu  -->
 
-            </lvc:CartesianChart>
-        </Grid>
-    </Border>
+        </lvc:CartesianChart>
+    </Grid>
 </UserControl>

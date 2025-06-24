@@ -56,11 +56,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private ObservableCollection<string> _imagePaths = new ObservableCollection<string>
         {
-            "/Image/wedding.jpg",
-            "/Image/anhcuoi.png",
-             "/Image/1.jpg",
-              "/Image/2.jpg",
-               "/Image/3.jpg",
+            "/Image/1.jpg",
+            "/Image/2.jpg",
+            //"/Image/3.jpg",
+        "/Image/4.jpg",
+            "/Image/5.jpg",
             // Thêm các đường dẫn ảnh khác nếu có
         };
 
@@ -163,15 +163,24 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 return;
             }
 
-            var latestMonth = allReports.First().Thang;
-            var latestYear = allReports.First().Nam;
+            //var latestMonth = allReports.First().Thang;
+            //var latestYear = allReports.First().Nam;
 
-            var latestMonthReports = allReports
-                .Where(x => x.Thang == latestMonth && x.Nam == latestYear)
+            //var latestMonthReports = allReports
+            //    .Where(x => x.Thang == latestMonth && x.Nam == latestYear)
+            //    .OrderBy(x => x.Ngay)
+            //    .ToList();
+            // Doanh thu tháng hiện tại
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+
+            var currentMonthReports = allReports
+                .Where(x => x.Thang == currentMonth && x.Nam == currentYear)
                 .OrderBy(x => x.Ngay)
                 .ToList();
 
-            var chartVM = new HomeChartViewModel(latestMonthReports);
+
+            var chartVM = new HomeChartViewModel(currentMonthReports);
 
             var homeChart = new HomeChart
             {

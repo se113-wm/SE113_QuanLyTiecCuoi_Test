@@ -244,10 +244,12 @@
                     Text="Danh sách tiệc cưới" />
 
                 <ListView
+                    x:Name="WeddingListView"
                     Grid.Row="1"
                     Margin="0"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
+                    GridViewColumnHeader.Click="WeddingListView_ColumnHeaderClick"
                     ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                     <ListView.View>

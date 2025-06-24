@@ -644,22 +644,17 @@ INSERT INTO DICHVU (TenDichVu, DonGia, GhiChu) VALUES
 (N'Dịch vụ rước dâu bằng voi', 10000000, N'Dịch vụ đặc biệt, cần đặt trước'),
 (N'Trang trí bàn gallery', 1500000, N'Bàn gallery đón khách sang trọng');
 
-
--- LOAISANH và SANH
-INSERT INTO LOAISANH (TenLoaiSanh, DonGiaBanToiThieu) VALUES (N'Sanh A', 3000000);
-INSERT INTO SANH (MaLoaiSanh, TenSanh, SoLuongBanToiDa, GhiChu)
-VALUES (1, N'Sanh Hoa Mai', 50, N'Sảnh tầng trệt');
-
 -- CA
 INSERT INTO CA (TenCa, ThoiGianBatDauCa, ThoiGianKetThucCa)
-VALUES (N'Ca sáng', '09:00', '12:00');
+VALUES (N'Ca sáng', '09:00', '15:00');
+INSERT INTO CA (TenCa, ThoiGianBatDauCa, ThoiGianKetThucCa)
+VALUES (N'Ca tối', '17:00', '23:00');
 
 -- MONAN
 INSERT INTO MONAN (TenMonAn, DonGia, GhiChu)
 VALUES 
 (N'Súp cua', 50000, N'Món khai vị'),
 (N'Cá hấp xì dầu', 120000, N'Món chính');
-
 INSERT INTO MONAN (TenMonAn, DonGia, GhiChu)
 VALUES 
 (N'Bò kho', 66175, N'Món đặc biệt'),
@@ -678,49 +673,344 @@ VALUES
 (N'Mực nướng', 71844, N'Món khai vị'),
 (N'Gà luộc', 78276, N'Món phụ')
 
+--thứ tự
+--5 phiếu đã thanh toán trước ngày 24/06
+--5 phiếu chưa thanh toán vào ngày 24/06
+--5 phiếu chưa thanh toán trước ngày 24/06
+--5 phiếu chưa thanh toán sau ngày 24/06
+
+INSERT INTO PHIEUDATTIEC (TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec,
+    MaCa, MaSanh, TienDatCoc, SoLuongBan, SoBanDuTru, DonGiaBanTiec)
+VALUES 
+(N'Nguyễn Văn Đức', N'Trần Thị Nguyệt', '0912345678', '2025-05-10', '2025-06-20', 1, 1, 7000000, 27, 1, 1000000),
+(N'Lê Văn Chí', N'Phạm Thị Tố', '0923456789', '2025-05-15', '2025-06-19', 2, 2, 7500000, 26, 1, 1000000),
+
+(N'Nguyễn Văn Anh', N'Trần Thị Bé', '0912345678', '2025-05-10', '2025-06-24', 1, 1, 9000000, 27, 1, 1000000),
+
+(N'Nguyễn Tự Tuấn', N'Trần Liễu My', '0912345678', '2025-05-10', '2025-06-20', 1, 1, 10000000, 27, 1, 1000000),
+
+(N'Nguyễn Đại Lương', N'Trần Nữ Uyên', '0912345678', '2025-05-10', '2025-06-26', 1, 1, 9000000, 27, 1, 1000000);
 
 
-INSERT INTO PHIEUDATTIEC (
-    TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec, MaCa, MaSanh,
-    TienDatCoc, SoLuongBan, SoBanDuTru, ChiPhiPhatSinh, TongTienBan
-)
-VALUES (
-    N'Nguyễn Văn A', N'Trần Thị B', '0912345678',
-    '2025-06-01', '2025-06-10', 1, 1,
-    10000000, 20, 2, 500000, 1000
-);
+INSERT INTO PHIEUDATTIEC (TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec,
+    MaCa, MaSanh, TienDatCoc, SoLuongBan, SoBanDuTru, DonGiaBanTiec)
+VALUES 
+(N'Hoàng Văn Mai', N'Ngô Thị Phấn', '0934567890', '2025-05-20', '2025-06-18', 1, 3, 8000000, 24, 0, 1100000),
 
-INSERT INTO PHIEUDATTIEC (
-    TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec, MaCa, MaSanh,
-    TienDatCoc, SoLuongBan, SoBanDuTru, ChiPhiPhatSinh, TongTienBan
-)
-VALUES (
-    N'Nguyễn Văn A', N'Trần Thị B', '0912345678',
-    '2025-06-01', '2025-06-13', 1, 1,
-    10000000, 20, 2, 500000, 1000
-);
+(N'Lê Văn Cường', N'Phạm Thị Dương', '0923456789', '2025-05-15', '2025-06-24', 2, 2, 15000000, 26, 1, 1000000),
+(N'Hoàng Văn E', N'Ngô Thị F', '0934567890', '2025-05-20', '2025-06-24', 1, 3, 8000000, 24, 0, 1100000),
 
--- Lấy MaPhieuDat mới thêm:
--- Giả sử là 1
+(N'Lê Trọng Nghĩa', N'Phạm Tuyết Lan', '0923456789', '2025-05-15', '2025-06-19', 2, 2, 10500000, 26, 1, 1000000),
+
+(N'Lê Tâm Việt', N'Phạm Xuân Nhi', '0923456789', '2025-05-15', '2025-06-27', 2, 2, 15000000, 26, 1, 1000000);
+
+INSERT INTO PHIEUDATTIEC (TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec,
+    MaCa, MaSanh, TienDatCoc, SoLuongBan, SoBanDuTru, DonGiaBanTiec)
+VALUES 
+(N'Phan Văn Tài', N'Đỗ Thị Hồng', '0945678901', '2025-05-25', '2025-06-17', 2, 4, 9000000, 24, 0, 1100000),
+
+(N'Phan Văn Giang', N'Đỗ Thị Hướng', '0945678901', '2025-05-25', '2025-06-24', 2, 4, 9000000, 22, 0, 1100000),
+
+(N'Hoàng Mạnh Sơn', N'Ngô Quế Đài', '0934567890', '2025-05-20', '2025-06-18', 1, 3, 12000000, 24, 0, 1100000),
+(N'Phan Chính Huy', N'Đỗ Mỹ Thanh', '0945678901', '2025-05-25', '2025-06-17', 2, 4, 9000000, 22, 0, 1100000),
+
+(N'Hoàng Bảo Phát', N'Ngô Sương Vy', '0934567890', '2025-05-20', '2025-07-17', 1, 3, 8000000, 24, 0, 1100000);
+
+INSERT INTO PHIEUDATTIEC (TenChuRe, TenCoDau, DienThoai, NgayDatTiec, NgayDaiTiec,
+    MaCa, MaSanh, TienDatCoc, SoLuongBan, SoBanDuTru, DonGiaBanTiec)
+VALUES 
+(N'Trịnh Văn Tuấn', N'Bùi Thị Trinh', '0956789012', '2025-05-28', '2025-06-16', 1, 5, 9600000, 23, 1, 1200000),
+
+(N'Trịnh Văn Yên', N'Bùi Thị Kiều', '0956789012', '2025-05-28', '2025-06-24', 1, 5, 9600000, 23, 1, 1200000),
+
+(N'Trịnh Chương Sĩ', N'Bùi Liên Yến', '0956789012', '2025-05-28', '2025-06-16', 1, 5, 9600000, 23, 1, 1200000),
+
+(N'Phan An Bình', N'Đỗ Oanh Ý', '0945678901', '2025-05-25', '2025-07-12', 2, 4, 9000000, 22, 0, 1100000),
+(N'Trịnh Ninh Xuyên', N'Bùi Ánh Châu', '0956789012', '2025-05-28', '2025-07-11', 1, 5, 9600000, 23, 1, 1200000);
+
+-- CẬP NHẬT thông tin thanh toán cho 5 phiếu
+UPDATE PHIEUDATTIEC
+SET NgayThanhToan = '2025-06-21', ChiPhiPhatSinh = 1000000
+WHERE MaPhieuDat = 1;
+
+UPDATE PHIEUDATTIEC
+SET NgayThanhToan = '2025-06-22', ChiPhiPhatSinh = 1200000
+WHERE MaPhieuDat = 2;
+
+UPDATE PHIEUDATTIEC
+SET NgayThanhToan = '2025-06-23', ChiPhiPhatSinh = 1500000
+WHERE MaPhieuDat = 6;
+
+UPDATE PHIEUDATTIEC
+SET NgayThanhToan = '2025-06-23', ChiPhiPhatSinh = 800000
+WHERE MaPhieuDat = 11;
+
+UPDATE PHIEUDATTIEC
+SET NgayThanhToan = '2025-06-22', ChiPhiPhatSinh = 1000000
+WHERE MaPhieuDat = 16;
+
 
 INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
-VALUES
-(1, 1, 20, 50000, N'Dùng làm món khai vị'),
-(1, 2, 20, 120000, N'Món chính');
-
+VALUES 
+(1, 1, 1, 50000, N'Súp cua - khai vị'),
+(1, 2, 1, 120000, N'Cá hấp xì dầu - món chính'),
+(1, 4, 1, 65451, N'Cơm tấm - món phụ'),
+(1, 6, 2, 187835, N'Gà rang muối - món chính (x2 mỗi bàn)'),
+(1, 11, 1, 171184, N'Canh chua - tráng miệng');
 INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
-VALUES
-(1, 1, 1, 2000000, 2000000, N'Trang trí sân khấu theo chủ đề hoa'),
-(1, 2, 1, 3000000, 3000000, N'Nhạc sống nhẹ nhàng');
+VALUES 
+(1, 1, 1, 2000000, 2000000, N'Âm thanh tiêu chuẩn'),
+(1, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(1, 8, 1, 3500000, 3500000, N'MC dẫn chương trình');
 
-update THAMSO
-set GiaTri = 1
-where TenThamSo = 'KiemTraPhat'
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(2, 3, 1, 66175, N'Bò kho - món đặc biệt'),
+(2, 5, 1, 56685, N'Lẩu gà lá é'),
+(2, 7, 2, 68192, N'Gỏi cuốn (x2 mỗi bàn)'),
+(2, 13, 1, 51317, N'Cháo gà - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(2, 2, 1, 2500000, 2500000, N'Hệ thống ánh sáng'),
+(2, 10, 2, 800000, 1600000, N'Pháo điện mỗi tiết mục'),
+(2, 12, 1, 4500000, 4500000, N'Chụp hình cưới');
 
-update LOAISANH
-set DonGiaBanToiThieu = 1000000
-where MaLoaiSanh = 1
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(3, 8, 1, 152310, N'Vịt quay - khai vị'),
+(3, 9, 1, 105045, N'Bánh hỏi'),
+(3, 10, 1, 163277, N'Cá chiên - món đặc biệt'),
+(3, 14, 1, 67096, N'Gỏi xoài - món chính'),
+(3, 15, 1, 62076, N'Bún chả - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(3, 3, 1, 5000000, 5000000, N'Ca sĩ biểu diễn'),
+(3, 6, 1, 1000000, 1000000, N'Trang trí bóng bay'),
+(3, 9, 1, 1500000, 1500000, N'Xe hoa đưa đón');
 
-update PHIEUDATTIEC
-set NgayThanhToan = '2025-06-19'
-where MaPhieuDat = 2
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(4, 1, 1, 50000, N'Súp cua'),
+(4, 6, 2, 187835, N'Gà rang muối (x2 mỗi bàn)'),
+(4, 11, 1, 171184, N'Canh chua'),
+(4, 16, 1, 71844, N'Mực nướng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(4, 4, 1, 7000000, 7000000, N'Ban nhạc sống'),
+(4, 7, 1, 4000000, 4000000, N'Nhóm múa khai tiệc'),
+(4, 11, 1, 1200000, 1200000, N'Thiết kế phông nền');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(5, 2, 1, 120000, N'Cá hấp xì dầu'),
+(5, 6, 1, 187835, N'Gà rang muối'),
+(5, 12, 1, 87469, N'Tôm chiên - tráng miệng'),
+(5, 13, 1, 51317, N'Cháo gà - tráng miệng'),
+(5, 17, 1, 78276, N'Gà luộc - món phụ');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(5, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(5, 8, 1, 3500000, 3500000, N'MC chuyên nghiệp'),
+(5, 14, 1, 3000000, 3000000, N'Làm album cưới');
+
+
+
+--5 phiếu diễn ra vào ngày 24/06
+
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(6, 1, 1, 50000, N'Súp cua - khai vị'),
+(6, 2, 1, 120000, N'Cá hấp xì dầu - món chính'),
+(6, 4, 1, 65451, N'Cơm tấm - món phụ'),
+(6, 6, 2, 187835, N'Gà rang muối - món chính (x2 mỗi bàn)'),
+(6, 11, 1, 171184, N'Canh chua - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(6, 1, 1, 2000000, 2000000, N'Âm thanh tiêu chuẩn'),
+(6, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(6, 8, 1, 3500000, 3500000, N'MC dẫn chương trình');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(7, 3, 1, 66175, N'Bò kho - món đặc biệt'),
+(7, 5, 1, 56685, N'Lẩu gà lá é'),
+(7, 7, 2, 68192, N'Gỏi cuốn (x2 mỗi bàn)'),
+(7, 13, 1, 51317, N'Cháo gà - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(7, 2, 1, 2500000, 2500000, N'Hệ thống ánh sáng'),
+(7, 10, 2, 800000, 1600000, N'Pháo điện mỗi tiết mục'),
+(7, 12, 1, 4500000, 4500000, N'Chụp hình cưới');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(8, 8, 1, 152310, N'Vịt quay - khai vị'),
+(8, 9, 1, 105045, N'Bánh hỏi'),
+(8, 10, 1, 163277, N'Cá chiên - món đặc biệt'),
+(8, 14, 1, 67096, N'Gỏi xoài - món chính'),
+(8, 15, 1, 62076, N'Bún chả - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(8, 3, 1, 5000000, 5000000, N'Ca sĩ biểu diễn'),
+(8, 6, 1, 1000000, 1000000, N'Trang trí bóng bay'),
+(8, 9, 1, 1500000, 1500000, N'Xe hoa đưa đón');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(9, 1, 1, 50000, N'Súp cua'),
+(9, 6, 2, 187835, N'Gà rang muối (x2 mỗi bàn)'),
+(9, 11, 1, 171184, N'Canh chua'),
+(9, 16, 1, 71844, N'Mực nướng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(9, 4, 1, 7000000, 7000000, N'Ban nhạc sống'),
+(9, 7, 1, 4000000, 4000000, N'Nhóm múa khai tiệc'),
+(9, 11, 1, 1200000, 1200000, N'Thiết kế phông nền');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(10, 2, 1, 120000, N'Cá hấp xì dầu'),
+(10, 6, 1, 187835, N'Gà rang muối'),
+(10, 12, 1, 87469, N'Tôm chiên - tráng miệng'),
+(10, 13, 1, 51317, N'Cháo gà - tráng miệng'),
+(10, 17, 1, 78276, N'Gà luộc - món phụ');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(10, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(10, 8, 1, 3500000, 3500000, N'MC chuyên nghiệp'),
+(10, 14, 1, 3000000, 3000000, N'Làm album cưới');
+
+--5 phiếu đã thanh toán trước ngày 24/06
+-- THÊM 5 PHIẾU ĐẶT TIỆC (chưa thanh toán)
+
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(11, 1, 1, 50000, N'Súp cua - khai vị'),
+(11, 2, 1, 120000, N'Cá hấp xì dầu - món chính'),
+(11, 4, 1, 65451, N'Cơm tấm - món phụ'),
+(11, 6, 2, 187835, N'Gà rang muối - món chính (x2 mỗi bàn)'),
+(11, 11, 1, 171184, N'Canh chua - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(11, 1, 1, 2000000, 2000000, N'Âm thanh tiêu chuẩn'),
+(11, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(11, 8, 1, 3500000, 3500000, N'MC dẫn chương trình');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(12, 3, 1, 66175, N'Bò kho - món đặc biệt'),
+(12, 5, 1, 56685, N'Lẩu gà lá é'),
+(12, 7, 2, 68192, N'Gỏi cuốn (x2 mỗi bàn)'),
+(12, 13, 1, 51317, N'Cháo gà - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(12, 2, 1, 2500000, 2500000, N'Hệ thống ánh sáng'),
+(12, 10, 2, 800000, 1600000, N'Pháo điện mỗi tiết mục'),
+(12, 12, 1, 4500000, 4500000, N'Chụp hình cưới');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(13, 8, 1, 152310, N'Vịt quay - khai vị'),
+(13, 9, 1, 105045, N'Bánh hỏi'),
+(13, 10, 1, 163277, N'Cá chiên - món đặc biệt'),
+(13, 14, 1, 67096, N'Gỏi xoài - món chính'),
+(13, 15, 1, 62076, N'Bún chả - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(13, 3, 1, 5000000, 5000000, N'Ca sĩ biểu diễn'),
+(13, 6, 1, 1000000, 1000000, N'Trang trí bóng bay'),
+(13, 9, 1, 1500000, 1500000, N'Xe hoa đưa đón');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(14, 1, 1, 50000, N'Súp cua'),
+(14, 6, 2, 187835, N'Gà rang muối (x2 mỗi bàn)'),
+(14, 11, 1, 171184, N'Canh chua'),
+(14, 16, 1, 71844, N'Mực nướng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(14, 4, 1, 7000000, 7000000, N'Ban nhạc sống'),
+(14, 7, 1, 4000000, 4000000, N'Nhóm múa khai tiệc'),
+(14, 11, 1, 1200000, 1200000, N'Thiết kế phông nền');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(15, 2, 1, 120000, N'Cá hấp xì dầu'),
+(15, 6, 1, 187835, N'Gà rang muối'),
+(15, 12, 1, 87469, N'Tôm chiên - tráng miệng'),
+(15, 13, 1, 51317, N'Cháo gà - tráng miệng'),
+(15, 17, 1, 78276, N'Gà luộc - món phụ');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(15, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(15, 8, 1, 3500000, 3500000, N'MC chuyên nghiệp'),
+(15, 14, 1, 3000000, 3000000, N'Làm album cưới');
+
+--5 phiếu diễn ra sau ngày 24/06
+
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(16, 1, 1, 50000, N'Súp cua - khai vị'),
+(16, 2, 1, 120000, N'Cá hấp xì dầu - món chính'),
+(16, 4, 1, 65451, N'Cơm tấm - món phụ'),
+(16, 6, 2, 187835, N'Gà rang muối - món chính (x2 mỗi bàn)'),
+(16, 11, 1, 171184, N'Canh chua - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(16, 1, 1, 2000000, 2000000, N'Âm thanh tiêu chuẩn'),
+(16, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(16, 8, 1, 3500000, 3500000, N'MC dẫn chương trình');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(17, 3, 1, 66175, N'Bò kho - món đặc biệt'),
+(17, 5, 1, 56685, N'Lẩu gà lá é'),
+(17, 7, 2, 68192, N'Gỏi cuốn (x2 mỗi bàn)'),
+(17, 13, 1, 51317, N'Cháo gà - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(17, 2, 1, 2500000, 2500000, N'Hệ thống ánh sáng'),
+(17, 10, 2, 800000, 1600000, N'Pháo điện mỗi tiết mục'),
+(17, 12, 1, 4500000, 4500000, N'Chụp hình cưới');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(18, 8, 1, 152310, N'Vịt quay - khai vị'),
+(18, 9, 1, 105045, N'Bánh hỏi'),
+(18, 10, 1, 163277, N'Cá chiên - món đặc biệt'),
+(18, 14, 1, 67096, N'Gỏi xoài - món chính'),
+(18, 15, 1, 62076, N'Bún chả - tráng miệng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(18, 3, 1, 5000000, 5000000, N'Ca sĩ biểu diễn'),
+(18, 6, 1, 1000000, 1000000, N'Trang trí bóng bay'),
+(18, 9, 1, 1500000, 1500000, N'Xe hoa đưa đón');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(19, 1, 1, 50000, N'Súp cua'),
+(19, 6, 2, 187835, N'Gà rang muối (x2 mỗi bàn)'),
+(19, 11, 1, 171184, N'Canh chua'),
+(19, 16, 1, 71844, N'Mực nướng');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(19, 4, 1, 7000000, 7000000, N'Ban nhạc sống'),
+(19, 7, 1, 4000000, 4000000, N'Nhóm múa khai tiệc'),
+(19, 11, 1, 1200000, 1200000, N'Thiết kế phông nền');
+
+INSERT INTO THUCDON (MaPhieuDat, MaMonAn, SoLuong, DonGia, GhiChu)
+VALUES 
+(20, 2, 1, 120000, N'Cá hấp xì dầu'),
+(20, 6, 1, 187835, N'Gà rang muối'),
+(20, 12, 1, 87469, N'Tôm chiên - tráng miệng'),
+(20, 13, 1, 51317, N'Cháo gà - tráng miệng'),
+(20, 17, 1, 78276, N'Gà luộc - món phụ');
+INSERT INTO CHITIETDV (MaPhieuDat, MaDichVu, SoLuong, DonGia, ThanhTien, GhiChu)
+VALUES 
+(20, 5, 1, 3000000, 3000000, N'Trang trí hoa tươi'),
+(20, 8, 1, 3500000, 3500000, N'MC chuyên nghiệp'),
+(20, 14, 1, 3000000, 3000000, N'Làm album cưới');
+

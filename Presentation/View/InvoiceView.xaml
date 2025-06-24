@@ -10,13 +10,13 @@
     Name="HoaDon"
     Title="Hóa Đơn"
     Width="1000"
-    Height="800"
+    Height="820"
     Icon="Assets/icon_invoice.ico"
     WindowStartupLocation="Manual">
     <Window.Resources>
         <converter:MultiplyConverter x:Key="MultiplyConverter" />
     </Window.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Disabled">
         <Grid>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
@@ -24,7 +24,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <!--  Ten hoa don  -->
@@ -434,7 +433,7 @@
                             Height="1"
                             Margin="0,5"
                             Background="Gray" />
-                        <Grid Margin="20">
+                        <Grid Margin="0,20,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -446,6 +445,7 @@
                                     Width="180"
                                     Margin="0,0,10,0"
                                     Command="{Binding ConfirmPaymentCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                                     Content="{Binding PaymentText, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource MaterialDesignRaisedButton}" />
                                 <TextBlock
