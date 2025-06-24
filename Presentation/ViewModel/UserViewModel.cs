@@ -270,8 +270,12 @@ namespace QuanLyTiecCuoi.ViewModel {
 
             List = new ObservableCollection<NGUOIDUNGDTO>(_nguoiDungService.GetAll().Where(nd => nd.MaNhom != maNhomHienTai && nd.MaNhom != "ADMIN").ToList());
             OriginalList = new ObservableCollection<NGUOIDUNGDTO>(List);
-            UserTypes = new ObservableCollection<NHOMNGUOIDUNGDTO>(_nhomNguoiDungService.GetAll().ToList());
-
+            //UserTypes = new ObservableCollection<NHOMNGUOIDUNGDTO>(_nhomNguoiDungService.GetAll().ToList());
+            // bỏ nhóm hiện tại và nhóm ADMIN khỏi danh sách nhóm người dùng
+            UserTypes = new ObservableCollection<NHOMNGUOIDUNGDTO>(
+                _nhomNguoiDungService.GetAll()
+                .Where(n => n.MaNhom != maNhomHienTai && n.MaNhom != "ADMIN")
+                .ToList());
             SearchProperties = new ObservableCollection<string>
             {
                 "Tên đăng nhập",
