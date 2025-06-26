@@ -707,8 +707,10 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
                     return false;
                 }
-                // Nếu có phiếu đặt tiệc nào đã đặt sảnh này, thì không cho sửa số lượng bàn tối đa
-                if (_phieuDatTiecService.GetAll().Any(t => t.MaSanh == SelectedItem.MaSanh))
+                if (_phieuDatTiecService.GetAll()
+                        .Any(t => t.MaSanh == SelectedItem.MaSanh
+                               && t.NgayDaiTiec.HasValue
+                               && t.NgayDaiTiec.Value.Date >= DateTime.Today.AddDays(1)))
                 {
                     if (int.TryParse(SoLuongBanToiDa, out int newMax) && SelectedItem.SoLuongBanToiDa != newMax)
                     {

@@ -278,6 +278,8 @@ namespace QuanLyTiecCuoi.ViewModel {
             try {
                 var ca = _caService.GetById(SelectedInvoice.MaCa.GetValueOrDefault());
                 var sanh = _sanhService.GetById(SelectedInvoice.MaSanh.GetValueOrDefault());
+                _phieuDatTiecService = new PhieuDatTiecService();
+                SelectedInvoice = _phieuDatTiecService.GetById(_InvoiceId);
                 PHIEUDATTIECDTO invoice = new PHIEUDATTIECDTO {
                     MaPhieuDat = SelectedInvoice.MaPhieuDat,
                     TenChuRe = SelectedInvoice.TenChuRe,
@@ -291,12 +293,14 @@ namespace QuanLyTiecCuoi.ViewModel {
                     SoBanDuTru = SelectedInvoice.SoBanDuTru,
                     MaCa = SelectedInvoice.MaCa,
                     MaSanh = SelectedInvoice.MaSanh,
-                    //DonGiaBanTiec = SelectedInvoice.DonGiaBanTiec,
+                    DonGiaBanTiec = SelectedInvoice.DonGiaBanTiec,
+                    TongTienBan = SelectedInvoice.TongTienBan,
+                    TongTienHoaDon = SelectedInvoice.TongTienHoaDon,
+                    TienConLai = SelectedInvoice.TienConLai,
                     TongTienDV = SelectedInvoice.TongTienDV,
                     NgayThanhToan = DateTime.Now,
                     SoLuongBan = tableQuantity,
                     ChiPhiPhatSinh = damageEquipmentCost,
-                    TongTienBan = totalTableAmount
                 };
                 _phieuDatTiecService.Update(invoice);
                 _phieuDatTiecService = new PhieuDatTiecService();
