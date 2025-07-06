@@ -267,11 +267,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 }
                 // Kiểm tra xem món ăn có tồn tại trong danh sách chưa
                 var existingItem = MenuList.FirstOrDefault(m => m.MonAn.MaMonAn == MonAn.MaMonAn);
-                if (existingItem != null && existingItem != SelectedMenuItem)
+                if (existingItem != null && existingItem != SelectedMenuItem && existingItem.MonAn.DonGia == SelectedMenuItem.DonGia)
                 {
                     // Nếu món ăn đã tồn tại và không phải là món ăn đang chỉnh sửa, không thể chỉnh sửa
                     return false;
                 }
+                // Kiểm tra xem món ăn có tồn tại trong danh sách chưa, nếu rồi thì kiểm tra xem có khác đơn giá trong menu ko
+
                 return true;
             }, (p) =>
             {

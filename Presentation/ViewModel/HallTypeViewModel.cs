@@ -125,6 +125,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = false;
+                        IsExporting = false;
                         Reset(); // reset các trường nhập liệu
                         break;
                 }

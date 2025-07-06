@@ -21,6 +21,7 @@ namespace QuanLyTiecCuoi.ViewModel
     {
         private readonly ISanhService _sanhService;
         private readonly ILoaiSanhService _loaiSanhService;
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
 
         private ObservableCollection<SANHDTO> _List;
         public ObservableCollection<SANHDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -161,6 +162,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = false;
+                        IsExporting = false;
                         Reset(); // reset các trường nhập liệu
                         break;
                 }
@@ -582,6 +584,7 @@ namespace QuanLyTiecCuoi.ViewModel
         {
             _sanhService = new SanhService();
             _loaiSanhService = new LoaiSanhService();
+            _phieuDatTiecService = new PhieuDatTiecService();
 
             List = new ObservableCollection<SANHDTO>(_sanhService.GetAll().ToList());
             OriginalList = new ObservableCollection<SANHDTO>(List);
@@ -704,6 +707,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
                     return false;
                 }
+                // nếu đang có phiếu đặt tiệc chưa có ngày thanh toán thì ko cho đổi giá tiền
                 EditMessage = string.Empty;
                 return true;
             }, (p) =>
