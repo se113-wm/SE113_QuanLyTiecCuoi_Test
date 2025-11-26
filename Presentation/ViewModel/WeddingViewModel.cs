@@ -1,5 +1,4 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
@@ -14,9 +13,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class WeddingViewModel : BaseViewModel
     {
-        private IPhieuDatTiecService _phieuDatTiecService;
-        private IThucDonService _thucDonService;
-        private IChiTietDVService _chiTietDichVuService;
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private readonly IThucDonService _thucDonService;
+        private readonly IChiTietDVService _chiTietDichVuService;
+        private readonly MainViewModel _mainViewModel;
 
         private ObservableCollection<PHIEUDATTIECDTO> _List;
         public ObservableCollection<PHIEUDATTIECDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -51,11 +51,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 {
                     _selectedTrangThai = value;
                     OnPropertyChanged();
-                    // Call your filter method here
                     PerformSearch();
                 }
             }
         }
+        
         public ObservableCollection<string> TenChuReFilterList { get; set; }
         public string SelectedTenChuRe { get => _selectedTenChuRe; set { _selectedTenChuRe = value; OnPropertyChanged(); PerformSearch(); } }
         private string _selectedTenChuRe;
@@ -92,15 +92,17 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private string _DeleteMessage;
         public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
 
-        private MainViewModel mainViewModel;
-
-        public WeddingViewModel(MainViewModel mainViewModel)
+        // Constructor với Dependency Injection
+        public WeddingViewModel(
+            MainViewModel mainViewModel, 
+            IPhieuDatTiecService phieuDatTiecService, 
+            IThucDonService thucDonService, 
+            IChiTietDVService chiTietDVService)
         {
-            this.mainViewModel = mainViewModel;
-            
-            _phieuDatTiecService = new PhieuDatTiecService();
-            _thucDonService = new ThucDonService();
-            _chiTietDichVuService = new ChiTietDVService();
+            _mainViewModel = mainViewModel;
+            _phieuDatTiecService = phieuDatTiecService;
+            _thucDonService = thucDonService;
+            _chiTietDichVuService = chiTietDVService;
 
             var all = _phieuDatTiecService.GetAll().ToList();
             List = new ObservableCollection<PHIEUDATTIECDTO>(all);
@@ -130,9 +132,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             DetailCommand = new RelayCommand<object>((p) => SelectedItem != null, (p) =>
             {
-                mainViewModel.CurrentView = new WeddingDetailView
+                // Sử dụng Factory Method để tạo WeddingDetailViewModel
+                _mainViewModel.CurrentView = new WeddingDetailView
                 {
-                    DataContext = new WeddingDetailViewModel(SelectedItem.MaPhieuDat)
+                    DataContext = Infrastructure.ServiceContainer.CreateWeddingDetailViewModel(SelectedItem.MaPhieuDat)
                 };
             });
 
@@ -154,7 +157,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     DeleteMessage = "Không thể xóa tiệc cưới tổ chức vào hôm nay và đã tổ chức.";
                     return false;
                 }
-                DeleteMessage = string.Empty; // Reset delete message
+                DeleteMessage = string.Empty;
                 return true;
             }
             , (p) =>
@@ -177,7 +180,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                             _chiTietDichVuService.Delete(SelectedItem.MaPhieuDat, chiTietDV.MaDichVu);
                         }
                         // Xóa phiếu đặt tiệc
-
                         _phieuDatTiecService.Delete(SelectedItem.MaPhieuDat);
                         List.Remove(SelectedItem);
                         RefreshList();
@@ -252,9 +254,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         public void AddCommandFunc()
         {
+            // Sử dụng Factory Method để tạo AddWeddingViewModel
             var addView = new Presentation.View.AddWeddingView()
             {
-                DataContext = new AddWeddingViewModel()
+                DataContext = Infrastructure.ServiceContainer.CreateAddWeddingViewModel()
             };
             addView.ShowDialog();
             RefreshList();
@@ -262,7 +265,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private void RefreshList()
         {
-            _phieuDatTiecService = new PhieuDatTiecService();
+            // Sử dụng service đã inject thay vì tạo mới
             var all = _phieuDatTiecService.GetAll().ToList();
             List = new ObservableCollection<PHIEUDATTIECDTO>(all);
             OriginalList = new ObservableCollection<PHIEUDATTIECDTO>(all);

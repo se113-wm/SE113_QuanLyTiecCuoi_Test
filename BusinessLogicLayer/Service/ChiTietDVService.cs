@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly IChiTietDVRepository _chiTietDVRepository;
 
-        public ChiTietDVService()
+        // Constructor với Dependency Injection
+        public ChiTietDVService(IChiTietDVRepository chiTietDVRepository)
         {
-            _chiTietDVRepository = new ChiTietDVRepository();
+            _chiTietDVRepository = chiTietDVRepository;
         }
 
         public IEnumerable<CHITIETDVDTO> GetAll()
@@ -69,14 +69,12 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                         TenDichVu = x.DICHVU.TenDichVu,
                         DonGia = x.DICHVU.DonGia,
                         GhiChu = x.DICHVU.GhiChu
-                        // Thêm các thuộc tính khác nếu cần
                     }
                     : null,
                 PhieuDatTiec = x.PHIEUDATTIEC != null
                     ? new PHIEUDATTIECDTO
                     {
                         MaPhieuDat = x.PHIEUDATTIEC.MaPhieuDat,
-                        // Thêm các thuộc tính khác nếu cần
                     }
                     : null
             };

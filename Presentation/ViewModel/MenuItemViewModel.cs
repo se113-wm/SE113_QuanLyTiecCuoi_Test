@@ -1,5 +1,5 @@
 ﻿using QuanLyTiecCuoi.DataTransferObject;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -12,6 +12,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class MenuItemViewModel : BaseViewModel
     {
+        private readonly IMonAnService _monAnService;
+
         // Danh sách gốc (không thay đổi)
         private ObservableCollection<MONANDTO> _originalFoodList;
         public ObservableCollection<MONANDTO> OriginalFoodList
@@ -82,10 +84,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         // Command hủy
         public ICommand CancelCommand { get; set; }
 
-        public MenuItemViewModel()
+        // Constructor với Dependency Injection
+        public MenuItemViewModel(IMonAnService monAnService)
         {
-            var monAnService = new MonAnService();
-            OriginalFoodList = new ObservableCollection<MONANDTO>(monAnService.GetAll());
+            _monAnService = monAnService;
+            
+            OriginalFoodList = new ObservableCollection<MONANDTO>(_monAnService.GetAll());
             FoodList = new ObservableCollection<MONANDTO>(OriginalFoodList);
 
             SelectedSearchProperty = SearchProperties.FirstOrDefault();

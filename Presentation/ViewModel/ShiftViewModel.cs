@@ -1,5 +1,4 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using System;
 using System.Collections.ObjectModel;
@@ -13,6 +12,23 @@ namespace QuanLyTiecCuoi.ViewModel
     {
         private readonly ICaService _caService;
         private readonly IPhieuDatTiecService _phieuDatTiecService;
+
+        // Constructor với Dependency Injection
+        public ShiftViewModel(ICaService caService, IPhieuDatTiecService phieuDatTiecService)
+        {
+            _caService = caService;
+            _phieuDatTiecService = phieuDatTiecService;
+
+            // Khởi tạo dữ liệu
+            List = new ObservableCollection<CADTO>(_caService.GetAll().ToList());
+            OriginalList = new ObservableCollection<CADTO>(List);
+
+            SearchProperties = new ObservableCollection<string> { "Tên ca", "Thời gian bắt đầu", "Thời gian kết thúc" };
+            SelectedSearchProperty = SearchProperties.FirstOrDefault();
+
+            // Khởi tạo Commands
+            InitializeCommands();
+        }
 
         private ObservableCollection<CADTO> _List;
         public ObservableCollection<CADTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -134,81 +150,29 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        private void PerformSearch()
-        {
-            try
-            {
-                SelectedItem = null;
-                TenCa = string.Empty;
-                ThoiGianBatDauCa = null;
-                ThoiGianKetThucCa = null;
-
-                if (string.IsNullOrWhiteSpace(SearchText) || string.IsNullOrWhiteSpace(SelectedSearchProperty))
-                {
-                    List = OriginalList;
-                    return;
-                }
-
-                string search = SearchText.Trim();
-
-                switch (SelectedSearchProperty)
-                {
-                    case "Tên ca":
-                        List = new ObservableCollection<CADTO>(
-                            OriginalList.Where(x => !string.IsNullOrWhiteSpace(x.TenCa) &&
-                                                    x.TenCa.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Thời gian bắt đầu":
-                        if (TimeSpan.TryParse(search, out TimeSpan startTime))
-                        {
-                            List = new ObservableCollection<CADTO>(
-                                OriginalList.Where(x => x.ThoiGianBatDauCa.HasValue && x.ThoiGianBatDauCa.Value == startTime));
-                        }
-                        else
-                        {
-                            List = new ObservableCollection<CADTO>();
-                        }
-                        break;
-                    case "Thời gian kết thúc":
-                        if (TimeSpan.TryParse(search, out TimeSpan endTime))
-                        {
-                            List = new ObservableCollection<CADTO>(
-                                OriginalList.Where(x => x.ThoiGianKetThucCa.HasValue && x.ThoiGianKetThucCa.Value == endTime));
-                        }
-                        else
-                        {
-                            List = new ObservableCollection<CADTO>();
-                        }
-                        break;
-                    default:
-                        List = OriginalList;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
         private bool _isEditing;
         public bool IsEditing
         {
             get => _isEditing;
             set { _isEditing = value; OnPropertyChanged(); }
         }
+        
         private bool _isAdding;
         public bool IsAdding
         {
             get => _isAdding;
             set { _isAdding = value; OnPropertyChanged(); }
         }
+        
         private bool _isDeleting;
         public bool IsDeleting
         {
             get => _isDeleting;
             set { _isDeleting = value; OnPropertyChanged(); }
         }
+        
         public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+        
         private string _selectedAction;
         public string SelectedAction
         {
@@ -223,51 +187,33 @@ namespace QuanLyTiecCuoi.ViewModel
                         IsAdding = true;
                         IsEditing = false;
                         IsDeleting = false;
-                        Reset(); // reset các trường nhập liệu
-                        // reset ảnh về ko có ảnh
+                        Reset();
                         break;
                     case "Sửa":
                         IsAdding = false;
                         IsEditing = true;
                         IsDeleting = false;
-                        Reset(); // reset các trường nhập liệu
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
+                        Reset();
                         break;
                     case "Xóa":
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = true;
-                        Reset(); // reset các trường nhập liệu
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
+                        Reset();
                         break;
                     default:
                         _selectedAction = null;
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = false;
-                        Reset(); // reset các trường nhập liệu
+                        Reset();
                         break;
                 }
             }
         }
-        public ShiftViewModel()
+
+        private void InitializeCommands()
         {
-            _caService = new CaService();
-            _phieuDatTiecService = new PhieuDatTiecService();
-            List = new ObservableCollection<CADTO>(_caService.GetAll().ToList());
-            OriginalList = new ObservableCollection<CADTO>(List);
-
-            SearchProperties = new ObservableCollection<string> { "Tên ca", "Thời gian bắt đầu", "Thời gian kết thúc" };
-            SelectedSearchProperty = SearchProperties.FirstOrDefault();
-
             AddCommand = new RelayCommand<object>((p) =>
             {
                 AddMessage = string.Empty;
@@ -410,18 +356,15 @@ namespace QuanLyTiecCuoi.ViewModel
 
             DeleteCommand = new RelayCommand<object>((p) =>
             {
-                // Kiểm tra nếu không có ca nào được chọn
                 if (SelectedItem == null)
                 {
                     return false;
                 }
-                // Kiểm tra nếu ca này đang được sử dụng trong phiếu đặt tiệc
                 if (_phieuDatTiecService.GetAll().Any(x => x.MaCa == SelectedItem.MaCa))
                 {
                     DeleteMessage = "Không thể xóa ca này vì nó đang được sử dụng trong phiếu đặt tiệc";
                     return false;
                 }
-                // Nếu đã chọn ca và không có vấn đề gì thì cho phép xóa
                 DeleteMessage = string.Empty;
                 return true;
             }, (p) =>
@@ -444,6 +387,63 @@ namespace QuanLyTiecCuoi.ViewModel
             });
 
             ResetCommand = new RelayCommand<object>((p) => true, (p) => Reset());
+        }
+
+        private void PerformSearch()
+        {
+            try
+            {
+                SelectedItem = null;
+                TenCa = string.Empty;
+                ThoiGianBatDauCa = null;
+                ThoiGianKetThucCa = null;
+
+                if (string.IsNullOrWhiteSpace(SearchText) || string.IsNullOrWhiteSpace(SelectedSearchProperty))
+                {
+                    List = OriginalList;
+                    return;
+                }
+
+                string search = SearchText.Trim();
+
+                switch (SelectedSearchProperty)
+                {
+                    case "Tên ca":
+                        List = new ObservableCollection<CADTO>(
+                            OriginalList.Where(x => !string.IsNullOrWhiteSpace(x.TenCa) &&
+                                                    x.TenCa.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    case "Thời gian bắt đầu":
+                        if (TimeSpan.TryParse(search, out TimeSpan startTime))
+                        {
+                            List = new ObservableCollection<CADTO>(
+                                OriginalList.Where(x => x.ThoiGianBatDauCa.HasValue && x.ThoiGianBatDauCa.Value == startTime));
+                        }
+                        else
+                        {
+                            List = new ObservableCollection<CADTO>();
+                        }
+                        break;
+                    case "Thời gian kết thúc":
+                        if (TimeSpan.TryParse(search, out TimeSpan endTime))
+                        {
+                            List = new ObservableCollection<CADTO>(
+                                OriginalList.Where(x => x.ThoiGianKetThucCa.HasValue && x.ThoiGianKetThucCa.Value == endTime));
+                        }
+                        else
+                        {
+                            List = new ObservableCollection<CADTO>();
+                        }
+                        break;
+                    default:
+                        List = OriginalList;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Reset()

@@ -9,9 +9,15 @@ namespace QuanLyTiecCuoi.DataAccessLayer.Repository
     {
         private readonly QuanLyTiecCuoiEntities _context;
 
-        public CaRepository()
+        // Constructor với Dependency Injection (nếu context được inject từ bên ngoài)
+        public CaRepository(QuanLyTiecCuoiEntities context)
         {
-            _context = new QuanLyTiecCuoiEntities();
+            _context = context ?? new QuanLyTiecCuoiEntities();
+        }
+
+        // Constructor mặc định để backward compatibility
+        public CaRepository() : this(null)
+        {
         }
 
         public IEnumerable<CA> GetAll()

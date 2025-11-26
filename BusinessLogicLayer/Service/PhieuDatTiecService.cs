@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly IPhieuDatTiecRepository _phieuDatTiecRepository;
 
-        public PhieuDatTiecService()
+        // Constructor với Dependency Injection
+        public PhieuDatTiecService(IPhieuDatTiecRepository phieuDatTiecRepository)
         {
-            _phieuDatTiecRepository = new PhieuDatTiecRepository();
+            _phieuDatTiecRepository = phieuDatTiecRepository;
         }
 
         public IEnumerable<PHIEUDATTIECDTO> GetAll()
@@ -151,9 +151,9 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                 NgayThanhToan = entity.NgayThanhToan,
                 DonGiaBanTiec = entity.DonGiaBanTiec,
                 TongTienBan = entity.TongTienBan,
-                TongTienDV = entity.TongTienDV,
                 TongTienHoaDon = entity.TongTienHoaDon,
                 TienConLai = entity.TienConLai,
+                TongTienDV = entity.TongTienDV,
                 ChiPhiPhatSinh = entity.ChiPhiPhatSinh,
                 TienPhat = entity.TienPhat
             };

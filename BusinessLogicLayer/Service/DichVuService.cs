@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly IDichVuRepository _dichVuRepository;
 
-        public DichVuService()
+        // Constructor với Dependency Injection
+        public DichVuService(IDichVuRepository dichVuRepository)
         {
-            _dichVuRepository = new DichVuRepository();
+            _dichVuRepository = dichVuRepository;
         }
 
         public IEnumerable<DICHVUDTO> GetAll()

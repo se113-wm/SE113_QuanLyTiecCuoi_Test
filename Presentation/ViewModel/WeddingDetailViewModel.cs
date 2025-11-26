@@ -1,7 +1,5 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
-using QuanLyTiecCuoi.Model;
 using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
 using System;
@@ -16,15 +14,64 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class WeddingDetailViewModel : BaseViewModel
     {
-        // Services
+        // Services - Inject qua constructor
         private readonly ISanhService _sanhService;
         private readonly ICaService _caService;
-        private IPhieuDatTiecService _phieuDatTiecService;
-        private IMonAnService _monAnService;
-        private IDichVuService _dichVuService;
-        private IThucDonService _thucDonService;
-        private IChiTietDVService _chiTietDichVuService;
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private readonly IMonAnService _monAnService;
+        private readonly IDichVuService _dichVuService;
+        private readonly IThucDonService _thucDonService;
+        private readonly IChiTietDVService _chiTietDichVuService;
         private readonly IThamSoService _thamSoService;
+
+        private int _maPhieuDat;
+
+        // Constructor với Dependency Injection
+        public WeddingDetailViewModel(
+            int maPhieuDat,
+            ISanhService sanhService,
+            ICaService caService,
+            IPhieuDatTiecService phieuDatTiecService,
+            IMonAnService monAnService,
+            IDichVuService dichVuService,
+            IThucDonService thucDonService,
+            IChiTietDVService chiTietDichVuService,
+            IThamSoService thamSoService)
+        {
+            // Inject services
+            _sanhService = sanhService;
+            _caService = caService;
+            _phieuDatTiecService = phieuDatTiecService;
+            _monAnService = monAnService;
+            _dichVuService = dichVuService;
+            _thucDonService = thucDonService;
+            _chiTietDichVuService = chiTietDichVuService;
+            _thamSoService = thamSoService;
+
+            _maPhieuDat = maPhieuDat;
+
+            // Load data
+            CaList = new ObservableCollection<CADTO>(_caService.GetAll());
+            SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
+
+            // Load wedding detail
+            if (maPhieuDat > 0)
+            {
+                LoadWeddingDetail(maPhieuDat);
+            }
+
+            var from = new DateTime(2000, 1, 1);
+            var to = DateTime.Today;
+
+            if (from > to)
+            {
+                to = from;
+            }
+            NgayKhongChoChon = new ObservableCollection<CalendarDateRange>();
+
+            // Initialize Commands
+            InitializeCommands();
+        }
 
         // Wedding Info
         private string _tenChuRe;
@@ -279,60 +326,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand DeleteServiceCommand { get; set; }
         public ICommand ShowInvoiceCommand { get; set; }
 
-        private int _maPhieuDat;
-
-        public WeddingDetailViewModel(int maPhieuDat)
+        private void InitializeCommands()
         {
-            // Initialize services
-            _sanhService = new SanhService();
-            _caService = new CaService();
-            _phieuDatTiecService = new PhieuDatTiecService();
-            _monAnService = new MonAnService();
-            _dichVuService = new DichVuService();
-            _thucDonService = new ThucDonService();
-            _chiTietDichVuService = new ChiTietDVService();
-            _thamSoService = new ThamSoService();
-
-            // Load data
-            CaList = new ObservableCollection<CADTO>(_caService.GetAll());
-            SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
-
-            _maPhieuDat = maPhieuDat;
-            // Example: Load wedding detail here if needed
-            if (maPhieuDat > 0)
-            {
-                LoadWeddingDetail(maPhieuDat);
-            }
-            var from = new DateTime(2000, 1, 1);
-            var to = DateTime.Today;
-
-            // Nếu có ngày đãi tiệc, kiểm tra kỹ
-            //if (NgayDaiTiec.HasValue)
-            //{
-            //    var date = NgayDaiTiec.Value.Date;
-
-            //    // Nếu ngày đãi tiệc nằm trong phạm vi hợp lệ và lớn hơn "from"
-            //    if (date >= from && date <= to)
-            //    {
-            //        to = date;
-            //    }
-            //}
-
-            //// Không được để from > to
-            //if (from > to)
-            //{
-            //    // Log để kiểm tra
-            //    MessageBox.Show($"LỖI PHẠM VI: from = {from}, to = {to}");
-            //    // Đặt lại to = from để tránh lỗi
-            //    to = from;
-            if (from > to)
-            {
-                // Đặt lại to = from để tránh lỗi
-                to = from;
-            }
-            NgayKhongChoChon = new ObservableCollection<CalendarDateRange>();
-
-
             ResetTCCommand = new RelayCommand<object>((p) => true, (p) => 
             {
                 // Lấy lại thông tin ban đầu
@@ -351,12 +346,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     SoBanDuTru = wedding.SoBanDuTru.ToString();
                     
                     // Load menu and service details
-                    _thucDonService = new ThucDonService();
                     MenuList = new ObservableCollection<THUCDONDTO>(_thucDonService.GetByPhieuDat(_maPhieuDat));
-                    _chiTietDichVuService = new ChiTietDVService();
                     ServiceList = new ObservableCollection<CHITIETDVDTO>(_chiTietDichVuService.GetByPhieuDat(_maPhieuDat));
                 }
             });
+            
             ConfirmEditCommand = new RelayCommand<object>((p) => IsEditing, (p) => ConfirmEdit());
             CancelEditCommand = new RelayCommand<object>((p) => IsEditing, (p) => CancelEdit());
             ResetTDCommand = new RelayCommand<object>((p) => true, (p) => ResetTD());
@@ -366,16 +360,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             AddMenuCommand = new RelayCommand<object>((p) =>
             {
                 if (!IsEditing) return false;
-                // Nếu MonAn là null hoặc không có tên món ăn, không thể thêm
                 if (MonAn == null || string.IsNullOrWhiteSpace(MonAn.TenMonAn) || !int.TryParse(TD_SoLuong, out int sl) || sl <= 0)
                 {
                     return false;
                 }
-                // Kiểm tra xem món ăn đã tồn tại trong danh sách chưa
                 var existingItem = MenuList.FirstOrDefault(m => m.MonAn.MaMonAn == MonAn.MaMonAn);
                 if (existingItem != null)
                 {
-                    // Nếu món ăn đã tồn tại, không thể thêm
                     return false;
                 }
                 return true ;
@@ -391,24 +382,21 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     SoLuong = int.Parse(TD_SoLuong),
                     GhiChu = TD_GhiChu
                 });
-                // Reset input fields after adding
                 TD_SoLuong = string.Empty;
                 TD_GhiChu = string.Empty;
                 TD_DonGia = string.Empty;
                 MonAn = new MONANDTO();
                 OnPropertyChanged(nameof(MonAn));
             });
+
             EditMenuCommand = new RelayCommand<object>((p) =>
             {
                 if (!IsEditing) return false;
-                // Nếu SelectedMenuItem là null, không thể chỉnh sửa
                 if (SelectedMenuItem == null) return false;
-                // Kiểm tra tính hợp lệ của dữ liệu
                 if (MonAn == null || string.IsNullOrWhiteSpace(MonAn.TenMonAn) || !int.TryParse(TD_SoLuong, out int sl) || sl <= 0)
                 {
                     return false;
                 }
-                // Nếu không có gì thay đổi, không cần chỉnh sửa
                 if (
                     SelectedMenuItem.MonAn.TenMonAn == MonAn.TenMonAn &&
                     SelectedMenuItem.SoLuong?.ToString() == TD_SoLuong &&
@@ -418,32 +406,22 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     )
                 )
                 {
-                    // Mess, cho tui xem giá trị của SelectedMenuItem.MonAn.DonGia và MonAn.DonGia
-                     
                     return false;
                 }
-                //MessageBox.Show($"SelectedMenuItem.MonAn.DonGia: {SelectedMenuItem.MonAn.DonGia}, MonAn.DonGia: {TD_DonGia}");
-                // Kiểm tra xem món ăn có tồn tại trong danh sách chưa
                 var existingItem = MenuList.FirstOrDefault(m => m.MonAn.MaMonAn == MonAn.MaMonAn);
                 if (existingItem != null && existingItem != SelectedMenuItem)
                 {
-                    // Nếu món ăn đã tồn tại và không phải là món ăn đang chỉnh sửa, không thể chỉnh sửa
                     return false;
                 }
-                // Kiểm tra xem món ăn có tồn tại trong danh sách chưa, nếu rồi thì kiểm tra xem có khác đơn giá trong menu ko
-
                 return true;
             }, (p) =>
             {
-                // Nếu giá mã món ăn giống nhau, mà đơn giá món ăn khác đơn giá trong menu
-                // thì báo lên message hỏi có muốn cập nhật theo giá mới (giá món ăn)
-                // Nếu có thì cho sửa bình thường, không thì kết thúc
                 if (SelectedMenuItem.MonAn.MaMonAn == MonAn.MaMonAn && SelectedMenuItem.DonGia != MonAn.DonGia)
                 {
                     var result = MessageBox.Show($"Món ăn {MonAn.TenMonAn} đã có trong thực đơn với đơn giá {SelectedMenuItem.DonGia:N0}. Bạn có muốn cập nhật đơn giá mới là {MonAn.DonGia:N0} không?", "Cập nhật đơn giá", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.No)
                     {
-                        return; // Không cập nhật, kết thúc lệnh
+                        return;
                     }
                 }
 
@@ -459,6 +437,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 int index = MenuList.IndexOf(SelectedMenuItem);
                 MenuList[index] = NewMenuItem;
             });
+
             DeleteMenuCommand = new RelayCommand<object>((p) => SelectedMenuItem != null, (p) =>
             {
                 MenuList.Remove(SelectedMenuItem);
@@ -466,23 +445,19 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             });
             // Service commands
             ChonDichVuCommand = new RelayCommand<object>((p) => true, (p) => ChonDichVu());
-            AddServiceCommand = new RelayCommand<object>((p) =>
+            AddServiceCommand = new RelayCommand<Object>((p) =>
             {
                 if (!IsEditing) return false;
-                // Nếu DichVu là null hoặc không có tên dịch vụ, không thể thêm
                 if (DichVu == null || string.IsNullOrWhiteSpace(DichVu.TenDichVu) || !int.TryParse(DV_SoLuong, out int sl) || sl <= 0)
                 {
                     return false;
                 }
-                // Kiểm tra xem dịch vụ đã tồn tại trong danh sách chưa
                 var existingService = ServiceList.FirstOrDefault(s => s.DichVu.MaDichVu == DichVu.MaDichVu);
                 if (existingService != null)
                 {
-                    // Nếu dịch vụ đã tồn tại, không thể thêm
                     return false;
                 }
                 return true;
-
             }
             , (p) =>
             {
@@ -501,17 +476,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 DichVu = new DICHVUDTO();
                 OnPropertyChanged(nameof(DichVu));
             });
+
             EditServiceCommand = new RelayCommand<object>((p) =>
             {
                 if (!IsEditing) return false;
-                // Nếu SelectedServiceItem là null, không thể chỉnh sửa
                 if (SelectedServiceItem == null) return false;
-                // Kiểm tra tính hợp lệ của dữ liệu
                 if (DichVu == null || string.IsNullOrWhiteSpace(DichVu.TenDichVu) || !int.TryParse(DV_SoLuong, out int sl) || sl <= 0)
                 {
                     return false;
                 }
-                // Nếu không có gì thay đổi, không cần chỉnh sửa
                 if (
                     SelectedServiceItem.DichVu.TenDichVu == DichVu.TenDichVu &&
                     SelectedServiceItem.SoLuong?.ToString() == DV_SoLuong &&
@@ -521,29 +494,23 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     )
                 )
                 {
-                    
                     return false;
                 }
 
-                // Kiểm tra xem dịch vụ có tồn tại trong danh sách chưa
                 var existingService = ServiceList.FirstOrDefault(s => s.DichVu.MaDichVu == DichVu.MaDichVu);
                 if (existingService != null && existingService != SelectedServiceItem)
                 {
-                    // Nếu dịch vụ đã tồn tại và không phải là dịch vụ đang chỉnh sửa, không thể chỉnh sửa
                     return false;
                 }
                 return true;
             }, (p) =>
             {
-                // Nếu giá mã dịch vụ giống nhau, mà đơn giá dịch vụ khác đơn giá trong danh sách
-                // thì báo lên message hỏi có muốn cập nhật theo giá mới (giá dịch vụ)
-                // Nếu có thì cho sửa bình thường, không thì kết thúc
                 if (SelectedServiceItem.DichVu.MaDichVu == DichVu.MaDichVu && SelectedServiceItem.DonGia != DichVu.DonGia)
                 {
                     var result = MessageBox.Show($"Dịch vụ {DichVu.TenDichVu} đã có trong danh sách với đơn giá {SelectedServiceItem.DonGia:N0}. Bạn có muốn cập nhật đơn giá mới là {DichVu.DonGia:N0} không?", "Cập nhật đơn giá", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.No)
                     {
-                        return; // Không cập nhật, kết thúc lệnh
+                        return;
                     }
                 }
 
@@ -557,12 +524,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     GhiChu = DV_GhiChu
                 };
                 int index = ServiceList.IndexOf(SelectedServiceItem);
-                ServiceList[index] = NewServiceItem; // Cập nhật trực tiếp
-
+                ServiceList[index] = NewServiceItem;
             });
+
             DeleteServiceCommand = new RelayCommand<object>((p) =>
             {
-                // Nếu SelectedServiceItem là null, không thể xóa
                 return SelectedServiceItem != null;
             }
             , (p) =>
@@ -573,25 +539,19 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             ShowInvoiceCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-
                 var invoiceView = new InvoiceView() {
-                    DataContext = new InvoiceViewModel(_maPhieuDat)
+                    DataContext = Infrastructure.ServiceContainer.CreateInvoiceViewModel(_maPhieuDat)
                 };
                 invoiceView.ShowDialog();
                     
-                IsEditing = false; // Reset editing mode after showing invoice
-                LoadWeddingDetail(maPhieuDat); // Reload wedding details to reflect any changes
-              
+                IsEditing = false;
+                LoadWeddingDetail(_maPhieuDat);
             });
-
         }
 
         // Load wedding detail by ID (if needed)
         private void LoadWeddingDetail(int maPhieuDat)
         {
-            _phieuDatTiecService = new PhieuDatTiecService(); // Refresh service to get updated data
-            _thucDonService = new ThucDonService(); // Refresh service to get updated data
-            _chiTietDichVuService = new ChiTietDVService(); // Refresh service to get updated data
             var wedding = _phieuDatTiecService.GetById(maPhieuDat);
             if (wedding != null)
             {
@@ -601,13 +561,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 NgayDaiTiec = wedding.NgayDaiTiec;
                 NgayDatTiec = (DateTime)wedding.NgayDatTiec;
                 SelectedCa = CaList.FirstOrDefault(c => c.MaCa == wedding.MaCa);
-                //SelectedSanh = SanhList.FirstOrDefault(s => s.MaSanh == wedding.MaSanh);
-                SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll()); // Refresh SanhList
+                SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
                 
                 var sanh = SanhList.FirstOrDefault(s => s.MaSanh == wedding.MaSanh);
                 if (sanh.LoaiSanh.DonGiaBanToiThieu != wedding.DonGiaBanTiec)
                 {
-                    // thêm vào 1 sảnh tương tự với đơn giá là đơn gián bàn tiệc đã đặt
                     var sanhMoi = new SANHDTO
                     {
                         MaSanh = sanh.MaSanh,
@@ -620,7 +578,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                         },
                         SoLuongBanToiDa = sanh.SoLuongBanToiDa,
                     };
-                    // Thêm vào đầu danh sách
                     SanhList.Insert(0, sanhMoi);
                     SelectedSanh = sanhMoi;
                 }
@@ -631,7 +588,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 TienDatCoc = wedding.TienDatCoc.ToString();
                 SoLuongBan = wedding.SoLuongBan.ToString();
                 SoBanDuTru = wedding.SoBanDuTru.ToString();
-                // Load menu and service details
+                
                 MenuList = new ObservableCollection<THUCDONDTO>(_thucDonService.GetByPhieuDat(maPhieuDat));
 
                 var allMonAn = _monAnService.GetAll().ToList();
@@ -657,7 +614,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             if (SelectedMenuItem != null)
             {
                 MonAn = SelectedMenuItem.MonAn;
-                TD_DonGia = SelectedMenuItem.DonGia?.ToString("N0"); // Format as currency
+                TD_DonGia = SelectedMenuItem.DonGia?.ToString("N0");
                 TD_SoLuong = SelectedMenuItem.SoLuong?.ToString();
                 TD_GhiChu = SelectedMenuItem.GhiChu;
                 OnPropertyChanged(nameof(MonAn));
@@ -685,12 +642,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void ChonMonAn()
         {
             var monAnDialog = new MenuItemView();
-            var viewModel = new MenuItemViewModel();
+            var viewModel = Infrastructure.ServiceContainer.GetService<MenuItemViewModel>();
             monAnDialog.DataContext = viewModel;
             if (monAnDialog.ShowDialog() == true)
             {
                 MonAn = viewModel.SelectedFood;
-                TD_DonGia = MonAn.DonGia?.ToString("N0"); // Format as currency
+                TD_DonGia = MonAn.DonGia?.ToString("N0");
                 TD_SoLuong = "1";
                 OnPropertyChanged(nameof(MonAn));
             }
@@ -702,7 +659,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             if (SelectedServiceItem != null)
             {
                 DichVu = SelectedServiceItem.DichVu;
-                DV_DonGia = SelectedServiceItem.DonGia?.ToString("N0"); // Format as currency
+                DV_DonGia = SelectedServiceItem.DonGia?.ToString("N0");
                 DV_SoLuong = SelectedServiceItem.SoLuong?.ToString();
                 DV_GhiChu = SelectedServiceItem.GhiChu;
                 OnPropertyChanged(nameof(DichVu));
@@ -727,16 +684,15 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             OnPropertyChanged(nameof(DichVu));
         }
 
-
         private void ChonDichVu()
         {
             var dichVuDialog = new ServiceDetailItemView();
-            var viewModel = new ServiceDetailItemViewModel();
+            var viewModel = Infrastructure.ServiceContainer.GetService<ServiceDetailItemViewModel>();
             dichVuDialog.DataContext = viewModel;
             if (dichVuDialog.ShowDialog() == true)
             {
                 DichVu = viewModel.SelectedService;
-                DV_DonGia = DichVu.DonGia?.ToString("N0"); // Format as currency
+                DV_DonGia = DichVu.DonGia?.ToString("N0");
                 DV_SoLuong = "1";
                 OnPropertyChanged(nameof(DichVu));
             }
@@ -754,21 +710,16 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin bắt buộc và chọn thực đơn, dịch vụ.", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            // Kiểm tra ngày đãi tiệc phải là ngày mai hoặc ngày sau đó
             if (NgayDaiTiec.Value.Date < DateTime.Today.AddDays(1))
             {
                 MessageBox.Show("Ngày đãi tiệc phải là ngày mai hoặc ngày sau đó.", "Lỗi ngày", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            _phieuDatTiecService = new PhieuDatTiecService(); // Refresh service to get updated data
-            _thucDonService = new ThucDonService(); // Refresh service to get updated data
-            _chiTietDichVuService = new ChiTietDVService(); // Refresh service to get updated data
 
-            // Kiểm tra nếu không có gì thay đổi (bao gồm cả menu và dịch vụ) thì không cần cập nhật
             var existingWedding = _phieuDatTiecService.GetById(_maPhieuDat);
             var existingMenu = _thucDonService.GetByPhieuDat(_maPhieuDat);
             var existingServices = _chiTietDichVuService.GetByPhieuDat(_maPhieuDat);
-            // Xử lý kiểu dữ liệu của 2 list đang khác nhau giữa list cần so sánh và list đã sửa, nên cần chuyển đổi
+            
             var updatedMenu = MenuList.Select(m => new THUCDONDTO
             {
                 MaPhieuDat = _maPhieuDat,
@@ -787,18 +738,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 GhiChu = s.GhiChu
             }).ToList();
 
-            // Để kiểm tra xem sảnh có đổi hay không, ta cần so sánh MaSanh, nếu khác thì  nghĩa là đã đổi sảnh
-            // Nếu giống, tiếp tục kiểm tra thử sảnh mới chọn có khác giá với đơn giá bàn tiệc đã đặt hay không, nếu không khác thì không cần cập nhật,
-            // nếu khác thì cần cập nhật đơn giá bàn tiệc mới
-            //var sanhKhongBiDoi = false;
-            //if (SelectedSanh.MaSanh == existingWedding.MaSanh)
-            //{
-            //    // Kiểm tra đơn giá bàn tiệc có khác không
-            //    if (SelectedSanh.LoaiSanh.DonGiaBanToiThieu == existingWedding.DonGiaBanTiec)
-            //    {
-            //        sanhKhongBiDoi = true;
-            //    }
-            //}
             if (existingWedding != null &&
                 existingWedding.TenChuRe == TenChuRe &&
                 existingWedding.TenCoDau == TenCoDau &&
@@ -806,7 +745,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 existingWedding.NgayDaiTiec == NgayDaiTiec &&
                 existingWedding.NgayDatTiec.Value.Date == NgayDatTiec.Date &&
                 existingWedding.MaCa == SelectedCa.MaCa &&
-                //existingWedding.MaSanh == SelectedSanh.MaSanh &&
                 SelectedSanh.MaSanh == existingWedding.MaSanh &&
                 SelectedSanh.LoaiSanh.DonGiaBanToiThieu == existingWedding.DonGiaBanTiec &&
                 existingWedding.TienDatCoc.ToString() == TienDatCoc &&
@@ -861,7 +799,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 return;
             }
 
-            // Kiểm tra formatter số điện thoại (10 số hoặc 11 số bắt đầu bằng 0 hoặc 84)
             if (!string.IsNullOrWhiteSpace(DienThoai) && !System.Text.RegularExpressions.Regex.IsMatch(DienThoai, @"^(0|\+84)[0-9]{9,10}$"))
             {
                 MessageBox.Show("Số điện thoại phải là 10 hoặc 11 chữ số và bắt đầu bằng 0 hoặc +84.", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -900,7 +837,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             // 6. Lưu dữ liệu
             try
             {
-                // Cập nhật thông tin tiệc cưới
                 var phieuDatTiec = _phieuDatTiecService.GetById(_maPhieuDat);
                 if (phieuDatTiec == null)
                 {
@@ -911,8 +847,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 phieuDatTiec.TenChuRe = TenChuRe;
                 phieuDatTiec.TenCoDau = TenCoDau;
                 phieuDatTiec.DienThoai = DienThoai;
-                //phieuDatTiec.NgayDaiTiec = NgayDaiTiec;
-                // giờ đãi tiệc là thời gian bắt đầu của ca
                 phieuDatTiec.NgayDaiTiec = NgayDaiTiec.Value.Date.Add(SelectedCa.ThoiGianBatDauCa.Value);
                 phieuDatTiec.NgayDatTiec = NgayDatTiec;
                 phieuDatTiec.MaCa = SelectedCa.MaCa;
@@ -924,8 +858,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
                 _phieuDatTiecService.Update(phieuDatTiec);
 
-                // Cập nhật thực đơn
-                _thucDonService = new ThucDonService(); // Refresh service to get updated data
                 var oldMenus = _thucDonService.GetByPhieuDat(_maPhieuDat).ToList();
                 foreach (var old in oldMenus)
                     _thucDonService.Delete(_maPhieuDat, old.MaMonAn);
@@ -943,8 +875,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     _thucDonService.Create(thucDon);
                 }
 
-                // Cập nhật dịch vụ
-                _chiTietDichVuService = new ChiTietDVService(); // Refresh service to get updated data
                 var oldServices = _chiTietDichVuService.GetByPhieuDat(_maPhieuDat).ToList();
                 foreach (var old in oldServices)
                     _chiTietDichVuService.Delete(_maPhieuDat, old.MaDichVu);
@@ -964,7 +894,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 }
 
                 IsEditing = false;
-                LoadWeddingDetail(_maPhieuDat); // Reload wedding details to reflect any changes
+                LoadWeddingDetail(_maPhieuDat);
                 MessageBox.Show("Cập nhật thông tin tiệc cưới thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (FormatException ex)
@@ -985,7 +915,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private void CancelEdit()
         {
-            // Reload original data or revert changes
             IsEditing = false;
             LoadWeddingDetail(_maPhieuDat);
             MessageBox.Show("Đã hủy chỉnh sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);

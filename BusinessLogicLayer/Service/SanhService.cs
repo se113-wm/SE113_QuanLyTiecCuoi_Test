@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly ISanhRepository _sanhRepository;
 
-        public SanhService()
+        // Constructor với Dependency Injection
+        public SanhService(ISanhRepository sanhRepository)
         {
-            _sanhRepository = new SanhRepository();
+            _sanhRepository = sanhRepository;
         }
 
         public IEnumerable<SANHDTO> GetAll()

@@ -295,6 +295,7 @@
     <Compile Include="DataTransferObject\SANHDTO.cs" />
     <Compile Include="DataTransferObject\THAMSODTO.cs" />
     <Compile Include="DataTransferObject\THUCDONDTO.cs" />
+    <Compile Include="Infrastructure\ServiceContainer.cs" />
     <Compile Include="Model\THAMSO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -579,6 +580,8 @@
     <Content Include="Fonts\TIMESI.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="DEPENDENCY_INJECTION_GUIDE.md" />
+    <None Include="DI_MIGRATION_PROGRESS.md" />
     <None Include="Model\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </None>

@@ -1,5 +1,4 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using System;
 using System.Collections.ObjectModel;
@@ -28,7 +27,6 @@ namespace QuanLyTiecCuoi.ViewModel
         public string TiLeSoBanDatTruocToiThieu { get => _TiLeSoBanDatTruocToiThieu; set { _TiLeSoBanDatTruocToiThieu = value; OnPropertyChanged(); } }
 
         public ICommand EditCommand { get; set; }
-
         public ICommand ResetCommand { get; set; }
 
         private string _editMessage;
@@ -39,9 +37,10 @@ namespace QuanLyTiecCuoi.ViewModel
             return value >= min && value <= max;
         }
 
-        public ParameterViewModel()
+        // Constructor với Dependency Injection
+        public ParameterViewModel(IThamSoService thamSoService)
         {
-            _thamSoService = new ThamSoService();
+            _thamSoService = thamSoService;
 
             var thamSoList = _thamSoService.GetAll().ToList();
 
@@ -57,7 +56,8 @@ namespace QuanLyTiecCuoi.ViewModel
 
             if (KiemTraPhat == 1)
                 KiemTraPhatText = "Có";
-            else KiemTraPhatText = "Không";
+            else 
+                KiemTraPhatText = "Không";
 
             EditCommand = new RelayCommand<object>((p) =>
             {
@@ -112,6 +112,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     }
                 }
             });
+            
             ResetCommand = new RelayCommand<object>((p) => true, (p) =>
             {
                 KiemTraPhat = (decimal)thamSoList.First(x => x.TenThamSo == "KiemTraPhat").GiaTri;

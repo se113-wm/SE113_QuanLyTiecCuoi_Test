@@ -2,9 +2,7 @@
 using Microsoft.Win32;
 using QuanLyTiecCuoi.BusinessLogicLayer.Helpers;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
-using QuanLyTiecCuoi.Model; // Để kiểm tra FK trực tiếp khi xoá
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -510,11 +508,11 @@ namespace QuanLyTiecCuoi.ViewModel
         #endregion
 
         #region Constructor
-        public FoodViewModel()
+        public FoodViewModel(IMonAnService monAnService, IThucDonService thucDonService)
         {
             Image = null;
-            _foodService = new MonAnService();
-            _thucDonService = new ThucDonService();
+            _foodService = monAnService;
+            _thucDonService = thucDonService;
 
             List = new ObservableCollection<MONANDTO>(_foodService.GetAll().ToList());
             OriginalList = new ObservableCollection<MONANDTO>(List);

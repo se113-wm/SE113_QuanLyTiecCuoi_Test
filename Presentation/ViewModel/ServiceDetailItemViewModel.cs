@@ -1,5 +1,5 @@
 ﻿using QuanLyTiecCuoi.DataTransferObject;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -11,6 +11,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class ServiceDetailItemViewModel : BaseViewModel
     {
+        private readonly IDichVuService _dichVuService;
+
         // Original list (unchanged)
         private ObservableCollection<DICHVUDTO> _originalServiceList;
         public ObservableCollection<DICHVUDTO> OriginalServiceList
@@ -81,10 +83,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         // Cancel command
         public ICommand CancelCommand { get; set; }
 
-        public ServiceDetailItemViewModel()
+        // Constructor với Dependency Injection
+        public ServiceDetailItemViewModel(IDichVuService dichVuService)
         {
-            var service = new DichVuService();
-            OriginalServiceList = new ObservableCollection<DICHVUDTO>(service.GetAll());
+            _dichVuService = dichVuService;
+            
+            OriginalServiceList = new ObservableCollection<DICHVUDTO>(_dichVuService.GetAll());
             ServiceList = new ObservableCollection<DICHVUDTO>(OriginalServiceList);
 
             SelectedSearchProperty = SearchProperties.FirstOrDefault();

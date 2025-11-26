@@ -557,11 +557,11 @@ namespace QuanLyTiecCuoi.ViewModel
         }
 
 
-        public ServiceViewModel()
+        public ServiceViewModel(IDichVuService dichVuService, IChiTietDVService chiTietDVService)
         {
             //MessageBox.Show("Chào mừng bạn đến với quản lý dịch vụ!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-            _dichVuService = new DichVuService();
-            _chiTietDVService = new ChiTietDVService();
+            _dichVuService = dichVuService;
+            _chiTietDVService = chiTietDVService;
             //MessageBox.Show(_dichVuService.GetAll().First().GhiChu);
             List = new ObservableCollection<DICHVUDTO>(_dichVuService.GetAll().ToList());
             OriginalList = new ObservableCollection<DICHVUDTO>(List);

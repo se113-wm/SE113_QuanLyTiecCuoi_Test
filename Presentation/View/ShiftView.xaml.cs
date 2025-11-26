@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using QuanLyTiecCuoi.Infrastructure;
+using QuanLyTiecCuoi.ViewModel;
 
 namespace QuanLyTiecCuoi.Presentation.View
 {
@@ -23,6 +25,9 @@ namespace QuanLyTiecCuoi.Presentation.View
         public ShiftView()
         {
             InitializeComponent();
+            
+            // Lấy ShiftViewModel từ DI Container thay vì khởi tạo thủ công
+            this.DataContext = ServiceContainer.GetService<ShiftViewModel>();
         }
     }
 }

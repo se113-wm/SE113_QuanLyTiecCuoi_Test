@@ -13,7 +13,6 @@
     Width="1400"
     Height="820"
     Background="{DynamicResource MaterialDesignPaper}"
-    DataContext="{StaticResource MainViewModel}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Icon="Assets/icon_window.ico"
     TextElement.FontSize="13"

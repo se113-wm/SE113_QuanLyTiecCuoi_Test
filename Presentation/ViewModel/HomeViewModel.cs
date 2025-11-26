@@ -1,4 +1,5 @@
-﻿using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.ViewModel;
@@ -19,6 +20,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
     public class HomeViewModel : BaseViewModel
     {
         private readonly CtBaoCaoDsService _baoCaoService = new CtBaoCaoDsService();
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private MainViewModel _mainVM;
+
         public ICommand DatTiecNgayCommand { get; set; }
         public ObservableCollection<RecentBookingViewModel> RecentBookings { get; set; }
         public ObservableCollection<SpecialDateInfo> WeddingDays { get; set; }
@@ -51,17 +55,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             }
         }
 
-        private readonly PhieuDatTiecService _phieuDatTiecService;
-        private MainViewModel _mainVM;
-
         private ObservableCollection<string> _imagePaths = new ObservableCollection<string>
         {
             "/Image/1.jpg",
             "/Image/2.jpg",
-            //"/Image/3.jpg",
-        "/Image/4.jpg",
+            "/Image/4.jpg",
             "/Image/5.jpg",
-            // Thêm các đường dẫn ảnh khác nếu có
         };
 
         private int _currentImageIndex;
@@ -77,9 +76,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand NextImageCommand { get; }
         public ICommand PreviousImageCommand { get; }
 
-        public HomeViewModel(MainViewModel mainVM)
+        // Constructor với Dependency Injection
+        public HomeViewModel(MainViewModel mainVM, IPhieuDatTiecService phieuDatTiecService)
         {
-            _phieuDatTiecService = new PhieuDatTiecService();
+            _phieuDatTiecService = phieuDatTiecService;
             _mainVM = mainVM;
 
             LoadRecentBookings();
@@ -98,7 +98,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             PreviousImageCommand = new RelayCommand<object>((p) => true, (p) => PreviousImage());
 
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(3); // 3 giây dễ quan sát hơn
+            _timer.Interval = TimeSpan.FromSeconds(3);
             _timer.Tick += (s, e) => NextImage();
             _timer.Start();
         }
@@ -163,13 +163,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 return;
             }
 
-            //var latestMonth = allReports.First().Thang;
-            //var latestYear = allReports.First().Nam;
-
-            //var latestMonthReports = allReports
-            //    .Where(x => x.Thang == latestMonth && x.Nam == latestYear)
-            //    .OrderBy(x => x.Ngay)
-            //    .ToList();
             // Doanh thu tháng hiện tại
             var currentMonth = DateTime.Now.Month;
             var currentYear = DateTime.Now.Year;
@@ -178,7 +171,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 .Where(x => x.Thang == currentMonth && x.Nam == currentYear)
                 .OrderBy(x => x.Ngay)
                 .ToList();
-
 
             var chartVM = new HomeChartViewModel(currentMonthReports);
 

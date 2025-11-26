@@ -24,7 +24,7 @@ namespace QuanLyTiecCuoi.Presentation.View
         public FoodView()
         {
             InitializeComponent();
-            this.DataContext = new FoodViewModel();
+            // DataContext được set từ MainViewModel thông qua ServiceContainer
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly IThucDonRepository _thucDonRepository;
 
-        public ThucDonService()
+        // Constructor với Dependency Injection
+        public ThucDonService(IThucDonRepository thucDonRepository)
         {
-            _thucDonRepository = new ThucDonRepository();
+            _thucDonRepository = thucDonRepository;
         }
 
         public IEnumerable<THUCDONDTO> GetAll()
@@ -67,14 +67,12 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
                         MaMonAn = x.MONAN.MaMonAn,
                         TenMonAn = x.MONAN.TenMonAn,
                         DonGia = x.MONAN.DonGia
-                        // Thêm các thuộc tính khác nếu cần
                     }
                     : null,
                 PhieuDatTiec = x.PHIEUDATTIEC != null
                     ? new PHIEUDATTIECDTO
                     {
                         MaPhieuDat = x.PHIEUDATTIEC.MaPhieuDat,
-                        // Thêm các thuộc tính khác nếu cần
                     }
                     : null
             };

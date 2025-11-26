@@ -1,5 +1,4 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 using QuanLyTiecCuoi.Presentation.View;
@@ -19,12 +18,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
     {
         private readonly ISanhService _sanhService;
         private readonly ICaService _caService;
-        private IPhieuDatTiecService _phieuDatTiecService;
+        private readonly IPhieuDatTiecService _phieuDatTiecService;
         private readonly IMonAnService _monAnService;
         private readonly IDichVuService _dichVuService;
         private readonly IThucDonService _thucDonService;
         private readonly IChiTietDVService _chiTietDichVuService;
-        private readonly IThamSoService thamSoService;
+        private readonly IThamSoService _thamSoService;
+        
         // Wedding Info
         private string _tenChuRe;
         public string TenChuRe { get => _tenChuRe; set { _tenChuRe = value; OnPropertyChanged(); } }
@@ -105,27 +105,42 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand ConfirmCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public AddWeddingViewModel()
+        // Constructor với Dependency Injection
+        public AddWeddingViewModel(
+            ISanhService sanhService,
+            ICaService caService,
+            IPhieuDatTiecService phieuDatTiecService,
+            IMonAnService monAnService,
+            IDichVuService dichVuService,
+            IThucDonService thucDonService,
+            IChiTietDVService chiTietDichVuService,
+            IThamSoService thamSoService)
         {
+            // Inject services
+            _sanhService = sanhService;
+            _caService = caService;
+            _phieuDatTiecService = phieuDatTiecService;
+            _monAnService = monAnService;
+            _dichVuService = dichVuService;
+            _thucDonService = thucDonService;
+            _chiTietDichVuService = chiTietDichVuService;
+            _thamSoService = thamSoService;
 
             NgayKhongChoChon = new ObservableCollection<CalendarDateRange>
             {
                 new CalendarDateRange(DateTime.MinValue, DateTime.Today)
             };
-            // Initialize services
-            _sanhService = new SanhService();
-            _caService = new CaService();
-            _phieuDatTiecService = new PhieuDatTiecService();
-            _monAnService = new MonAnService();
-            _dichVuService = new DichVuService();
-            _thucDonService = new ThucDonService();
-            _chiTietDichVuService = new ChiTietDVService();
-            thamSoService = new ThamSoService();
 
-            // Example data for Ca and Sanh
+            // Load data from services
             CaList = new ObservableCollection<CADTO>(_caService.GetAll());
             SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
 
+            // Initialize commands
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
             ResetWeddingCommand = new RelayCommand<object>((p) => true, (p) => ResetWedding());
             ResetTDCommand = new RelayCommand<object>((p) => true, (p) => ResetTD());
             ResetCTDVCommand = new RelayCommand<object>((p) => true, (p) => ResetCTDV());
@@ -310,7 +325,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 }
 
                 // 3. Kiểm tra số lượng bàn hợp lệ
-                var tiLeSoBanDatTruocToiThieu = thamSoService.GetByName("TiLeSoBanDatTruocToiThieu")?.GiaTri ?? 0.5m;
+                var tiLeSoBanDatTruocToiThieu = _thamSoService.GetByName("TiLeSoBanDatTruocToiThieu")?.GiaTri ?? 0.5m;
                 var soLuongBanToiDa = _sanhService.GetById(SelectedSanh.MaSanh)?.SoLuongBanToiDa ?? 0;
                 if (!int.TryParse(SoLuongBan, out int soLuongBan) || soLuongBan <= 0)
                 {
@@ -360,7 +375,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 var tongDonGiaDichVu = ServiceList.Sum(s => (s.DichVu.DonGia ?? 0) * (s.SoLuong ?? 0));
                 var donGiaBanToiThieu = _sanhService.GetById(SelectedSanh.MaSanh)?.LoaiSanh.DonGiaBanToiThieu ?? 0;
                 var tongChiPhiUocTinh = soLuongBan * (donGiaBanToiThieu + tongDonGiaMonAn) + tongDonGiaDichVu;
-                var tiLeTienDatCocToiThieu = thamSoService.GetByName("TiLeTienDatCocToiThieu")?.GiaTri ?? 0.3m;
+                var tiLeTienDatCocToiThieu = _thamSoService.GetByName("TiLeTienDatCocToiThieu")?.GiaTri ?? 0.3m;
 
                 var minDeposit = (decimal)Math.Ceiling(tiLeTienDatCocToiThieu * tongChiPhiUocTinh);
                 var maxDeposit = (decimal)Math.Ceiling(tongChiPhiUocTinh);
@@ -405,8 +420,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     };
 
                     _phieuDatTiecService.Create(phieuDatTiec);
-                    _phieuDatTiecService = new PhieuDatTiecService(); // Reload service to get the latest data
-                    phieuDatTiec = _phieuDatTiecService.GetAll().LastOrDefault(); // Get the newly created record ad
+                    
+                    // Lấy phiếu vừa tạo
+                    phieuDatTiec = _phieuDatTiecService.GetAll().LastOrDefault();
                     for (int i = 0; i < MenuList.Count; i++)
                     {
                         var item = MenuList[i];
@@ -542,7 +558,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void ChonMonAn()
         {
             var monAnDialog = new MenuItemView();
-            var viewModel = new MenuItemViewModel();
+            var viewModel = Infrastructure.ServiceContainer.GetService<MenuItemViewModel>();
             monAnDialog.DataContext = viewModel;
             if (monAnDialog.ShowDialog() == true)
             {
@@ -551,11 +567,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 OnPropertyChanged(nameof(MonAn));
             }
         }
+        
         // Service logic
         private void ChonDichVu()
         {
             var dichVuDialog = new ServiceDetailItemView();
-            var viewModel = new ServiceDetailItemViewModel();
+            var viewModel = Infrastructure.ServiceContainer.GetService<ServiceDetailItemViewModel>();
             dichVuDialog.DataContext = viewModel;
             if (dichVuDialog.ShowDialog() == true)
             {
@@ -563,7 +580,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 DV_SoLuong = "1"; // Default quantity
                 OnPropertyChanged(nameof(DichVu));
             }
-
         }
 
         // Confirm/Cancel logic

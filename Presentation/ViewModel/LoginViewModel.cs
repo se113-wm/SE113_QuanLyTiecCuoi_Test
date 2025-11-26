@@ -56,7 +56,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 // Gọi Main Window
                 MainWindow mainWindow = new MainWindow()
                 {
-                    DataContext = new MainViewModel()
+                    DataContext = Infrastructure.ServiceContainer.GetService<MainViewModel>()
                 };
                 mainWindow.Show();
                 p.Close();

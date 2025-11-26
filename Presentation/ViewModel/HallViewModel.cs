@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using QuanLyTiecCuoi.BusinessLogicLayer.Helpers;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using System;
 using System.Collections.ObjectModel;
@@ -580,11 +579,11 @@ namespace QuanLyTiecCuoi.ViewModel
             Reset();
         });
 
-        public HallViewModel()
+        public HallViewModel(ISanhService sanhService, ILoaiSanhService loaiSanhService, IPhieuDatTiecService phieuDatTiecService)
         {
-            _sanhService = new SanhService();
-            _loaiSanhService = new LoaiSanhService();
-            _phieuDatTiecService = new PhieuDatTiecService();
+            _sanhService = sanhService;
+            _loaiSanhService = loaiSanhService;
+            _phieuDatTiecService = phieuDatTiecService;
 
             List = new ObservableCollection<SANHDTO>(_sanhService.GetAll().ToList());
             OriginalList = new ObservableCollection<SANHDTO>(List);

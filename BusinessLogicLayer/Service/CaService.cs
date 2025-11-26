@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly ICaRepository _caRepository;
 
-        public CaService()
+        // Constructor với Dependency Injection
+        public CaService(ICaRepository caRepository)
         {
-            _caRepository = new CaRepository();
+            _caRepository = caRepository;
         }
 
         public IEnumerable<CADTO> GetAll()

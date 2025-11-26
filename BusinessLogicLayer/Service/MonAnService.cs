@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly IMonAnRepository _monAnRepository;
 
-        public MonAnService()
+        // Constructor với Dependency Injection
+        public MonAnService(IMonAnRepository monAnRepository)
         {
-            _monAnRepository = new MonAnRepository();
+            _monAnRepository = monAnRepository;
         }
 
         public IEnumerable<MONANDTO> GetAll()

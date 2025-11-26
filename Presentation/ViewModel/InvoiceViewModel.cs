@@ -12,7 +12,6 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using MaterialDesignThemes.Wpf.Converters;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Helpers;
 using QuanLyTiecCuoi.Model;
@@ -114,14 +113,26 @@ namespace QuanLyTiecCuoi.ViewModel {
         private string _ConfirmMessage;
         public string ConfirmMessage { get => _ConfirmMessage; set { _ConfirmMessage = value; OnPropertyChanged(); } }
 
-        public InvoiceViewModel(int invoiceId) {
+        // Constructor với Dependency Injection
+        public InvoiceViewModel(
+            int invoiceId,
+            IPhieuDatTiecService phieuDatTiecService,
+            ICaService caService,
+            ISanhService sanhService,
+            IChiTietDVService chiTietDichVuService,
+            IThucDonService thucDonService,
+            IThamSoService thamSoService)
+        {
             InvoiceId = invoiceId;
-            _phieuDatTiecService = new PhieuDatTiecService();
-            _caService = new CaService();
-            _sanhService = new SanhService();
-            _chiTietDichVuService = new ChiTietDVService();
-            _thucDonService = new ThucDonService();
-            _thamSoService = new ThamSoService();
+            
+            // Inject services
+            _phieuDatTiecService = phieuDatTiecService;
+            _caService = caService;
+            _sanhService = sanhService;
+            _chiTietDichVuService = chiTietDichVuService;
+            _thucDonService = thucDonService;
+            _thamSoService = thamSoService;
+            
             SelectedInvoice = _phieuDatTiecService.GetById(invoiceId);
             ServiceList = new ObservableCollection<CHITIETDVDTO>(_chiTietDichVuService.GetByPhieuDat(invoiceId));
 
@@ -278,7 +289,8 @@ namespace QuanLyTiecCuoi.ViewModel {
             try {
                 var ca = _caService.GetById(SelectedInvoice.MaCa.GetValueOrDefault());
                 var sanh = _sanhService.GetById(SelectedInvoice.MaSanh.GetValueOrDefault());
-                _phieuDatTiecService = new PhieuDatTiecService();
+                
+                // Lấy lại thông tin mới nhất từ database
                 SelectedInvoice = _phieuDatTiecService.GetById(_InvoiceId);
                 PHIEUDATTIECDTO invoice = new PHIEUDATTIECDTO {
                     MaPhieuDat = SelectedInvoice.MaPhieuDat,
@@ -303,7 +315,8 @@ namespace QuanLyTiecCuoi.ViewModel {
                     ChiPhiPhatSinh = damageEquipmentCost,
                 };
                 _phieuDatTiecService.Update(invoice);
-                _phieuDatTiecService = new PhieuDatTiecService();
+                
+                // Lấy invoice đã update
                 invoice = _phieuDatTiecService.GetAll().LastOrDefault();
 
                 Deposit = invoice.TienDatCoc.GetValueOrDefault();

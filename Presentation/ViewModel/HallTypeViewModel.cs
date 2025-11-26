@@ -1,9 +1,6 @@
 ﻿using ClosedXML.Excel;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
-using QuanLyTiecCuoi.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +13,7 @@ namespace QuanLyTiecCuoi.ViewModel
     public class HallTypeViewModel : BaseViewModel
     {
         private readonly ILoaiSanhService _loaiSanhService;
+        private readonly ISanhService _sanhService;
 
         private ObservableCollection<LOAISANHDTO> _List;
         public ObservableCollection<LOAISANHDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -224,9 +222,10 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        public HallTypeViewModel()
+        public HallTypeViewModel(ILoaiSanhService loaiSanhService, ISanhService sanhService )
         {
-            _loaiSanhService = new LoaiSanhService();
+            _loaiSanhService = loaiSanhService;
+            _sanhService = sanhService;
 
             List = new ObservableCollection<LOAISANHDTO>(_loaiSanhService.GetAll().ToList());
             OriginalList = new ObservableCollection<LOAISANHDTO>(List);
@@ -360,8 +359,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (SelectedItem == null)
                     return false;
                 // Tìm xem có sảnh nào có mã loại sảnh này không, bằng cách gọi sảnh service để lấy danh sách sảnh
-                var sanhService = new SanhService();
-                var hasSanh = sanhService.GetAll().Any(s => s.MaLoaiSanh == SelectedItem.MaLoaiSanh);
+                var hasSanh = _sanhService.GetAll().Any(s => s.MaLoaiSanh == SelectedItem.MaLoaiSanh);
                 if (hasSanh)
                 {
                     DeleteMessage = "Đang có sảnh thuộc loại sảnh này";
@@ -395,6 +393,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             });
             ExportToExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
+            _sanhService = sanhService;
         }
         //Exporting excel function
         private void ExportToExcel()

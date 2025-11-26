@@ -2,7 +2,6 @@
 using System.Linq;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly IThamSoRepository _thamSoRepository;
 
-        public ThamSoService()
+        // Constructor với Dependency Injection
+        public ThamSoService(IThamSoRepository thamSoRepository)
         {
-            _thamSoRepository = new ThamSoRepository();
+            _thamSoRepository = thamSoRepository;
         }
 
         public IEnumerable<THAMSODTO> GetAll()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyTiecCuoi.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,12 @@ namespace QuanLyTiecCuoi
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            
+            // Khởi tạo Dependency Injection Container khi ứng dụng bắt đầu
+            ServiceContainer.Configure();
+        }
     }
 }

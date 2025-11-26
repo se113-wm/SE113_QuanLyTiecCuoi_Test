@@ -4,7 +4,6 @@ using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
-using QuanLyTiecCuoi.DataAccessLayer.Repository;
 
 namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
 {
@@ -12,9 +11,10 @@ namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
     {
         private readonly ILoaiSanhRepository _loaiSanhRepository;
 
-        public LoaiSanhService()
+        // Constructor với Dependency Injection
+        public LoaiSanhService(ILoaiSanhRepository loaiSanhRepository)
         {
-            _loaiSanhRepository = new LoaiSanhRepository();
+            _loaiSanhRepository = loaiSanhRepository;
         }
 
         public IEnumerable<LOAISANHDTO> GetAll()
