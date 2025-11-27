@@ -22,16 +22,18 @@
             HorizontalAlignment="Center"
             FontSize="20"
             FontWeight="Bold"
-            Text="Quản lý danh sách phân quyền" />
+            Text="Quản lý danh sách phân quyền"
+            AutomationProperties.AutomationId="PermissionPageTitle" />
 
         <!--  Thông tin chi tiết  -->
         <materialDesign:Card
             Grid.Row="1"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="PermissionDetailsCard">
             <StackPanel>
-                <!--  Tiêu đề + Nút Reset sát nhau  -->
+                <!--  Tiêu đề + Nút Reset  -->
                 <StackPanel
                     Margin="0,0,0,0"
                     VerticalAlignment="Center"
@@ -49,7 +51,8 @@
                         Command="{Binding ResetCommand}"
                         Foreground="Purple"
                         Style="{StaticResource MaterialDesignToolButton}"
-                        ToolTip="Reset thông tin">
+                        ToolTip="Reset thông tin"
+                        AutomationProperties.AutomationId="ResetButton">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"
@@ -68,7 +71,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Tên phân quyền"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding TenNhom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="GroupNameTextBox" />
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -78,7 +82,8 @@
             Grid.Row="2"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="ActionsCard">
             <StackPanel>
                 <TextBlock
                     Margin="0,0,10,0"
@@ -97,13 +102,15 @@
                             materialDesign:HintAssist.Hint="Tìm theo"
                             ItemsSource="{Binding SearchProperties}"
                             SelectedItem="{Binding SelectedSearchProperty, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="SearchPropertyComboBox" />
                         <TextBox
                             Width="300"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="SearchTextBox" />
                     </StackPanel>
 
                     <StackPanel
@@ -112,7 +119,6 @@
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right"
                         Orientation="Horizontal">
-
                         <!--  ComboBox chọn thao tác  -->
                         <ComboBox
                             Width="200"
@@ -120,7 +126,8 @@
                             materialDesign:HintAssist.Hint="Chọn thao tác"
                             ItemsSource="{Binding ActionList}"
                             SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="ActionComboBox" />
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -137,13 +144,15 @@
                                     Margin="5"
                                     Command="{Binding AddCommand}"
                                     Content="Thêm"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="AddButton" />
                                 <TextBlock
                                     Height="32"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding AddMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="AddMessage" />
                             </StackPanel>
 
                             <!--  Nút Sửa  -->
@@ -156,14 +165,16 @@
                                     Margin="5"
                                     Command="{Binding EditCommand}"
                                     Content="Sửa"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="EditButton" />
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding EditMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="EditMessage" />
                             </StackPanel>
 
                             <!--  Nút Xóa  -->
@@ -176,19 +187,20 @@
                                     Margin="5"
                                     Command="{Binding DeleteCommand}"
                                     Content="Xóa"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="DeleteButton" />
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding DeleteMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="DeleteMessage" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
                 </DockPanel>
-
             </StackPanel>
         </materialDesign:Card>
 
@@ -198,7 +210,8 @@
             Margin="10"
             Padding="5"
             VerticalAlignment="Stretch"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="PermissionListCard">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -224,8 +237,9 @@
                         Margin="0"
                         VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
-                        ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                        ItemsSource="{Binding GroupList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                        AutomationProperties.AutomationId="PermissionGroupListView">
                         <ListView.View>
                             <GridView>
                                 <!--  Icon  -->
@@ -255,7 +269,7 @@
                                             <TextBlock
                                                 Margin="20,0,0,0"
                                                 HorizontalAlignment="Left"
-                                                Text="{Binding TenNhom}"
+                                                Text="{Binding GroupName}"
                                                 TextAlignment="Left" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -279,28 +293,15 @@
                         FontWeight="Bold"
                         Text="Chi tiết phân quyền" />
                     <StackPanel Grid.Row="1" Margin="10,0,0,0">
-                        <!--  Lặp qua các màn hình cố định  -->
-                        <!--<StackPanel
-                            Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Home]}"
-                            Orientation="Horizontal">
-                            <CheckBox
-                                Margin="0,0,10,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Text="HomeView" />
-                        </StackPanel>-->
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[HallType]}"
+                            DataContext="{Binding PermissionStates[HallType]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="HallTypePermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -308,12 +309,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Hall]}"
+                            DataContext="{Binding PermissionStates[Hall]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="HallPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -321,12 +323,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Shift]}"
+                            DataContext="{Binding PermissionStates[Shift]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="ShiftPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -334,12 +337,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Food]}"
+                            DataContext="{Binding PermissionStates[Food]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="FoodPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -347,12 +351,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Service]}"
+                            DataContext="{Binding PermissionStates[Service]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="ServicePermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -360,12 +365,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Wedding]}"
+                            DataContext="{Binding PermissionStates[Wedding]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="WeddingPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -373,12 +379,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Report]}"
+                            DataContext="{Binding PermissionStates[Report]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="ReportPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -386,12 +393,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Parameter]}"
+                            DataContext="{Binding PermissionStates[Parameter]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="ParameterPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -399,12 +407,13 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[Permission]}"
+                            DataContext="{Binding PermissionStates[Permission]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="PermissionManagementCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -412,23 +421,21 @@
                         </StackPanel>
                         <StackPanel
                             Margin="0,5"
-                            DataContext="{Binding ChucNangStates[User]}"
+                            DataContext="{Binding PermissionStates[User]}"
                             Orientation="Horizontal">
                             <CheckBox
                                 Margin="0,0,10,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                AutomationProperties.AutomationId="UserPermissionCheckBox" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="14"
                                 Text="Màn hình quản lý danh sách các người dùng" />
                         </StackPanel>
                     </StackPanel>
-
-
                 </Grid>
             </Grid>
         </materialDesign:Card>
-
     </Grid>
 </UserControl>

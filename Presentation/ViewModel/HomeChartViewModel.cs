@@ -39,20 +39,20 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             // Empty constructor for XAML designer
         }
 
-        public HomeChartViewModel(IEnumerable<CTBAOCAODDTO> reportList, bool isAreaChart = false)
+        public HomeChartViewModel(IEnumerable<RevenueReportDetailDTO> reportList, bool isAreaChart = false)
         {
             LoadChart(reportList, isAreaChart);
         }
 
-        private void LoadChart(IEnumerable<CTBAOCAODDTO> reportList, bool isAreaChart)
+        private void LoadChart(IEnumerable<RevenueReportDetailDTO> reportList, bool isAreaChart)
         {
             var values = new ChartValues<decimal>();
             var labels = new List<string>();
 
             foreach (var item in reportList)
             {
-                values.Add(item.DoanhThu ?? 0);
-                labels.Add(item.Ngay.ToString());
+                values.Add(item.Revenue ?? 0);
+                labels.Add(item.Day.ToString());
             }
 
             if (isAreaChart)

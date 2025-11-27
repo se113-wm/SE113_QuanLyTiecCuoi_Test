@@ -24,7 +24,7 @@ namespace QuanLyTiecCuoi.Model
         }
 
         public QuanLyTiecCuoiEntities DB { get; set; }
-        public NGUOIDUNG CurrentUser { get; set; }
+        public AppUser CurrentUser { get; set; }
 
         private DataProvider()
         {

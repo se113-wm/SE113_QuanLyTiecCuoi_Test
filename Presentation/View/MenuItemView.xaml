@@ -98,7 +98,7 @@
                                 FontSize="14"
                                 FontWeight="SemiBold"
                                 Foreground="DarkGreen"
-                                Text="{Binding DonGia, StringFormat='Giá: {0:N0} đ'}"
+                                Text="{Binding UnitPrice, StringFormat='Giá: {0:N0} đ'}"
                                 TextAlignment="Center" />
                             <TextBlock
                                 FontSize="13"

@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
-using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataTransferObject;
 using QuanLyTiecCuoi.Model;
 using System;
@@ -11,68 +10,89 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
+namespace QuanLyTiecCuoi.ViewModel
+{
+    public class UserViewModel : BaseViewModel, IDataErrorInfo
+    {
+        private readonly IAppUserService _appUserService;
+        private readonly IUserGroupService _userGroupService;
 
-namespace QuanLyTiecCuoi.ViewModel {
-    public class UserViewModel : BaseViewModel, IDataErrorInfo{
-        private readonly INguoiDungService _nguoiDungService;
-        private readonly INhomNguoiDungService _nhomNguoiDungService;
+        private ObservableCollection<AppUserDTO> _userList;
+        public ObservableCollection<AppUserDTO> UserList
+        {
+            get => _userList;
+            set { _userList = value; OnPropertyChanged(); }
+        }
 
-        private ObservableCollection<NGUOIDUNGDTO> _List;
-        public ObservableCollection<NGUOIDUNGDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
+        private ObservableCollection<AppUserDTO> _originalList;
+        public ObservableCollection<AppUserDTO> OriginalList
+        {
+            get => _originalList;
+            set { _originalList = value; OnPropertyChanged(); }
+        }
 
-        private ObservableCollection<NGUOIDUNGDTO> _OriginalList;
-        public ObservableCollection<NGUOIDUNGDTO> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
+        private ObservableCollection<UserGroupDTO> _userTypes;
+        public ObservableCollection<UserGroupDTO> UserTypes
+        {
+            get => _userTypes;
+            set { _userTypes = value; OnPropertyChanged(); }
+        }
 
-        private ObservableCollection<NHOMNGUOIDUNGDTO> _UserTypes;
-        public ObservableCollection<NHOMNGUOIDUNGDTO> UserTypes { get => _UserTypes; set { _UserTypes = value; OnPropertyChanged(); } }
-
-        private NGUOIDUNGDTO _SelectedItem;
-        public NGUOIDUNGDTO SelectedItem {
-            get => _SelectedItem;
-            set {
-                _SelectedItem = value;
+        private AppUserDTO _selectedItem;
+        public AppUserDTO SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
                 OnPropertyChanged();
-                if (SelectedItem != null) {
-                    TenDangNhap = SelectedItem.TenDangNhap;
-                    MatKhauMoi = "";
-                    HoTen = SelectedItem.HoTen;
+                if (SelectedItem != null)
+                {
+                    Username = SelectedItem.Username;
+                    NewPassword = string.Empty;
+                    FullName = SelectedItem.FullName;
                     Email = SelectedItem.Email;
-                    // Tìm loại nguoidung theo ID để giữ instance trùng (combobox)
-                    SelectedUserType = UserTypes?.FirstOrDefault(ht => ht.MaNhom == SelectedItem.MaNhom);
+                    SelectedUserType = UserTypes?.FirstOrDefault(ht => ht.GroupId == SelectedItem.GroupId);
                 }
-                else {
+                else
+                {
                     AddMessage = string.Empty;
                     EditMessage = string.Empty;
                     DeleteMessage = string.Empty;
                 }
             }
         }
+
         private bool _isEditing;
         public bool IsEditing
         {
             get => _isEditing;
             set { _isEditing = value; OnPropertyChanged(); }
         }
+
         private bool _isAdding;
         public bool IsAdding
         {
             get => _isAdding;
             set { _isAdding = value; OnPropertyChanged(); }
         }
+
         private bool _isDeleting;
         public bool IsDeleting
         {
             get => _isDeleting;
             set { _isDeleting = value; OnPropertyChanged(); }
         }
-        //Add ExportingExcel
+
         private bool _isExporting;
         public bool IsExporting
         {
             get => _isExporting;
             set { _isExporting = value; OnPropertyChanged(); }
         }
+
         public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Xuất Excel", "Chọn thao tác" };
+
         private string _selectedAction;
         public string SelectedAction
         {
@@ -88,7 +108,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                         IsEditing = false;
                         IsDeleting = false;
                         IsExporting = false;
-                        Reset(); // reset các trường nhập liệu
+                        Reset();
                         break;
                     case "Sửa":
                         IsAdding = false;
@@ -96,11 +116,6 @@ namespace QuanLyTiecCuoi.ViewModel {
                         IsDeleting = false;
                         IsExporting = false;
                         Reset();
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một sảnh để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
                         break;
                     case "Xóa":
                         IsAdding = false;
@@ -108,11 +123,6 @@ namespace QuanLyTiecCuoi.ViewModel {
                         IsDeleting = true;
                         IsExporting = false;
                         Reset();
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một sảnh để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
                         break;
                     case "Xuất Excel":
                         IsAdding = false;
@@ -127,49 +137,89 @@ namespace QuanLyTiecCuoi.ViewModel {
                         IsEditing = false;
                         IsDeleting = false;
                         IsExporting = false;
-                        Reset(); // reset các trường nhập liệu
+                        Reset();
                         break;
                 }
             }
         }
 
-        private NHOMNGUOIDUNGDTO _SelectedUserType;
-        public NHOMNGUOIDUNGDTO SelectedUserType {
-            get => _SelectedUserType;
-            set {
-                _SelectedUserType = value;
+        private UserGroupDTO _selectedUserType;
+        public UserGroupDTO SelectedUserType
+        {
+            get => _selectedUserType;
+            set
+            {
+                _selectedUserType = value;
                 OnPropertyChanged();
-                TenNhom = _SelectedUserType?.TenNhom;
+                GroupName = _selectedUserType?.GroupName;
             }
         }
+
         public ICommand AddCommand { get; set; }
-        private string _AddMessage;
-        public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
+
+        private string _addMessage;
+        public string AddMessage
+        {
+            get => _addMessage;
+            set { _addMessage = value; OnPropertyChanged(); }
+        }
+
         public ICommand EditCommand { get; set; }
-        private string _EditMessage;
-        public string EditMessage { get => _EditMessage; set { _EditMessage = value; OnPropertyChanged(); } }
+
+        private string _editMessage;
+        public string EditMessage
+        {
+            get => _editMessage;
+            set { _editMessage = value; OnPropertyChanged(); }
+        }
+
         public ICommand DeleteCommand { get; set; }
-        private string _DeleteMessage;
-        public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
+
+        private string _deleteMessage;
+        public string DeleteMessage
+        {
+            get => _deleteMessage;
+            set { _deleteMessage = value; OnPropertyChanged(); }
+        }
+
         public ICommand ExportToExcelCommand { get; set; }
-        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
-            Reset();
-        });
 
-        private string _TenDangNhap;
-        public string TenDangNhap { get => _TenDangNhap; set { _TenDangNhap = value; OnPropertyChanged(); } }
+        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => { Reset(); });
 
-        private string _MatKhauMoi;
-        public string MatKhauMoi { get => _MatKhauMoi; set { _MatKhauMoi = value; OnPropertyChanged(); } }
+        private string _username;
+        public string Username
+        {
+            get => _username;
+            set { _username = value; OnPropertyChanged(); }
+        }
 
-        private string _HoTen;
-        public string HoTen { get => _HoTen; set { _HoTen = value; OnPropertyChanged(); } }
+        private string _newPassword;
+        public string NewPassword
+        {
+            get => _newPassword;
+            set { _newPassword = value; OnPropertyChanged(); }
+        }
 
-        private string _Email;
-        public string Email { get => _Email; set { _Email = value; OnPropertyChanged(); } }
-        public string this[string columnName] {
-            get {
-                if (columnName == nameof(Email)) {
+        private string _fullName;
+        public string FullName
+        {
+            get => _fullName;
+            set { _fullName = value; OnPropertyChanged(); }
+        }
+
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set { _email = value; OnPropertyChanged(); }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == nameof(Email))
+                {
                     if (string.IsNullOrWhiteSpace(Email))
                         return "Email không được để trống";
                     if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
@@ -181,17 +231,28 @@ namespace QuanLyTiecCuoi.ViewModel {
 
         public string Error => null;
 
-        private string _TenNhom;
-        public string TenNhom { get => _TenNhom; set { _TenNhom = value; OnPropertyChanged(); } }
+        private string _groupName;
+        public string GroupName
+        {
+            get => _groupName;
+            set { _groupName = value; OnPropertyChanged(); }
+        }
 
-        private bool _isChecked; //true -> Doi Mat Khau, false -> Khong doi
-        public bool isChecked { get => _isChecked; set { _isChecked = value; OnPropertyChanged(); MatKhauMoi = ""; } }
+        private bool _isPasswordChangeEnabled;
+        public bool IsPasswordChangeEnabled
+        {
+            get => _isPasswordChangeEnabled;
+            set { _isPasswordChangeEnabled = value; OnPropertyChanged(); NewPassword = string.Empty; }
+        }
 
         private string _searchText;
-        public string SearchText {
+        public string SearchText
+        {
             get => _searchText;
-            set {
-                if (_searchText != value) {
+            set
+            {
+                if (_searchText != value)
+                {
                     _searchText = value;
                     OnPropertyChanged();
                     PerformSearch();
@@ -199,234 +260,267 @@ namespace QuanLyTiecCuoi.ViewModel {
             }
         }
 
-        private ObservableCollection<string> _SearchProperties;
-        public ObservableCollection<string> SearchProperties {
-            get => _SearchProperties;
-            set { _SearchProperties = value; OnPropertyChanged(); }
+        private ObservableCollection<string> _searchProperties;
+        public ObservableCollection<string> SearchProperties
+        {
+            get => _searchProperties;
+            set { _searchProperties = value; OnPropertyChanged(); }
         }
 
-        private string _SelectedSearchProperty;
-        public string SelectedSearchProperty {
-            get => _SelectedSearchProperty;
-            set {
-                _SelectedSearchProperty = value;
+        private string _selectedSearchProperty;
+        public string SelectedSearchProperty
+        {
+            get => _selectedSearchProperty;
+            set
+            {
+                _selectedSearchProperty = value;
                 OnPropertyChanged();
                 PerformSearch();
             }
         }
 
-        // Tìm kiếm
-        private void PerformSearch() {
-            try {
-                SelectedItem = null;
-                TenDangNhap = string.Empty;
-                HoTen = string.Empty;
-                Email = string.Empty;
-                SelectedUserType = null;
-                if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty)) {
-                    List = OriginalList;
-                    return;
-                }
+        public UserViewModel(IAppUserService appUserService, IUserGroupService userGroupService)
+        {
+            _appUserService = appUserService;
+            _userGroupService = userGroupService;
 
-                switch (SelectedSearchProperty) {
-                    case "Tên đăng nhập":
-                        List = new ObservableCollection<NGUOIDUNGDTO>(
-                            OriginalList.Where(x => !string.IsNullOrEmpty(x.TenDangNhap) &&
-                                x.TenDangNhap.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Họ Tên":
-                        List = new ObservableCollection<NGUOIDUNGDTO>(
-                            OriginalList.Where(x => !string.IsNullOrEmpty(x.HoTen) &&
-                                x.HoTen.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Nhóm người dùng":
-                        List = new ObservableCollection<NGUOIDUNGDTO>(
-                            OriginalList.Where(x => !string.IsNullOrEmpty(x.MaNhom) &&
-                                x.MaNhom.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Email":
-                        List = new ObservableCollection<NGUOIDUNGDTO>(
-                            OriginalList.Where(x => !string.IsNullOrEmpty(x.Email) &&
-                                x.Email.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    default:
-                        List = new ObservableCollection<NGUOIDUNGDTO>(OriginalList);
-                        break;
-                }
-            }
-            catch (Exception ex) {
-                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+            var currentGroupId = DataProvider.Ins.CurrentUser.GroupId;
+            IsPasswordChangeEnabled = false;
 
-        
-
-        public UserViewModel() {
-            _nguoiDungService = new NguoiDungService();
-            _nhomNguoiDungService = new NhomNguoiDungService();
-
-            var maNhomHienTai = DataProvider.Ins.CurrentUser.MaNhom;
-            isChecked = false;
-
-            List = new ObservableCollection<NGUOIDUNGDTO>(_nguoiDungService.GetAll().Where(nd => nd.MaNhom != maNhomHienTai && nd.MaNhom != "ADMIN").ToList());
-            OriginalList = new ObservableCollection<NGUOIDUNGDTO>(List);
-            //UserTypes = new ObservableCollection<NHOMNGUOIDUNGDTO>(_nhomNguoiDungService.GetAll().ToList());
-            // bỏ nhóm hiện tại và nhóm ADMIN khỏi danh sách nhóm người dùng
-            UserTypes = new ObservableCollection<NHOMNGUOIDUNGDTO>(
-                _nhomNguoiDungService.GetAll()
-                .Where(n => n.MaNhom != maNhomHienTai && n.MaNhom != "ADMIN")
+            UserList = new ObservableCollection<AppUserDTO>(_appUserService.GetAll().Where(u => u.GroupId != currentGroupId && u.GroupId != "ADMIN").ToList());
+            OriginalList = new ObservableCollection<AppUserDTO>(UserList);
+            UserTypes = new ObservableCollection<UserGroupDTO>(
+                _userGroupService.GetAll()
+                .Where(g => g.GroupId != currentGroupId && g.GroupId != "ADMIN")
                 .ToList());
+
             SearchProperties = new ObservableCollection<string>
             {
-                "Tên đăng nhập",
-                "Họ tên",
-                "Nhóm người dùng",
+                "Tên đăng nhập",
+                "Họ tên",
+                "Nhóm người dùng",
                 "Email"
             };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
 
-            // Nút "Thêm"
-            AddCommand = new RelayCommand<object>((p) => {
-                if (string.IsNullOrWhiteSpace(TenDangNhap)) {
-                    AddMessage = "Vui lòng nhập tên đăng nhập";
-                    return false;
-                    }
-                if (!isChecked || string.IsNullOrWhiteSpace(MatKhauMoi)) {
-                    AddMessage = "Vui lòng nhập mật khẩu";
+            AddCommand = new RelayCommand<object>((p) =>
+            {
+                if (string.IsNullOrWhiteSpace(Username))
+                {
+                    AddMessage = "Vui lòng nhập tên đăng nhập";
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(HoTen)) {
-                    AddMessage = "Vui lòng nhập họ tên";
+                if (!IsPasswordChangeEnabled || string.IsNullOrWhiteSpace(NewPassword))
+                {
+                    AddMessage = "Vui lòng nhập mật khẩu";
                     return false;
                 }
-                if (SelectedUserType == null) {
-                    AddMessage = "Vui lòng chọn loại nhóm người dùng";
+                if (string.IsNullOrWhiteSpace(FullName))
+                {
+                    AddMessage = "Vui lòng nhập họ tên";
                     return false;
                 }
-                if(!EmailValidationHelper.IsValidEmail(Email)) {
+                if (SelectedUserType == null)
+                {
+                    AddMessage = "Vui lòng chọn loại nhóm người dùng";
+                    return false;
+                }
+                if (!EmailValidationHelper.IsValidEmail(Email))
+                {
                     AddMessage = "Vui lòng nhập email đúng định dạng";
                     return false;
                 }
-                var exists = OriginalList.Any(x => x.TenDangNhap == TenDangNhap);
-                if (exists) {
+                var exists = OriginalList.Any(x => x.Username == Username);
+                if (exists)
+                {
                     AddMessage = "Người dùng này đã tồn tại";
                     return false;
                 }
                 AddMessage = string.Empty;
                 return true;
-            }, (p) => {
-                try {
-                    var newUser = new NGUOIDUNGDTO() {
-                        TenDangNhap = TenDangNhap,
-                        MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhauMoi)),
-                        HoTen = HoTen,
+            }, (p) =>
+            {
+                try
+                {
+                    var newUser = new AppUserDTO()
+                    {
+                        Username = Username,
+                        PasswordHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(NewPassword)),
+                        FullName = FullName,
                         Email = Email,
-                        MaNhom = SelectedUserType?.MaNhom,
-                        NhomNguoiDung = SelectedUserType
+                        GroupId = SelectedUserType?.GroupId,
+                        UserGroup = SelectedUserType
                     };
-                    _nguoiDungService.Create(newUser);
-                    List.Add(newUser);
+                    _appUserService.Create(newUser);
+                    UserList.Add(newUser);
 
                     Reset();
                     MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show($"Lỗi khi thêm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
 
-            // Nút "Sửa"
-            EditCommand = new RelayCommand<object>((p) => {
-                if (SelectedItem == null) {
+            EditCommand = new RelayCommand<object>((p) =>
+            {
+                if (SelectedItem == null)
+                {
                     EditMessage = string.Empty;
                     return false;
                 }
-                if (TenDangNhap == SelectedItem.TenDangNhap && HoTen == SelectedItem.HoTen && Email == SelectedItem.Email 
-                && SelectedUserType.MaNhom == SelectedItem.MaNhom && MatKhauMoi == "") {
+                if (Username == SelectedItem.Username && FullName == SelectedItem.FullName && Email == SelectedItem.Email
+                && SelectedUserType.GroupId == SelectedItem.GroupId && NewPassword == string.Empty)
+                {
                     EditMessage = "Không có thay đổi nào để cập nhật";
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(TenDangNhap)) {
-                    EditMessage = "Tên đăng nhập không được để trống";
+                if (string.IsNullOrWhiteSpace(Username))
+                {
+                    EditMessage = "Tên đăng nhập không được để trống";
                     return false;
                 }
-                var exists = List.Any(x =>
-                    x.TenDangNhap == TenDangNhap && x.MaNguoiDung != SelectedItem.MaNguoiDung);
-                if (exists) {
+                var exists = UserList.Any(x => x.Username == Username && x.UserId != SelectedItem.UserId);
+                if (exists)
+                {
                     EditMessage = "Tên đăng nhập này đã tồn tại";
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(HoTen)) {
-                    EditMessage = "Họ tên không được để trống";
+                if (string.IsNullOrWhiteSpace(FullName))
+                {
+                    EditMessage = "Họ tên không được để trống";
                     return false;
                 }
-                if (!EmailValidationHelper.IsValidEmail(Email)) {
+                if (!EmailValidationHelper.IsValidEmail(Email))
+                {
                     EditMessage = "Vui lòng nhập email đúng định dạng";
                     return false;
                 }
-                if (isChecked && string.IsNullOrWhiteSpace(MatKhauMoi)) {
+                if (IsPasswordChangeEnabled && string.IsNullOrWhiteSpace(NewPassword))
+                {
                     EditMessage = "Mật khẩu không được để trống";
                     return false;
                 }
 
                 EditMessage = string.Empty;
                 return true;
-            }, (p) => {
-                try {
-                    var updateDto = new NGUOIDUNGDTO() {
-                        MaNguoiDung = SelectedItem.MaNguoiDung,
-                        TenDangNhap = TenDangNhap,
-                        MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhauMoi)),
-                        HoTen = HoTen,
+            }, (p) =>
+            {
+                try
+                {
+                    var updateDto = new AppUserDTO()
+                    {
+                        UserId = SelectedItem.UserId,
+                        Username = Username,
+                        FullName = FullName,
                         Email = Email,
-                        MaNhom = SelectedUserType?.MaNhom,
-                        NhomNguoiDung = SelectedUserType
+                        GroupId = SelectedUserType?.GroupId,
+                        UserGroup = SelectedUserType
                     };
-                    if (!string.IsNullOrWhiteSpace(MatKhauMoi)) {
-                        updateDto.MatKhauHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(MatKhauMoi));
+
+                    if (!string.IsNullOrWhiteSpace(NewPassword))
+                    {
+                        updateDto.PasswordHash = PasswordHelper.MD5Hash(PasswordHelper.Base64Encode(NewPassword));
                     }
-                    else {
-                        updateDto.MatKhauHash = _nguoiDungService.GetById(SelectedItem.MaNguoiDung).MatKhauHash;
+                    else
+                    {
+                        updateDto.PasswordHash = _appUserService.GetById(SelectedItem.UserId).PasswordHash;
                     }
 
-                    _nguoiDungService.Update(updateDto);
+                    _appUserService.Update(updateDto);
 
-                    var index = List.IndexOf(SelectedItem);
-                    List[index] = null;
-                    List[index] = updateDto;
+                    var index = UserList.IndexOf(SelectedItem);
+                    UserList[index] = null;
+                    UserList[index] = updateDto;
 
                     Reset();
                     MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
 
-            // Nút "Xoá"
-            DeleteCommand = new RelayCommand<object>((p) => {
+            DeleteCommand = new RelayCommand<object>((p) =>
+            {
                 return SelectedItem != null;
-            }, (p) => {
-                try {
+            }, (p) =>
+            {
+                try
+                {
                     var result = MessageBox.Show("Bạn có chắc chắn muốn xóa người dùng này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.Yes) {
-                        _nguoiDungService.Delete(SelectedItem.MaNguoiDung);
-                        List.Remove(SelectedItem);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        _appUserService.Delete(SelectedItem.UserId);
+                        UserList.Remove(SelectedItem);
 
                         Reset();
                         MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
+
             ExportToExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
         }
-        //Exporting excel function
+
+        private void PerformSearch()
+        {
+            try
+            {
+                SelectedItem = null;
+                Username = string.Empty;
+                FullName = string.Empty;
+                Email = string.Empty;
+                SelectedUserType = null;
+
+                if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty))
+                {
+                    UserList = OriginalList;
+                    return;
+                }
+
+                switch (SelectedSearchProperty)
+                {
+                    case "Tên đăng nhập":
+                        UserList = new ObservableCollection<AppUserDTO>(
+                            OriginalList.Where(x => !string.IsNullOrEmpty(x.Username) &&
+                                x.Username.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    case "Họ tên":
+                        UserList = new ObservableCollection<AppUserDTO>(
+                            OriginalList.Where(x => !string.IsNullOrEmpty(x.FullName) &&
+                                x.FullName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    case "Nhóm người dùng":
+                        UserList = new ObservableCollection<AppUserDTO>(
+                            OriginalList.Where(x => !string.IsNullOrEmpty(x.GroupId) &&
+                                x.GroupId.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    case "Email":
+                        UserList = new ObservableCollection<AppUserDTO>(
+                            OriginalList.Where(x => !string.IsNullOrEmpty(x.Email) &&
+                                x.Email.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    default:
+                        UserList = new ObservableCollection<AppUserDTO>(OriginalList);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void ExportToExcel()
         {
-            if (List == null || List.Count == 0)
+            if (UserList == null || UserList.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
@@ -435,13 +529,11 @@ namespace QuanLyTiecCuoi.ViewModel {
             var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Danh sách Người dùng");
 
-            // Tiêu đề cột
             worksheet.Cell(1, 1).Value = "Tên đăng nhập";
             worksheet.Cell(1, 2).Value = "Họ tên";
             worksheet.Cell(1, 3).Value = "Nhóm người dùng";
             worksheet.Cell(1, 4).Value = "Email";
 
-            // Format tiêu đề
             var headerRange = worksheet.Range("A1:D1");
             headerRange.Style.Font.Bold = true;
             headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -449,16 +541,14 @@ namespace QuanLyTiecCuoi.ViewModel {
             headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-            // Ghi dữ liệu
             int row = 2;
-            foreach (var item in List)
+            foreach (var item in UserList)
             {
-                worksheet.Cell(row, 1).Value = item.TenDangNhap;
-                worksheet.Cell(row, 2).Value = item.HoTen;
-                worksheet.Cell(row, 3).Value = item.NhomNguoiDung?.TenNhom ?? "Không xác định";
+                worksheet.Cell(row, 1).Value = item.Username;
+                worksheet.Cell(row, 2).Value = item.FullName;
+                worksheet.Cell(row, 3).Value = item.UserGroup?.GroupName ?? "Không xác định";
                 worksheet.Cell(row, 4).Value = item.Email;
 
-                // Format dòng dữ liệu
                 for (int col = 1; col <= 4; col++)
                 {
                     worksheet.Cell(row, col).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -468,7 +558,6 @@ namespace QuanLyTiecCuoi.ViewModel {
                 row++;
             }
 
-            // Tự động điều chỉnh độ rộng
             worksheet.Columns().AdjustToContents();
 
             var dialog = new Microsoft.Win32.SaveFileDialog
@@ -494,11 +583,13 @@ namespace QuanLyTiecCuoi.ViewModel {
                 }
             }
         }
-        private void Reset() {
+
+        private void Reset()
+        {
             SelectedItem = null;
-            TenDangNhap = string.Empty;
-            HoTen = string.Empty;
-            MatKhauMoi = string.Empty;
+            Username = string.Empty;
+            FullName = string.Empty;
+            NewPassword = string.Empty;
             Email = string.Empty;
             SelectedUserType = null;
             SearchText = string.Empty;

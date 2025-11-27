@@ -304,7 +304,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding Sanh.TenSanh}"
+                                            Text="{Binding Sanh.HallName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -316,7 +316,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding NgayDaiTiec, StringFormat='dd/MM/yyyy'}"
+                                            Text="{Binding WeddingDate, StringFormat='dd/MM/yyyy'}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -328,7 +328,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding NgayDaiTiec, StringFormat='HH:mm:ss'}"
+                                            Text="{Binding WeddingDate, StringFormat='HH:mm:ss'}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

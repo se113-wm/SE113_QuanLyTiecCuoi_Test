@@ -7,17 +7,18 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:QuanLyTiecCuoi.Presentation.ViewModel"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    Name="HoaDon"
-    Title="Hóa Đơn"
+    Name="InvoiceWindow"
+    Title="Invoice"
     Width="1000"
     Height="820"
     Icon="Assets/icon_invoice.ico"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen"
+    AutomationProperties.AutomationId="InvoiceWindow">
     <Window.Resources>
         <converter:MultiplyConverter x:Key="MultiplyConverter" />
     </Window.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Visible">
-        <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Visible" AutomationProperties.AutomationId="InvoiceScrollViewer">
+        <Grid AutomationProperties.AutomationId="InvoiceMainGrid">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -26,8 +27,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!--  Ten hoa don  -->
-                <Grid Grid.Row="0">
+                <!--  Invoice Header  -->
+                <Grid Grid.Row="0" AutomationProperties.AutomationId="InvoiceHeaderGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -38,49 +39,56 @@
                     <StackPanel
                         Grid.Column="1"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        AutomationProperties.AutomationId="InvoiceTitleStack">
                         <TextBlock
                             FontSize="24"
                             FontWeight="Bold"
-                            Text="HOÁ ĐƠN " />
+                            Text="INVOICE "
+                            AutomationProperties.AutomationId="InvoiceTitleText" />
                         <TextBlock
                             FontSize="24"
                             FontWeight="Bold"
-                            Text="{Binding InvoiceId}" />
+                            Text="{Binding InvoiceId}"
+                            AutomationProperties.AutomationId="InvoiceIdText" />
                     </StackPanel>
 
-                    <!--  Status on the right with colored border  -->
+                    <!--  Status Badge  -->
                     <Border
                         Grid.Column="2"
                         Margin="0,0,10,0"
                         Padding="8,2"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        BorderBrush="{Binding SelectedInvoice.TrangThaiBrush}"
+                        BorderBrush="{Binding SelectedInvoice.StatusBrush}"
                         BorderThickness="2"
-                        CornerRadius="6">
+                        CornerRadius="6"
+                        AutomationProperties.AutomationId="InvoiceStatusBorder">
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="20"
                             FontWeight="Bold"
-                            Foreground="{Binding SelectedInvoice.TrangThaiBrush}"
-                            Text="{Binding SelectedInvoice.TrangThai}"
-                            TextAlignment="Center" />
+                            Foreground="{Binding SelectedInvoice.StatusBrush}"
+                            Text="{Binding SelectedInvoice.Status}"
+                            TextAlignment="Center"
+                            AutomationProperties.AutomationId="InvoiceStatusText" />
                     </Border>
                 </Grid>
 
-                <!--  Chi tiet tiec cuoi  -->
+                <!--  Wedding Details Section  -->
                 <materialDesign:Card
                     Grid.Row="1"
                     Margin="0,0,0,10"
                     Padding="10"
-                    BorderThickness="0.5">
+                    BorderThickness="0.5"
+                    AutomationProperties.AutomationId="WeddingDetailsCard">
                     <StackPanel>
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                             <TextBlock
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Chi tiết tiệc cưới" />
+                                Text="Wedding Details"
+                                AutomationProperties.AutomationId="WeddingDetailsSectionTitle" />
                         </StackPanel>
 
                         <Grid>
@@ -94,71 +102,82 @@
                                 <RowDefinition Height="2*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
+                            
                             <TextBox
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Margin="5"
-                                materialDesign:HintAssist.Hint="Tên chú rễ"
+                                materialDesign:HintAssist.Hint="Groom Name"
                                 IsReadOnly="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding SelectedInvoice.TenChuRe, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding SelectedInvoice.GroomName, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="GroomNameTextBox" />
+                            
                             <TextBox
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Margin="5"
-                                materialDesign:HintAssist.Hint="Tên cô dâu"
+                                materialDesign:HintAssist.Hint="Bride Name"
                                 IsReadOnly="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding SelectedInvoice.TenCoDau, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding SelectedInvoice.BrideName, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="BrideNameTextBox" />
+                            
                             <TextBox
                                 Grid.Row="0"
                                 Grid.Column="2"
                                 Margin="5"
-                                materialDesign:HintAssist.Hint="Ngày thanh toán"
+                                materialDesign:HintAssist.Hint="Payment Date"
                                 IsReadOnly="true"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding PaymentDate, StringFormat={}{0:dd/MM/yyyy}, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding PaymentDate, StringFormat={}{0:dd/MM/yyyy}, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="PaymentDateTextBox" />
+                            
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Margin="5"
-                                materialDesign:HintAssist.Hint="Số lượng bàn"
+                                materialDesign:HintAssist.Hint="Table Quantity"
                                 IsReadOnly="{Binding IsPaid}"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding TableQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding TableQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="TableQuantityTextBox" />
+                            
                             <StackPanel
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="5"
                                 Orientation="Vertical">
                                 <TextBlock
-                                    Grid.Row="2"
-                                    Grid.Column="0"
                                     Margin="5"
                                     FontSize="10"
-                                    Text="{Binding TableQuantityMessage}" />
+                                    Text="{Binding TableQuantityMessage}"
+                                    AutomationProperties.AutomationId="TableQuantityMessageText" />
                                 <TextBlock
-                                    Grid.Row="3"
-                                    Grid.Column="0"
                                     Margin="5"
                                     FontSize="10"
-                                    Text="{Binding TableQuantityMax}" />
+                                    Text="{Binding TableQuantityMax}"
+                                    AutomationProperties.AutomationId="TableQuantityMaxText" />
                             </StackPanel>
+                            
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="5"
-                                materialDesign:HintAssist.Hint="Đơn giá bàn"
+                                materialDesign:HintAssist.Hint="Table Price"
                                 IsReadOnly="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding DonGiaBan, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding TablePrice, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="TablePriceTextBox" />
+                            
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="2"
                                 Margin="5"
-                                materialDesign:HintAssist.Hint="Tổng tiền bàn"
+                                materialDesign:HintAssist.Hint="Total Table Amount"
                                 IsReadOnly="True"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                AutomationProperties.AutomationId="TotalTableAmountTextBox">
                                 <TextBox.Text>
                                     <MultiBinding
                                         Converter="{StaticResource MultiplyConverter}"
@@ -168,7 +187,7 @@
                                         UpdateSourceTrigger="PropertyChanged"
                                         ValidatesOnExceptions="False">
                                         <Binding Path="TableQuantity" />
-                                        <Binding Path="DonGiaBan" />
+                                        <Binding Path="TablePrice" />
                                     </MultiBinding>
                                 </TextBox.Text>
                             </TextBox>
@@ -176,13 +195,14 @@
                     </StackPanel>
                 </materialDesign:Card>
 
-                <!--  Danh sach dich vu  -->
+                <!--  Service List Section  -->
                 <materialDesign:Card
                     Grid.Row="2"
                     Margin="0,0,0,10"
                     Padding="5"
                     VerticalAlignment="Stretch"
-                    BorderThickness="0.5">
+                    BorderThickness="0.5"
+                    AutomationProperties.AutomationId="ServiceListCard">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -193,7 +213,8 @@
                             Grid.Row="0"
                             FontSize="16"
                             FontWeight="Bold"
-                            Text="Danh sách dịch vụ" />
+                            Text="Service List"
+                            AutomationProperties.AutomationId="ServiceListSectionTitle" />
 
                         <ListView
                             Grid.Row="1"
@@ -201,66 +222,72 @@
                             VerticalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             AlternationCount="1000"
-                            ItemsSource="{Binding ServiceList}">
+                            ItemsSource="{Binding ServiceList}"
+                            AutomationProperties.AutomationId="ServiceListView">
                             <ListView.View>
                                 <GridView>
                                     <!--  Index  -->
-                                    <GridViewColumn Width="90" Header="STT">
+                                    <GridViewColumn Width="90" Header="No.">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
                                                     Margin="20,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource AddConverter}, ConverterParameter=1}"
-                                                    TextAlignment="Left" />
+                                                    TextAlignment="Left"
+                                                    AutomationProperties.AutomationId="ServiceIndexText" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <!--  Name  -->
-                                    <GridViewColumn Width="150" Header="Tên dịch vụ">
+                                    <!--  Service Name  -->
+                                    <GridViewColumn Width="150" Header="Service Name">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
                                                     Margin="20,0,0,0"
                                                     HorizontalAlignment="Left"
-                                                    Text="{Binding DichVu.TenDichVu}"
-                                                    TextAlignment="Left" />
+                                                    Text="{Binding Service.ServiceName}"
+                                                    TextAlignment="Left"
+                                                    AutomationProperties.AutomationId="ServiceNameText" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <!--  Price  -->
-                                    <GridViewColumn Width="150" Header="Đơn giá">
+                                    <!--  Unit Price  -->
+                                    <GridViewColumn Width="150" Header="Unit Price">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
                                                     Margin="20,0,0,0"
                                                     HorizontalAlignment="Left"
-                                                    Text="{Binding DonGia, Converter={StaticResource CurrencyFormatConverter}, StringFormat={}{0:N0}}"
-                                                    TextAlignment="Left" />
+                                                    Text="{Binding UnitPrice, Converter={StaticResource CurrencyFormatConverter}, StringFormat={}{0:N0}}"
+                                                    TextAlignment="Left"
+                                                    AutomationProperties.AutomationId="ServiceUnitPriceText" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <!--  Quantity  -->
-                                    <GridViewColumn Width="150" Header="Số lượng">
+                                    <GridViewColumn Width="150" Header="Quantity">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
                                                     Margin="20,0,0,0"
                                                     HorizontalAlignment="Left"
-                                                    Text="{Binding SoLuong}"
-                                                    TextAlignment="Left" />
+                                                    Text="{Binding Quantity}"
+                                                    TextAlignment="Left"
+                                                    AutomationProperties.AutomationId="ServiceQuantityText" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <!--  Note  -->
-                                    <GridViewColumn Width="Auto" Header="Ghi chú">
+                                    <GridViewColumn Width="Auto" Header="Note">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
                                                     Margin="20,0,0,0"
                                                     HorizontalAlignment="Left"
-                                                    Text="{Binding GhiChu}"
-                                                    TextAlignment="Left" />
+                                                    Text="{Binding Note}"
+                                                    TextAlignment="Left"
+                                                    AutomationProperties.AutomationId="ServiceNoteText" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -270,14 +297,15 @@
                     </Grid>
                 </materialDesign:Card>
 
-                <!--  Tien  -->
+                <!--  Payment Summary Section  -->
                 <materialDesign:Card
                     Grid.Row="3"
                     Padding="10"
                     VerticalAlignment="Stretch"
-                    BorderThickness="0.5">
+                    BorderThickness="0.5"
+                    AutomationProperties.AutomationId="PaymentSummaryCard">
                     <StackPanel Orientation="Vertical">
-                        <!--  Tổng tiền dịch vụ  -->
+                        <!--  Total Service Amount  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -288,21 +316,20 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Tổng tiền dịch vụ:" />
+                                Text="Total Service Amount:"
+                                AutomationProperties.AutomationId="TotalServiceAmountLabel" />
                             <TextBox
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16"
                                 IsReadOnly="True"
-                                Text="{Binding SelectedInvoice.TongTienDV, Converter={StaticResource CurrencyFormatConverter}}" />
+                                Text="{Binding SelectedInvoice.TotalServiceAmount, Converter={StaticResource CurrencyFormatConverter}}"
+                                AutomationProperties.AutomationId="TotalServiceAmountTextBox" />
                         </Grid>
-                        <Border
-                            Height="1"
-                            Margin="0,5"
-                            Background="Gray" />
+                        <Border Height="1" Margin="0,5" Background="Gray" />
 
-                        <!--  Chi phí thiết bị hỏng hóc  -->
+                        <!--  Additional Cost  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -313,18 +340,20 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Chi phí thiết bị hỏng hóc trong tiệc:" />
+                                Text="Additional Cost (Damaged Equipment):"
+                                AutomationProperties.AutomationId="AdditionalCostLabel" />
                             <TextBox
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16"
-                                IsReadOnly="{Binding IsPaid}">
+                                IsReadOnly="{Binding IsPaid}"
+                                AutomationProperties.AutomationId="AdditionalCostTextBox">
                                 <TextBox.Text>
                                     <Binding
                                         Converter="{StaticResource CurrencyFormatConverter}"
                                         Mode="TwoWay"
-                                        Path="DamageEquipmentCost"
+                                        Path="AdditionalCost"
                                         UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
                                             <converter:DecimalValidationRule />
@@ -333,11 +362,9 @@
                                 </TextBox.Text>
                             </TextBox>
                         </Grid>
-                        <Border
-                            Height="1"
-                            Margin="0,5"
-                            Background="Gray" />
-                        <!--  Tổng tiền hóa đơn  -->
+                        <Border Height="1" Margin="0,5" Background="Gray" />
+                        
+                        <!--  Total Invoice Amount  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -348,20 +375,20 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Tổng tiền hóa đơn:" />
+                                Text="Total Invoice Amount:"
+                                AutomationProperties.AutomationId="TotalInvoiceAmountLabel" />
                             <TextBox
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16"
                                 IsReadOnly="True"
-                                Text="{Binding TotalInvoiceAmount, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding TotalInvoiceAmount, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="TotalInvoiceAmountTextBox" />
                         </Grid>
-                        <Border
-                            Height="1"
-                            Margin="0,5"
-                            Background="Gray" />
-                        <!--  Tien phat  -->
+                        <Border Height="1" Margin="0,5" Background="Gray" />
+                        
+                        <!--  Penalty Amount  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -372,20 +399,20 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Tiền phạt (thanh toán trễ):" />
+                                Text="Penalty Amount (Late Payment):"
+                                AutomationProperties.AutomationId="PenaltyAmountLabel" />
                             <TextBox
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16"
                                 IsReadOnly="True"
-                                Text="{Binding Fine, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Fine, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="PenaltyAmountTextBox" />
                         </Grid>
-                        <Border
-                            Height="1"
-                            Margin="0,5"
-                            Background="Gray" />
-                        <!--  Tiền đặt cọc  -->
+                        <Border Height="1" Margin="0,5" Background="Gray" />
+                        
+                        <!--  Deposit  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -396,20 +423,20 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Tiền đặt cọc:" />
+                                Text="Deposit:"
+                                AutomationProperties.AutomationId="DepositLabel" />
                             <TextBox
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16"
                                 IsReadOnly="True"
-                                Text="{Binding Deposit, Mode=TwoWay, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Deposit, Mode=TwoWay, Converter={StaticResource CurrencyFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                AutomationProperties.AutomationId="DepositTextBox" />
                         </Grid>
-                        <Border
-                            Height="1"
-                            Margin="0,5"
-                            Background="Gray" />
-                        <!--  Còn lại  -->
+                        <Border Height="1" Margin="0,5" Background="Gray" />
+                        
+                        <!--  Remaining Amount  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -420,50 +447,53 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="Còn lại:" />
+                                Text="Remaining Amount:"
+                                AutomationProperties.AutomationId="RemainingAmountLabel" />
                             <TextBox
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16"
                                 IsReadOnly="True"
-                                Text="{Binding RemainingAmount, Mode=OneWay, Converter={StaticResource CurrencyFormatConverter}}" />
+                                Text="{Binding RemainingAmount, Mode=OneWay, Converter={StaticResource CurrencyFormatConverter}}"
+                                AutomationProperties.AutomationId="RemainingAmountTextBox" />
                         </Grid>
-                        <Border
-                            Height="1"
-                            Margin="0,5"
-                            Background="Gray" />
+                        <Border Height="1" Margin="0,5" Background="Gray" />
+                        
+                        <!--  Action Buttons  -->
                         <Grid Margin="0,20,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Row="0" Orientation="Vertical">
+                            
+                            <StackPanel Grid.Column="0" Orientation="Vertical">
                                 <Button
-                                    Grid.Column="0"
                                     Width="180"
                                     Margin="0,0,10,0"
                                     Command="{Binding ConfirmPaymentCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                                     Content="{Binding PaymentText, UpdateSourceTrigger=PropertyChanged}"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="ConfirmPaymentButton" />
                                 <TextBlock
-                                    Grid.Row="2"
-                                    Grid.Column="0"
                                     Margin="5"
                                     HorizontalAlignment="Center"
                                     FontSize="10"
                                     Foreground="Gray"
-                                    Text="{Binding ConfirmMessage, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding ConfirmMessage, UpdateSourceTrigger=PropertyChanged}"
+                                    AutomationProperties.AutomationId="ConfirmMessageText" />
                             </StackPanel>
+                            
                             <Button
                                 Grid.Column="2"
                                 Width="120"
                                 VerticalAlignment="Top"
                                 Command="{Binding ExportCommand}"
-                                Content="Xuất PDF"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                                Content="Export PDF"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                AutomationProperties.AutomationId="ExportPdfButton" />
                         </Grid>
                     </StackPanel>
                 </materialDesign:Card>

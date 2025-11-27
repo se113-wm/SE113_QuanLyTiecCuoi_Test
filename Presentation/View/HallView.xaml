@@ -123,7 +123,7 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Tên sảnh"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding TenSanh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding HallName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <ComboBox
                         Grid.Row="0"
@@ -142,7 +142,7 @@
                         materialDesign:HintAssist.Hint="Đơn giá bàn tối thiểu"
                         IsReadOnly="True"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding SelectedHallType.DonGiaBanToiThieu, StringFormat=N0}" />
+                        Text="{Binding SelectedHallType.MinTablePrice, StringFormat=N0}" />
 
                     <!--  Row 1: 2 controls  -->
                     <TextBox
@@ -151,7 +151,7 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Số lượng bàn tối đa"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding SoLuongBanToiDa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                        Text="{Binding MaxTableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
 
                     <TextBox
                         Grid.Row="1"
@@ -160,7 +160,7 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Ghi chú"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding GhiChu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -371,7 +371,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding LoaiSanh.TenLoaiSanh}"
+                                            Text="{Binding LoaiSanh.HallTypeName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -383,7 +383,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding LoaiSanh.DonGiaBanToiThieu, StringFormat=N0}"
+                                            Text="{Binding LoaiSanh.MinTablePrice, StringFormat=N0}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

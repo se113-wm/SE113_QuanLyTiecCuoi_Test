@@ -22,12 +22,14 @@
             HorizontalAlignment="Center"
             FontSize="20"
             FontWeight="Bold"
-            Text="Quản lý danh sách món ăn" />
+            Text="Quản lý danh sách món ăn"
+            AutomationProperties.AutomationId="FoodPageTitle" />
         <materialDesign:Card
             Grid.Row="1"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="FoodDetailsCard">
             <StackPanel>
                 <StackPanel
                     Margin="0,0,0,0"
@@ -46,7 +48,8 @@
                         Command="{Binding ResetCommand}"
                         Foreground="Purple"
                         Style="{StaticResource MaterialDesignToolButton}"
-                        ToolTip="Reset thông tin">
+                        ToolTip="Reset thông tin"
+                        AutomationProperties.AutomationId="ResetButton">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"
@@ -76,7 +79,8 @@
                         Background="#FFF0F0F0"
                         BorderBrush="Gray"
                         BorderThickness="1"
-                        CornerRadius="8">
+                        CornerRadius="8"
+                        AutomationProperties.AutomationId="DishImageBorder">
                         <Grid>
                             <Image
                                 Width="100"
@@ -84,7 +88,8 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Source="{Binding Image}"
-                                Stretch="UniformToFill">
+                                Stretch="UniformToFill"
+                                AutomationProperties.AutomationId="DishImage">
                                 <Image.Clip>
                                     <RectangleGeometry
                                         RadiusX="8"
@@ -100,7 +105,8 @@
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Command="{Binding SelectImageCommand}"
-                                ToolTip="{Binding ImageBtnToolTip}">
+                                ToolTip="{Binding ImageBtnToolTip}"
+                                AutomationProperties.AutomationId="SelectDishImageButton">
                                 <materialDesign:PackIcon
                                     Width="36"
                                     Height="36"
@@ -108,7 +114,7 @@
                                     VerticalAlignment="Center"
                                     Foreground="#888"
                                     Kind="Camera"
-                                    Visibility="{Binding nullImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    Visibility="{Binding HasNoImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </Button>
                         </Grid>
                     </Border>
@@ -119,7 +125,8 @@
                         Margin="5,5,5,5"
                         materialDesign:HintAssist.Hint="Tên món ăn"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding TenMonAn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding DishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="DishNameTextBox" />
 
                     <TextBox
                         Grid.Row="0"
@@ -127,7 +134,8 @@
                         Margin="5,5,5,5"
                         materialDesign:HintAssist.Hint="Đơn giá"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                        Text="{Binding UnitPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                        AutomationProperties.AutomationId="UnitPriceTextBox" />
 
 
                     <TextBox
@@ -137,7 +145,8 @@
                         Margin="5,5,5,5"
                         materialDesign:HintAssist.Hint="Ghi chú"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding GhiChu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="NoteTextBox" />
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -146,7 +155,8 @@
             Grid.Row="2"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="ActionsCard">
             <StackPanel>
                 <TextBlock
                     Margin="0,0,10,0"
@@ -165,13 +175,15 @@
                             materialDesign:HintAssist.Hint="Tìm theo"
                             ItemsSource="{Binding SearchProperties}"
                             SelectedItem="{Binding SelectedSearchProperty, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="SearchPropertyComboBox" />
                         <TextBox
                             Width="300"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="SearchTextBox" />
                     </StackPanel>
 
                     <StackPanel
@@ -180,7 +192,6 @@
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right"
                         Orientation="Horizontal">
-
                         <!--  ComboBox chọn thao tác  -->
                         <ComboBox
                             Width="200"
@@ -188,7 +199,8 @@
                             materialDesign:HintAssist.Hint="Chọn thao tác"
                             ItemsSource="{Binding ActionList}"
                             SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="ActionComboBox" />
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -205,13 +217,15 @@
                                     Margin="5"
                                     Command="{Binding AddCommand}"
                                     Content="Thêm"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="AddButton" />
                                 <TextBlock
                                     Height="32"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding AddMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="AddMessage" />
                             </StackPanel>
 
                             <!--  Nút Sửa  -->
@@ -224,14 +238,16 @@
                                     Margin="5"
                                     Command="{Binding EditCommand}"
                                     Content="Sửa"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="EditButton" />
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding EditMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="EditMessage" />
                             </StackPanel>
 
                             <!--  Nút Xóa  -->
@@ -244,14 +260,16 @@
                                     Margin="5"
                                     Command="{Binding DeleteCommand}"
                                     Content="Xóa"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="DeleteButton" />
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding DeleteMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="DeleteMessage" />
                             </StackPanel>
                             <!--  Nút Xuất Excel  -->
                             <StackPanel
@@ -263,7 +281,8 @@
                                     Margin="5"
                                     Command="{Binding ExportToExcelCommand}"
                                     Content="Xuất Excel"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="ExportExcelButton" />
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
@@ -273,11 +292,8 @@
                                     TextWrapping="Wrap" />
                             </StackPanel>
                         </Grid>
-
-
                     </StackPanel>
                 </DockPanel>
-
             </StackPanel>
         </materialDesign:Card>
 
@@ -288,7 +304,8 @@
             Margin="10"
             Padding="5"
             VerticalAlignment="Stretch"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="FoodListCard">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -307,9 +324,9 @@
                     Margin="0"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
-                    ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-
+                    ItemsSource="{Binding DishList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    AutomationProperties.AutomationId="DishListView">
                     <ListView.View>
                         <GridView>
                             <!--  Icon cột đầu  -->
@@ -339,7 +356,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenMonAn}"
+                                            Text="{Binding DishName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -352,7 +369,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding DonGia, StringFormat=N0}"
+                                            Text="{Binding UnitPrice, StringFormat=N0}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -365,7 +382,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding GhiChu}"
+                                            Text="{Binding Note}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

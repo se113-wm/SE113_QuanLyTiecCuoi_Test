@@ -1,4 +1,6 @@
-﻿using QuanLyTiecCuoi.Model;
+﻿using QuanLyTiecCuoi.BusinessLogicLayer.IService;
+using QuanLyTiecCuoi.DataTransferObject;
+using QuanLyTiecCuoi.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,90 +12,102 @@ namespace QuanLyTiecCuoi.ViewModel
 {
     public class PermissionViewModel : BaseViewModel
     {
-        private ObservableCollection<NHOMNGUOIDUNG> _List;
-        public ObservableCollection<NHOMNGUOIDUNG> List
+        private readonly IUserGroupService _userGroupService;
+        private readonly IPermissionService _permissionService;
+        private readonly IAppUserService _appUserService;
+
+        private ObservableCollection<UserGroupDTO> _groupList;
+        public ObservableCollection<UserGroupDTO> GroupList
         {
-            get => _List;
-            set { _List = value; OnPropertyChanged(); }
+            get => _groupList;
+            set { _groupList = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<NHOMNGUOIDUNG> _OriginalList;
-        public ObservableCollection<NHOMNGUOIDUNG> OriginalList
+        private ObservableCollection<UserGroupDTO> _originalList;
+        public ObservableCollection<UserGroupDTO> OriginalList
         {
-            get => _OriginalList;
-            set { _OriginalList = value; OnPropertyChanged(); }
+            get => _originalList;
+            set { _originalList = value; OnPropertyChanged(); }
         }
 
-        // Trong PermissionViewModel:
-        public Dictionary<string, ChucNangState> ChucNangStates { get; set; }
+        public Dictionary<string, PermissionState> PermissionStates { get; set; }
 
-        private void InitChucNangStates()
+        private void InitPermissionStates()
         {
-            ChucNangStates = new Dictionary<string, ChucNangState>
+            PermissionStates = new Dictionary<string, PermissionState>
             {
-                ["Home"] = new ChucNangState { MaChucNang = "Home", TenManHinhDuocLoad = "HomeView" },
-                ["HallType"] = new ChucNangState { MaChucNang = "HallType", TenManHinhDuocLoad = "HallTypeView" },
-                ["Hall"] = new ChucNangState { MaChucNang = "Hall", TenManHinhDuocLoad = "HallView" },
-                ["Shift"] = new ChucNangState { MaChucNang = "Shift", TenManHinhDuocLoad = "ShiftView" },
-                ["Food"] = new ChucNangState { MaChucNang = "Food", TenManHinhDuocLoad = "FoodView" },
-                ["Service"] = new ChucNangState { MaChucNang = "Service", TenManHinhDuocLoad = "ServiceView" },
-                ["Wedding"] = new ChucNangState { MaChucNang = "Wedding", TenManHinhDuocLoad = "WeddingView" },
-                ["Report"] = new ChucNangState { MaChucNang = "Report", TenManHinhDuocLoad = "ReportView" },
-                ["Parameter"] = new ChucNangState { MaChucNang = "Parameter", TenManHinhDuocLoad = "ParameterView" },
-                ["Permission"] = new ChucNangState { MaChucNang = "Permission", TenManHinhDuocLoad = "PermissionView" },
-                ["User"] = new ChucNangState { MaChucNang = "User", TenManHinhDuocLoad = "UserView" }
+                ["Home"] = new PermissionState { PermissionId = "Home", LoadedScreenName = "HomeView" },
+                ["HallType"] = new PermissionState { PermissionId = "HallType", LoadedScreenName = "HallTypeView" },
+                ["Hall"] = new PermissionState { PermissionId = "Hall", LoadedScreenName = "HallView" },
+                ["Shift"] = new PermissionState { PermissionId = "Shift", LoadedScreenName = "ShiftView" },
+                ["Food"] = new PermissionState { PermissionId = "Food", LoadedScreenName = "FoodView" },
+                ["Service"] = new PermissionState { PermissionId = "Service", LoadedScreenName = "ServiceView" },
+                ["Wedding"] = new PermissionState { PermissionId = "Wedding", LoadedScreenName = "WeddingView" },
+                ["Report"] = new PermissionState { PermissionId = "Report", LoadedScreenName = "ReportView" },
+                ["Parameter"] = new PermissionState { PermissionId = "Parameter", LoadedScreenName = "ParameterView" },
+                ["Permission"] = new PermissionState { PermissionId = "Permission", LoadedScreenName = "PermissionView" },
+                ["User"] = new PermissionState { PermissionId = "User", LoadedScreenName = "UserView" }
             };
-            foreach (var state in ChucNangStates.Values)
-                state.UpdatePermission += ChucNangState_UpdatePermission;
+            foreach (var state in PermissionStates.Values)
+                state.UpdatePermission += PermissionState_UpdatePermission;
         }
 
-        private void ChucNangState_UpdatePermission(object sender, EventArgs e)
+        private void PermissionState_UpdatePermission(object sender, EventArgs e)
         {
             if (SelectedItem == null) return;
-            var state = sender as ChucNangState;
+            var state = sender as PermissionState;
             var db = DataProvider.Ins.DB;
-            var chucNang = db.CHUCNANGs.FirstOrDefault(cn => cn.MaChucNang == state.MaChucNang);
-            if (chucNang == null) return;
+            var permission = db.Permissions.FirstOrDefault(p => p.PermissionId == state.PermissionId);
+            if (permission == null) return;
+
+            var userGroup = db.UserGroups.FirstOrDefault(g => g.GroupId == SelectedItem.GroupId);
+            if (userGroup == null) return;
+
             if (state.IsChecked)
             {
-                if (!SelectedItem.CHUCNANGs.Any(cn => cn.MaChucNang == state.MaChucNang))
-                    SelectedItem.CHUCNANGs.Add(chucNang);
+                if (!userGroup.Permissions.Any(p => p.PermissionId == state.PermissionId))
+                    userGroup.Permissions.Add(permission);
             }
             else
             {
-                var remove = SelectedItem.CHUCNANGs.FirstOrDefault(cn => cn.MaChucNang == state.MaChucNang);
+                var remove = userGroup.Permissions.FirstOrDefault(p => p.PermissionId == state.PermissionId);
                 if (remove != null)
-                    SelectedItem.CHUCNANGs.Remove(remove);
+                    userGroup.Permissions.Remove(remove);
             }
             db.SaveChanges();
         }
 
-        // Khi đổi SelectedItem (nhóm người dùng), cập nhật trạng thái check:
-        private void UpdateChucNangStates()
+        private void UpdatePermissionStates()
         {
             if (SelectedItem == null)
             {
-                foreach (var state in ChucNangStates.Values)
+                foreach (var state in PermissionStates.Values)
                     state.IsChecked = false;
                 return;
             }
-            var maChucNangSet = new HashSet<string>(SelectedItem.CHUCNANGs.Select(cn => cn.MaChucNang));
-            foreach (var state in ChucNangStates.Values)
-                state.IsChecked = maChucNangSet.Contains(state.MaChucNang);
+
+            var db = DataProvider.Ins.DB;
+            var userGroup = db.UserGroups.FirstOrDefault(g => g.GroupId == SelectedItem.GroupId);
+            if (userGroup == null) return;
+
+            var permissionIdSet = new HashSet<string>(userGroup.Permissions.Select(p => p.PermissionId));
+            foreach (var state in PermissionStates.Values)
+                state.IsChecked = permissionIdSet.Contains(state.PermissionId);
         }
 
-        private NHOMNGUOIDUNG _SelectedItem;
-        public NHOMNGUOIDUNG SelectedItem
+        private UserGroupDTO _selectedItem;
+        public UserGroupDTO SelectedItem
         {
-            get => _SelectedItem;
+            get => _selectedItem;
             set
             {
-                _SelectedItem = value;
+                _selectedItem = value;
                 OnPropertyChanged();
                 if (SelectedItem != null)
                 {
-                    TenNhom = SelectedItem.TenNhom;
+                    GroupName = SelectedItem.GroupName;
                     IsSelected = true;
+                    UpdatePermissionStates();
                 }
                 else
                 {
@@ -105,96 +119,108 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        private string _TenNhom;
-        public string TenNhom
+        private string _groupName;
+        public string GroupName
         {
-            get => _TenNhom;
-            set { _TenNhom = value; OnPropertyChanged(); }
+            get => _groupName;
+            set { _groupName = value; OnPropertyChanged(); }
         }
 
         public ICommand AddCommand { get; set; }
-        private string _AddMessage;
-        public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
+        private string _addMessage;
+        public string AddMessage
+        {
+            get => _addMessage;
+            set { _addMessage = value; OnPropertyChanged(); }
+        }
+
         public ICommand EditCommand { get; set; }
-        private string _EditMessage;
-        public string EditMessage { get => _EditMessage; set { _EditMessage = value; OnPropertyChanged(); } }
+        private string _editMessage;
+        public string EditMessage
+        {
+            get => _editMessage;
+            set { _editMessage = value; OnPropertyChanged(); }
+        }
+
         public ICommand DeleteCommand { get; set; }
-        private string _DeleteMessage;
-        public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
+        private string _deleteMessage;
+        public string DeleteMessage
+        {
+            get => _deleteMessage;
+            set { _deleteMessage = value; OnPropertyChanged(); }
+        }
 
-        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
-            Reset();
-        });
+        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => { Reset(); });
 
-        private string _SearchText;
+        private string _searchText;
         public string SearchText
         {
-            get => _SearchText;
+            get => _searchText;
             set
             {
-                if (_SearchText != value)
+                if (_searchText != value)
                 {
-                    _SearchText = value;
+                    _searchText = value;
                     OnPropertyChanged();
                     PerformSearch();
                 }
             }
         }
 
-        private ObservableCollection<string> _SearchProperties;
+        private ObservableCollection<string> _searchProperties;
         public ObservableCollection<string> SearchProperties
         {
-            get => _SearchProperties;
-            set { _SearchProperties = value; OnPropertyChanged(); }
+            get => _searchProperties;
+            set { _searchProperties = value; OnPropertyChanged(); }
         }
 
-        private string _SelectedSearchProperty;
+        private string _selectedSearchProperty;
         public string SelectedSearchProperty
         {
-            get => _SelectedSearchProperty;
+            get => _selectedSearchProperty;
             set
             {
-                _SelectedSearchProperty = value;
+                _selectedSearchProperty = value;
                 OnPropertyChanged();
                 PerformSearch();
             }
         }
+
         private void PerformSearch()
         {
             try
             {
                 SelectedItem = null;
-                TenNhom = string.Empty;
+                GroupName = string.Empty;
 
                 if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty))
                 {
-                    List = OriginalList;
+                    GroupList = OriginalList;
                     return;
                 }
 
                 switch (SelectedSearchProperty)
                 {
-                    case "Tên nhóm":
-                        List = new ObservableCollection<NHOMNGUOIDUNG>(
-                            OriginalList.Where(x => x.TenNhom != null && x.TenNhom.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                    case "Group Name":
+                        GroupList = new ObservableCollection<UserGroupDTO>(
+                            OriginalList.Where(x => x.GroupName != null && x.GroupName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                         break;
                     default:
-                        List = new ObservableCollection<NHOMNGUOIDUNG>(OriginalList);
+                        GroupList = new ObservableCollection<UserGroupDTO>(OriginalList);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Search error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private bool _isSeledted;
-
+        private bool _isSelected;
         public bool IsSelected
         {
-            get => _isSeledted;
-            set { _isSeledted = value; OnPropertyChanged(); }
+            get => _isSelected;
+            set { _isSelected = value; OnPropertyChanged(); }
         }
 
         private bool _isEditing;
@@ -203,19 +229,23 @@ namespace QuanLyTiecCuoi.ViewModel
             get => _isEditing;
             set { _isEditing = value; OnPropertyChanged(); }
         }
+
         private bool _isAdding;
         public bool IsAdding
         {
             get => _isAdding;
             set { _isAdding = value; OnPropertyChanged(); }
         }
+
         private bool _isDeleting;
         public bool IsDeleting
         {
             get => _isDeleting;
             set { _isDeleting = value; OnPropertyChanged(); }
         }
-        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Chọn thao tác" };
+
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Add", "Edit", "Delete", "Select Action" };
+
         private string _selectedAction;
         public string SelectedAction
         {
@@ -226,94 +256,83 @@ namespace QuanLyTiecCuoi.ViewModel
                 OnPropertyChanged();
                 switch (value)
                 {
-                    case "Thêm":
+                    case "Add":
                         IsAdding = true;
                         IsEditing = false;
                         IsDeleting = false;
-                        Reset(); // reset các trường nhập liệu
-                        // reset ảnh về ko có ảnh
+                        Reset();
                         break;
-                    case "Sửa":
+                    case "Edit":
                         IsAdding = false;
                         IsEditing = true;
                         IsDeleting = false;
-                        Reset(); // reset các trường nhập liệu
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
+                        Reset();
                         break;
-                    case "Xóa":
+                    case "Delete":
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = true;
-                        Reset(); // reset các trường nhập liệu
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một dịch vụ để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
+                        Reset();
                         break;
                     default:
                         _selectedAction = null;
                         IsAdding = false;
                         IsEditing = false;
                         IsDeleting = false;
-                        Reset(); // reset các trường nhập liệu
+                        Reset();
                         break;
                 }
             }
         }
-        public PermissionViewModel()
+
+        public PermissionViewModel(IUserGroupService userGroupService, IPermissionService permissionService, IAppUserService appUserService)
         {
-            // Load dữ liệu từ database, không hiển thị nhóm 'ADMIN' và nhóm của người dùng hiện tại
-            List = new ObservableCollection<NHOMNGUOIDUNG>(
-                DataProvider.Ins.DB.NHOMNGUOIDUNGs
-                    .Where(x => x.TenNhom != "Quản trị viên" && x.MaNhom != DataProvider.Ins.CurrentUser.MaNhom)
+            _userGroupService = userGroupService;
+            _permissionService = permissionService;
+            _appUserService = appUserService;
+
+            var currentGroupId = DataProvider.Ins.CurrentUser.GroupId;
+
+            GroupList = new ObservableCollection<UserGroupDTO>(
+                _userGroupService.GetAll()
+                    .Where(x => x.GroupName != "Administrator" && x.GroupId != currentGroupId)
                     .ToList()
             );
-            // Lưu danh sách gốc để tìm kiếm
-            OriginalList = new ObservableCollection<NHOMNGUOIDUNG>(List);
+            OriginalList = new ObservableCollection<UserGroupDTO>(GroupList);
 
-
-            SearchProperties = new ObservableCollection<string> { "Tên nhóm" };
+            SearchProperties = new ObservableCollection<string> { "Group Name" };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
-            // Khởi tạo trạng thái chức năng
-            InitChucNangStates();
-            // Đăng ký sự kiện khi thay đổi SelectedItem
+
+            InitPermissionStates();
+            InitializeCommands();
+
             PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(SelectedItem))
                 {
-                    UpdateChucNangStates();
+                    UpdatePermissionStates();
                 }
             };
+        }
 
+        private void InitializeCommands()
+        {
             AddCommand = new RelayCommand<object>((p) =>
             {
-                if (string.IsNullOrWhiteSpace(TenNhom))
+                if (string.IsNullOrWhiteSpace(GroupName))
                 {
-                    if (SelectedItem != null)
-                    {
-                        AddMessage = "Vui lòng nhập tên nhóm";
-                    }
-                    else
-                    {
-                        AddMessage = string.Empty;
-                    }
+                    AddMessage = "Please enter group name";
                     return false;
                 }
-                // Nếu tên nhóm chọn là 'Quản trị viên' thì không cho phép sửa
-                if (TenNhom == "Quản trị viên" || TenNhom.ToLower().Contains("quản trị viên") || TenNhom.ToLower().Contains("admin"))
+                if (GroupName == "Administrator" || GroupName.ToLower().Contains("administrator") || GroupName.ToLower().Contains("admin"))
                 {
-                    AddMessage = "Không thể thêm 'Quản trị viên'";
+                    AddMessage = "Cannot add 'Administrator'";
                     return false;
                 }
-                var exists = DataProvider.Ins.DB.NHOMNGUOIDUNGs.Any(x => x.TenNhom == TenNhom);
+                var exists = GroupList.Any(x => x.GroupName == GroupName);
                 if (exists)
                 {
-                    AddMessage = "Tên nhóm đã tồn tại";
+                    AddMessage = "Group name already exists";
                     return false;
                 }
                 AddMessage = string.Empty;
@@ -322,35 +341,30 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    // Tạo mã nhóm mới (rút gọn từ GUID, 8 ký tự)
-                    string maNhom = "GR" + Guid.NewGuid().ToString("N").Substring(0, 8);
+                    string groupId = "GR" + Guid.NewGuid().ToString("N").Substring(0, 8);
 
-                    // Kiểm tra trùng mã nhóm trong DB (hiếm nhưng nên có)
-                    while (DataProvider.Ins.DB.NHOMNGUOIDUNGs.Any(x => x.MaNhom == maNhom))
+                    while (GroupList.Any(x => x.GroupId == groupId))
                     {
-                        maNhom = "GR" + Guid.NewGuid().ToString("N").Substring(0, 8);
+                        groupId = "GR" + Guid.NewGuid().ToString("N").Substring(0, 8);
                     }
 
-                    var newPermission = new NHOMNGUOIDUNG()
+                    var newGroup = new UserGroupDTO()
                     {
-                        TenNhom = TenNhom.Trim(),
-                        MaNhom = maNhom
+                        GroupName = GroupName.Trim(),
+                        GroupId = groupId
                     };
 
-                    DataProvider.Ins.DB.NHOMNGUOIDUNGs.Add(newPermission);
-                    DataProvider.Ins.DB.SaveChanges();
-
-                    List.Add(newPermission);
+                    _userGroupService.Create(newGroup);
+                    GroupList.Add(newGroup);
 
                     Reset();
-                    MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi thêm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Add error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
-
 
             EditCommand = new RelayCommand<object>((p) =>
             {
@@ -358,26 +372,25 @@ namespace QuanLyTiecCuoi.ViewModel
                 {
                     return false;
                 }
-                if (SelectedItem.TenNhom == TenNhom)
+                if (SelectedItem.GroupName == GroupName)
                 {
-                    EditMessage = "Không có thay đổi nào để cập nhật";
+                    EditMessage = "No changes to update";
                     return false;
                 }
-                // Kiểm tra tính hợp lệ của dữ liệu
-                if (string.IsNullOrWhiteSpace(TenNhom))
+                if (string.IsNullOrWhiteSpace(GroupName))
                 {
-                    EditMessage = "Tên nhóm không được để trống";
+                    EditMessage = "Group name cannot be empty";
                     return false;
                 }
-                if (TenNhom == "Quản trị viên" || TenNhom.ToLower().Contains("quản trị viên") || TenNhom.ToLower().Contains("admin"))
+                if (GroupName == "Administrator" || GroupName.ToLower().Contains("administrator") || GroupName.ToLower().Contains("admin"))
                 {
-                    EditMessage = "Không thể sửa thành 'Quản trị viên'";
+                    EditMessage = "Cannot change to 'Administrator'";
                     return false;
                 }
-                var exists = DataProvider.Ins.DB.NHOMNGUOIDUNGs.Any(x => x.TenNhom == TenNhom);
+                var exists = GroupList.Any(x => x.GroupName == GroupName && x.GroupId != SelectedItem.GroupId);
                 if (exists)
                 {
-                    EditMessage = "Tên nhóm đã tồn tại";
+                    EditMessage = "Group name already exists";
                     return false;
                 }
                 EditMessage = string.Empty;
@@ -386,25 +399,24 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    var permission = DataProvider.Ins.DB.NHOMNGUOIDUNGs.Where(x => x.MaNhom == SelectedItem.MaNhom).SingleOrDefault();
-                    if (permission != null)
+                    var updateDto = new UserGroupDTO
                     {
-                        permission.TenNhom = TenNhom.Trim();
-                        DataProvider.Ins.DB.SaveChanges();
+                        GroupId = SelectedItem.GroupId,
+                        GroupName = GroupName.Trim()
+                    };
 
-                        SelectedItem.TenNhom = TenNhom.Trim();
+                    _userGroupService.Update(updateDto);
 
-                        var index = List.IndexOf(SelectedItem);
-                        List[index] = null;
-                        List[index] = permission;
+                    var index = GroupList.IndexOf(SelectedItem);
+                    GroupList[index] = null;
+                    GroupList[index] = updateDto;
 
-                        Reset();
-                        MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
+                    Reset();
+                    MessageBox.Show("Updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Update error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
 
@@ -412,11 +424,11 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 if (SelectedItem == null)
                     return false;
-                // Kiểm tra tham chiếu nếu có (ví dụ: kiểm tra bảng người dùng có nhóm quyền này không)
-                var hasReferences = DataProvider.Ins.DB.NGUOIDUNGs.Any(u => u.MaNhom == SelectedItem.MaNhom);
+
+                var hasReferences = _appUserService.GetAll().Any(u => u.GroupId == SelectedItem.GroupId);
                 if (hasReferences)
                 {
-                    DeleteMessage = "Đối tượng đang được tham chiếu.";
+                    DeleteMessage = "Object is being referenced.";
                     return false;
                 }
                 else
@@ -428,33 +440,52 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 try
                 {
-                    var result = MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm phân quyền này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var result = MessageBox.Show("Are you sure you want to delete this permission group?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        DataProvider.Ins.DB.NHOMNGUOIDUNGs.Remove(SelectedItem);
-                        DataProvider.Ins.DB.SaveChanges();
-
-                        List.Remove(SelectedItem);
+                        _userGroupService.Delete(SelectedItem.GroupId);
+                        GroupList.Remove(SelectedItem);
                         Reset();
 
-                        MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Deleted successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Hủy xóa", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Delete cancelled", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Delete error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
         }
+
         private void Reset()
         {
             SelectedItem = null;
-            TenNhom = string.Empty;
+            GroupName = string.Empty;
             SearchText = string.Empty;
         }
+    }
+
+    public class PermissionState : BaseViewModel
+    {
+        public string PermissionId { get; set; }
+        public string LoadedScreenName { get; set; }
+
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged();
+                UpdatePermission?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler UpdatePermission;
     }
 }

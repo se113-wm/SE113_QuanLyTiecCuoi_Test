@@ -10,117 +10,202 @@ namespace QuanLyTiecCuoi.ViewModel
 {
     public class ParameterViewModel : BaseViewModel
     {
-        private readonly IThamSoService _thamSoService;
+        #region Service
+        private readonly IParameterService _parameterService;
+        #endregion
 
-        private decimal _KiemTraPhat;
-        public decimal KiemTraPhat { get => _KiemTraPhat; set { _KiemTraPhat = value; OnPropertyChanged(); } }
-        private string _KiemTraPhatText;
-        public string KiemTraPhatText { get => _KiemTraPhatText; set { _KiemTraPhatText = value; OnPropertyChanged(); } }
+        #region Bindable Fields
+        private decimal _enablePenalty;
+        public decimal EnablePenalty
+        {
+            get => _enablePenalty;
+            set { _enablePenalty = value; OnPropertyChanged(); }
+        }
 
-        private string _TiLePhat;
-        public string TiLePhat { get => _TiLePhat; set { _TiLePhat = value; OnPropertyChanged(); } }
+        private string _enablePenaltyText;
+        public string EnablePenaltyText
+        {
+            get => _enablePenaltyText;
+            set { _enablePenaltyText = value; OnPropertyChanged(); }
+        }
 
-        private string _TiLeTienDatCocToiThieu;
-        public string TiLeTienDatCocToiThieu { get => _TiLeTienDatCocToiThieu; set { _TiLeTienDatCocToiThieu = value; OnPropertyChanged(); } }
+        private string _penaltyRate;
+        public string PenaltyRate
+        {
+            get => _penaltyRate;
+            set { _penaltyRate = value; OnPropertyChanged(); }
+        }
 
-        private string _TiLeSoBanDatTruocToiThieu;
-        public string TiLeSoBanDatTruocToiThieu { get => _TiLeSoBanDatTruocToiThieu; set { _TiLeSoBanDatTruocToiThieu = value; OnPropertyChanged(); } }
+        private string _minDepositRate;
+        public string MinDepositRate
+        {
+            get => _minDepositRate;
+            set { _minDepositRate = value; OnPropertyChanged(); }
+        }
+
+        private string _minAdvanceBookingRate;
+        public string MinAdvanceBookingRate
+        {
+            get => _minAdvanceBookingRate;
+            set { _minAdvanceBookingRate = value; OnPropertyChanged(); }
+        }
+        #endregion
+
+        #region Messages & Commands
+        private string _editMessage;
+        public string EditMessage
+        {
+            get => _editMessage;
+            set { _editMessage = value; OnPropertyChanged(); }
+        }
 
         public ICommand EditCommand { get; set; }
         public ICommand ResetCommand { get; set; }
+        #endregion
 
-        private string _editMessage;
-        public string EditMessage { get => _editMessage; set { _editMessage = value; OnPropertyChanged(); } }
+        #region Constructor
+        public ParameterViewModel(IParameterService parameterService)
+        {
+            _parameterService = parameterService;
 
-        private bool isInBounds(decimal value, decimal min, decimal max)
+            var parameterList = _parameterService.GetAll().ToList();
+
+            var enablePenalty = parameterList.FirstOrDefault(x => x.ParameterName == "EnablePenalty");
+            var penaltyRate = parameterList.FirstOrDefault(x => x.ParameterName == "PenaltyRate");
+            var minDepositRate = parameterList.FirstOrDefault(x => x.ParameterName == "MinDepositRate");
+            var minAdvanceBookingRate = parameterList.FirstOrDefault(x => x.ParameterName == "MinReserveTableRate");
+
+            if (enablePenalty == null || penaltyRate == null || minDepositRate == null || minAdvanceBookingRate == null)
+            {
+                MessageBox.Show("Không thể tải thông tin tham số. Vui lòng kiểm tra cơ sở dữ liệu.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                EnablePenalty = 0;
+                PenaltyRate = "0";
+                MinDepositRate = "0";
+                MinAdvanceBookingRate = "0";
+                EnablePenaltyText = "Không";
+            }
+            else
+            {
+                EnablePenalty = (decimal)enablePenalty.Value;
+                PenaltyRate = penaltyRate.Value.ToString();
+                MinDepositRate = minDepositRate.Value.ToString();
+                MinAdvanceBookingRate = minAdvanceBookingRate.Value.ToString();
+                EnablePenaltyText = EnablePenalty == 1 ? "Có" : "Không";
+            }
+
+            EditCommand = new RelayCommand<object>(
+                (p) => CanEdit(parameterList),
+                (p) => EditParameters(parameterList)
+            );
+
+            ResetCommand = new RelayCommand<object>(
+                (p) => true,
+                (p) => Reset(parameterList)
+            );
+        }
+        #endregion
+
+        #region Validation Helpers
+        private bool IsInBounds(decimal value, decimal min, decimal max)
         {
             return value >= min && value <= max;
         }
+        #endregion
 
-        // Constructor với Dependency Injection
-        public ParameterViewModel(IThamSoService thamSoService)
+        #region Edit
+        private bool CanEdit(System.Collections.Generic.List<ParameterDTO> parameterList)
         {
-            _thamSoService = thamSoService;
-
-            var thamSoList = _thamSoService.GetAll().ToList();
-
-            var kiemTraPhat = thamSoList.First(x => x.TenThamSo == "KiemTraPhat");
-            var tiLePhat = thamSoList.First(x => x.TenThamSo == "TiLePhat");
-            var tiLeTienDatCocToiThieu = thamSoList.First(x => x.TenThamSo == "TiLeTienDatCocToiThieu");
-            var tiLeSoBanDatTruocToiThieu = thamSoList.First(x => x.TenThamSo == "TiLeSoBanDatTruocToiThieu");
-
-            KiemTraPhat = (decimal)kiemTraPhat.GiaTri;
-            TiLePhat = tiLePhat.GiaTri.ToString();
-            TiLeTienDatCocToiThieu = tiLeTienDatCocToiThieu.GiaTri.ToString();
-            TiLeSoBanDatTruocToiThieu = tiLeSoBanDatTruocToiThieu.GiaTri.ToString();
-
-            if (KiemTraPhat == 1)
-                KiemTraPhatText = "Có";
-            else 
-                KiemTraPhatText = "Không";
-
-            EditCommand = new RelayCommand<object>((p) =>
+            if (string.IsNullOrWhiteSpace(PenaltyRate) ||
+                string.IsNullOrWhiteSpace(MinDepositRate) ||
+                string.IsNullOrWhiteSpace(MinAdvanceBookingRate))
             {
-                if (string.IsNullOrWhiteSpace(TiLePhat) || string.IsNullOrWhiteSpace(TiLeTienDatCocToiThieu) || string.IsNullOrWhiteSpace(TiLeSoBanDatTruocToiThieu))
-                {
-                    EditMessage = "Vui lòng nhập đầy đủ thông tin.";
-                    return false;
-                }
-                if (!decimal.TryParse(TiLePhat, out _) || !decimal.TryParse(TiLeTienDatCocToiThieu, out _) || !decimal.TryParse(TiLeSoBanDatTruocToiThieu, out _))
-                {
-                    EditMessage = "Vui lòng nhập đúng định dạng số.";
-                    return false;
-                }
-                if (!isInBounds(decimal.Parse(TiLePhat), 0, 1) || !isInBounds(decimal.Parse(TiLeTienDatCocToiThieu), 0, 1) || !isInBounds(decimal.Parse(TiLeSoBanDatTruocToiThieu), 0, 1))
-                {
-                    EditMessage = "Vui lòng nhập số trong khoảng từ 0 đến 1.";
-                    return false;
-                }
-                EditMessage = string.Empty;
-                return true;
-            }, (p) =>
+                EditMessage = "Vui lòng nhập đầy đủ thông tin.";
+                return false;
+            }
+
+            if (!decimal.TryParse(PenaltyRate, out _) ||
+                !decimal.TryParse(MinDepositRate, out _) ||
+                !decimal.TryParse(MinAdvanceBookingRate, out _))
             {
-                if (thamSoList != null)
-                {
-                    try
-                    {
-                        kiemTraPhat.TenThamSo = "KiemTraPhat";
-                        decimal gt = KiemTraPhatText == "Có" ? 1 : 0;
-                        kiemTraPhat.GiaTri = gt;
+                EditMessage = "Vui lòng nhập đúng định dạng số.";
+                return false;
+            }
 
-                        tiLePhat.TenThamSo = "TiLePhat";
-                        tiLePhat.GiaTri = decimal.Parse(TiLePhat);
-
-                        tiLeTienDatCocToiThieu.TenThamSo = "TiLeTienDatCocToiThieu";
-                        tiLeTienDatCocToiThieu.GiaTri = decimal.Parse(TiLeTienDatCocToiThieu);
-
-                        tiLeSoBanDatTruocToiThieu.TenThamSo = "TiLeSoBanDatTruocToiThieu";
-                        tiLeSoBanDatTruocToiThieu.GiaTri = decimal.Parse(TiLeSoBanDatTruocToiThieu);
-
-                        _thamSoService.Update(tiLePhat);
-                        _thamSoService.Update(tiLeTienDatCocToiThieu);
-                        _thamSoService.Update(tiLeSoBanDatTruocToiThieu);
-                        _thamSoService.Update(kiemTraPhat);
-
-                        MessageBox.Show($"Cập nhật tham số thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                        EditMessage = string.Empty;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Lỗi khi cập nhật tham số: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            });
-            
-            ResetCommand = new RelayCommand<object>((p) => true, (p) =>
+            if (!IsInBounds(decimal.Parse(PenaltyRate), 0, 1) ||
+                !IsInBounds(decimal.Parse(MinDepositRate), 0, 1) ||
+                !IsInBounds(decimal.Parse(MinAdvanceBookingRate), 0, 1))
             {
-                KiemTraPhat = (decimal)thamSoList.First(x => x.TenThamSo == "KiemTraPhat").GiaTri;
-                TiLePhat = thamSoList.First(x => x.TenThamSo == "TiLePhat").GiaTri.ToString();
-                TiLeTienDatCocToiThieu = thamSoList.First(x => x.TenThamSo == "TiLeTienDatCocToiThieu").GiaTri.ToString();
-                TiLeSoBanDatTruocToiThieu = thamSoList.First(x => x.TenThamSo == "TiLeSoBanDatTruocToiThieu").GiaTri.ToString();
-                KiemTraPhatText = KiemTraPhat == 1 ? "Có" : "Không";
-            });
+                EditMessage = "Vui lòng nhập số trong khoảng từ 0 đến 1.";
+                return false;
+            }
+
+            EditMessage = string.Empty;
+            return true;
         }
+
+        private void EditParameters(System.Collections.Generic.List<ParameterDTO> parameterList)
+        {
+            if (parameterList == null)
+                return;
+
+            try
+            {
+                var enablePenalty = parameterList.FirstOrDefault(x => x.ParameterName == "EnablePenalty");
+                var penaltyRate = parameterList.FirstOrDefault(x => x.ParameterName == "PenaltyRate");
+                var minDepositRate = parameterList.FirstOrDefault(x => x.ParameterName == "MinDepositRate");
+                var minAdvanceBookingRate = parameterList.FirstOrDefault(x => x.ParameterName == "MinReserveTableRate");
+
+                if (enablePenalty == null || penaltyRate == null || minDepositRate == null || minAdvanceBookingRate == null)
+                {
+                    MessageBox.Show("Không tìm thấy tham số trong cơ sở dữ liệu.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                enablePenalty.ParameterName = "EnablePenalty";
+                decimal value = EnablePenaltyText == "Có" ? 1 : 0;
+                enablePenalty.Value = value;
+
+                penaltyRate.ParameterName = "PenaltyRate";
+                penaltyRate.Value = decimal.Parse(PenaltyRate);
+
+                minDepositRate.ParameterName = "MinDepositRate";
+                minDepositRate.Value = decimal.Parse(MinDepositRate);
+
+                minAdvanceBookingRate.ParameterName = "MinReserveTableRate";
+                minAdvanceBookingRate.Value = decimal.Parse(MinAdvanceBookingRate);
+
+                _parameterService.Update(penaltyRate);
+                _parameterService.Update(minDepositRate);
+                _parameterService.Update(minAdvanceBookingRate);
+                _parameterService.Update(enablePenalty);
+
+                MessageBox.Show("Cập nhật tham số thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                EditMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật tham số: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region Helpers
+        private void Reset(System.Collections.Generic.List<ParameterDTO> parameterList)
+        {
+            var enablePenalty = parameterList.FirstOrDefault(x => x.ParameterName == "EnablePenalty");
+            var penaltyRate = parameterList.FirstOrDefault(x => x.ParameterName == "PenaltyRate");
+            var minDepositRate = parameterList.FirstOrDefault(x => x.ParameterName == "MinDepositRate");
+            var minAdvanceBookingRate = parameterList.FirstOrDefault(x => x.ParameterName == "MinReserveTableRate");
+
+            if (enablePenalty != null && penaltyRate != null && minDepositRate != null && minAdvanceBookingRate != null)
+            {
+                EnablePenalty = (decimal)enablePenalty.Value;
+                PenaltyRate = penaltyRate.Value.ToString();
+                MinDepositRate = minDepositRate.Value.ToString();
+                MinAdvanceBookingRate = minAdvanceBookingRate.Value.ToString();
+                EnablePenaltyText = EnablePenalty == 1 ? "Có" : "Không";
+            }
+        }
+        #endregion
     }
 }

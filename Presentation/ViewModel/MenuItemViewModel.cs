@@ -12,19 +12,19 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class MenuItemViewModel : BaseViewModel
     {
-        private readonly IMonAnService _monAnService;
+        private readonly IDishService _DishService;
 
         // Danh sách gốc (không thay đổi)
-        private ObservableCollection<MONANDTO> _originalFoodList;
-        public ObservableCollection<MONANDTO> OriginalFoodList
+        private ObservableCollection<DishDTO> _originalFoodList;
+        public ObservableCollection<DishDTO> OriginalFoodList
         {
             get => _originalFoodList;
             set { _originalFoodList = value; OnPropertyChanged(); }
         }
 
         // Danh sách hiển thị (sau khi lọc)
-        private ObservableCollection<MONANDTO> _foodList;
-        public ObservableCollection<MONANDTO> FoodList
+        private ObservableCollection<DishDTO> _foodList;
+        public ObservableCollection<DishDTO> FoodList
         {
             get => _foodList;
             set { _foodList = value; OnPropertyChanged(); }
@@ -65,8 +65,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         }
 
         // Món ăn được chọn
-        private MONANDTO _selectedFood;
-        public MONANDTO SelectedFood
+        private DishDTO _selectedFood;
+        public DishDTO SelectedFood
         {
             get => _selectedFood;
             set
@@ -85,12 +85,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand CancelCommand { get; set; }
 
         // Constructor với Dependency Injection
-        public MenuItemViewModel(IMonAnService monAnService)
+        public MenuItemViewModel(IDishService DishService)
         {
-            _monAnService = monAnService;
+            _DishService = DishService;
             
-            OriginalFoodList = new ObservableCollection<MONANDTO>(_monAnService.GetAll());
-            FoodList = new ObservableCollection<MONANDTO>(OriginalFoodList);
+            OriginalFoodList = new ObservableCollection<DishDTO>(_DishService.GetAll());
+            FoodList = new ObservableCollection<DishDTO>(OriginalFoodList);
 
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
 
@@ -98,7 +98,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 (p) => SelectedFood != null,
                 (p) =>
                 {
-                    MessageBox.Show($"Bạn đã chọn món: {SelectedFood.TenMonAn}", "Xác nhận", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Bạn đã chọn món: {SelectedFood.DishName}", "Xác nhận", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     if (p is Window window)
                     {
@@ -124,7 +124,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         {
             if (string.IsNullOrWhiteSpace(SearchText) || string.IsNullOrWhiteSpace(SelectedSearchProperty))
             {
-                FoodList = new ObservableCollection<MONANDTO>(OriginalFoodList);
+                FoodList = new ObservableCollection<DishDTO>(OriginalFoodList);
                 return;
             }
 
@@ -133,25 +133,25 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             switch (SelectedSearchProperty)
             {
                 case "Tên món":
-                    FoodList = new ObservableCollection<MONANDTO>(
-                        OriginalFoodList.Where(x => !string.IsNullOrWhiteSpace(x.TenMonAn) &&
-                            x.TenMonAn.ToLowerInvariant().Contains(search)));
+                    FoodList = new ObservableCollection<DishDTO>(
+                        OriginalFoodList.Where(x => !string.IsNullOrWhiteSpace(x.DishName) &&
+                            x.DishName.ToLowerInvariant().Contains(search)));
                     break;
                 case "Đơn giá":
-                    FoodList = new ObservableCollection<MONANDTO>(
+                    FoodList = new ObservableCollection<DishDTO>(
                             OriginalFoodList.Where(x =>
-                                x.DonGia != null &&
-                                x.DonGia.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
+                                x.UnitPrice != null &&
+                                x.UnitPrice.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
                             )
                         );
                     break;
                 case "Ghi chú":
-                    FoodList = new ObservableCollection<MONANDTO>(
-                        OriginalFoodList.Where(x => !string.IsNullOrWhiteSpace(x.GhiChu) &&
-                            x.GhiChu.ToLowerInvariant().Contains(search)));
+                    FoodList = new ObservableCollection<DishDTO>(
+                        OriginalFoodList.Where(x => !string.IsNullOrWhiteSpace(x.Note) &&
+                            x.Note.ToLowerInvariant().Contains(search)));
                     break;
                 default:
-                    FoodList = new ObservableCollection<MONANDTO>(OriginalFoodList);
+                    FoodList = new ObservableCollection<DishDTO>(OriginalFoodList);
                     break;
             }
         }

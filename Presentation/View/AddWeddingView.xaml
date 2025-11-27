@@ -78,7 +78,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tên chú rể"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding TenChuRe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding GroomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <!--  Bride Name  -->
                         <TextBox
                             Grid.Row="0"
@@ -86,7 +86,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tên cô dâu"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding TenCoDau, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding BrideName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <!--  Phone  -->
                         <TextBox
                             Grid.Row="0"
@@ -94,13 +94,13 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Điện thoại"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding DienThoai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <!--  Wedding Date  -->
                         <DatePicker
                             Grid.Row="0"
                             Grid.Column="3"
                             Margin="5"
-                            helper:DatePickerHelper.BlackoutDatesSource="{Binding NgayKhongChoChon}"
+                            helper:DatePickerHelper.BlackoutDatesSource="{Binding UnavailableDates}"
                             materialDesign:HintAssist.Hint="Ngày đãi tiệc"
                             Language="vi-VN">
                             <DatePicker.Resources>
@@ -146,7 +146,7 @@
                             <DatePicker.SelectedDate>
                                 <Binding
                                     Mode="TwoWay"
-                                    Path="NgayDaiTiec"
+                                    Path="WeddingDate"
                                     UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
                                         <local:FutureDateValidationRule ValidatesOnTargetUpdated="True" />
@@ -162,7 +162,7 @@
                             materialDesign:HintAssist.Hint="Ngày đặt tiệc"
                             IsReadOnly="True"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding NgayDatTiec, Mode=OneWay}" />
+                            Text="{Binding BookingDate, Mode=OneWay}" />
 
                         <!--  Session  -->
                         <ComboBox
@@ -170,8 +170,8 @@
                             Grid.Column="0"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Ca"
-                            ItemsSource="{Binding CaList}"
-                            SelectedItem="{Binding SelectedCa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding ShiftList}"
+                            SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -192,8 +192,8 @@
                             Grid.Column="1"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Sảnh"
-                            ItemsSource="{Binding SanhList}"
-                            SelectedItem="{Binding SelectedSanh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding HallList}"
+                            SelectedItem="{Binding SelectedHall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -204,7 +204,7 @@
                                         <TextBlock Foreground="Gray" Text="{Binding SoLuongBanToiDa}" />
                                         <TextBlock Foreground="Gray" Text=" bàn | " />
                                         <TextBlock Foreground="Gray" Text="Đơn giá: " />
-                                        <TextBlock Foreground="Gray" Text="{Binding LoaiSanh.DonGiaBanToiThieu, StringFormat=N0}" />
+                                        <TextBlock Foreground="Gray" Text="{Binding LoaiSanh.MinTablePrice, StringFormat=N0}" />
                                         <TextBlock Foreground="Gray" Text="đ" />
 
                                     </StackPanel>
@@ -218,7 +218,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tiền đặt cọc"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding TienDatCoc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                            Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                         <!--  Table Count  -->
                         <TextBox
                             Grid.Row="1"
@@ -226,7 +226,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Số lượng bàn"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding SoLuongBan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding TableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <!--  Reserve Table Count  -->
                         <TextBox
                             Grid.Row="1"
@@ -234,7 +234,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Số bàn dự trữ"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding SoBanDuTru, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding ReserveTableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                 </StackPanel>
             </materialDesign:Card>
@@ -314,7 +314,7 @@
                                         Height="24"
                                         Margin="5,0,0,0"
                                         Background="{DynamicResource PrimaryHueMidBrush}"
-                                        Command="{Binding ResetTDCommand}"
+                                        Command="{Binding ResetMenuCommand}"
                                         Foreground="Purple"
                                         Style="{StaticResource MaterialDesignToolButton}"
                                         ToolTip="Reset thông tin">
@@ -332,7 +332,7 @@
                                     materialDesign:HintAssist.Hint="Tên món ăn"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding MonAn.TenMonAn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Dish.DishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="0"
@@ -340,7 +340,7 @@
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Số lượng"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding TD_SoLuong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding MenuQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                                 <TextBox
                                     Grid.Row="1"
                                     Grid.Column="1"
@@ -349,12 +349,12 @@
                                     materialDesign:HintAssist.Hint="Đơn giá"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding MonAn.DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding Dish.UnitPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                                 <Button
                                     Grid.Row="1"
                                     Grid.Column="2"
                                     Margin="10,0,0,0"
-                                    Command="{Binding ChonMonAnCommand}"
+                                    Command="{Binding SelectDishCommand}"
                                     Content="Chọn món"
                                     Style="{StaticResource MaterialDesignOutlinedButton}" />
                                 <TextBox
@@ -365,7 +365,7 @@
                                     materialDesign:HintAssist.Hint="Ghi chú"
                                     AcceptsReturn="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding TD_GhiChu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding MenuNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     TextWrapping="Wrap" />
                             </Grid>
                         </materialDesign:Card>
@@ -476,7 +476,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding MonAn.TenMonAn}"
+                                                            Text="{Binding Dish.DishName}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -500,7 +500,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding MonAn.DonGia, StringFormat=N0}"
+                                                            Text="{Binding Dish.UnitPrice, StringFormat=N0}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -570,7 +570,7 @@
                                         Height="24"
                                         Margin="5,0,0,0"
                                         Background="{DynamicResource PrimaryHueMidBrush}"
-                                        Command="{Binding ResetCTDVCommand}"
+                                        Command="{Binding ResetServiceCommand}"
                                         Foreground="Purple"
                                         Style="{StaticResource MaterialDesignToolButton}"
                                         ToolTip="Reset thông tin">
@@ -588,7 +588,7 @@
                                     materialDesign:HintAssist.Hint="Tên dịch vụ"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding DichVu.TenDichVu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Service.ServiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="0"
@@ -596,7 +596,7 @@
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Số lượng"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding DV_SoLuong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding ServiceQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                                 <TextBox
                                     Grid.Row="1"
                                     Grid.Column="1"
@@ -605,12 +605,12 @@
                                     materialDesign:HintAssist.Hint="Đơn giá"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding DichVu.DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding Service.UnitPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
                                 <Button
                                     Grid.Row="1"
                                     Grid.Column="2"
                                     Margin="0,0,10,0"
-                                    Command="{Binding ChonDichVuCommand}"
+                                    Command="{Binding SelectServiceCommand}"
                                     Content="Chọn dịch vụ"
                                     Style="{StaticResource MaterialDesignOutlinedButton}" />
                                 <TextBox
@@ -621,7 +621,7 @@
                                     materialDesign:HintAssist.Hint="Ghi chú"
                                     AcceptsReturn="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding DV_GhiChu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding ServiceNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     TextWrapping="Wrap" />
                             </Grid>
                         </materialDesign:Card>
@@ -733,7 +733,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding DichVu.TenDichVu}"
+                                                            Text="{Binding Service.ServiceName}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -757,7 +757,7 @@
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
-                                                            Text="{Binding DichVu.DonGia, StringFormat=N0}"
+                                                            Text="{Binding Service.UnitPrice, StringFormat=N0}"
                                                             TextAlignment="Left" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>

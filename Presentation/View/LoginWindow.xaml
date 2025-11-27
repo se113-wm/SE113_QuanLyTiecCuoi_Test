@@ -11,11 +11,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:QuanLyTiecCuoi.ViewModel"
     Name="loginWindow"
-    Title="Đăng Nhập"
+    Title="Login"
     Width="875"
     Height="645"
     Background="{DynamicResource MaterialDesignPaper}"
-    DataContext="{StaticResource LoginViewModel}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Icon="Assets/icon_window.ico"
     SizeToContent="Manual"
@@ -25,17 +24,15 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
-    <Grid>
-        <!--  Định nghĩa các hàng  -->
+    mc:Ignorable="d"
+    AutomationProperties.AutomationId="LoginWindow">
+    <Grid AutomationProperties.AutomationId="LoginMainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <!--  Hàng cho nội dung chính  -->
         </Grid.RowDefinitions>
 
-        <!--  Nội dung chính  -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" AutomationProperties.AutomationId="LoginContentGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -46,28 +43,31 @@
                     Opacity="0.4"
                     ShadowDepth="1" />
             </Grid.Effect>
-            <Border Background="#6a7eee" ClipToBounds="True">
+            
+            <Border Background="#6a7eee" ClipToBounds="True" AutomationProperties.AutomationId="LoginLeftPanel">
                 <Grid>
-                    <StackPanel Margin="0,120,0,0" VerticalAlignment="Top">
+                    <StackPanel Margin="0,120,0,0" VerticalAlignment="Top" AutomationProperties.AutomationId="WelcomeStack">
                         <TextBlock
                             FontSize="46"
                             FontWeight="Light"
                             Foreground="White"
-                            Text="Xin Chào"
-                            TextAlignment="Center" />
+                            Text="Welcome"
+                            TextAlignment="Center"
+                            AutomationProperties.AutomationId="WelcomeText" />
                         <TextBlock
                             FontSize="18"
                             FontWeight="Light"
                             Foreground="White"
-                            Text="Đăng nhập"
-                            TextAlignment="Center" />
+                            Text="Login to continue"
+                            TextAlignment="Center"
+                            AutomationProperties.AutomationId="WelcomeSubtitleText" />
                         <TextBlock
                             FontSize="18"
                             FontWeight="Light"
                             Foreground="White"
-                            Text="Trung tâm tiệc cưới UIT"
-                            TextAlignment="Center" />
-
+                            Text="UIT Wedding Center"
+                            TextAlignment="Center"
+                            AutomationProperties.AutomationId="CenterNameText" />
                     </StackPanel>
 
                     <Ellipse
@@ -104,10 +104,10 @@
                         VerticalAlignment="Bottom"
                         Fill="#87c5ff"
                         Opacity="0.8" />
-
                 </Grid>
             </Border>
-            <Border Grid.Column="1" Background="White">
+            
+            <Border Grid.Column="1" Background="White" AutomationProperties.AutomationId="LoginFormPanel">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -118,62 +118,66 @@
                     <StackPanel
                         Grid.Row="1"
                         Height="206"
-                        VerticalAlignment="Center">
-                        <!--  Ô nhập Tên đăng nhập  -->
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="LoginInputStack">
+                        
                         <Border
                             Margin="6"
                             Padding="6"
                             Background="Transparent"
                             CornerRadius="5"
-                            Opacity="0.7">
+                            Opacity="0.7"
+                            AutomationProperties.AutomationId="UsernameBorder">
                             <Grid>
                                 <TextBox
-                                    x:Name="UserNameBox"
+                                    x:Name="UsernameTextBox"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    materialDesign:HintAssist.Hint="Tên Đăng Nhập"
+                                    materialDesign:HintAssist.Hint="Username"
                                     materialDesign:ValidationAssist.PopupPlacement="AbsolutePoint"
                                     FontSize="23"
                                     Foreground="Black"
                                     Style="{StaticResource MaterialDesignFilledTextBox}"
-                                    Text="{Binding UserName}"
-                                    TextWrapping="Wrap">
+                                    Text="{Binding Username}"
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="UsernameTextBox">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="TextChanged">
-                                            <i:InvokeCommandAction Command="{Binding UserNameChangedCommand}" CommandParameter="{Binding ElementName=UserNameBox}" />
+                                            <i:InvokeCommandAction Command="{Binding UsernameChangedCommand}" CommandParameter="{Binding ElementName=UsernameTextBox}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBox>
                             </Grid>
                         </Border>
 
-                        <!--  Ô nhập Mật khẩu  -->
                         <Border
                             Margin="6"
                             Padding="6"
                             Background="Transparent"
                             CornerRadius="5"
-                            Opacity="0.7">
+                            Opacity="0.7"
+                            AutomationProperties.AutomationId="PasswordBorder">
                             <Grid>
                                 <PasswordBox
-                                    x:Name="FloatingPasswordBox"
+                                    x:Name="PasswordBox"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    materialDesign:HintAssist.Hint="Mật Khẩu"
+                                    materialDesign:HintAssist.Hint="Password"
                                     materialDesign:TextFieldAssist.HasClearButton="True"
                                     FontSize="23"
                                     Foreground="Black"
-                                    Style="{StaticResource MaterialDesignFilledRevealPasswordBox}">
+                                    Style="{StaticResource MaterialDesignFilledRevealPasswordBox}"
+                                    AutomationProperties.AutomationId="PasswordBox">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PasswordChanged">
-                                            <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=FloatingPasswordBox}" />
+                                            <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=PasswordBox}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </PasswordBox>
                             </Grid>
                         </Border>
-
                     </StackPanel>
+                    
                     <Border
                         Grid.Row="2"
                         Width="250"
@@ -181,16 +185,18 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="#6a7eee"
-                        CornerRadius="10">
+                        CornerRadius="10"
+                        AutomationProperties.AutomationId="LoginButtonBorder">
                         <Button
                             Background="Transparent"
                             BorderThickness="0"
                             Command="{Binding LoginCommand}"
                             CommandParameter="{Binding ElementName=loginWindow}"
-                            Content="Đăng Nhập"
+                            Content="Login"
                             FontSize="18"
                             Foreground="White"
-                            IsDefault="True" />
+                            IsDefault="True"
+                            AutomationProperties.AutomationId="LoginButton" />
                     </Border>
                 </Grid>
             </Border>

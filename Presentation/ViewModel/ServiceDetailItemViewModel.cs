@@ -11,19 +11,19 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class ServiceDetailItemViewModel : BaseViewModel
     {
-        private readonly IDichVuService _dichVuService;
+        private readonly IServiceService _ServiceService;
 
         // Original list (unchanged)
-        private ObservableCollection<DICHVUDTO> _originalServiceList;
-        public ObservableCollection<DICHVUDTO> OriginalServiceList
+        private ObservableCollection<ServiceDTO> _originalServiceList;
+        public ObservableCollection<ServiceDTO> OriginalServiceList
         {
             get => _originalServiceList;
             set { _originalServiceList = value; OnPropertyChanged(); }
         }
 
         // Displayed list (after filtering)
-        private ObservableCollection<DICHVUDTO> _serviceList;
-        public ObservableCollection<DICHVUDTO> ServiceList
+        private ObservableCollection<ServiceDTO> _serviceList;
+        public ObservableCollection<ServiceDTO> ServiceList
         {
             get => _serviceList;
             set { _serviceList = value; OnPropertyChanged(); }
@@ -64,8 +64,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         }
 
         // Selected service
-        private DICHVUDTO _selectedService;
-        public DICHVUDTO SelectedService
+        private ServiceDTO _selectedService;
+        public ServiceDTO SelectedService
         {
             get => _selectedService;
             set
@@ -84,12 +84,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand CancelCommand { get; set; }
 
         // Constructor với Dependency Injection
-        public ServiceDetailItemViewModel(IDichVuService dichVuService)
+        public ServiceDetailItemViewModel(IServiceService ServiceService)
         {
-            _dichVuService = dichVuService;
+            _ServiceService = ServiceService;
             
-            OriginalServiceList = new ObservableCollection<DICHVUDTO>(_dichVuService.GetAll());
-            ServiceList = new ObservableCollection<DICHVUDTO>(OriginalServiceList);
+            OriginalServiceList = new ObservableCollection<ServiceDTO>(_ServiceService.GetAll());
+            ServiceList = new ObservableCollection<ServiceDTO>(OriginalServiceList);
 
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
 
@@ -97,7 +97,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 (p) => SelectedService != null,
                 (p) =>
                 {
-                    MessageBox.Show($"Bạn đã chọn dịch vụ: {SelectedService.TenDichVu}", "Xác nhận", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Bạn đã chọn dịch vụ: {SelectedService.ServiceName}", "Xác nhận", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     if (p is Window window)
                     {
@@ -123,7 +123,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         {
             if (string.IsNullOrWhiteSpace(SearchText) || string.IsNullOrWhiteSpace(SelectedSearchProperty))
             {
-                ServiceList = new ObservableCollection<DICHVUDTO>(OriginalServiceList);
+                ServiceList = new ObservableCollection<ServiceDTO>(OriginalServiceList);
                 return;
             }
 
@@ -132,25 +132,25 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             switch (SelectedSearchProperty)
             {
                 case "Tên dịch vụ":
-                    ServiceList = new ObservableCollection<DICHVUDTO>(
-                        OriginalServiceList.Where(x => !string.IsNullOrWhiteSpace(x.TenDichVu) &&
-                            x.TenDichVu.ToLowerInvariant().Contains(search)));
+                    ServiceList = new ObservableCollection<ServiceDTO>(
+                        OriginalServiceList.Where(x => !string.IsNullOrWhiteSpace(x.ServiceName) &&
+                            x.ServiceName.ToLowerInvariant().Contains(search)));
                     break;
                 case "Đơn giá":
-                    ServiceList = new ObservableCollection<DICHVUDTO>(
+                    ServiceList = new ObservableCollection<ServiceDTO>(
                         OriginalServiceList.Where(x =>
-                            x.DonGia != null &&
-                            x.DonGia.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
+                            x.UnitPrice != null &&
+                            x.UnitPrice.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
                         )
                     );
                     break;
                 case "Ghi chú":
-                    ServiceList = new ObservableCollection<DICHVUDTO>(
-                        OriginalServiceList.Where(x => !string.IsNullOrWhiteSpace(x.GhiChu) &&
-                            x.GhiChu.ToLowerInvariant().Contains(search)));
+                    ServiceList = new ObservableCollection<ServiceDTO>(
+                        OriginalServiceList.Where(x => !string.IsNullOrWhiteSpace(x.Note) &&
+                            x.Note.ToLowerInvariant().Contains(search)));
                     break;
                 default:
-                    ServiceList = new ObservableCollection<DICHVUDTO>(OriginalServiceList);
+                    ServiceList = new ObservableCollection<ServiceDTO>(OriginalServiceList);
                     break;
             }
         }

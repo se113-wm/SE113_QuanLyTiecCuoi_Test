@@ -19,8 +19,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
     public class HomeViewModel : BaseViewModel
     {
-        private readonly CtBaoCaoDsService _baoCaoService = new CtBaoCaoDsService();
-        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private readonly IRevenueReportDetailService _revenueReportDetailService;
+        private readonly IBookingService _BookingService;
         private MainViewModel _mainVM;
 
         public ICommand DatTiecNgayCommand { get; set; }
@@ -77,9 +77,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand PreviousImageCommand { get; }
 
         // Constructor với Dependency Injection
-        public HomeViewModel(MainViewModel mainVM, IPhieuDatTiecService phieuDatTiecService)
+        public HomeViewModel(MainViewModel mainVM, IBookingService BookingService, IRevenueReportDetailService revenueReportDetailService)
         {
-            _phieuDatTiecService = phieuDatTiecService;
+            _revenueReportDetailService = revenueReportDetailService;
+            _BookingService = BookingService;
             _mainVM = mainVM;
 
             LoadRecentBookings();
@@ -117,16 +118,16 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private void LoadRecentBookings()
         {
-            var bookings = _phieuDatTiecService.GetAll()
-                .Where(x => x.NgayDatTiec.HasValue)
-                .OrderByDescending(x => x.NgayDatTiec.Value)
+            var bookings = _BookingService.GetAll()
+                .Where(x => x.BookingDate.HasValue)
+                .OrderByDescending(x => x.BookingDate.Value)
                 .Take(5)
                 .Select(x => new RecentBookingViewModel
                 {
-                    BrideGroom = $"{x.TenCoDau} - {x.TenChuRe}",
-                    Hall = x.Sanh?.TenSanh ?? "",
-                    TableCount = x.SoLuongBan ?? 0,
-                    BookingDate = x.NgayDatTiec ?? DateTime.MinValue
+                    BrideGroom = $"{x.BrideName} - {x.GroomName}",
+                    Hall = x.Hall?.HallName ?? "",
+                    TableCount = x.TableCount ?? 0,
+                    BookingDate = x.BookingDate ?? DateTime.MinValue
                 });
 
             RecentBookings = new ObservableCollection<RecentBookingViewModel>(bookings);
@@ -136,13 +137,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void LoadWeddingDays()
         {
             var now = DateTime.Today;
-            var weddings = _phieuDatTiecService.GetAll()
-                .Where(x => x.NgayDaiTiec.HasValue && x.NgayDaiTiec.Value >= now)
-                .OrderBy(x => x.NgayDaiTiec.Value)
+            var weddings = _BookingService.GetAll()
+                .Where(x => x.WeddingDate.HasValue && x.WeddingDate.Value >= now)
+                .OrderBy(x => x.WeddingDate.Value)
                 .Select(x => new SpecialDateInfo
                 {
-                    Date = x.NgayDaiTiec.Value,
-                    Tooltip = $"{x.TenCoDau} - {x.TenChuRe}\nSảnh: {x.Sanh?.TenSanh ?? ""}\nBàn: {x.SoLuongBan ?? 0}"
+                    Date = x.WeddingDate.Value,
+                    Tooltip = $"{x.BrideName} - {x.GroomName}\nSảnh: {x.Hall?.HallName ?? ""}\nBàn: {x.TableCount ?? 0}"
                 });
 
             WeddingDays = new ObservableCollection<SpecialDateInfo>(weddings);
@@ -151,10 +152,10 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         private void LoadStatisticChart()
         {
-            var allReports = _baoCaoService.GetAll()
-                    .OrderByDescending(x => x.Nam)
-                    .ThenByDescending(x => x.Thang)
-                    .ThenByDescending(x => x.Ngay)
+            var allReports = _revenueReportDetailService.GetAll()
+                    .OrderByDescending(x => x.Year)
+                    .ThenByDescending(x => x.Month)
+                    .ThenByDescending(x => x.Day)
                     .ToList();
 
             if (allReports.Count == 0)
@@ -168,8 +169,8 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             var currentYear = DateTime.Now.Year;
 
             var currentMonthReports = allReports
-                .Where(x => x.Thang == currentMonth && x.Nam == currentYear)
-                .OrderBy(x => x.Ngay)
+                .Where(x => x.Month == currentMonth && x.Year == currentYear)
+                .OrderBy(x => x.Day)
                 .ToList();
 
             var chartVM = new HomeChartViewModel(currentMonthReports);

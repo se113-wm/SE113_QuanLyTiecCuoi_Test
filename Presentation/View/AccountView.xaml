@@ -67,12 +67,12 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tên đăng nhập"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding TenDangNhap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBox
                             Margin="5"
                             materialDesign:HintAssist.Hint="Họ tên"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding HoTen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBox
                             Margin="5"
                             materialDesign:HintAssist.Hint="Email"
@@ -84,7 +84,7 @@
                             FontSize="14"
                             IsReadOnly="True"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding TenNhom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
                     <StackPanel
@@ -237,7 +237,7 @@
                                             HorizontalAlignment="Right"
                                             Text="Nhập lại mật khẩu mới:" />
                                         <PasswordBox
-                                            x:Name="NewPassword1Box"
+                                            x:Name="ConfirmNewPasswordBox"
                                             Grid.Column="1"
                                             Margin="20,5,0,0"
                                             HorizontalAlignment="Stretch"
@@ -248,10 +248,10 @@
                                             Foreground="Black"
                                             Background="White"
                                             Style="{StaticResource MaterialDesignFilledRevealPasswordBox}"
-                                            helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmNewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="PasswordChanged">
-                                                    <i:InvokeCommandAction Command="{Binding NewPassword1ChangedCommand}" CommandParameter="{Binding ElementName=NewPassword1Box}" />
+                                                    <i:InvokeCommandAction Command="{Binding ConfirmNewPasswordChangedCommand}" CommandParameter="{Binding ElementName=ConfirmNewPasswordBox}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </PasswordBox>

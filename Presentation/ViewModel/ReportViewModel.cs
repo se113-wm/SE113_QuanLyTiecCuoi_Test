@@ -20,15 +20,16 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+
 namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class ReportViewModel : INotifyPropertyChanged
     {
-        private readonly ICtBaoCaoDsService _ctBaoCaoService;
+        private readonly IRevenueReportDetailService _revenueReportDetailService;
 
         public ObservableCollection<int> Months { get; set; }
         public ObservableCollection<int> Years { get; set; }
-        public ObservableCollection<CTBAOCAODDTO> ReportList { get; set; }
+        public ObservableCollection<RevenueReportDetailDTO> ReportList { get; set; }
 
         private int _selectedMonth;
         public int SelectedMonth
@@ -44,11 +45,11 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             set { _selectedYear = value; OnPropertyChanged(); }
         }
 
-        private decimal _tongDoanhThu;
-        public decimal TongDoanhThu
+        private decimal _totalRevenue;
+        public decimal TotalRevenue
         {
-            get => _tongDoanhThu;
-            set { _tongDoanhThu = value; OnPropertyChanged(); }
+            get => _totalRevenue;
+            set { _totalRevenue = value; OnPropertyChanged(); }
         }
 
         public ICommand LoadReportCommand { get; set; }
@@ -56,13 +57,13 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         public ICommand ExportExcelCommand { get; set; }
         public ICommand ShowChartCommand { get; set; }
 
-        public ReportViewModel(ICtBaoCaoDsService ctBaoCaoService)
+        public ReportViewModel(IRevenueReportDetailService revenueReportDetailService)
         {
-            _ctBaoCaoService = ctBaoCaoService;
+            _revenueReportDetailService = revenueReportDetailService;
 
             Months = new ObservableCollection<int>();
             Years = new ObservableCollection<int>();
-            ReportList = new ObservableCollection<CTBAOCAODDTO>();
+            ReportList = new ObservableCollection<RevenueReportDetailDTO>();
          
             LoadReportCommand = new RelayCommand(_ => LoadReport());
             ExportPdfCommand = new RelayCommand(_ => ExportPdf());
@@ -85,25 +86,23 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         private void LoadReport()
         {
             ReportList.Clear();
-            //var data = _ctBaoCaoService.GetByMonthYear(SelectedMonth, SelectedYear);
-            var data = _ctBaoCaoService.GetByMonthYear(SelectedMonth, SelectedYear)
-                .Where(x => x.SoLuongTiec > 0 && (x.DoanhThu ?? 0) > 0)
+            var data = _revenueReportDetailService.GetByMonthYear(SelectedMonth, SelectedYear)
+                .Where(x => x.WeddingCount > 0 && (x.Revenue ?? 0) > 0)
                 .ToList();
             Console.WriteLine($"Đã load dòng dữ liệu.");
 
-            decimal total = data.Sum(x => x.DoanhThu ?? 0); // Tính tổng doanh thu một lần chính xác
-            int stt = 1;
+            decimal total = data.Sum(x => x.Revenue ?? 0);
+            int rowNumber = 1;
 
             foreach (var item in data)
             {
-                item.STT = stt++;
-                item.TiLe = total == 0 ? 0 : Math.Round(((item.DoanhThu ?? 0) / total) * 100, 2);
+                item.RowNumber = rowNumber++;
+                item.Ratio = total == 0 ? 0 : Math.Round(((item.Revenue ?? 0) / total) * 100, 2);
                 ReportList.Add(item);
             }
 
-            TongDoanhThu = total;
+            TotalRevenue = total;
         }
-
 
         private void ExportExcel()
         {
@@ -120,13 +119,12 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     var workbook = new XLWorkbook();
                     var worksheet = workbook.Worksheets.Add("Báo Cáo Doanh Thu");
 
-                    // Tiêu đề cột
                     worksheet.Cell(1, 1).Value = "STT";
                     worksheet.Cell(1, 2).Value = "Ngày";
                     worksheet.Cell(1, 3).Value = "Số lượng tiệc";
                     worksheet.Cell(1, 4).Value = "Doanh thu";
                     worksheet.Cell(1, 5).Value = "Tỉ lệ";
-                    // Format tiêu đề
+
                     var headerRange = worksheet.Range("A1:E1");
                     headerRange.Style.Font.Bold = true;
                     headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -139,31 +137,28 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     foreach (var item in ReportList)
                     {
                         worksheet.Cell(row, 1).Value = stt;
-                        worksheet.Cell(row, 2).Value = $"{item.Ngay}/{item.Thang}/{item.Nam}";
-                        worksheet.Cell(row, 3).Value = item.SoLuongTiec ?? 0;
-                        // Format dòng dữ liệu
+                        worksheet.Cell(row, 2).Value = $"{item.Day}/{item.Month}/{item.Year}";
+                        worksheet.Cell(row, 3).Value = item.WeddingCount ?? 0;
+
                         for (int col = 1; col <= 5; col++)
                         {
                             worksheet.Cell(row, col).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                             worksheet.Cell(row, col).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                             worksheet.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                         }
-                        // Format doanh thu kiểu tiền tệ
-                        worksheet.Cell(row, 4).Value = item.DoanhThu ?? 0;
+
+                        worksheet.Cell(row, 4).Value = item.Revenue ?? 0;
                         worksheet.Cell(row, 4).Style.NumberFormat.Format = "#,##0 \"VNĐ\"";
 
-                        // Format tỷ lệ phần trăm (KHÔNG nhân *100)
-                        worksheet.Cell(row, 5).Value = (item.TiLe ?? 0) / 100m;
+                        worksheet.Cell(row, 5).Value = (item.Ratio ?? 0) / 100m;
                         worksheet.Cell(row, 5).Style.NumberFormat.Format = "0.00%";
 
                         row++;
                         stt++;
                     }
 
-                    // Tự động chỉnh kích thước cột sau khi nhập xong
                     worksheet.Columns().AdjustToContents();
 
-                    // Lưu và mở file
                     workbook.SaveAs(saveFileDialog.FileName);
                     Process.Start("explorer.exe", saveFileDialog.FileName);
                 }
@@ -189,11 +184,9 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     var doc = new Document();
                     var section = doc.AddSection();
 
-                    // Định dạng font mặc định
                     doc.Styles["Normal"].Font.Name = "Times New Roman";
                     doc.Styles["Normal"].Font.Size = 12;
 
-                    // Tiêu đề
                     var title = section.AddParagraph("BÁO CÁO DOANH THU");
                     title.Format.Font.Size = 16;
                     title.Format.Font.Bold = true;
@@ -201,42 +194,36 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     title.Format.SpaceBefore = "0.5cm";
                     title.Format.Alignment = ParagraphAlignment.Center;
 
-                    // Thông tin ngày lập báo cáo
                     var reportDate = section.AddParagraph($"Ngày lập báo cáo: {DateTime.Now:dd/MM/yyyy}");
                     reportDate.Format.SpaceAfter = "0.2cm";
                     reportDate.Format.Alignment = ParagraphAlignment.Right;
                     reportDate.Format.Font.Size = 12;
                     reportDate.Format.Font.Italic = true;
 
-                    // Tính tổng doanh thu
                     decimal tongDoanhThu = 0;
                     int tongSoTiec = 0;
                     foreach (var item in ReportList)
                     {
-                        tongDoanhThu += item.DoanhThu ?? 0;
-                        tongSoTiec += item.SoLuongTiec ?? 0;
+                        tongDoanhThu += item.Revenue ?? 0;
+                        tongSoTiec += item.WeddingCount ?? 0;
                     }
 
-                    // Hiển thị tổng quát
                     var summary = section.AddParagraph($"Tổng số tiệc: {tongSoTiec} | Tổng doanh thu: {tongDoanhThu:N0} VNĐ");
                     summary.Format.SpaceAfter = "0.5cm";
                     summary.Format.Alignment = ParagraphAlignment.Left;
                     summary.Format.Font.Bold = true;
 
-                    // Tạo bảng dữ liệu
                     var table = section.AddTable();
                     table.Borders.Width = 0.75;
                     table.Borders.Color = Colors.Black;
                     table.Format.Font.Name = "Times New Roman";
 
-                    // Cột
-                    table.AddColumn("2cm"); // STT
-                    table.AddColumn("3cm"); // Ngày
-                    table.AddColumn("3cm"); // Số lượng
-                    table.AddColumn("4cm"); // Doanh thu
-                    table.AddColumn("3cm"); // Tỉ lệ
+                    table.AddColumn("2cm");
+                    table.AddColumn("3cm");
+                    table.AddColumn("3cm");
+                    table.AddColumn("4cm");
+                    table.AddColumn("3cm");
 
-                    // Header
                     var header = table.AddRow();
                     header.Shading.Color = Colors.LightGray;
                     header.HeadingFormat = true;
@@ -249,21 +236,19 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                     header.Cells[3].AddParagraph("Doanh thu");
                     header.Cells[4].AddParagraph("Tỉ lệ");
 
-                    // Dòng dữ liệu
                     int stt = 1;
                     foreach (var item in ReportList)
                     {
                         var row = table.AddRow();
                         row.Format.Alignment = ParagraphAlignment.Center;
                         row.Cells[0].AddParagraph(stt.ToString());
-                        row.Cells[1].AddParagraph($"{item.Ngay}/{item.Thang}/{item.Nam}");
-                        row.Cells[2].AddParagraph(item.SoLuongTiec?.ToString() ?? "0");
-                        row.Cells[3].AddParagraph(string.Format("{0:N0} VNĐ", item.DoanhThu ?? 0));
-                        row.Cells[4].AddParagraph((item.TiLe ?? 0).ToString("N2", CultureInfo.InvariantCulture) + " %");
+                        row.Cells[1].AddParagraph($"{item.Day}/{item.Month}/{item.Year}");
+                        row.Cells[2].AddParagraph(item.WeddingCount?.ToString() ?? "0");
+                        row.Cells[3].AddParagraph(string.Format("{0:N0} VNĐ", item.Revenue ?? 0));
+                        row.Cells[4].AddParagraph((item.Ratio ?? 0).ToString("N2", CultureInfo.InvariantCulture) + " %");
                         stt++;
                     }
 
-                    // Xuất PDF
                     var renderer = new PdfDocumentRenderer(unicode: true)
                     {
                         Document = doc
@@ -284,7 +269,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             }
         }
 
-
         private void ShowChart()
         {
             var chartWindow = new ChartView
@@ -292,7 +276,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 DataContext = new ChartViewModel(ReportList)
             };
             chartWindow.ShowDialog();
-            // ChartView cần có constructor nhận ReportList
         }
 
         private void OnPropertyChanged([CallerMemberName] string property = null)
@@ -302,7 +285,6 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Viết RelayCommand bên trong ViewModel
         public class RelayCommand : ICommand
         {
             private readonly Action<object> _execute;

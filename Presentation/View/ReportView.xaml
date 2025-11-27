@@ -30,13 +30,15 @@
             FontSize="26"
             FontWeight="Bold"
             Foreground="DarkSlateBlue"
-            Text="BÁO CÁO DOANH SỐ" />
+            Text="BÁO CÁO DOANH SỐ"
+            AutomationProperties.AutomationId="ReportPageTitle" />
 
         <!--  Bộ lọc  -->
         <StackPanel
             Grid.Row="1"
             Margin="0,0,0,15"
-            Orientation="Vertical">
+            Orientation="Vertical"
+            AutomationProperties.AutomationId="FilterPanel">
             <!--  Dòng đầu tiên: Tiêu đề  -->
             <TextBlock
                 Margin="0,0,0,10"
@@ -54,7 +56,8 @@
                     Width="80"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding Months}"
-                    SelectedItem="{Binding SelectedMonth}" />
+                    SelectedItem="{Binding SelectedMonth}"
+                    AutomationProperties.AutomationId="MonthComboBox" />
 
                 <TextBlock
                     Margin="0,0,5,0"
@@ -64,15 +67,16 @@
                     Width="100"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding Years}"
-                    SelectedItem="{Binding SelectedYear}" />
+                    SelectedItem="{Binding SelectedYear}"
+                    AutomationProperties.AutomationId="YearComboBox" />
 
                 <Button
                     Width="120"
                     Command="{Binding LoadReportCommand}"
-                    Content="Xem báo cáo" />
+                    Content="Xem báo cáo"
+                    AutomationProperties.AutomationId="LoadReportButton" />
             </StackPanel>
         </StackPanel>
-
 
         <!--  Tổng doanh thu  -->
         <TextBlock
@@ -81,7 +85,8 @@
             FontSize="16"
             FontWeight="SemiBold"
             Foreground="DarkGreen"
-            Text="{Binding TongDoanhThu, StringFormat=Tổng Doanh Thu: {0:N0} VNĐ}" />
+            Text="{Binding TotalRevenue, StringFormat=Tổng Doanh Thu: {0:N0} VNĐ}"
+            AutomationProperties.AutomationId="TotalRevenueTextBlock" />
 
         <!--  Bảng chi tiết  -->
         <DataGrid
@@ -98,11 +103,12 @@
             HeadersVisibility="Column"
             IsReadOnly="True"
             ItemsSource="{Binding ReportList}"
-            VerticalScrollBarVisibility="Auto">
+            VerticalScrollBarVisibility="Auto"
+            AutomationProperties.AutomationId="ReportDataGrid">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding STT}"
+                    Binding="{Binding RowNumber}"
                     Header="STT">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -114,8 +120,14 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding NgayHienThi}"
                     Header="Ngày">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0}/{1}/{2}">
+                            <Binding Path="Day" />
+                            <Binding Path="Month" />
+                            <Binding Path="Year" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -126,7 +138,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding SoLuongTiec}"
+                    Binding="{Binding WeddingCount}"
                     Header="Số Lượng Tiệc">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -138,7 +150,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding DoanhThu, StringFormat={}{0:N0} VNĐ}"
+                    Binding="{Binding Revenue, StringFormat={}{0:N0} VNĐ}"
                     Header="Doanh Thu">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -150,7 +162,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding TiLe}"
+                    Binding="{Binding Ratio, StringFormat={}{0:N2} %}"
                     Header="Tỉ Lệ (%)">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -177,22 +189,26 @@
             Grid.Row="4"
             Margin="0,15,0,0"
             HorizontalAlignment="Right"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            AutomationProperties.AutomationId="ActionButtonsPanel">
             <Button
                 Width="100"
                 Margin="5"
                 Command="{Binding ExportPdfCommand}"
-                Content="Xuất PDF" />
+                Content="Xuất PDF"
+                AutomationProperties.AutomationId="ExportPdfButton" />
             <Button
                 Width="100"
                 Margin="5"
                 Command="{Binding ExportExcelCommand}"
-                Content="Xuất Excel" />
+                Content="Xuất Excel"
+                AutomationProperties.AutomationId="ExportExcelButton" />
             <Button
                 Width="120"
                 Margin="5"
                 Command="{Binding ShowChartCommand}"
-                Content="Xem biểu đồ" />
+                Content="Xem biểu đồ"
+                AutomationProperties.AutomationId="ShowChartButton" />
         </StackPanel>
     </Grid>
 </UserControl>

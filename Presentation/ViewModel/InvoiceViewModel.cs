@@ -30,30 +30,43 @@ using System.Windows.Input;
 
 namespace QuanLyTiecCuoi.ViewModel {
     public class InvoiceViewModel : BaseViewModel {
-        private  IPhieuDatTiecService _phieuDatTiecService;
-        private readonly IDichVuService _dichVuService;
-        private readonly ICaService _caService;
+        private readonly IBookingService _bookingService;
+        private readonly IServiceService _serviceService;
+        private readonly IShiftService _shiftService;
         private readonly IHallService _hallService;
-        private readonly IChiTietDVService _chiTietDichVuService;
-        private readonly IThucDonService _thucDonService;
-        private readonly IThamSoService _thamSoService;
+        private readonly IServiceDetailService _serviceDetailService;
+        private readonly IMenuService _menuService;
+        private readonly IParameterService _parameterService;
 
-        private PHIEUDATTIECDTO _SelectedInvoice;
-        public PHIEUDATTIECDTO SelectedInvoice { get => _SelectedInvoice; set { _SelectedInvoice = value; OnPropertyChanged(); } }
-        private int _InvoiceId;
-        public int InvoiceId { get => _InvoiceId; set { _InvoiceId = value; OnPropertyChanged(); } }
+        private BookingDTO _selectedInvoice;
+        public BookingDTO SelectedInvoice { get => _selectedInvoice; set { _selectedInvoice = value; OnPropertyChanged(); } }
+        
+        private int _invoiceId;
+        public int InvoiceId { get => _invoiceId; set { _invoiceId = value; OnPropertyChanged(); } }
 
-        private decimal? _DonGiaBan;
-        public decimal? DonGiaBan { get => _DonGiaBan; set { _DonGiaBan = value; OnPropertyChanged(); } }
-        private bool _IsPaid = false;
-        public bool IsPaid { get => _IsPaid; set { _IsPaid = value; OnPropertyChanged(); } }
-        private DateTime? _PaymentDate = DateTime.Now;
-        public DateTime? PaymentDate { get => _PaymentDate; set { _PaymentDate = value; OnPropertyChanged(); } }
-        private string _TableQuantity;
-        public string TableQuantity { get => _TableQuantity; set { _TableQuantity = value; OnPropertyChanged(); OnPropertyChanged(nameof(TotalInvoiceAmount)); OnPropertyChanged(nameof(RemainingAmount)); } }
-        private string _TableQuantityMax = "Số lượng bàn tối đa là ";
-        public string TableQuantityMax { get => _TableQuantityMax; set { _TableQuantityMax = value; OnPropertyChanged(); } }
-        private decimal _RemainingAmount;
+        private decimal? _tablePrice;
+        public decimal? TablePrice { get => _tablePrice; set { _tablePrice = value; OnPropertyChanged(); } }
+        
+        private bool _isPaid = false;
+        public bool IsPaid { get => _isPaid; set { _isPaid = value; OnPropertyChanged(); } }
+        
+        private DateTime? _paymentDate = DateTime.Now;
+        public DateTime? PaymentDate { get => _paymentDate; set { _paymentDate = value; OnPropertyChanged(); } }
+        
+        private string _tableQuantity;
+        public string TableQuantity { 
+            get => _tableQuantity; 
+            set { 
+                _tableQuantity = value; 
+                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(TotalInvoiceAmount)); 
+                OnPropertyChanged(nameof(RemainingAmount)); 
+            } 
+        }
+        
+        private string _tableQuantityMax = "Maximum table count is ";
+        public string TableQuantityMax { get => _tableQuantityMax; set { _tableQuantityMax = value; OnPropertyChanged(); } }
+        
         public decimal? RemainingAmount { 
             get {
                 decimal? sum = null;
@@ -70,30 +83,48 @@ namespace QuanLyTiecCuoi.ViewModel {
                 return sum;
             }
         } 
-        private string _TableQuantityMessage = "Số lượng bàn đã đặt trước là ";
-        public string TableQuantityMessage { get => _TableQuantityMessage; set { _TableQuantityMessage = value; OnPropertyChanged(); } }
-        private string _DamageEquipmentCost;
-        public string DamageEquipmentCost { get => _DamageEquipmentCost; set { _DamageEquipmentCost = value; OnPropertyChanged(); OnPropertyChanged(nameof(TotalInvoiceAmount)); OnPropertyChanged(nameof(RemainingAmount)); } }
-        private decimal? _Deposit;
-        public decimal? Deposit { get => _Deposit; set { _Deposit = value; OnPropertyChanged(); } }
-        private decimal? _Fine;
-        public decimal? Fine { get => _Fine; set { _Fine = value; OnPropertyChanged(); OnPropertyChanged(nameof(RemainingAmount)); } }
+        
+        private string _tableQuantityMessage = "Pre-booked table count is ";
+        public string TableQuantityMessage { get => _tableQuantityMessage; set { _tableQuantityMessage = value; OnPropertyChanged(); } }
+        
+        private string _additionalCost;
+        public string AdditionalCost { 
+            get => _additionalCost; 
+            set { 
+                _additionalCost = value; 
+                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(TotalInvoiceAmount)); 
+                OnPropertyChanged(nameof(RemainingAmount)); 
+            } 
+        }
+        
+        private decimal? _deposit;
+        public decimal? Deposit { get => _deposit; set { _deposit = value; OnPropertyChanged(); } }
+        
+        private decimal? _fine;
+        public decimal? Fine { 
+            get => _fine; 
+            set { 
+                _fine = value; 
+                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(RemainingAmount)); 
+            } 
+        }
+        
         public decimal? TotalInvoiceAmount
         {
             get
             {
                 if (SelectedInvoice != null && int.TryParse(TableQuantity, out int quantity))
                 {
-                    // Lấy tổng tiền các món trong thực đơn
-                    var thucDonList = _thucDonService.GetByPhieuDat(SelectedInvoice.MaPhieuDat);
-                    decimal tongTienMonAn = thucDonList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
+                    var menuList = _menuService.GetByBookingId(SelectedInvoice.BookingId);
+                    decimal totalDishAmount = menuList.Sum(m => (m.UnitPrice ?? 0) * (m.Quantity ?? 0));
+                    decimal totalTableAmount = quantity * ((SelectedInvoice.TablePrice ?? 0) + totalDishAmount);
 
-                    decimal tongTienBan = quantity * ((SelectedInvoice.DonGiaBanTiec ?? 0) + tongTienMonAn);
-
-                    if (decimal.TryParse(DamageEquipmentCost, out decimal dmgcost))
-                        return tongTienBan + (SelectedInvoice.TongTienDV ?? 0) + dmgcost;
+                    if (decimal.TryParse(AdditionalCost, out decimal additionalCost))
+                        return totalTableAmount + (SelectedInvoice.TotalServiceAmount ?? 0) + additionalCost;
                     else
-                        return tongTienBan + (SelectedInvoice.TongTienDV ?? 0);
+                        return totalTableAmount + (SelectedInvoice.TotalServiceAmount ?? 0);
                 }
                 return 0;
             }
@@ -102,73 +133,81 @@ namespace QuanLyTiecCuoi.ViewModel {
                 TotalInvoiceAmount = value;
             }
         }
-        private string _PaymentText = "Xác nhận thanh toán";
-        public string PaymentText { get => _PaymentText; set { _PaymentText = value; OnPropertyChanged(); } }
-        public ObservableCollection<CHITIETDVDTO> ServiceList { get; set; } = new ObservableCollection<CHITIETDVDTO>();
-        private bool CanExport = false;
+        
+        private string _paymentText = "Confirm Payment";
+        public string PaymentText { get => _paymentText; set { _paymentText = value; OnPropertyChanged(); } }
+        
+        public ObservableCollection<ServiceDetailDTO> ServiceList { get; set; } = new ObservableCollection<ServiceDetailDTO>();
+        private bool _canExport = false;
 
         // Command properties
         public ICommand ExportCommand { get; set; }
         public ICommand ConfirmPaymentCommand { get; set; }
-        private string _ConfirmMessage;
-        public string ConfirmMessage { get => _ConfirmMessage; set { _ConfirmMessage = value; OnPropertyChanged(); } }
+        
+        private string _confirmMessage;
+        public string ConfirmMessage { get => _confirmMessage; set { _confirmMessage = value; OnPropertyChanged(); } }
 
-        // Constructor với Dependency Injection
+        // Constructor with Dependency Injection
         public InvoiceViewModel(
             int invoiceId,
-            IPhieuDatTiecService phieuDatTiecService,
-            ICaService caService,
+            IBookingService bookingService,
+            IShiftService shiftService,
             IHallService hallService,
-            IChiTietDVService chiTietDichVuService,
-            IThucDonService thucDonService,
-            IThamSoService thamSoService)
+            IServiceDetailService serviceDetailService,
+            IMenuService menuService,
+            IParameterService parameterService)
         {
             InvoiceId = invoiceId;
             
             // Inject services
-            _phieuDatTiecService = phieuDatTiecService;
-            _caService = caService;
+            _bookingService = bookingService;
+            _shiftService = shiftService;
             _hallService = hallService;
-            _chiTietDichVuService = chiTietDichVuService;
-            _thucDonService = thucDonService;
-            _thamSoService = thamSoService;
+            _serviceDetailService = serviceDetailService;
+            _menuService = menuService;
+            _parameterService = parameterService;
             
-            SelectedInvoice = _phieuDatTiecService.GetById(invoiceId);
-            ServiceList = new ObservableCollection<CHITIETDVDTO>(_chiTietDichVuService.GetByPhieuDat(invoiceId));
+            SelectedInvoice = _bookingService.GetById(invoiceId);
+            ServiceList = new ObservableCollection<ServiceDetailDTO>(_serviceDetailService.GetByBookingId(invoiceId));
 
-            TableQuantity = SelectedInvoice.SoLuongBan.ToString();
-            TableQuantityMessage += $"{SelectedInvoice.SoLuongBan}";
-            TableQuantityMax += SelectedInvoice.Sanh.SoLuongBanToiDa.ToString();
-            Deposit = SelectedInvoice.TienDatCoc;
+            TableQuantity = SelectedInvoice.TableCount.ToString();
+            TableQuantityMessage += $"{SelectedInvoice.TableCount}";
+            TableQuantityMax += SelectedInvoice.Hall.MaxTableCount.ToString();
+            Deposit = SelectedInvoice.Deposit;
 
-            // Lấy tổng tiền các món trong thực đơn
-            var thucDonList = _thucDonService.GetByPhieuDat(invoiceId);
-            decimal tongTienMonAn = thucDonList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
-            DonGiaBan = (SelectedInvoice.DonGiaBanTiec ?? 0) + tongTienMonAn;
+            var menuList = _menuService.GetByBookingId(invoiceId);
+            decimal totalDishAmount = menuList.Sum(m => (m.UnitPrice ?? 0) * (m.Quantity ?? 0));
+            TablePrice = (SelectedInvoice.TablePrice ?? 0) + totalDishAmount;
 
-            if (SelectedInvoice.NgayThanhToan != null) {
+            if (SelectedInvoice.PaymentDate != null) {
                 IsPaid = true;
-                CanExport = true;
-                PaymentText = "Đã thanh toán";
+                _canExport = true;
+                PaymentText = "Paid";
 
-                PaymentDate = SelectedInvoice.NgayThanhToan;
-                TableQuantity = SelectedInvoice.SoLuongBan.ToString();
-                Fine = SelectedInvoice.TienPhat;
-                DamageEquipmentCost = SelectedInvoice.ChiPhiPhatSinh.ToString();
+                PaymentDate = SelectedInvoice.PaymentDate;
+                TableQuantity = SelectedInvoice.TableCount.ToString();
+                Fine = SelectedInvoice.PenaltyAmount;
+                AdditionalCost = SelectedInvoice.AdditionalCost.ToString();
 
                 TableQuantityMessage = string.Empty;
             }
             else {
                 decimal? tmpTotalInvoiceAmount = TotalInvoiceAmount;
-                decimal? tiLePhat = _thamSoService.GetByName("TiLePhat").GiaTri;
-                decimal? kiemTraPhat = _thamSoService.GetByName("KiemTraPhat").GiaTri;
-                int dayDiff = (DateTime.Now - SelectedInvoice.NgayDaiTiec.GetValueOrDefault()).Days;
+                decimal? penaltyRate = _parameterService.GetByName("TiLePhat").Value;
+                decimal? penaltyCheck = _parameterService.GetByName("KiemTraPhat").Value;
+                int dayDiff = (DateTime.Now - SelectedInvoice.WeddingDate.GetValueOrDefault()).Days;
                 if (dayDiff < 0) {
-                    dayDiff = 0; // Không phạt nếu ngày đãi tiệc chưa đến
+                    dayDiff = 0;
                 }
-                Fine = tiLePhat * kiemTraPhat * (tmpTotalInvoiceAmount - SelectedInvoice.TienDatCoc) * (decimal)dayDiff;
+                Fine = penaltyRate * penaltyCheck * (tmpTotalInvoiceAmount - SelectedInvoice.Deposit) * (decimal)dayDiff;
             }
-            ExportCommand = new RelayCommand<Window>((p) => { return CanExport; }, (p) => {
+            
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
+            ExportCommand = new RelayCommand<Window>((p) => { return _canExport; }, (p) => {
                 try
                 {
                     if (SelectedInvoice == null)
@@ -177,7 +216,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                     }
                     var dialog = new Microsoft.Win32.SaveFileDialog
                     {
-                        FileName = $"HoaDon_{SelectedInvoice.MaPhieuDat}",
+                        FileName = $"Invoice_{SelectedInvoice.BookingId}",
                         DefaultExt = ".pdf",
                         Filter = "PDF documents (.pdf)|*.pdf"
                     };
@@ -185,143 +224,139 @@ namespace QuanLyTiecCuoi.ViewModel {
                     if (result == true)
                     {
                         string filePath = dialog.FileName;
-                        ExportInvoice(SelectedInvoice, filePath);
-                        MessageBox.Show("Xuất hóa đơn thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        ExportInvoiceToPdf(SelectedInvoice, filePath);
+                        MessageBox.Show("Invoice exported successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                        // Mở file PDF vừa xuất
                         System.Diagnostics.Process.Start(filePath);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi xuất hóa đơn: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Error exporting invoice: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
+            
             ConfirmPaymentCommand = new RelayCommand<Window>((p) => {
                 if (SelectedInvoice == null) {
                     return false;
                 }
                 if (IsPaid) {
-                    CanExport = true;
-                    ConfirmMessage = "Hóa đơn đã được thanh toán";
+                    _canExport = true;
+                    ConfirmMessage = "Invoice has been paid";
                     return false;
                 }
-                if (!int.TryParse(TableQuantity, out int _tableQuantiy)) {
-                    CanExport = false;
-                    ConfirmMessage = "Nhập số bàn là số nguyên";
+                if (!int.TryParse(TableQuantity, out int tableQuantity)) {
+                    _canExport = false;
+                    ConfirmMessage = "Table count must be an integer";
                     return false;
                 }
-                if (int.Parse(TableQuantity) < SelectedInvoice.SoLuongBan) {
-                    CanExport = false;
-                    ConfirmMessage = "Số bàn đã dùng không được nhỏ hơn số bàn đã đặt";
+                if (int.Parse(TableQuantity) < SelectedInvoice.TableCount) {
+                    _canExport = false;
+                    ConfirmMessage = "Used table count cannot be less than booked count";
                     return false;
                 }
-                if(int.Parse(TableQuantity) > SelectedInvoice.Sanh.SoLuongBanToiDa) {
-                    CanExport = false;
-                    ConfirmMessage = "Số bàn đã dùng không được lớn hơn số bàn tối đa của sảnh";
+                if(int.Parse(TableQuantity) > SelectedInvoice.Hall.MaxTableCount) {
+                    _canExport = false;
+                    ConfirmMessage = "Used table count cannot exceed hall maximum";
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(DamageEquipmentCost)) {
-                    CanExport = false;
-                    ConfirmMessage = "Nhập chi phí thiết bị hỏng hóc";
+                if (string.IsNullOrWhiteSpace(AdditionalCost)) {
+                    _canExport = false;
+                    ConfirmMessage = "Enter additional cost";
                     return false;
                 }
-                // Chỉ cho phép thanh toán nếu ngày hiện tại lớn hơn hoặc bằng ngày đãi tiệc
-                if (SelectedInvoice.NgayDaiTiec.HasValue && DateTime.Now < SelectedInvoice.NgayDaiTiec.Value) {
-                    CanExport = false;
-                    ConfirmMessage = "Không thể thanh toán trước ngày đãi tiệc";
+                if (SelectedInvoice.WeddingDate.HasValue && DateTime.Now < SelectedInvoice.WeddingDate.Value) {
+                    _canExport = false;
+                    ConfirmMessage = "Cannot pay before wedding date";
                     return false;
                 }
                 ConfirmMessage = string.Empty;
                 return true;
             }, (p) => {
-
                 var window = p as Window;
                 try
                 {
                     var result = window != null
-                        ? MessageBox.Show(window, "Bạn có chắc chắn muốn thanh toán không? Lưu ý: Thanh toán chỉ được thực hiện 1 lần duy nhất.", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question)
-                        : MessageBox.Show("Bạn có chắc chắn muốn thanh toán không? Lưu ý: Thanh toán chỉ được thực hiện 1 lần duy nhất.", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        ? MessageBox.Show(window, "Are you sure you want to confirm payment? Note: Payment can only be made once.", "Confirm Payment", MessageBoxButton.YesNo, MessageBoxImage.Question)
+                        : MessageBox.Show("Are you sure you want to confirm payment? Note: Payment can only be made once.", "Confirm Payment", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes)
                     {
                         try
                         {
-                            ConfirmPayment();
-                            SelectedInvoice = _phieuDatTiecService.GetById(_InvoiceId);
+                            ProcessPayment();
+                            SelectedInvoice = _bookingService.GetById(_invoiceId);
                             if (window != null)
-                                MessageBox.Show(window, "Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                                MessageBox.Show(window, "Payment successful!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                             else
-                                MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                                MessageBox.Show("Payment successful!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         catch (Exception ex)
                         {
                             if (window != null)
-                                MessageBox.Show(window, $"Có lỗi khi thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show(window, $"Payment error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             else
-                                MessageBox.Show($"Có lỗi khi thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show($"Payment error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     if (window != null)
-                        MessageBox.Show(window, $"Có lỗi khi xác nhận thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(window, $"Confirmation error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     else
-                        MessageBox.Show($"Có lỗi khi xác nhận thanh toán: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"Confirmation error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
         }
-        private void ConfirmPayment() {
+
+        private void ProcessPayment() {
             int tableQuantity = 0;
             decimal totalTableAmount = 0;
-            decimal damageEquipmentCost = 0;
-            if (int.TryParse(TableQuantity, out int _tableQuantiy))
+            decimal additionalCost = 0;
+            
+            if (int.TryParse(TableQuantity, out int parsedQuantity))
             {
-                tableQuantity = _tableQuantiy;
-                // Lấy tổng tiền các món trong thực đơn
-                var thucDonList = _thucDonService.GetByPhieuDat(SelectedInvoice.MaPhieuDat);
-                decimal tongTienMonAn = thucDonList.Sum(m => (m.DonGia ?? 0) * (m.SoLuong ?? 0));
-                // Tổng tiền bàn = số bàn * (đơn giá bàn tiệc + tổng tiền món ăn)
-                totalTableAmount = tableQuantity * ((SelectedInvoice.DonGiaBanTiec ?? 0) + tongTienMonAn);
+                tableQuantity = parsedQuantity;
+                var menuList = _menuService.GetByBookingId(SelectedInvoice.BookingId);
+                decimal totalDishAmount = menuList.Sum(m => (m.UnitPrice ?? 0) * (m.Quantity ?? 0));
+                totalTableAmount = tableQuantity * ((SelectedInvoice.TablePrice ?? 0) + totalDishAmount);
             }
-            damageEquipmentCost = decimal.Parse(DamageEquipmentCost);
+            additionalCost = decimal.Parse(AdditionalCost);
+            
             try {
-                var ca = _caService.GetById(SelectedInvoice.MaCa.GetValueOrDefault());
-                var sanh = _hallService.GetById(SelectedInvoice.MaSanh.GetValueOrDefault());
+                var shift = _shiftService.GetById(SelectedInvoice.ShiftId.GetValueOrDefault());
+                var hall = _hallService.GetById(SelectedInvoice.HallId.GetValueOrDefault());
                 
-                // Lấy lại thông tin mới nhất từ database
-                SelectedInvoice = _phieuDatTiecService.GetById(_InvoiceId);
-                PHIEUDATTIECDTO invoice = new PHIEUDATTIECDTO {
-                    MaPhieuDat = SelectedInvoice.MaPhieuDat,
-                    TenChuRe = SelectedInvoice.TenChuRe,
-                    TenCoDau = SelectedInvoice.TenCoDau,
-                    DienThoai = SelectedInvoice.DienThoai,
-                    NgayDaiTiec = SelectedInvoice.NgayDaiTiec.Value,
-                    NgayDatTiec = SelectedInvoice.NgayDatTiec,
-                    Ca = ca,
-                    Sanh = sanh,
-                    TienDatCoc = SelectedInvoice.TienDatCoc,
-                    SoBanDuTru = SelectedInvoice.SoBanDuTru,
-                    MaCa = SelectedInvoice.MaCa,
-                    MaSanh = SelectedInvoice.MaSanh,
-                    DonGiaBanTiec = SelectedInvoice.DonGiaBanTiec,
-                    TongTienBan = SelectedInvoice.TongTienBan,
-                    TongTienHoaDon = SelectedInvoice.TongTienHoaDon,
-                    TienConLai = SelectedInvoice.TienConLai,
-                    TongTienDV = SelectedInvoice.TongTienDV,
-                    NgayThanhToan = DateTime.Now,
-                    SoLuongBan = tableQuantity,
-                    ChiPhiPhatSinh = damageEquipmentCost,
+                SelectedInvoice = _bookingService.GetById(_invoiceId);
+                BookingDTO invoice = new BookingDTO {
+                    BookingId = SelectedInvoice.BookingId,
+                    GroomName = SelectedInvoice.GroomName,
+                    BrideName = SelectedInvoice.BrideName,
+                    Phone = SelectedInvoice.Phone,
+                    WeddingDate = SelectedInvoice.WeddingDate.Value,
+                    BookingDate = SelectedInvoice.BookingDate,
+                    Shift = shift,
+                    Hall = hall,
+                    Deposit = SelectedInvoice.Deposit,
+                    ReserveTableCount = SelectedInvoice.ReserveTableCount,
+                    ShiftId = SelectedInvoice.ShiftId,
+                    HallId = SelectedInvoice.HallId,
+                    TablePrice = SelectedInvoice.TablePrice,
+                    TotalTableAmount = SelectedInvoice.TotalTableAmount,
+                    TotalInvoiceAmount = SelectedInvoice.TotalInvoiceAmount,
+                    RemainingAmount = SelectedInvoice.RemainingAmount,
+                    TotalServiceAmount = SelectedInvoice.TotalServiceAmount,
+                    PaymentDate = DateTime.Now,
+                    TableCount = tableQuantity,
+                    AdditionalCost = additionalCost,
                 };
-                _phieuDatTiecService.Update(invoice);
+                _bookingService.Update(invoice);
                 
-                // Lấy invoice đã update
-                invoice = _phieuDatTiecService.GetAll().LastOrDefault();
+                invoice = _bookingService.GetAll().LastOrDefault();
 
-                Deposit = invoice.TienDatCoc.GetValueOrDefault();
-                Fine = invoice.TienPhat.GetValueOrDefault();
-                //SelectedInvoice = invoice;
+                Deposit = invoice.Deposit.GetValueOrDefault();
+                Fine = invoice.PenaltyAmount.GetValueOrDefault();
                 OnPropertyChanged();
                 IsPaid = true;
             }
@@ -329,7 +364,8 @@ namespace QuanLyTiecCuoi.ViewModel {
                 MessageBox.Show(e.Message);
             }
         }
-        private void ExportInvoice(PHIEUDATTIECDTO bill, string outputPath) {
+
+        private void ExportInvoiceToPdf(BookingDTO bill, string outputPath) {
             var regularFont = PDFFont.RegularFont;
             var boldFont = PDFFont.BoldFont;
             var italicFont = PDFFont.ItalicFont;
@@ -341,75 +377,69 @@ namespace QuanLyTiecCuoi.ViewModel {
             var document = new Document(pdf, iText.Kernel.Geom.PageSize.A4);
             document.SetMargins(40, 30, 40, 30);
 
-            /* Logo (nếu có)
-            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logo.png");
-            if (File.Exists(logoPath)) {
-                var logo = new Image(ImageDataFactory.Create(logoPath)).ScaleToFit(80, 80).SetHorizontalAlignment(HorizontalAlignment.CENTER);
-                document.Add(logo);
-            }*/
-
-            // Tiêu đề
-            var header = new Paragraph("HÓA ĐƠN THANH TOÁN TIỆC CƯỚI")
+            // Header
+            var header = new Paragraph("WEDDING BANQUET PAYMENT INVOICE")
                 .SetFontSize(20)
                 .SetFont(PDFFont.BoldFont)
                 .SetTextAlignment(textAlignmentC)
                 .SetMarginBottom(10);
             document.Add(header);
 
-            // Dòng kẻ
             document.Add(new LineSeparator(new SolidLine(1f)).SetMarginBottom(15));
 
-            // Thông tin tiệc cưới
+            // Wedding information
             document.Add(PdfExportHelper.CreateInfoTable(new[] {
-                ("Tên chú rể:", bill.TenChuRe ?? ""),
-                ("Tên cô dâu:", bill.TenCoDau ?? ""),
-                ("Ngày đãi tiệc:", bill.NgayDaiTiec?.ToString("dd'/'MM'/'yyyy") ?? ""),
-                ("Số lượng bàn:", bill.SoLuongBan?.ToString() ?? ""),
-                ("Ca:", _caService.GetById(bill.MaCa ?? 1).TenCa),
-                ("Sảnh:", _hallService.GetById(bill.MaSanh ?? 1).TenSanh),
+                ("Groom name:", bill.GroomName ?? ""),
+                ("Bride name:", bill.BrideName ?? ""),
+                ("Wedding date:", bill.WeddingDate?.ToString("dd'/'MM'/'yyyy") ?? ""),
+                ("Table count:", bill.TableCount?.ToString() ?? ""),
+                ("Shift:", _shiftService.GetById(bill.ShiftId ?? 1).ShiftName),
+                ("Hall:", _hallService.GetById(bill.HallId ?? 1).HallName),
             }, regularFont));
-            document.Add(new Paragraph("\n")); // Line break
-            // Danh sách dịch vụ
-            document.Add(new Paragraph("Danh sách dịch vụ").SetFont(boldFont).SetFontSize(11));
+            document.Add(new Paragraph("\n"));
+            
+            // Service list
+            document.Add(new Paragraph("Service List").SetFont(boldFont).SetFontSize(11));
 
             Table serviceTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 3, 2, 1, 3 }))
                 .UseAllAvailableWidth();
 
-            string[] headers = { "STT", "Tên dịch vụ", "Đơn giá", "Số lượng", "Ghi chú" };
+            string[] headers = { "No.", "Service name", "Unit price", "Quantity", "Note" };
             foreach (var h in headers)
                 serviceTable.AddHeaderCell(PdfExportHelper.CreateCell(h, boldFont, align: textAlignmentC));
+            
             for (int i = 1; i <= ServiceList.Count; i++) {
                 var service = ServiceList[i-1];
                 serviceTable.AddCell(PdfExportHelper.CreateCell(i.ToString(), regularFont, align: textAlignmentC));
-                serviceTable.AddCell(PdfExportHelper.CreateCell(service.DichVu.TenDichVu, regularFont));
-                serviceTable.AddCell(PdfExportHelper.CreateCell(service.DichVu.DonGia.ToString(), regularFont, align: textAlignmentR, isCurrency:true));
-                serviceTable.AddCell(PdfExportHelper.CreateCell(service.SoLuong.ToString(), regularFont, align: textAlignmentC));
-                serviceTable.AddCell(PdfExportHelper.CreateCell(service.GhiChu??"", regularFont));
+                serviceTable.AddCell(PdfExportHelper.CreateCell(service.Service.ServiceName, regularFont));
+                serviceTable.AddCell(PdfExportHelper.CreateCell(service.Service.UnitPrice.ToString(), regularFont, align: textAlignmentR, isCurrency:true));
+                serviceTable.AddCell(PdfExportHelper.CreateCell(service.Quantity.ToString(), regularFont, align: textAlignmentC));
+                serviceTable.AddCell(PdfExportHelper.CreateCell(service.Note??"", regularFont));
             }
             document.Add(serviceTable);
             document.Add(new Paragraph("\n"));
-            // Thông tin thanh toán
-            PdfExportHelper.AddPaymentRow(document, "Tổng tiền bàn:", bill.TongTienBan, boldFont, regularFont);
-            PdfExportHelper.AddPaymentRow(document, "Tổng tiền dịch vụ:", bill.TongTienDV, boldFont, regularFont);
-            PdfExportHelper.AddPaymentRow(document, "Chi phí phát sinh:", bill.ChiPhiPhatSinh, boldFont, regularFont);
-            PdfExportHelper.AddPaymentRow(document, "Tổng hóa đơn:", bill.TongTienHoaDon, boldFont, regularFont);
-            PdfExportHelper.AddPaymentRow(document, "Tiền phạt:", bill.TienPhat, boldFont, regularFont);
-            PdfExportHelper.AddPaymentRow(document, "Tiền đặt cọc:", bill.TienDatCoc, boldFont, regularFont);
-            PdfExportHelper.AddPaymentRow(document, "Số tiền còn lại:", bill.TienConLai, boldFont, regularFont);
+            
+            // Payment information
+            PdfExportHelper.AddPaymentRow(document, "Total table amount:", bill.TotalTableAmount, boldFont, regularFont);
+            PdfExportHelper.AddPaymentRow(document, "Total service amount:", bill.TotalServiceAmount, boldFont, regularFont);
+            PdfExportHelper.AddPaymentRow(document, "Additional cost:", bill.AdditionalCost, boldFont, regularFont);
+            PdfExportHelper.AddPaymentRow(document, "Total invoice:", bill.TotalInvoiceAmount, boldFont, regularFont);
+            PdfExportHelper.AddPaymentRow(document, "Penalty amount:", bill.PenaltyAmount, boldFont, regularFont);
+            PdfExportHelper.AddPaymentRow(document, "Deposit:", bill.Deposit, boldFont, regularFont);
+            PdfExportHelper.AddPaymentRow(document, "Remaining amount:", bill.RemainingAmount, boldFont, regularFont);
 
-            // Dòng kẻ dưới
             document.Add(new LineSeparator(new SolidLine(1f)).SetMarginTop(15).SetMarginBottom(15));
 
-            // Footer ngày lập hóa đơn
-            document.Add(new Paragraph("Ngày lập hóa đơn: " + DateTime.Now.ToString("dd'/'MM'/'yyyy"))
+            // Footer - invoice date
+            document.Add(new Paragraph("Invoice date: " + DateTime.Now.ToString("dd'/'MM'/'yyyy"))
                 .SetFont(italicFont)
                 .SetFontSize(11)
                 .SetTextAlignment(textAlignmentR)
                 .SetMarginBottom(40));
 
-            // Footer chữ ký
-            document.Add(new Paragraph("Người lập hóa đơn").SetFont(regularFont).SetTextAlignment(textAlignmentR).SetFontSize(11));
-            document.Add(new Paragraph("(Ký tên)").SetFont(italicFont).SetTextAlignment(textAlignmentR).SetFontSize(10));
+            // Footer - signature
+            document.Add(new Paragraph("Invoice issuer").SetFont(regularFont).SetTextAlignment(textAlignmentR).SetFontSize(11));
+            document.Add(new Paragraph("(Signature)").SetFont(italicFont).SetTextAlignment(textAlignmentR).SetFontSize(10));
 
             document.Close();
         }

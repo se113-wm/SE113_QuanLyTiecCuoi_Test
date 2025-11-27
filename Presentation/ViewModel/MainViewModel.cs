@@ -11,14 +11,17 @@ using QuanLyTiecCuoi.Model;
 using QuanLyTiecCuoi.Presentation.View;
 using QuanLyTiecCuoi.Presentation.ViewModel;
 
-
 namespace QuanLyTiecCuoi.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private readonly IBookingService _bookingService;
+        private readonly IUserGroupService _userGroupService;
+        private readonly IPermissionService _permissionService;
+        private readonly IAppUserService _appUserService;
+        private readonly IRevenueReportDetailService _revenueReportDetailService;
 
-        #region command
+        #region Commands
         public ICommand LoadedWindowCommand { get; set; }
         public ICommand HomeCommand { get; set; }
         public ICommand HallTypeCommand { get; set; }
@@ -38,30 +41,44 @@ namespace QuanLyTiecCuoi.ViewModel
         public Dictionary<string, Visibility> ButtonVisibilities { get; set; } = new Dictionary<string, Visibility>();
         public Dictionary<string, Brush> ButtonBackgrounds { get; set; } = new Dictionary<string, Brush>();
 
-        private object _CurrentView;
+        private object _currentView;
         public object CurrentView
         {
-            get => _CurrentView;
-            set { _CurrentView = value; OnPropertyChanged(); }
+            get => _currentView;
+            set { _currentView = value; OnPropertyChanged(); }
         }
 
-        // Constructor với Dependency Injection
-        public MainViewModel(IPhieuDatTiecService phieuDatTiecService)
+        // Constructor with Dependency Injection
+        public MainViewModel(
+            IBookingService bookingService,
+            IUserGroupService userGroupService,
+            IPermissionService permissionService,
+            IAppUserService appUserService,
+            IRevenueReportDetailService revenueReportDetailService)
         {
-            _phieuDatTiecService = phieuDatTiecService;
+            _bookingService = bookingService;
+            _userGroupService = userGroupService;
+            _permissionService = permissionService;
+            _appUserService = appUserService;
+            _revenueReportDetailService = revenueReportDetailService;
             
             LoadButtonVisibility();
-            #region Command
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new HomeView()
                 {
-                    DataContext = new HomeViewModel(this, _phieuDatTiecService)
+                    DataContext = new HomeViewModel(this, _bookingService, _revenueReportDetailService)
                 };
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue); 
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             HallTypeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new HallTypeView
@@ -83,13 +100,15 @@ namespace QuanLyTiecCuoi.ViewModel
                 ButtonBackgrounds["Hall"] = new SolidColorBrush(Colors.DarkBlue); 
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             ShiftCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                CurrentView = new ShiftView(); // ShiftView sẽ tự lấy ViewModel từ DI Container
+                CurrentView = new ShiftView();
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Shift"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             ServiceCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new ServiceView()
@@ -100,27 +119,29 @@ namespace QuanLyTiecCuoi.ViewModel
                 ButtonBackgrounds["Service"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             WeddingCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                var thucDonService = Infrastructure.ServiceContainer.GetService<IThucDonService>();
-                var chiTietDVService = Infrastructure.ServiceContainer.GetService<IChiTietDVService>();
+                var menuService = Infrastructure.ServiceContainer.GetService<IMenuService>();
+                var serviceDetailService = Infrastructure.ServiceContainer.GetService<IServiceDetailService>();
                 
                 CurrentView = new WeddingView()
                 {
-                    DataContext = new WeddingViewModel(this, _phieuDatTiecService, thucDonService, chiTietDVService)
+                    DataContext = new WeddingViewModel(this, _bookingService, menuService, serviceDetailService)
                 };
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue); 
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             ReportCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                CurrentView = new ReportView(); // <- ViewModel được binding ở ContentControl
+                CurrentView = new ReportView();
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Report"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
-            //ParameterCommand = new RelayCommand<object>((p) => { return true; }, (p) => { CurrentView = new ParameterView(); });
+            
             ParameterCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 CurrentView = new ParameterView()
@@ -131,11 +152,12 @@ namespace QuanLyTiecCuoi.ViewModel
                 ButtonBackgrounds["Parameter"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             PermissionCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 CurrentView = new PermissionView() {
-                    DataContext = new PermissionViewModel()
+                    DataContext = new PermissionViewModel(_userGroupService, _permissionService, _appUserService)
                 };
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Permission"] = new SolidColorBrush(Colors.DarkBlue);
@@ -145,21 +167,23 @@ namespace QuanLyTiecCuoi.ViewModel
             UserCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
                 DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 CurrentView = new UserView() {
-                    DataContext = new UserViewModel()
+                    DataContext = Infrastructure.ServiceContainer.GetService<UserViewModel>()
                 };
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["User"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             AccountCommand = new RelayCommand<object>((p) => { return true; }, (p) => {
                 DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 CurrentView = new AccountView() {
-                    DataContext = new AccountViewModel()
+                    DataContext = Infrastructure.ServiceContainer.GetService<AccountViewModel>()
                 };
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Account"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             FoodCommand = new RelayCommand<object>((p) => true, (p) =>
             {
                 CurrentView = new FoodView()
@@ -170,114 +194,83 @@ namespace QuanLyTiecCuoi.ViewModel
                 ButtonBackgrounds["Food"] = new SolidColorBrush(Colors.DarkBlue);
                 OnPropertyChanged(nameof(ButtonBackgrounds));
             });
+            
             LogoutCommand = new RelayCommand<Window>((p) => { return true; }, (p) => {
                 LoginWindow loginWindow = new LoginWindow();
-                loginWindow.DataContext = new LoginViewModel();
+                loginWindow.DataContext = Infrastructure.ServiceContainer.GetService<LoginViewModel>();
                 DataProvider.Ins.DB = new QuanLyTiecCuoiEntities();
                 loginWindow.Show();
                 LoadButtonVisibility();
                 DataProvider.Ins.CurrentUser = null;
                 p.Close();
             });
-            #endregion
         }
-        // Chuyển sang tab Đặt tiệc cưới, nếu có quyền
+
         public void SwitchToWeddingTab()
         {
             if (ButtonVisibilities.ContainsKey("Wedding") && ButtonVisibilities["Wedding"] == Visibility.Visible)
             {
-                var thucDonService = Infrastructure.ServiceContainer.GetService<IThucDonService>();
-                var chiTietDVService = Infrastructure.ServiceContainer.GetService<IChiTietDVService>();
+                var menuService = Infrastructure.ServiceContainer.GetService<IMenuService>();
+                var serviceDetailService = Infrastructure.ServiceContainer.GetService<IServiceDetailService>();
                 
-                var dataContext = new WeddingViewModel(this, _phieuDatTiecService, thucDonService, chiTietDVService);
+                var dataContext = new WeddingViewModel(this, _bookingService, menuService, serviceDetailService);
                 CurrentView = new WeddingView()
                 {
                     DataContext = dataContext
                 };
                 
-                // Đặt màu nền cho nút "Wedding" là màu được chọn
                 ResetButtonBackgrounds();
                 ButtonBackgrounds["Wedding"] = new SolidColorBrush(Colors.DarkBlue);
-                // Gọi OnPropertyChanged để cập nhật giao diện
                 OnPropertyChanged(nameof(ButtonBackgrounds));
-                dataContext.AddCommandFunc();
+                dataContext.AddWedding();
             }
         }
-        // Chuyển tab sang Chi tiết Đặt tiệc cưới
+
         public void SwitchToWeddingDetailTab(int weddingId)
         {
-            // Sử dụng ServiceContainer để lấy các dependencies và tạo WeddingDetailViewModel
-            var sanhService = Infrastructure.ServiceContainer.GetService<ISanhService>();
-            var caService = Infrastructure.ServiceContainer.GetService<ICaService>();
-            var phieuDatTiecService = Infrastructure.ServiceContainer.GetService<IPhieuDatTiecService>();
-            var monAnService = Infrastructure.ServiceContainer.GetService<IMonAnService>();
-            var dichVuService = Infrastructure.ServiceContainer.GetService<IDichVuService>();
-            var thucDonService = Infrastructure.ServiceContainer.GetService<IThucDonService>();
-            var chiTietDVService = Infrastructure.ServiceContainer.GetService<IChiTietDVService>();
-            var thamSoService = Infrastructure.ServiceContainer.GetService<IThamSoService>();
-
-            var dataContext = new WeddingDetailViewModel(
-                weddingId,
-                sanhService,
-                caService,
-                phieuDatTiecService,
-                monAnService,
-                dichVuService,
-                thucDonService,
-                chiTietDVService,
-                thamSoService
-            );
-            
             CurrentView = new WeddingDetailView()
             {
-                DataContext = dataContext
+                DataContext = Infrastructure.ServiceContainer.CreateWeddingDetailViewModel(weddingId)
             };
         }
-        // Tắt tất cả các view và view model khác (trừ main và view model hiện tại)
+
         public void CloseAllViewsExceptCurrent()
         {
-            // Đặt CurrentView về null để tắt tất cả các view khác
             CurrentView = null;
-            // Reset màu nền của tất cả các nút
             ResetButtonBackgrounds();
             OnPropertyChanged(nameof(ButtonBackgrounds));
         }
 
-
         private void LoadButtonVisibility()
         {
-            // Lấy danh sách chức năng của nhóm người dùng hiện tại
-            var userPermissions = DataProvider.Ins.DB.NHOMNGUOIDUNGs
-                .Where(nhom => nhom.MaNhom == DataProvider.Ins.CurrentUser.MaNhom) // Lọc theo mã nhóm của người dùng hiện tại
-                .SelectMany(nhom => nhom.CHUCNANGs); // Lấy danh sách CHUCNANG từ NHOMNGUOIDUNG
+            var userPermissions = DataProvider.Ins.DB.UserGroups
+                .Where(group => group.GroupId == DataProvider.Ins.CurrentUser.GroupId)
+                .SelectMany(group => group.Permissions);
 
-            // Thiết lập Visibility dựa trên quyền
             var buttonKeys = new List<string> { "Home", "HallType", "Hall", "Shift", "Food", "Service", "Wedding", "Report", "Parameter", "Permission", "User", "Account" };
 
             foreach (var key in buttonKeys)
             {
-                ButtonVisibilities[key] = userPermissions.Any(cn => cn.MaChucNang == key) ? Visibility.Visible : Visibility.Collapsed;
+                ButtonVisibilities[key] = userPermissions.Any(p => p.PermissionId == key) ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            // Gọi OnPropertyChanged để cập nhật giao diện
             OnPropertyChanged(nameof(ButtonVisibilities));
             ResetButtonBackgrounds();
-            // Đặt màu nền cho nút "Trang chủ" là màu được chọn
+            
             CurrentView = new HomeView()
             {
-                DataContext = new HomeViewModel(this, _phieuDatTiecService)
+                DataContext = new HomeViewModel(this, _bookingService, _revenueReportDetailService)
             };
             ButtonBackgrounds["Home"] = new SolidColorBrush(Colors.DarkBlue);
-            // Gọi OnPropertyChanged để cập nhật giao diện
             OnPropertyChanged(nameof(ButtonBackgrounds));
         }
+
         private void ResetButtonBackgrounds()
         {
             foreach (var key in ButtonBackgrounds.Keys.ToList())
             {
-                ButtonBackgrounds[key] = new SolidColorBrush(Colors.Transparent); // Màu mặc định
+                ButtonBackgrounds[key] = new SolidColorBrush(Colors.Transparent);
             }
         }
-
     }
 }

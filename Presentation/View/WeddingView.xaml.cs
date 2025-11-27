@@ -34,7 +34,7 @@ namespace QuanLyTiecCuoi.Presentation.View
                         sortBy = "TenCoDau";
                         break;
                     case "Tên sảnh":
-                        sortBy = "Sanh.TenSanh";
+                        sortBy = "Sanh.HallName";
                         break;
                     case "Ngày đãi tiệc":
                         sortBy = "NgayDaiTiec";

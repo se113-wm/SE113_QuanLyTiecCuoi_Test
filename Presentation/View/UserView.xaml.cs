@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuanLyTiecCuoi.Infrastructure;
+using QuanLyTiecCuoi.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +22,7 @@ namespace QuanLyTiecCuoi.Presentation.View {
     public partial class UserView : UserControl {
         public UserView() {
             InitializeComponent();
+            DataContext = ServiceContainer.GetService<UserViewModel>();
         }
     }
 }

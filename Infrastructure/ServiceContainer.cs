@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using QuanLyTiecCuoi.BusinessLogicLayer.IService;
 using QuanLyTiecCuoi.BusinessLogicLayer.Service;
 using QuanLyTiecCuoi.DataAccessLayer.IRepository;
@@ -10,14 +10,14 @@ using System;
 namespace QuanLyTiecCuoi.Infrastructure
 {
     /// <summary>
-    /// Container qu?n l� Dependency Injection cho to�n b? ?ng d?ng
+    /// Container quản lý Dependency Injection cho toàn bộ ứng dụng
     /// </summary>
     public static class ServiceContainer
     {
         private static IServiceProvider _serviceProvider;
 
         /// <summary>
-        /// Service Provider singleton - t? ??ng kh?i t?o n?u ch?a c�
+        /// Service Provider singleton - tự động khởi tạo nếu chưa có
         /// </summary>
         public static IServiceProvider ServiceProvider
         {
@@ -32,44 +32,55 @@ namespace QuanLyTiecCuoi.Infrastructure
         }
 
         /// <summary>
-        /// C?u h�nh t?t c? dependencies cho ?ng d?ng
+        /// Cấu hình tất cả dependencies cho ứng dụng
         /// </summary>
         public static void Configure()
         {
             var services = new ServiceCollection();
 
             // ============================================
-            // REGISTER REPOSITORIES (Transient - m?i l?n t?o m?i)
+            // REGISTER REPOSITORIES (Transient - mỗi lần tạo mới)
             // ============================================
-            services.AddTransient<ICaRepository, CaRepository>();
-            services.AddTransient<IBaoCaoDsRepository, BaoCaoDsRepository>();
-            services.AddTransient<IChiTietDVRepository, ChiTietDVRepository>();
-            services.AddTransient<IDichVuRepository, DichVuRepository>();
-            services.AddTransient<ILoaiSanhRepository, LoaiSanhRepository>();
-            services.AddTransient<IMonAnRepository, MonAnRepository>();
-            services.AddTransient<INguoiDungRepository, NguoiDungRepository>();
-            services.AddTransient<IPhieuDatTiecRepository, PhieuDatTiecRepository>();
+            services.AddTransient<IAppUserRepository, AppUserRepository>();
+            services.AddTransient<IBookingRepository, BookingRepository>();
+            services.AddTransient<IDishRepository, DishRepository>();
             services.AddTransient<IHallRepository, HallRepository>();
-            services.AddTransient<IThamSoRepository, ThamSoRepository>();
-            services.AddTransient<IThucDonRepository, ThucDonRepository>();
+            services.AddTransient<IHallTypeRepository, HallTypeRepository>();
+            services.AddTransient<IMenuRepository, MenuRepository>();
+            services.AddTransient<IParameterRepository, ParameterRepository>();
+            services.AddTransient<IPermissionRepository, PermissionRepository>();
+            services.AddTransient<IRevenueReportRepository, RevenueReportRepository>();
+            services.AddTransient<IRevenueReportDetailRepository, RevenueReportDetailRepository>();
+            services.AddTransient<IServiceRepository, ServiceRepository>();
+            services.AddTransient<IServiceDetailRepository, ServiceDetailRepository>();
+            services.AddTransient<IShiftRepository, ShiftRepository>();
+            services.AddTransient<IUserGroupRepository, UserGroupRepository>();
 
             // ============================================
             // REGISTER SERVICES (Transient - Business Logic Layer)
             // ============================================
-            services.AddTransient<ICaService, CaService>();
-            services.AddTransient<IChiTietDVService, ChiTietDVService>();
-            services.AddTransient<IDichVuService, DichVuService>();
-            services.AddTransient<ILoaiSanhService, LoaiSanhService>();
-            services.AddTransient<IMonAnService, MonAnService>();
-            services.AddTransient<INguoiDungService, NguoiDungService>();
-            services.AddTransient<IPhieuDatTiecService, PhieuDatTiecService>();
+            services.AddTransient<IAppUserService, AppUserService>();
+            services.AddTransient<IBookingService, BookingService>();
+            services.AddTransient<IDishService, DishService>();
             services.AddTransient<IHallService, HallService>();
-            services.AddTransient<IThamSoService, ThamSoService>();
-            services.AddTransient<IThucDonService, ThucDonService>();
+            services.AddTransient<IHallTypeService, HallTypeService>();
+            services.AddTransient<IMenuService, MenuService>();
+            services.AddTransient<IParameterService, ParameterService>();
+            services.AddTransient<IPermissionService, PermissionService>();
+            services.AddTransient<IRevenueReportService, RevenueReportService>();
+            services.AddTransient<IRevenueReportDetailService, RevenueReportDetailService>();
+            services.AddTransient<IServiceService, ServiceService>();
+            services.AddTransient<IServiceDetailService, ServiceDetailService>();
+            services.AddTransient<IShiftService, ShiftService>();
+            services.AddTransient<IUserGroupService, UserGroupService>();
 
             // ============================================
-            // REGISTER VIEWMODELS (Transient - m?i View m?i s? c� ViewModel m?i)
+            // REGISTER VIEWMODELS (Transient - mỗi View mới sẽ có ViewModel mới)
             // ============================================
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<AccountViewModel>();
+            services.AddTransient<UserViewModel>();
+            services.AddTransient<PermissionViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<ShiftViewModel>();
             services.AddTransient<MenuItemViewModel>();
@@ -79,26 +90,27 @@ namespace QuanLyTiecCuoi.Infrastructure
             services.AddTransient<ServiceViewModel>();
             services.AddTransient<HallViewModel>();
             services.AddTransient<HallTypeViewModel>();
+            services.AddTransient<ReportViewModel>();
             
-            // HomeViewModel c?n MainViewModel, s? ???c t?o trong MainViewModel constructor
-            // WeddingViewModel c?n MainViewModel, s? ???c t?o trong MainViewModel
-            // Th�m c�c ViewModel kh�c ? ?�y khi c?n...
+            // HomeViewModel cần MainViewModel, sẽ được tạo trong MainViewModel constructor
+            // WeddingViewModel cần MainViewModel, sẽ được tạo trong MainViewModel
+            // Thêm các ViewModel khác ở đây khi cần...
 
             _serviceProvider = services.BuildServiceProvider();
         }
 
         /// <summary>
-        /// L?y service t? container theo ki?u generic
+        /// Lấy service từ container theo kiểu generic
         /// </summary>
-        /// <typeparam name="T">Ki?u service c?n l?y</typeparam>
-        /// <returns>Instance c?a service</returns>
+        /// <typeparam name="T">Kiểu service cần lấy</typeparam>
+        /// <returns>Instance của service</returns>
         public static T GetService<T>()
         {
             return ServiceProvider.GetService<T>();
         }
 
         /// <summary>
-        /// T?o scope m?i cho m?t ph?m vi ho&t ??ng
+        /// Tạo scope mới cho một phạm vi hoạt động
         /// </summary>
         public static IServiceScope CreateScope()
         {
@@ -106,57 +118,57 @@ namespace QuanLyTiecCuoi.Infrastructure
         }
 
         // ============================================
-        // FACTORY METHODS cho ViewModels c� parameters
+        // FACTORY METHODS cho ViewModels có parameters
         // ============================================
 
         /// <summary>
-        /// T?o WeddingDetailViewModel v?i DI
+        /// Tạo WeddingDetailViewModel với DI
         /// </summary>
-        public static WeddingDetailViewModel CreateWeddingDetailViewModel(int maPhieuDat)
+        public static WeddingDetailViewModel CreateWeddingDetailViewModel(int bookingId)
         {
             return new WeddingDetailViewModel(
-                maPhieuDat,
+                bookingId,
                 GetService<IHallService>(),
-                GetService<ICaService>(),
-                GetService<IPhieuDatTiecService>(),
-                GetService<IMonAnService>(),
-                GetService<IDichVuService>(),
-                GetService<IThucDonService>(),
-                GetService<IChiTietDVService>(),
-                GetService<IThamSoService>()
+                GetService<IShiftService>(),
+                GetService<IBookingService>(),
+                GetService<IDishService>(),
+                GetService<IServiceService>(),
+                GetService<IMenuService>(),
+                GetService<IServiceDetailService>(),
+                GetService<IParameterService>()
             );
         }
 
         /// <summary>
-        /// T?o AddWeddingViewModel v?i DI
+        /// Tạo AddWeddingViewModel với DI
         /// </summary>
         public static AddWeddingViewModel CreateAddWeddingViewModel()
         {
             return new AddWeddingViewModel(
                 GetService<IHallService>(),
-                GetService<ICaService>(),
-                GetService<IPhieuDatTiecService>(),
-                GetService<IMonAnService>(),
-                GetService<IDichVuService>(),
-                GetService<IThucDonService>(),
-                GetService<IChiTietDVService>(),
-                GetService<IThamSoService>()
+                GetService<IShiftService>(),
+                GetService<IBookingService>(),
+                GetService<IDishService>(),
+                GetService<IServiceService>(),
+                GetService<IMenuService>(),
+                GetService<IServiceDetailService>(),
+                GetService<IParameterService>()
             );
         }
 
         /// <summary>
-        /// T?o InvoiceViewModel v?i DI
+        /// Tạo InvoiceViewModel với DI
         /// </summary>
         public static InvoiceViewModel CreateInvoiceViewModel(int invoiceId)
         {
             return new InvoiceViewModel(
                 invoiceId,
-                GetService<IPhieuDatTiecService>(),
-                GetService<ICaService>(),
+                GetService<IBookingService>(),
+                GetService<IShiftService>(),
                 GetService<IHallService>(),
-                GetService<IChiTietDVService>(),
-                GetService<IThucDonService>(),
-                GetService<IThamSoService>()
+                GetService<IServiceDetailService>(),
+                GetService<IMenuService>(),
+                GetService<IParameterService>()
             );
         }
     }

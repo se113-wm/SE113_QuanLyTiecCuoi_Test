@@ -12,47 +12,61 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static QuanLyTiecCuoi.Presentation.ViewModel.ReportViewModel;
 
 namespace QuanLyTiecCuoi.ViewModel
 {
     public class HallViewModel : BaseViewModel
     {
+        #region Service & Collections
         private readonly IHallService _hallService;
-        private readonly ILoaiSanhService _loaiSanhService;
-        private readonly IPhieuDatTiecService _phieuDatTiecService;
+        private readonly IHallTypeService _hallTypeService;
+        private readonly IBookingService _bookingService;
 
-        private ObservableCollection<SANHDTO> _List;
-        public ObservableCollection<SANHDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
-
-        private ObservableCollection<SANHDTO> _OriginalList;
-        public ObservableCollection<SANHDTO> OriginalList { get => _OriginalList; set { _OriginalList = value; OnPropertyChanged(); } }
-
-        private ObservableCollection<LOAISANHDTO> _HallTypes;
-        public ObservableCollection<LOAISANHDTO> HallTypes { get => _HallTypes; set { _HallTypes = value; OnPropertyChanged(); } }
-
-        private SANHDTO _SelectedItem;
-        public SANHDTO SelectedItem
+        private ObservableCollection<HallDTO> _hallList;
+        public ObservableCollection<HallDTO> HallList
         {
-            get => _SelectedItem;
+            get => _hallList;
+            set { _hallList = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<HallDTO> _originalList;
+        public ObservableCollection<HallDTO> OriginalList
+        {
+            get => _originalList;
+            set { _originalList = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<HallTypeDTO> _hallTypes;
+        public ObservableCollection<HallTypeDTO> HallTypes
+        {
+            get => _hallTypes;
+            set { _hallTypes = value; OnPropertyChanged(); }
+        }
+        #endregion
+
+        #region Selected Item
+        private HallDTO _selectedItem;
+        public HallDTO SelectedItem
+        {
+            get => _selectedItem;
             set
             {
-                _SelectedItem = value;
+                _selectedItem = value;
                 OnPropertyChanged();
+
                 if (SelectedItem != null)
                 {
-                    TenSanh = SelectedItem.TenSanh;
-                    SoLuongBanToiDa = SelectedItem.SoLuongBanToiDa?.ToString();
-                    DonGiaBanToiThieu = SelectedItem.LoaiSanh?.DonGiaBanToiThieu;
-                    GhiChu = SelectedItem.GhiChu;
-                    SelectedHallType = HallTypes?.FirstOrDefault(ht => ht.MaLoaiSanh == SelectedItem.MaLoaiSanh);
+                    HallName = SelectedItem.HallName;
+                    MaxTableCount = SelectedItem.MaxTableCount?.ToString();
+                    MinTablePrice = SelectedItem.HallType?.MinTablePrice;
+                    Note = SelectedItem.Note;
+                    SelectedHallType = HallTypes?.FirstOrDefault(ht => ht.HallTypeId == SelectedItem.HallTypeId);
                     if (!IsAdding)
                     {
-                        RenderImageAsync(SelectedItem.MaSanh.ToString(), "Hall");
+                        RenderImageAsync(SelectedItem.HallId.ToString(), "Hall");
                     }
                     if (IsEditing)
                     {
-                        // Clean up cache files
                         string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
                         string addCache = Path.Combine(folder, "Addcache.jpg");
                         string editCache = Path.Combine(folder, "Editcache.jpg");
@@ -66,132 +80,42 @@ namespace QuanLyTiecCuoi.ViewModel
                     EditMessage = string.Empty;
                     DeleteMessage = string.Empty;
                     Image = null;
-  
-                }
-              
-            }
-        }
-
-        private bool _nullImage;
-        public bool nullImage
-        {
-            get => _nullImage;
-            set { _nullImage = value; OnPropertyChanged(); }
-        }
-
-        private bool _isEditing;
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set { _isEditing = value; OnPropertyChanged(); }
-        }
-        private bool _isAdding;
-        public bool IsAdding
-        {
-            get => _isAdding;
-            set { _isAdding = value; OnPropertyChanged(); }
-        }
-        private bool _isDeleting;
-        public bool IsDeleting
-        {
-            get => _isDeleting;
-            set { _isDeleting = value; OnPropertyChanged(); }
-        }
-        //Add ExportingExcel
-        private bool _isExporting;
-        public bool IsExporting
-        {
-            get => _isExporting;
-            set { _isExporting = value; OnPropertyChanged(); }
-        }
-
-        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Xuất Excel", "Chọn thao tác"};
-        private string _selectedAction;
-        public string SelectedAction
-        {
-            get => _selectedAction;
-            set 
-            { 
-                _selectedAction = value; 
-                OnPropertyChanged(); 
-                switch (value)
-                {
-                    case "Thêm":
-                        IsAdding = true;
-                        IsEditing = false;
-                        IsDeleting = false;
-                        IsExporting = false;
-                        Reset(); // reset các trường nhập liệu
-                        // reset ảnh về ko có ảnh
-                        Image = null;
-                        break;
-                    case "Sửa":
-                        IsAdding = false;
-                        IsEditing = true;
-                        IsDeleting = false;
-                        IsExporting = false;
-                        Reset();
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một sảnh để sửa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
-                        break;
-                    case "Xóa":
-                        IsAdding = false;
-                        IsEditing = false;
-                        IsDeleting = true;
-                        IsExporting = false;
-                        Reset();
-                        //if (SelectedItem == null)
-                        //{
-                        //    MessageBox.Show("Vui lòng chọn một sảnh để xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    return;
-                        //}
-                        break;
-                    case "Xuất Excel":
-                        IsAdding = false;
-                        IsEditing = false;
-                        IsDeleting = false;
-                        IsExporting = true;
-                        Reset();
-                        break;
-                    default:
-                        _selectedAction = null;
-                        IsAdding = false;
-                        IsEditing = false;
-                        IsDeleting = false;
-                        IsExporting = false;
-                        Reset(); // reset các trường nhập liệu
-                        break;
                 }
             }
         }
+        #endregion
 
-        private LOAISANHDTO _SelectedHallType;
-        public LOAISANHDTO SelectedHallType
+        #region Bindable Fields
+        private string _hallName;
+        public string HallName
         {
-            get => _SelectedHallType;
-            set
-            {
-                _SelectedHallType = value;
-                OnPropertyChanged();
-                DonGiaBanToiThieu = _SelectedHallType?.DonGiaBanToiThieu;
-            }
+            get => _hallName;
+            set { _hallName = value; OnPropertyChanged(); }
         }
 
-        private string _TenSanh;
-        public string TenSanh { get => _TenSanh; set { _TenSanh = value; OnPropertyChanged(); } }
+        private string _maxTableCount;
+        public string MaxTableCount
+        {
+            get => _maxTableCount;
+            set { _maxTableCount = value; OnPropertyChanged(); }
+        }
 
-        private string _SoLuongBanToiDa;
-        public string SoLuongBanToiDa { get => _SoLuongBanToiDa; set { _SoLuongBanToiDa = value; OnPropertyChanged(); } }
+        private string _note;
+        public string Note
+        {
+            get => _note;
+            set { _note = value; OnPropertyChanged(); }
+        }
 
-        private string _GhiChu;
-        public string GhiChu { get => _GhiChu; set { _GhiChu = value; OnPropertyChanged(); } }
+        private decimal? _minTablePrice;
+        public decimal? MinTablePrice
+        {
+            get => _minTablePrice;
+            set { _minTablePrice = value; OnPropertyChanged(); }
+        }
+        #endregion
 
-        private decimal? _DonGiaBanToiThieu;
-        public decimal? DonGiaBanToiThieu { get => _DonGiaBanToiThieu; set { _DonGiaBanToiThieu = value; OnPropertyChanged(); } }
-
+        #region Search
         private string _searchText;
         public string SearchText
         {
@@ -207,12 +131,139 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
+        private ObservableCollection<string> _searchProperties;
+        public ObservableCollection<string> SearchProperties
+        {
+            get => _searchProperties;
+            set { _searchProperties = value; OnPropertyChanged(); }
+        }
 
-        private ImageSource _Image;
+        private string _selectedSearchProperty;
+        public string SelectedSearchProperty
+        {
+            get => _selectedSearchProperty;
+            set
+            {
+                _selectedSearchProperty = value;
+                OnPropertyChanged();
+                PerformSearch();
+            }
+        }
+        #endregion
+
+        #region Action Selection
+        private bool _hasNoImage;
+        public bool HasNoImage
+        {
+            get => _hasNoImage;
+            set { _hasNoImage = value; OnPropertyChanged(); }
+        }
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); }
+        }
+
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set { _isAdding = value; OnPropertyChanged(); }
+        }
+
+        private bool _isDeleting;
+        public bool IsDeleting
+        {
+            get => _isDeleting;
+            set { _isDeleting = value; OnPropertyChanged(); }
+        }
+
+        private bool _isExporting;
+        public bool IsExporting
+        {
+            get => _isExporting;
+            set { _isExporting = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<string> ActionList { get; } = new ObservableCollection<string> { "Thêm", "Sửa", "Xóa", "Xuất Excel", "Chọn thao tác" };
+
+        private string _selectedAction;
+        public string SelectedAction
+        {
+            get => _selectedAction;
+            set
+            {
+                _selectedAction = value;
+                OnPropertyChanged();
+                switch (value)
+                {
+                    case "Thêm":
+                        IsAdding = true;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        IsExporting = false;
+                        Reset();
+                        Image = null;
+                        break;
+                    case "Sửa":
+                        IsAdding = false;
+                        IsEditing = true;
+                        IsDeleting = false;
+                        IsExporting = false;
+                        Reset();
+                        break;
+                    case "Xóa":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = true;
+                        IsExporting = false;
+                        Reset();
+                        break;
+                    case "Xuất Excel":
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        IsExporting = true;
+                        Reset();
+                        break;
+                    default:
+                        _selectedAction = null;
+                        IsAdding = false;
+                        IsEditing = false;
+                        IsDeleting = false;
+                        IsExporting = false;
+                        Reset();
+                        break;
+                }
+            }
+        }
+
+        private HallTypeDTO _selectedHallType;
+        public HallTypeDTO SelectedHallType
+        {
+            get => _selectedHallType;
+            set
+            {
+                _selectedHallType = value;
+                OnPropertyChanged();
+                MinTablePrice = _selectedHallType?.MinTablePrice;
+            }
+        }
+        #endregion
+
+        #region Image Handling
+        private ImageSource _image;
         public ImageSource Image
         {
-            get => _Image;
-            set { _Image = value; OnPropertyChanged(); nullImage = Image == null ? true : false; }
+            get => _image;
+            set
+            {
+                _image = value;
+                OnPropertyChanged();
+                HasNoImage = Image == null;
+            }
         }
 
         private string _imageBtnToolTip;
@@ -225,8 +276,6 @@ namespace QuanLyTiecCuoi.ViewModel
         public ICommand SelectImageCommand => new RelayCommand<object>(
             (p) =>
             {
-                //// Allow only when adding or editing
-                //return IsAdding || IsEditing;
                 if (IsAdding)
                 {
                     return true;
@@ -245,7 +294,7 @@ namespace QuanLyTiecCuoi.ViewModel
 
                 if (IsEditing && SelectedItem != null)
                 {
-                    string currentImagePath = Path.Combine(folder, SelectedItem.MaSanh + ".jpg");
+                    string currentImagePath = Path.Combine(folder, SelectedItem.HallId + ".jpg");
                     string cachePath = Path.Combine(folder, "Editcache.jpg");
 
                     if (File.Exists(currentImagePath) || File.Exists(cachePath))
@@ -257,7 +306,7 @@ namespace QuanLyTiecCuoi.ViewModel
                             MessageBoxImage.Question,
                             MessageBoxResult.Cancel);
 
-                        if (result == MessageBoxResult.Yes) // Đổi ảnh
+                        if (result == MessageBoxResult.Yes)
                         {
                             var dlg = new OpenFileDialog
                             {
@@ -277,11 +326,10 @@ namespace QuanLyTiecCuoi.ViewModel
                                 }
                             }
                         }
-                        else if (result == MessageBoxResult.No) // Xóa ảnh
+                        else if (result == MessageBoxResult.No)
                         {
                             try
                             {
-                                //if (File.Exists(currentImagePath)) File.Delete(currentImagePath);
                                 if (File.Exists(cachePath)) File.Delete(cachePath);
                                 Image = null;
                             }
@@ -290,9 +338,8 @@ namespace QuanLyTiecCuoi.ViewModel
                                 MessageBox.Show("Không thể xóa ảnh: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
-                        // Cancel: do nothing
                     }
-                    else // Chưa có ảnh, chọn ảnh như bình thường
+                    else
                     {
                         var dlg = new OpenFileDialog
                         {
@@ -325,7 +372,7 @@ namespace QuanLyTiecCuoi.ViewModel
                             MessageBoxImage.Question,
                             MessageBoxResult.Cancel);
 
-                        if (result == MessageBoxResult.Yes) // Đổi ảnh
+                        if (result == MessageBoxResult.Yes)
                         {
                             var dlg = new OpenFileDialog
                             {
@@ -345,7 +392,7 @@ namespace QuanLyTiecCuoi.ViewModel
                                 }
                             }
                         }
-                        else if (result == MessageBoxResult.No) // Xóa ảnh
+                        else if (result == MessageBoxResult.No)
                         {
                             try
                             {
@@ -357,9 +404,8 @@ namespace QuanLyTiecCuoi.ViewModel
                                 MessageBox.Show("Không thể xóa ảnh: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
-                        // Cancel: do nothing
                     }
-                    else // Chưa có ảnh, chọn ảnh như bình thường
+                    else
                     {
                         var dlg = new OpenFileDialog
                         {
@@ -392,7 +438,6 @@ namespace QuanLyTiecCuoi.ViewModel
             }
             try
             {
-                // Load original image
                 BitmapImage original = new BitmapImage();
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
@@ -404,22 +449,17 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
 
                 int cropSize = Math.Min(original.PixelWidth, original.PixelHeight);
-
-                // Calculate crop rectangle (centered)
                 int x = (original.PixelWidth - cropSize) / 2;
                 int y = (original.PixelHeight - cropSize) / 2;
 
-                // Crop to square
                 var cropped = new CroppedBitmap(original, new Int32Rect(x, y, cropSize, cropSize));
 
-                // Resize to 100x100
                 var targetSize = 500;
                 var resized = new TransformedBitmap(cropped, new ScaleTransform(
                     (double)targetSize / cropSize,
                     (double)targetSize / cropSize
                 ));
 
-                // Encode and overwrite the file
                 var encoder = new JpegBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(resized));
                 using (var outStream = new FileStream(path, FileMode.Create, FileAccess.Write))
@@ -427,7 +467,6 @@ namespace QuanLyTiecCuoi.ViewModel
                     encoder.Save(outStream);
                 }
 
-                // Reload the resized image for display
                 BitmapImage bitmap = new BitmapImage();
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
@@ -445,9 +484,9 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        private void RenderImageAsync(string id, string loai)
+        private void RenderImageAsync(string id, string type)
         {
-            var path = ImageHelper.GetImagePath(loai, id);
+            var path = ImageHelper.GetImagePath(type, id);
             if (!File.Exists(path))
             {
                 Image = null;
@@ -482,112 +521,48 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             });
         }
-        
+        #endregion
 
-        private ObservableCollection<string> _SearchProperties;
-        public ObservableCollection<string> SearchProperties
+        #region Messages & Commands
+        private string _addMessage;
+        public string AddMessage
         {
-            get => _SearchProperties;
-            set { _SearchProperties = value; OnPropertyChanged(); }
+            get => _addMessage;
+            set { _addMessage = value; OnPropertyChanged(); }
         }
 
-        private string _SelectedSearchProperty;
-        public string SelectedSearchProperty
+        private string _editMessage;
+        public string EditMessage
         {
-            get => _SelectedSearchProperty;
-            set
-            {
-                _SelectedSearchProperty = value;
-                OnPropertyChanged();
-                PerformSearch();
-            }
+            get => _editMessage;
+            set { _editMessage = value; OnPropertyChanged(); }
         }
 
-        private void PerformSearch()
+        private string _deleteMessage;
+        public string DeleteMessage
         {
-            try
-            {
-                SelectedItem = null;
-                TenSanh = string.Empty;
-                SoLuongBanToiDa = null;
-                GhiChu = string.Empty;
-                SelectedHallType = null;
-                if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty))
-                {
-                    List = OriginalList;
-                    return;
-                }
-
-                switch (SelectedSearchProperty)
-                {
-                    case "Tên sảnh":
-                        List = new ObservableCollection<SANHDTO>(
-                            OriginalList.Where(x => !string.IsNullOrEmpty(x.TenSanh) &&
-                                x.TenSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Tên loại sảnh":
-                        List = new ObservableCollection<SANHDTO>(
-                            OriginalList.Where(x => x.LoaiSanh != null && !string.IsNullOrEmpty(x.LoaiSanh.TenLoaiSanh) &&
-                                x.LoaiSanh.TenLoaiSanh.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    case "Đơn giá bàn tối thiểu":
-                        List = new ObservableCollection<SANHDTO>(
-                            OriginalList.Where(x =>
-                                x.LoaiSanh != null &&
-                                x.LoaiSanh.DonGiaBanToiThieu != null &&
-                                x.LoaiSanh.DonGiaBanToiThieu.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
-                            )
-                        );
-                        break;
-                    case "Số lượng bàn tối đa":
-                        List = new ObservableCollection<SANHDTO>(
-                            OriginalList.Where(x =>
-                                x.SoLuongBanToiDa != null &&
-                                x.SoLuongBanToiDa.Value.ToString().Contains(SearchText.Trim())
-                            )
-                        );
-                        break;
-                    case "Ghi chú":
-                        List = new ObservableCollection<SANHDTO>(
-                            OriginalList.Where(x => !string.IsNullOrEmpty(x.GhiChu) &&
-                                x.GhiChu.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
-                        break;
-                    default:
-                        List = new ObservableCollection<SANHDTO>(OriginalList);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            get => _deleteMessage;
+            set { _deleteMessage = value; OnPropertyChanged(); }
         }
 
         public ICommand AddCommand { get; set; }
-        private string _AddMessage;
-        public string AddMessage { get => _AddMessage; set { _AddMessage = value; OnPropertyChanged(); } }
         public ICommand EditCommand { get; set; }
-        private string _EditMessage;
-        public string EditMessage { get => _EditMessage; set { _EditMessage = value; OnPropertyChanged(); } }
         public ICommand DeleteCommand { get; set; }
-        private string _DeleteMessage;
-        public string DeleteMessage { get => _DeleteMessage; set { _DeleteMessage = value; OnPropertyChanged(); } }
         public ICommand ExportToExcelCommand { get; set; }
+        public ICommand ResetCommand { get; set; }
+        #endregion
 
-
-        public ICommand ResetCommand => new RelayCommand<object>((p) => true, (p) => {
-            Reset();
-        });
-
-        public HallViewModel(IHallService hallService, ILoaiSanhService loaiSanhService, IPhieuDatTiecService phieuDatTiecService)
+        #region Constructor
+        public HallViewModel(IHallService hallService, IHallTypeService hallTypeService, IBookingService bookingService)
         {
+            Image = null;
             _hallService = hallService;
-            _loaiSanhService = loaiSanhService;
-            _phieuDatTiecService = phieuDatTiecService;
+            _hallTypeService = hallTypeService;
+            _bookingService = bookingService;
 
-            List = new ObservableCollection<SANHDTO>(_hallService.GetAll().ToList());
-            OriginalList = new ObservableCollection<SANHDTO>(List);
-            HallTypes = new ObservableCollection<LOAISANHDTO>(_loaiSanhService.GetAll().ToList());
+            HallList = new ObservableCollection<HallDTO>(_hallService.GetAll().ToList());
+            OriginalList = new ObservableCollection<HallDTO>(HallList);
+            HallTypes = new ObservableCollection<HallTypeDTO>(_hallTypeService.GetAll().ToList());
 
             SearchProperties = new ObservableCollection<string>
             {
@@ -599,227 +574,275 @@ namespace QuanLyTiecCuoi.ViewModel
             };
             SelectedSearchProperty = SearchProperties.FirstOrDefault();
 
-            AddCommand = new RelayCommand<object>((p) =>
-            {
-                if (string.IsNullOrWhiteSpace(TenSanh))
-                {
-                    if (SelectedItem != null)
-                    {
-                        AddMessage = "Vui lòng nhập tên sảnh";
-                    }
-                    else
-                    {
-                        AddMessage = string.Empty;
-                    }
-                    return false;
-                }
-                if (SelectedHallType == null)
-                {
-                    AddMessage = "Vui lòng chọn loại sảnh";
-                    return false;
-                }
-                if (SoLuongBanToiDa == null || !int.TryParse(SoLuongBanToiDa, out int soLuong) || soLuong <= 0)
-                {
-                    AddMessage = "Số lượng bàn tối đa phải là số nguyên dương";
-                    return false;
-                }
-                var exists = OriginalList.Any(x => x.TenSanh == TenSanh && x.MaLoaiSanh == SelectedHallType.MaLoaiSanh);
-                if (exists)
-                {
-                    AddMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
-                    return false;
-                }
-                AddMessage = string.Empty;
-                return true;
-            }, (p) =>
-            {
-                try
-                {
-                    var newHall = new SANHDTO()
-                    {
-                        TenSanh = TenSanh,
-                        SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null,
-                        GhiChu = GhiChu,
-                        MaLoaiSanh = SelectedHallType?.MaLoaiSanh,
-                        LoaiSanh = SelectedHallType
-                    };
+            AddCommand = new RelayCommand<object>(
+                (p) => CanAdd(),
+                (p) => AddHall()
+            );
 
-                    _hallService.Create(newHall);
+            EditCommand = new RelayCommand<object>(
+                (p) => CanEdit(),
+                (p) => EditHall()
+            );
 
-                    List.Add(newHall);
+            DeleteCommand = new RelayCommand<object>(
+                (p) => CanDelete(),
+                (p) => DeleteHall()
+            );
 
-                    // Move Addcache.jpg to real image
-                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
-                    string cachePath = Path.Combine(folder, "Addcache.jpg");
-                    if (File.Exists(cachePath))
-                    {
-                        string newImagePath = Path.Combine(folder, newHall.MaSanh + ".jpg");
-                        File.Copy(cachePath, newImagePath, true);
-                        File.Delete(cachePath);
-                    }
-                    SelectedAction = null; // Reset action selection
-                    Reset();
-                    MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Lỗi khi thêm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
+            ResetCommand = new RelayCommand<object>(
+                (p) => true,
+                (p) => Reset()
+            );
 
-            EditCommand = new RelayCommand<object>((p) =>
-            {
-                if (SelectedItem == null)
-                {
-                    EditMessage = string.Empty;
-                    return false;
-                }
-                var folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
-                var imagePath = Path.Combine(folder, SelectedItem.MaSanh + ".jpg");
-                var imageExists = File.Exists(imagePath);
-                if (SelectedItem.TenSanh == TenSanh
-                    && SelectedItem.SoLuongBanToiDa?.ToString() == SoLuongBanToiDa
-                    && SelectedItem.GhiChu == GhiChu
-                    && SelectedItem.MaLoaiSanh == (SelectedHallType?.MaLoaiSanh ?? 0)
-                    && !(imageExists && Image == null)
-                    && ImageHelper.IsEditCacheImageSameAsCurrent(SelectedItem.MaSanh, "Hall"))
-                {
-                    EditMessage = "Không có thay đổi nào để cập nhật";
-                    return false;
-                }
-                if (string.IsNullOrWhiteSpace(TenSanh))
-                {
-                    EditMessage = "Tên sảnh không được để trống";
-                    return false;
-                }
-                if (!int.TryParse(SoLuongBanToiDa, out int soLuong) || soLuong <= 0)
-                {
-                    EditMessage = "Số lượng bàn tối đa phải là số nguyên dương";
-                    return false;
-                }
-                var exists = OriginalList.Any(x =>
-                    x.TenSanh == TenSanh &&
-                    x.MaLoaiSanh == SelectedHallType.MaLoaiSanh &&
-                    x.MaSanh != SelectedItem.MaSanh);
-                if (exists)
-                {
-                    EditMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
-                    return false;
-                }
-                if (_phieuDatTiecService.GetAll()
-                        .Any(t => t.MaSanh == SelectedItem.MaSanh
-                               && t.NgayDaiTiec.HasValue
-                               && t.NgayDaiTiec.Value.Date >= DateTime.Today.AddDays(1)))
-                {
-                    if (int.TryParse(SoLuongBanToiDa, out int newMax) && SelectedItem.SoLuongBanToiDa != newMax)
-                    {
-                        EditMessage = "Đang có tiệc chưa tổ chức, không sửa số lượng bàn tối đa";
-                        return false;
-                    }
-                }
-                EditMessage = string.Empty;
-                return true;
-            }, (p) =>
-            {
-                try
-                {
-
-                    string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
-                    if (Image == null)
-                    {
-                        string imagePath = Path.Combine(folder, SelectedItem.MaSanh + ".jpg");
-
-                        if (File.Exists(imagePath))
-                        {
-                            File.Delete(imagePath);
-                        }
-                    }
-                
-
-
-                    var updateDto = new SANHDTO()
-                    {
-                        MaSanh = SelectedItem.MaSanh,
-                        TenSanh = TenSanh,
-                        SoLuongBanToiDa = int.TryParse(SoLuongBanToiDa, out int soLuong) ? soLuong : (int?)null,
-                        GhiChu = GhiChu,
-                        MaLoaiSanh = SelectedHallType?.MaLoaiSanh,
-                        LoaiSanh = SelectedHallType
-                    };
-
-                    _hallService.Update(updateDto);
-
-                    var index = List.IndexOf(SelectedItem);
-                    List[index] = null;
-                    List[index] = updateDto;
-
-
-                    // Move Editcache.jpg to real image
-                    string cachePath = Path.Combine(folder, "Editcache.jpg");
-                    if (File.Exists(cachePath))
-                    {
-                        string newImagePath = Path.Combine(folder, updateDto.MaSanh + ".jpg");
-                        File.Copy(cachePath, newImagePath, true);
-                        File.Delete(cachePath);
-                    }
-                    SelectedAction = null; // Reset action selection
-                    Reset();
-                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            DeleteCommand = new RelayCommand<object>((p) =>
-            {
-                // Chỉ cho phép xóa khi có sảnh được chọn
-                if (SelectedItem == null)
-                {
-                    return false;
-                }
-                // Kiểm tra xem sảnh có đang được sử dụng trong phiếu đặt tiệc nào không
-                if (_phieuDatTiecService.GetAll().Any(t => t.MaSanh == SelectedItem.MaSanh))
-                {
-                    DeleteMessage = "Không thể xóa sảnh này vì đang có phiếu đặt tiệc sử dụng nó.";
-                    return false;
-                }
-                DeleteMessage = string.Empty;
-                return true;
-            }, (p) =>
-            {
-                try
-                {
-                    var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sảnh này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        // Xóa ảnh của sảnh
-                        string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
-                        string imagePath = Path.Combine(folder, SelectedItem.MaSanh + ".jpg");
-                        if (File.Exists(imagePath))
-                        {
-                            File.Delete(imagePath);
-                        }
-
-                        _hallService.Delete(SelectedItem.MaSanh);
-                        List.Remove(SelectedItem);
-                        SelectedAction = null; // Reset action selection
-                        Reset();
-                        MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
             ExportToExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
         }
-        //Exporting excel function
+        #endregion
+
+        #region Validation Helpers
+        private bool TryParseTableCount(string input, out int val)
+            => int.TryParse(input, out val);
+        #endregion
+
+        #region Add
+        private bool CanAdd()
+        {
+            if (string.IsNullOrWhiteSpace(HallName))
+            {
+                if (SelectedItem != null)
+                {
+                    AddMessage = "Vui lòng nhập tên sảnh";
+                }
+                else
+                {
+                    AddMessage = string.Empty;
+                }
+                return false;
+            }
+
+            if (SelectedHallType == null)
+            {
+                AddMessage = "Vui lòng chọn loại sảnh";
+                return false;
+            }
+
+            if (MaxTableCount == null || !TryParseTableCount(MaxTableCount, out int count) || count <= 0)
+            {
+                AddMessage = "Số lượng bàn tối đa phải là số nguyên dương";
+                return false;
+            }
+
+            var exists = OriginalList.Any(x => x.HallName == HallName && x.HallTypeId == SelectedHallType.HallTypeId);
+            if (exists)
+            {
+                AddMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
+                return false;
+            }
+
+            AddMessage = string.Empty;
+            return true;
+        }
+
+        private void AddHall()
+        {
+            try
+            {
+                var newHall = new HallDTO()
+                {
+                    HallName = HallName.Trim(),
+                    MaxTableCount = TryParseTableCount(MaxTableCount, out int count) ? count : (int?)null,
+                    Note = Note,
+                    HallTypeId = SelectedHallType?.HallTypeId,
+                    HallType = SelectedHallType
+                };
+
+                _hallService.Create(newHall);
+                OriginalList.Add(newHall);
+                HallList = new ObservableCollection<HallDTO>(OriginalList);
+
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
+                string cachePath = Path.Combine(folder, "Addcache.jpg");
+                if (File.Exists(cachePath))
+                {
+                    string newImagePath = Path.Combine(folder, newHall.HallId + ".jpg");
+                    File.Copy(cachePath, newImagePath, true);
+                    File.Delete(cachePath);
+                }
+                SelectedAction = null;
+
+                Reset();
+                MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi thêm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region Edit
+        private bool CanEdit()
+        {
+            if (SelectedItem == null)
+            {
+                EditMessage = string.Empty;
+                return false;
+            }
+
+            var folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
+            var imagePath = Path.Combine(folder, SelectedItem.HallId + ".jpg");
+            var imageExists = File.Exists(imagePath);
+
+            if (SelectedItem.HallName == HallName
+                && SelectedItem.MaxTableCount?.ToString() == MaxTableCount
+                && SelectedItem.Note == Note
+                && SelectedItem.HallTypeId == (SelectedHallType?.HallTypeId ?? 0)
+                && !(imageExists && Image == null)
+                && ImageHelper.IsEditCacheImageSameAsCurrent(SelectedItem.HallId, "Hall"))
+            {
+                EditMessage = "Không có thay đổi nào để cập nhật";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(HallName))
+            {
+                EditMessage = "Tên sảnh không được để trống";
+                return false;
+            }
+
+            if (!TryParseTableCount(MaxTableCount, out int count) || count <= 0)
+            {
+                EditMessage = "Số lượng bàn tối đa phải là số nguyên dương";
+                return false;
+            }
+
+            var exists = OriginalList.Any(x =>
+                x.HallName == HallName &&
+                x.HallTypeId == SelectedHallType.HallTypeId &&
+                x.HallId != SelectedItem.HallId);
+            if (exists)
+            {
+                EditMessage = "Tên sảnh đã tồn tại trong loại sảnh này";
+                return false;
+            }
+
+            if (_bookingService.GetAll()
+                    .Any(t => t.HallId == SelectedItem.HallId
+                           && t.WeddingDate.HasValue
+                           && t.WeddingDate.Value.Date >= DateTime.Today.AddDays(1)))
+            {
+                if (TryParseTableCount(MaxTableCount, out int newMax) && SelectedItem.MaxTableCount != newMax)
+                {
+                    EditMessage = "Đang có tiệc chưa tổ chức, không sửa số lượng bàn tối đa";
+                    return false;
+                }
+            }
+
+            EditMessage = string.Empty;
+            return true;
+        }
+
+        private void EditHall()
+        {
+            try
+            {
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
+                if (Image == null)
+                {
+                    string imagePath = Path.Combine(folder, SelectedItem.HallId + ".jpg");
+                    if (File.Exists(imagePath))
+                    {
+                        File.Delete(imagePath);
+                    }
+                }
+
+                var updateDto = new HallDTO()
+                {
+                    HallId = SelectedItem.HallId,
+                    HallName = HallName.Trim(),
+                    MaxTableCount = TryParseTableCount(MaxTableCount, out int count) ? count : (int?)null,
+                    Note = Note,
+                    HallTypeId = SelectedHallType?.HallTypeId,
+                    HallType = SelectedHallType
+                };
+
+                _hallService.Update(updateDto);
+
+                var index = HallList.IndexOf(SelectedItem);
+                HallList[index] = null;
+                HallList[index] = updateDto;
+                OriginalList[index] = updateDto;
+
+                string cachePath = Path.Combine(folder, "Editcache.jpg");
+                if (File.Exists(cachePath))
+                {
+                    string newImagePath = Path.Combine(folder, updateDto.HallId + ".jpg");
+                    File.Copy(cachePath, newImagePath, true);
+                    File.Delete(cachePath);
+                }
+                SelectedAction = null;
+
+                Reset();
+                MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region Delete
+        private bool CanDelete()
+        {
+            if (SelectedItem == null)
+            {
+                return false;
+            }
+
+            if (_bookingService.GetAll().Any(t => t.HallId == SelectedItem.HallId))
+            {
+                DeleteMessage = "Không thể xóa sảnh này vì đang có phiếu đặt tiệc sử dụng nó.";
+                return false;
+            }
+
+            DeleteMessage = string.Empty;
+            return true;
+        }
+
+        private void DeleteHall()
+        {
+            var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sảnh này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
+                string imagePath = Path.Combine(folder, SelectedItem.HallId + ".jpg");
+                if (File.Exists(imagePath))
+                {
+                    File.Delete(imagePath);
+                }
+
+                _hallService.Delete(SelectedItem.HallId);
+                HallList.Remove(SelectedItem);
+                OriginalList.Remove(SelectedItem);
+
+                SelectedAction = null;
+                Reset();
+                MessageBox.Show("Xóa thành công", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region ExportToExcel
         private void ExportToExcel()
         {
-            if (List == null || List.Count == 0)
+            if (HallList == null || HallList.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
@@ -828,14 +851,12 @@ namespace QuanLyTiecCuoi.ViewModel
             var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Danh sách sảnh");
 
-            // Tiêu đề cột
             worksheet.Cell(1, 1).Value = "Tên sảnh";
             worksheet.Cell(1, 2).Value = "Loại sảnh";
             worksheet.Cell(1, 3).Value = "Đơn giá bàn tối thiểu";
             worksheet.Cell(1, 4).Value = "Số lượng bàn tối đa";
             worksheet.Cell(1, 5).Value = "Ghi chú";
 
-            // Format tiêu đề
             var headerRange = worksheet.Range("A1:E1");
             headerRange.Style.Font.Bold = true;
             headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -843,17 +864,15 @@ namespace QuanLyTiecCuoi.ViewModel
             headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-            // Ghi dữ liệu
             int row = 2;
-            foreach (var item in List)
+            foreach (var item in HallList)
             {
-                worksheet.Cell(row, 1).Value = item.TenSanh;
-                worksheet.Cell(row, 2).Value = item.LoaiSanh?.TenLoaiSanh;
-                worksheet.Cell(row, 3).Value = item.LoaiSanh?.DonGiaBanToiThieu ?? 0;
-                worksheet.Cell(row, 4).Value = item.SoLuongBanToiDa ?? 0;
-                worksheet.Cell(row, 5).Value = item.GhiChu;
+                worksheet.Cell(row, 1).Value = item.HallName;
+                worksheet.Cell(row, 2).Value = item.HallType?.HallTypeName;
+                worksheet.Cell(row, 3).Value = item.HallType?.MinTablePrice ?? 0;
+                worksheet.Cell(row, 4).Value = item.MaxTableCount ?? 0;
+                worksheet.Cell(row, 5).Value = item.Note;
 
-                // Format dòng dữ liệu
                 for (int col = 1; col <= 5; col++)
                 {
                     worksheet.Cell(row, col).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -861,11 +880,10 @@ namespace QuanLyTiecCuoi.ViewModel
                     worksheet.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                 }
 
-                worksheet.Cell(row, 3).Style.NumberFormat.Format = "#,##0"; // Format tiền
+                worksheet.Cell(row, 3).Style.NumberFormat.Format = "#,##0";
                 row++;
             }
 
-            // Tự động điều chỉnh độ rộng
             worksheet.Columns().AdjustToContents();
 
             var dialog = new Microsoft.Win32.SaveFileDialog
@@ -891,24 +909,85 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             }
         }
+        #endregion
 
+        #region Helpers
+        private void PerformSearch()
+        {
+            try
+            {
+                SelectedItem = null;
+                HallName = string.Empty;
+                MaxTableCount = null;
+                Note = string.Empty;
+                SelectedHallType = null;
 
+                if (string.IsNullOrEmpty(SearchText) || string.IsNullOrEmpty(SelectedSearchProperty))
+                {
+                    HallList = OriginalList;
+                    return;
+                }
+
+                switch (SelectedSearchProperty)
+                {
+                    case "Tên sảnh":
+                        HallList = new ObservableCollection<HallDTO>(
+                            OriginalList.Where(x => !string.IsNullOrEmpty(x.HallName) &&
+                                x.HallName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    case "Tên loại sảnh":
+                        HallList = new ObservableCollection<HallDTO>(
+                            OriginalList.Where(x => x.HallType != null && !string.IsNullOrEmpty(x.HallType.HallTypeName) &&
+                                x.HallType.HallTypeName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    case "Đơn giá bàn tối thiểu":
+                        HallList = new ObservableCollection<HallDTO>(
+                            OriginalList.Where(x =>
+                                x.HallType != null &&
+                                x.HallType.MinTablePrice != null &&
+                                x.HallType.MinTablePrice.Value.ToString("N0").Replace(",", "").Contains(SearchText.Replace(",", "").Trim())
+                            )
+                        );
+                        break;
+                    case "Số lượng bàn tối đa":
+                        HallList = new ObservableCollection<HallDTO>(
+                            OriginalList.Where(x =>
+                                x.MaxTableCount != null &&
+                                x.MaxTableCount.Value.ToString().Contains(SearchText.Trim())
+                            )
+                        );
+                        break;
+                    case "Ghi chú":
+                        HallList = new ObservableCollection<HallDTO>(
+                            OriginalList.Where(x => !string.IsNullOrEmpty(x.Note) &&
+                                x.Note.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
+                        break;
+                    default:
+                        HallList = new ObservableCollection<HallDTO>(OriginalList);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void Reset()
         {
             SelectedItem = null;
-            TenSanh = string.Empty;
-            SoLuongBanToiDa = null;
-            GhiChu = string.Empty;
+            HallName = string.Empty;
+            MaxTableCount = null;
+            Note = string.Empty;
             SelectedHallType = null;
             SearchText = string.Empty;
 
-            // Clean up cache files
             string folder = Path.Combine(ImageHelper.BaseImagePath, "Hall");
             string addCache = Path.Combine(folder, "Addcache.jpg");
             string editCache = Path.Combine(folder, "Editcache.jpg");
             if (File.Exists(addCache)) File.Delete(addCache);
             if (File.Exists(editCache)) File.Delete(editCache);
         }
+        #endregion
     }
 }

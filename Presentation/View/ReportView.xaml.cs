@@ -1,4 +1,5 @@
 ﻿using QuanLyTiecCuoi.BusinessLogicLayer.Service;
+using QuanLyTiecCuoi.Infrastructure;
 using QuanLyTiecCuoi.Presentation.ViewModel;
 using QuanLyTiecCuoi.ViewModel;
 using System;
@@ -25,7 +26,7 @@ namespace QuanLyTiecCuoi.Presentation.View
         public ReportView()
         {
             InitializeComponent();
-            DataContext = new ReportViewModel(new CtBaoCaoDsService());
+            DataContext = ServiceContainer.GetService<ReportViewModel>();
         }
     }
 }

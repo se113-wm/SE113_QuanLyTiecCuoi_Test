@@ -20,16 +20,18 @@
             HorizontalAlignment="Center"
             FontSize="20"
             FontWeight="Bold"
-            Text="Quản lý danh sách người dùng" />
+            Text="Quản lý danh sách người dùng"
+            AutomationProperties.AutomationId="UserPageTitle" />
 
         <!--  Thông tin chi tiết  -->
         <materialDesign:Card
             Grid.Row="1"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="UserDetailsCard">
             <StackPanel>
-                <!--  Tiêu đề + Nút Reset sát nhau  -->
+                <!--  Tiêu đề + Nút Reset  -->
                 <StackPanel
                     Margin="0,0,0,0"
                     VerticalAlignment="Center"
@@ -47,7 +49,8 @@
                         Command="{Binding ResetCommand}"
                         Foreground="Purple"
                         Style="{StaticResource MaterialDesignToolButton}"
-                        ToolTip="Reset thông tin">
+                        ToolTip="Reset thông tin"
+                        AutomationProperties.AutomationId="ResetButton">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"
@@ -61,21 +64,23 @@
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
-                    <!--  Tên đăng nhập  -->
+                    <!--  Tên đăng nhập  -->
                     <TextBox
                         Grid.Column="0"
                         Margin="5"
-                        materialDesign:HintAssist.Hint="Tên đăng nhập"
+                        materialDesign:HintAssist.Hint="Tên đăng nhập"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding TenDangNhap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="UsernameTextBox" />
 
-                    <!--  Họ tên  -->
+                    <!--  Họ tên  -->
                     <TextBox
                         Grid.Column="1"
                         Margin="5"
-                        materialDesign:HintAssist.Hint="Họ tên"
+                        materialDesign:HintAssist.Hint="Họ tên"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding HoTen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="FullNameTextBox" />
 
                     <!--  Email  -->
                     <TextBox
@@ -83,7 +88,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Email"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="EmailTextBox" />
                 </Grid>
 
                 <Grid>
@@ -92,22 +98,24 @@
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
-                    <!--  Mã nhóm (ComboBox)  -->
+                    <!--  Nhóm người dùng (ComboBox)  -->
                     <ComboBox
                         Grid.Column="0"
                         Margin="5"
-                        materialDesign:HintAssist.Hint="Nhóm người dùng"
-                        DisplayMemberPath="TenNhom"
+                        materialDesign:HintAssist.Hint="Nhóm người dùng"
+                        DisplayMemberPath="GroupName"
                         ItemsSource="{Binding UserTypes}"
                         SelectedItem="{Binding SelectedUserType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        AutomationProperties.AutomationId="UserGroupComboBox" />
 
-                    <!--  Mật khẩu  -->
+                    <!--  Mật khẩu  -->
                     <TextBox
                         Grid.Column="1"
                         Margin="5"
-                        materialDesign:HintAssist.Hint="Mật khẩu mới"
-                        Text="{Binding MatKhauMoi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        materialDesign:HintAssist.Hint="Mật khẩu mới"
+                        Text="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="NewPasswordTextBox">
                         <TextBox.Style>
                             <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
                                 <Setter Property="IsReadOnly" Value="True" />
@@ -120,7 +128,7 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <!--  Đối mật khẩu (CheckBox)  -->
+                    <!--  Đổi mật khẩu (CheckBox)  -->
                     <StackPanel
                         Grid.Column="2"
                         VerticalAlignment="Center"
@@ -130,7 +138,8 @@
                             Margin="0,0,5,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            IsChecked="{Binding IsPasswordChangeEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="PasswordChangeCheckBox" />
                         <TextBlock
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
@@ -138,8 +147,6 @@
                             Foreground="Gray"
                             Text="Nhập mật khẩu mới" />
                     </StackPanel>
-
-
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -149,7 +156,8 @@
             Grid.Row="2"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="ActionsCard">
             <StackPanel>
                 <TextBlock
                     Margin="0,0,10,0"
@@ -168,13 +176,15 @@
                             materialDesign:HintAssist.Hint="Tìm theo"
                             ItemsSource="{Binding SearchProperties}"
                             SelectedItem="{Binding SelectedSearchProperty, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="SearchPropertyComboBox" />
                         <TextBox
                             Width="300"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="SearchTextBox" />
                     </StackPanel>
 
                     <StackPanel
@@ -190,7 +200,8 @@
                            materialDesign:HintAssist.Hint="Chọn thao tác"
                            ItemsSource="{Binding ActionList}"
                            SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
-                           Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                           AutomationProperties.AutomationId="ActionComboBox" />
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -207,13 +218,15 @@
                                    Margin="5"
                                    Command="{Binding AddCommand}"
                                    Content="Thêm"
-                                   Style="{StaticResource MaterialDesignRaisedButton}" />
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   AutomationProperties.AutomationId="AddButton" />
                                 <TextBlock
                                    Height="32"
                                    FontSize="10"
                                    Foreground="Gray"
                                    Text="{Binding AddMessage}"
-                                   TextWrapping="Wrap" />
+                                   TextWrapping="Wrap"
+                                   AutomationProperties.AutomationId="AddMessage" />
                             </StackPanel>
 
                             <!--  Nút Sửa  -->
@@ -226,14 +239,16 @@
                                    Margin="5"
                                    Command="{Binding EditCommand}"
                                    Content="Sửa"
-                                   Style="{StaticResource MaterialDesignRaisedButton}" />
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   AutomationProperties.AutomationId="EditButton" />
                                 <TextBlock
                                    Height="32"
                                    VerticalAlignment="Top"
                                    FontSize="10"
                                    Foreground="Gray"
                                    Text="{Binding EditMessage}"
-                                   TextWrapping="Wrap" />
+                                   TextWrapping="Wrap"
+                                   AutomationProperties.AutomationId="EditMessage" />
                             </StackPanel>
 
                             <!--  Nút Xóa  -->
@@ -246,14 +261,16 @@
                                    Margin="5"
                                    Command="{Binding DeleteCommand}"
                                    Content="Xóa"
-                                   Style="{StaticResource MaterialDesignRaisedButton}" />
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   AutomationProperties.AutomationId="DeleteButton" />
                                 <TextBlock
                                    Height="32"
                                    VerticalAlignment="Top"
                                    FontSize="10"
                                    Foreground="Gray"
                                    Text="{Binding DeleteMessage}"
-                                   TextWrapping="Wrap" />
+                                   TextWrapping="Wrap"
+                                   AutomationProperties.AutomationId="DeleteMessage" />
                             </StackPanel>
                             <!--  Nút Xuất Excel  -->
                             <StackPanel
@@ -265,7 +282,8 @@
                                    Margin="5"
                                    Command="{Binding ExportToExcelCommand}"
                                    Content="Xuất Excel"
-                                   Style="{StaticResource MaterialDesignRaisedButton}" />
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   AutomationProperties.AutomationId="ExportExcelButton" />
                                 <TextBlock
                                    Height="32"
                                    VerticalAlignment="Top"
@@ -277,22 +295,21 @@
                         </Grid>
                     </StackPanel>
                 </DockPanel>
-
             </StackPanel>
         </materialDesign:Card>
 
-        <!--  Danh sách các người dùng  -->
+        <!--  Danh sách người dùng  -->
         <materialDesign:Card
             Grid.Row="3"
             Margin="10"
             Padding="5"
             VerticalAlignment="Stretch"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="UserListCard">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <!--  Danh sách sẽ chiếm phần còn lại và scroll  -->
                 </Grid.RowDefinitions>
 
                 <TextBlock
@@ -300,15 +317,16 @@
                     Margin="0,0,10,0"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Danh sách các người dùng" />
+                    Text="Danh sách người dùng" />
 
                 <ListView
                     Grid.Row="1"
                     Margin="0"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
-                    ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    ItemsSource="{Binding UserList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    AutomationProperties.AutomationId="UserListView">
                     <ListView.View>
                         <GridView>
                             <!--  Icon  -->
@@ -330,38 +348,38 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <!--  Tên đăng nhập  -->
-                            <GridViewColumn Width="150" Header="Tên đăng nhập">
+                            <!--  Tên đăng nhập  -->
+                            <GridViewColumn Width="150" Header="Tên đăng nhập">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenDangNhap}"
+                                            Text="{Binding Username}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <!--  Họ Tên  -->
-                            <GridViewColumn Width="200" Header="Họ tên">
+                            <!--  Họ Tên  -->
+                            <GridViewColumn Width="200" Header="Họ tên">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding HoTen, StringFormat=N0}"
+                                            Text="{Binding FullName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <!--  Nhóm người dùng  -->
-                            <GridViewColumn Width="200" Header="Nhóm người dùng">
+                            <!--  Nhóm người dùng  -->
+                            <GridViewColumn Width="200" Header="Nhóm người dùng">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding NhomNguoiDung.TenNhom}"
+                                            Text="{Binding UserGroup.GroupName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

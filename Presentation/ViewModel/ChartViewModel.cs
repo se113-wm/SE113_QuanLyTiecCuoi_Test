@@ -40,20 +40,20 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             // Empty constructor for XAML designer
         }
 
-        public ChartViewModel(IEnumerable<CTBAOCAODDTO> reportList)
+        public ChartViewModel(IEnumerable<RevenueReportDetailDTO> reportList)
         {
             LoadChart(reportList);
         }
 
-        private void LoadChart(IEnumerable<CTBAOCAODDTO> reportList)
+        private void LoadChart(IEnumerable<RevenueReportDetailDTO> reportList)
         {
             var values = new ChartValues<decimal>();
             var labels = new List<string>();
 
             foreach (var item in reportList)
             {
-                values.Add(item.DoanhThu ?? 0);
-                labels.Add(item.Ngay.ToString());
+                values.Add(item.Revenue ?? 0);
+                labels.Add(item.Day.ToString());
             }
 
             SeriesCollection = new SeriesCollection
