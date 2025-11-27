@@ -12,19 +12,19 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class LOAISANH
+    public partial class Permission
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LOAISANH()
+        public Permission()
         {
-            this.SANHs = new HashSet<SANH>();
+            this.UserGroups = new HashSet<UserGroup>();
         }
     
-        public int MaLoaiSanh { get; set; }
-        public string TenLoaiSanh { get; set; }
-        public Nullable<decimal> DonGiaBanToiThieu { get; set; }
+        public string PermissionId { get; set; }
+        public string PermissionName { get; set; }
+        public string LoadedScreenName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SANH> SANHs { get; set; }
+        public virtual ICollection<UserGroup> UserGroups { get; set; }
     }
 }

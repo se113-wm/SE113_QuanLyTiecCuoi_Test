@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace QuanLyTiecCuoi.DataTransferObject
 {
-    public class SANHDTO
+    public class HallDTO
     {
-        public int MaSanh { get; set; }
-        public int? MaLoaiSanh { get; set; }
-        public string TenSanh { get; set; }
-        public int? SoLuongBanToiDa { get; set; }
-        public string GhiChu { get; set; }
+        public int HallId { get; set; }
+        public int? HallTypeId { get; set; }
+        public string HallName { get; set; }
+        public int? MaxTableCount { get; set; }
+        public string Note { get; set; }
 
         // Navigation properties
-        public LOAISANHDTO LoaiSanh { get; set; }
+        public HallTypeDTO HallType { get; set; }
     }
 }

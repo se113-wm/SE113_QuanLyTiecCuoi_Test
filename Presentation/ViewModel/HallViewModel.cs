@@ -18,7 +18,7 @@ namespace QuanLyTiecCuoi.ViewModel
 {
     public class HallViewModel : BaseViewModel
     {
-        private readonly ISanhService _sanhService;
+        private readonly IHallService _hallService;
         private readonly ILoaiSanhService _loaiSanhService;
         private readonly IPhieuDatTiecService _phieuDatTiecService;
 
@@ -579,13 +579,13 @@ namespace QuanLyTiecCuoi.ViewModel
             Reset();
         });
 
-        public HallViewModel(ISanhService sanhService, ILoaiSanhService loaiSanhService, IPhieuDatTiecService phieuDatTiecService)
+        public HallViewModel(IHallService hallService, ILoaiSanhService loaiSanhService, IPhieuDatTiecService phieuDatTiecService)
         {
-            _sanhService = sanhService;
+            _hallService = hallService;
             _loaiSanhService = loaiSanhService;
             _phieuDatTiecService = phieuDatTiecService;
 
-            List = new ObservableCollection<SANHDTO>(_sanhService.GetAll().ToList());
+            List = new ObservableCollection<SANHDTO>(_hallService.GetAll().ToList());
             OriginalList = new ObservableCollection<SANHDTO>(List);
             HallTypes = new ObservableCollection<LOAISANHDTO>(_loaiSanhService.GetAll().ToList());
 
@@ -644,7 +644,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         LoaiSanh = SelectedHallType
                     };
 
-                    _sanhService.Create(newHall);
+                    _hallService.Create(newHall);
 
                     List.Add(newHall);
 
@@ -734,7 +734,7 @@ namespace QuanLyTiecCuoi.ViewModel
                             File.Delete(imagePath);
                         }
                     }
-                 
+                
 
 
                     var updateDto = new SANHDTO()
@@ -747,7 +747,7 @@ namespace QuanLyTiecCuoi.ViewModel
                         LoaiSanh = SelectedHallType
                     };
 
-                    _sanhService.Update(updateDto);
+                    _hallService.Update(updateDto);
 
                     var index = List.IndexOf(SelectedItem);
                     List[index] = null;
@@ -802,7 +802,7 @@ namespace QuanLyTiecCuoi.ViewModel
                             File.Delete(imagePath);
                         }
 
-                        _sanhService.Delete(SelectedItem.MaSanh);
+                        _hallService.Delete(SelectedItem.MaSanh);
                         List.Remove(SelectedItem);
                         SelectedAction = null; // Reset action selection
                         Reset();

@@ -12,16 +12,9 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CHITIETDV
+    public partial class Parameter
     {
-        public int MaPhieuDat { get; set; }
-        public int MaDichVu { get; set; }
-        public Nullable<int> SoLuong { get; set; }
-        public Nullable<decimal> DonGia { get; set; }
-        public Nullable<decimal> ThanhTien { get; set; }
-        public string GhiChu { get; set; }
-    
-        public virtual DICHVU DICHVU { get; set; }
-        public virtual PHIEUDATTIEC PHIEUDATTIEC { get; set; }
+        public string ParameterName { get; set; }
+        public Nullable<decimal> Value { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
     public class WeddingDetailViewModel : BaseViewModel
     {
         // Services - Inject qua constructor
-        private readonly ISanhService _sanhService;
+        private readonly IHallService _hallService;
         private readonly ICaService _caService;
         private readonly IPhieuDatTiecService _phieuDatTiecService;
         private readonly IMonAnService _monAnService;
@@ -29,7 +29,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
         // Constructor với Dependency Injection
         public WeddingDetailViewModel(
             int maPhieuDat,
-            ISanhService sanhService,
+            IHallService hallService,
             ICaService caService,
             IPhieuDatTiecService phieuDatTiecService,
             IMonAnService monAnService,
@@ -39,7 +39,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             IThamSoService thamSoService)
         {
             // Inject services
-            _sanhService = sanhService;
+            _hallService = hallService;
             _caService = caService;
             _phieuDatTiecService = phieuDatTiecService;
             _monAnService = monAnService;
@@ -52,7 +52,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             // Load data
             CaList = new ObservableCollection<CADTO>(_caService.GetAll());
-            SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
+            SanhList = new ObservableCollection<SANHDTO>(_hallService.GetAll());
 
             // Load wedding detail
             if (maPhieuDat > 0)
@@ -561,7 +561,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
                 NgayDaiTiec = wedding.NgayDaiTiec;
                 NgayDatTiec = (DateTime)wedding.NgayDatTiec;
                 SelectedCa = CaList.FirstOrDefault(c => c.MaCa == wedding.MaCa);
-                SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
+                SanhList = new ObservableCollection<SANHDTO>(_hallService.GetAll());
                 
                 var sanh = SanhList.FirstOrDefault(s => s.MaSanh == wedding.MaSanh);
                 if (sanh.LoaiSanh.DonGiaBanToiThieu != wedding.DonGiaBanTiec)

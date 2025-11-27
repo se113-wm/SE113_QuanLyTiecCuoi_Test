@@ -12,19 +12,19 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CHUCNANG
+    public partial class HallType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CHUCNANG()
+        public HallType()
         {
-            this.NHOMNGUOIDUNGs = new HashSet<NHOMNGUOIDUNG>();
+            this.Halls = new HashSet<Hall>();
         }
     
-        public string MaChucNang { get; set; }
-        public string TenChucNang { get; set; }
-        public string TenManHinhDuocLoad { get; set; }
+        public int HallTypeId { get; set; }
+        public string HallTypeName { get; set; }
+        public Nullable<decimal> MinTablePrice { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NHOMNGUOIDUNG> NHOMNGUOIDUNGs { get; set; }
+        public virtual ICollection<Hall> Halls { get; set; }
     }
 }

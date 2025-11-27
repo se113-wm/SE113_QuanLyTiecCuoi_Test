@@ -16,7 +16,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 {
     public class AddWeddingViewModel : BaseViewModel
     {
-        private readonly ISanhService _sanhService;
+        private readonly IHallService _hallService;
         private readonly ICaService _caService;
         private readonly IPhieuDatTiecService _phieuDatTiecService;
         private readonly IMonAnService _monAnService;
@@ -107,7 +107,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
         // Constructor với Dependency Injection
         public AddWeddingViewModel(
-            ISanhService sanhService,
+            IHallService hallService,
             ICaService caService,
             IPhieuDatTiecService phieuDatTiecService,
             IMonAnService monAnService,
@@ -117,7 +117,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             IThamSoService thamSoService)
         {
             // Inject services
-            _sanhService = sanhService;
+            _hallService = hallService;
             _caService = caService;
             _phieuDatTiecService = phieuDatTiecService;
             _monAnService = monAnService;
@@ -133,7 +133,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
 
             // Load data from services
             CaList = new ObservableCollection<CADTO>(_caService.GetAll());
-            SanhList = new ObservableCollection<SANHDTO>(_sanhService.GetAll());
+            SanhList = new ObservableCollection<SANHDTO>(_hallService.GetAll());
 
             // Initialize commands
             InitializeCommands();

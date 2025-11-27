@@ -3,12 +3,12 @@ using QuanLyTiecCuoi.Model;
 
 namespace QuanLyTiecCuoi.DataAccessLayer.IRepository
 {
-    public interface ISanhRepository
+    public interface IHallRepository
     {
-        IEnumerable<SANH> GetAll();
-        SANH GetById(int maSanh);
-        void Create(SANH sanh);
-        void Update(SANH sanh);
-        void Delete(int maSanh);
+        IEnumerable<Hall> GetAll();
+        Hall GetById(int hallId);
+        void Create(Hall hall);
+        void Update(Hall hall);
+        void Delete(int hallId);
     }
 }

@@ -7,90 +7,88 @@ using QuanLyTiecCuoi.Model;
 
 namespace QuanLyTiecCuoi.BusinessLogicLayer.Service
 {
-    public class SanhService : ISanhService
+    public class HallService : IHallService
     {
-        private readonly ISanhRepository _sanhRepository;
+        private readonly IHallRepository _hallRepository;
 
-        // Constructor với Dependency Injection
-        public SanhService(ISanhRepository sanhRepository)
+        public HallService(IHallRepository hallRepository)
         {
-            _sanhRepository = sanhRepository;
+            _hallRepository = hallRepository;
         }
 
-        public IEnumerable<SANHDTO> GetAll()
+        public IEnumerable<HallDTO> GetAll()
         {
-            return _sanhRepository.GetAll()
-                .Select(x => new SANHDTO
+            return _hallRepository.GetAll()
+                .Select(x => new HallDTO
                 {
-                    MaSanh = x.MaSanh,
-                    MaLoaiSanh = x.MaLoaiSanh,
-                    TenSanh = x.TenSanh,
-                    SoLuongBanToiDa = x.SoLuongBanToiDa,
-                    GhiChu = x.GhiChu,
-                    LoaiSanh = x.LOAISANH != null
-                        ? new LOAISANHDTO
+                    HallId = x.HallId,
+                    HallTypeId = x.HallTypeId,
+                    HallName = x.HallName,
+                    MaxTableCount = x.MaxTableCount,
+                    Note = x.Note,
+                    HallType = x.HallType != null
+                        ? new HallTypeDTO
                         {
-                            MaLoaiSanh = x.LOAISANH.MaLoaiSanh,
-                            TenLoaiSanh = x.LOAISANH.TenLoaiSanh,
-                            DonGiaBanToiThieu = x.LOAISANH.DonGiaBanToiThieu
+                            HallTypeId = x.HallType.HallTypeId,
+                            HallTypeName = x.HallType.HallTypeName,
+                            MinTablePrice = x.HallType.MinTablePrice
                         }
                         : null
                 });
         }
 
-        public SANHDTO GetById(int maSanh)
+        public HallDTO GetById(int hallId)
         {
-            var entity = _sanhRepository.GetById(maSanh);
+            var entity = _hallRepository.GetById(hallId);
             if (entity == null) return null;
-            return new SANHDTO
+            return new HallDTO
             {
-                MaSanh = entity.MaSanh,
-                MaLoaiSanh = entity.MaLoaiSanh,
-                TenSanh = entity.TenSanh,
-                SoLuongBanToiDa = entity.SoLuongBanToiDa,
-                GhiChu = entity.GhiChu,
-                LoaiSanh = entity.LOAISANH != null
-                    ? new LOAISANHDTO
+                HallId = entity.HallId,
+                HallTypeId = entity.HallTypeId,
+                HallName = entity.HallName,
+                MaxTableCount = entity.MaxTableCount,
+                Note = entity.Note,
+                HallType = entity.HallType != null
+                    ? new HallTypeDTO
                     {
-                        MaLoaiSanh = entity.LOAISANH.MaLoaiSanh,
-                        TenLoaiSanh = entity.LOAISANH.TenLoaiSanh,
-                        DonGiaBanToiThieu = entity.LOAISANH.DonGiaBanToiThieu
+                        HallTypeId = entity.HallType.HallTypeId,
+                        HallTypeName = entity.HallType.HallTypeName,
+                        MinTablePrice = entity.HallType.MinTablePrice
                     }
                     : null
             };
         }
 
-        public void Create(SANHDTO sanhDto)
+        public void Create(HallDTO hallDto)
         {
-            var entity = new SANH
+            var entity = new Hall
             {
-                MaSanh = sanhDto.MaSanh,
-                MaLoaiSanh = sanhDto.MaLoaiSanh,
-                TenSanh = sanhDto.TenSanh,
-                SoLuongBanToiDa = sanhDto.SoLuongBanToiDa,
-                GhiChu = sanhDto.GhiChu
+                HallId = hallDto.HallId,
+                HallTypeId = hallDto.HallTypeId,
+                HallName = hallDto.HallName,
+                MaxTableCount = hallDto.MaxTableCount,
+                Note = hallDto.Note
             };
-            _sanhRepository.Create(entity);
-            // Reload the entity to get the generated ID if applicable
-            sanhDto.MaSanh = entity.MaSanh; // Assuming MaSanh is an auto-generated ID
+            _hallRepository.Create(entity);
+            hallDto.HallId = entity.HallId;
         }
 
-        public void Update(SANHDTO sanhDto)
+        public void Update(HallDTO hallDto)
         {
-            var entity = new SANH
+            var entity = new Hall
             {
-                MaSanh = sanhDto.MaSanh,
-                MaLoaiSanh = sanhDto.MaLoaiSanh,
-                TenSanh = sanhDto.TenSanh,
-                SoLuongBanToiDa = sanhDto.SoLuongBanToiDa,
-                GhiChu = sanhDto.GhiChu
+                HallId = hallDto.HallId,
+                HallTypeId = hallDto.HallTypeId,
+                HallName = hallDto.HallName,
+                MaxTableCount = hallDto.MaxTableCount,
+                Note = hallDto.Note
             };
-            _sanhRepository.Update(entity);
+            _hallRepository.Update(entity);
         }
 
-        public void Delete(int maSanh)
+        public void Delete(int hallId)
         {
-            _sanhRepository.Delete(maSanh);
+            _hallRepository.Delete(hallId);
         }
     }
 }

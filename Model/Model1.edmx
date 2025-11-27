@@ -5,354 +5,358 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="QuanLyTiecCuoiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="BAOCAODS">
+        <EntityType Name="AppUser">
           <Key>
-            <PropertyRef Name="Thang" />
-            <PropertyRef Name="Nam" />
+            <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="Thang" Type="int" Nullable="false" />
-          <Property Name="Nam" Type="int" Nullable="false" />
-          <Property Name="TongDoanhThu" Type="money" />
-        </EntityType>
-        <EntityType Name="CA">
-          <Key>
-            <PropertyRef Name="MaCa" />
-          </Key>
-          <Property Name="MaCa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenCa" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="ThoiGianBatDauCa" Type="time" Precision="7" />
-          <Property Name="ThoiGianKetThucCa" Type="time" Precision="7" />
-        </EntityType>
-        <EntityType Name="CHITIETDV">
-          <Key>
-            <PropertyRef Name="MaPhieuDat" />
-            <PropertyRef Name="MaDichVu" />
-          </Key>
-          <Property Name="MaPhieuDat" Type="int" Nullable="false" />
-          <Property Name="MaDichVu" Type="int" Nullable="false" />
-          <Property Name="SoLuong" Type="int" />
-          <Property Name="DonGia" Type="money" />
-          <Property Name="ThanhTien" Type="money" />
-          <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="CHUCNANG">
-          <Key>
-            <PropertyRef Name="MaChucNang" />
-          </Key>
-          <Property Name="MaChucNang" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TenChucNang" Type="nvarchar" MaxLength="100" />
-          <Property Name="TenManHinhDuocLoad" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="CTBAOCAODS">
-          <Key>
-            <PropertyRef Name="Ngay" />
-            <PropertyRef Name="Thang" />
-            <PropertyRef Name="Nam" />
-          </Key>
-          <Property Name="Ngay" Type="int" Nullable="false" />
-          <Property Name="Thang" Type="int" Nullable="false" />
-          <Property Name="Nam" Type="int" Nullable="false" />
-          <Property Name="SoLuongTiec" Type="int" />
-          <Property Name="DoanhThu" Type="money" />
-          <Property Name="TiLe" Type="decimal" Precision="7" Scale="2" />
-        </EntityType>
-        <EntityType Name="DICHVU">
-          <Key>
-            <PropertyRef Name="MaDichVu" />
-          </Key>
-          <Property Name="MaDichVu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenDichVu" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="DonGia" Type="money" />
-          <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="LOAISANH">
-          <Key>
-            <PropertyRef Name="MaLoaiSanh" />
-          </Key>
-          <Property Name="MaLoaiSanh" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenLoaiSanh" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="DonGiaBanToiThieu" Type="money" />
-        </EntityType>
-        <EntityType Name="MONAN">
-          <Key>
-            <PropertyRef Name="MaMonAn" />
-          </Key>
-          <Property Name="MaMonAn" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenMonAn" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="DonGia" Type="money" />
-          <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="NGUOIDUNG">
-          <Key>
-            <PropertyRef Name="MaNguoiDung" />
-          </Key>
-          <Property Name="MaNguoiDung" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenDangNhap" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="MatKhauHash" Type="varchar" MaxLength="256" Nullable="false" />
-          <Property Name="HoTen" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
-          <Property Name="MaNhom" Type="varchar" MaxLength="10" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="15" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="BirthDate" Type="date" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="GroupId" Type="varchar" MaxLength="10" />
         </EntityType>
-        <EntityType Name="NHOMNGUOIDUNG">
+        <EntityType Name="Booking">
           <Key>
-            <PropertyRef Name="MaNhom" />
+            <PropertyRef Name="BookingId" />
           </Key>
-          <Property Name="MaNhom" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TenNhom" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="BookingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroomName" Type="nvarchar" MaxLength="40" />
+          <Property Name="BrideName" Type="nvarchar" MaxLength="40" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="BookingDate" Type="smalldatetime" />
+          <Property Name="WeddingDate" Type="smalldatetime" />
+          <Property Name="ShiftId" Type="int" />
+          <Property Name="HallId" Type="int" />
+          <Property Name="Deposit" Type="money" />
+          <Property Name="TableCount" Type="int" />
+          <Property Name="ReserveTableCount" Type="int" />
+          <Property Name="PaymentDate" Type="smalldatetime" />
+          <Property Name="TablePrice" Type="money" />
+          <Property Name="TotalTableAmount" Type="money" />
+          <Property Name="TotalServiceAmount" Type="money" />
+          <Property Name="TotalInvoiceAmount" Type="money" />
+          <Property Name="RemainingAmount" Type="money" />
+          <Property Name="AdditionalCost" Type="money" />
+          <Property Name="PenaltyAmount" Type="money" />
         </EntityType>
-        <EntityType Name="PHANQUYEN">
+        <EntityType Name="Dish">
           <Key>
-            <PropertyRef Name="MaNhom" />
-            <PropertyRef Name="MaChucNang" />
+            <PropertyRef Name="DishId" />
           </Key>
-          <Property Name="MaNhom" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="MaChucNang" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DishId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DishName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="UnitPrice" Type="money" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <EntityType Name="PHIEUDATTIEC">
+        <EntityType Name="GroupPermission">
           <Key>
-            <PropertyRef Name="MaPhieuDat" />
+            <PropertyRef Name="GroupId" />
+            <PropertyRef Name="PermissionId" />
           </Key>
-          <Property Name="MaPhieuDat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenChuRe" Type="nvarchar" MaxLength="40" />
-          <Property Name="TenCoDau" Type="nvarchar" MaxLength="40" />
-          <Property Name="DienThoai" Type="varchar" MaxLength="10" />
-          <Property Name="NgayDatTiec" Type="smalldatetime" />
-          <Property Name="NgayDaiTiec" Type="smalldatetime" />
-          <Property Name="MaCa" Type="int" />
-          <Property Name="MaSanh" Type="int" />
-          <Property Name="TienDatCoc" Type="money" />
-          <Property Name="SoLuongBan" Type="int" />
-          <Property Name="SoBanDuTru" Type="int" />
-          <Property Name="NgayThanhToan" Type="smalldatetime" />
-          <Property Name="DonGiaBanTiec" Type="money" />
-          <Property Name="TongTienBan" Type="money" />
-          <Property Name="TongTienDV" Type="money" />
-          <Property Name="TongTienHoaDon" Type="money" />
-          <Property Name="TienConLai" Type="money" />
-          <Property Name="ChiPhiPhatSinh" Type="money" />
-          <Property Name="TienPhat" Type="money" />
+          <Property Name="GroupId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PermissionId" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <EntityType Name="SANH">
+        <EntityType Name="Hall">
           <Key>
-            <PropertyRef Name="MaSanh" />
+            <PropertyRef Name="HallId" />
           </Key>
-          <Property Name="MaSanh" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MaLoaiSanh" Type="int" />
-          <Property Name="TenSanh" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="SoLuongBanToiDa" Type="int" />
-          <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
+          <Property Name="HallId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HallTypeId" Type="int" />
+          <Property Name="HallName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="MaxTableCount" Type="int" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <EntityType Name="THAMSO">
+        <EntityType Name="HallType">
           <Key>
-            <PropertyRef Name="TenThamSo" />
+            <PropertyRef Name="HallTypeId" />
           </Key>
-          <Property Name="TenThamSo" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="GiaTri" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="HallTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HallTypeName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="MinTablePrice" Type="money" />
         </EntityType>
-        <EntityType Name="THUCDON">
+        <EntityType Name="Menu">
           <Key>
-            <PropertyRef Name="MaPhieuDat" />
-            <PropertyRef Name="MaMonAn" />
+            <PropertyRef Name="BookingId" />
+            <PropertyRef Name="DishId" />
           </Key>
-          <Property Name="MaPhieuDat" Type="int" Nullable="false" />
-          <Property Name="MaMonAn" Type="int" Nullable="false" />
-          <Property Name="SoLuong" Type="int" />
-          <Property Name="DonGia" Type="money" />
-          <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
+          <Property Name="BookingId" Type="int" Nullable="false" />
+          <Property Name="DishId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="UnitPrice" Type="money" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <Association Name="FK__CHITIETDV__MaDic__4F7CD00D">
-          <End Role="DICHVU" Type="Self.DICHVU" Multiplicity="1" />
-          <End Role="CHITIETDV" Type="Self.CHITIETDV" Multiplicity="*" />
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="ParameterName" />
+          </Key>
+          <Property Name="ParameterName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="PermissionId" />
+          </Key>
+          <Property Name="PermissionId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PermissionName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LoadedScreenName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="RevenueReport">
+          <Key>
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="TotalRevenue" Type="money" />
+        </EntityType>
+        <EntityType Name="RevenueReportDetail">
+          <Key>
+            <PropertyRef Name="Day" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="Day" Type="int" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="WeddingCount" Type="int" />
+          <Property Name="Revenue" Type="money" />
+          <Property Name="Ratio" Type="decimal" Precision="7" Scale="2" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="UnitPrice" Type="money" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ServiceDetail">
+          <Key>
+            <PropertyRef Name="BookingId" />
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="BookingId" Type="int" Nullable="false" />
+          <Property Name="ServiceId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="UnitPrice" Type="money" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Shift">
+          <Key>
+            <PropertyRef Name="ShiftId" />
+          </Key>
+          <Property Name="ShiftId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShiftName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="7" />
+          <Property Name="EndTime" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__AppUser__GroupId__75A278F5">
+          <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="0..1" />
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DICHVU">
-              <PropertyRef Name="MaDichVu" />
+            <Principal Role="UserGroup">
+              <PropertyRef Name="GroupId" />
             </Principal>
-            <Dependent Role="CHITIETDV">
-              <PropertyRef Name="MaDichVu" />
+            <Dependent Role="AppUser">
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CHITIETDV__MaPhi__4E88ABD4">
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="1" />
-          <End Role="CHITIETDV" Type="Self.CHITIETDV" Multiplicity="*" />
+        <Association Name="FK__Booking__HallId__5535A963">
+          <End Role="Hall" Type="Self.Hall" Multiplicity="0..1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaPhieuDat" />
+            <Principal Role="Hall">
+              <PropertyRef Name="HallId" />
             </Principal>
-            <Dependent Role="CHITIETDV">
-              <PropertyRef Name="MaPhieuDat" />
+            <Dependent Role="Booking">
+              <PropertyRef Name="HallId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CTBAOCAODS__5441852A">
-          <End Role="BAOCAODS" Type="Self.BAOCAODS" Multiplicity="1" />
-          <End Role="CTBAOCAODS" Type="Self.CTBAOCAODS" Multiplicity="*" />
+        <Association Name="FK__Booking__ShiftId__5441852A">
+          <End Role="Shift" Type="Self.Shift" Multiplicity="0..1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="BAOCAODS">
-              <PropertyRef Name="Thang" />
-              <PropertyRef Name="Nam" />
+            <Principal Role="Shift">
+              <PropertyRef Name="ShiftId" />
             </Principal>
-            <Dependent Role="CTBAOCAODS">
-              <PropertyRef Name="Thang" />
-              <PropertyRef Name="Nam" />
+            <Dependent Role="Booking">
+              <PropertyRef Name="ShiftId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGUOIDUNG__MaNho__628FA481">
-          <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="0..1" />
-          <End Role="NGUOIDUNG" Type="Self.NGUOIDUNG" Multiplicity="*" />
+        <Association Name="FK__GroupPerm__Group__70DDC3D8">
+          <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="1" />
+          <End Role="GroupPermission" Type="Self.GroupPermission" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="NHOMNGUOIDUNG">
-              <PropertyRef Name="MaNhom" />
+            <Principal Role="UserGroup">
+              <PropertyRef Name="GroupId" />
             </Principal>
-            <Dependent Role="NGUOIDUNG">
-              <PropertyRef Name="MaNhom" />
+            <Dependent Role="GroupPermission">
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHANQUYEN__MaChu__5EBF139D">
-          <End Role="CHUCNANG" Type="Self.CHUCNANG" Multiplicity="1" />
-          <End Role="PHANQUYEN" Type="Self.PHANQUYEN" Multiplicity="*" />
+        <Association Name="FK__GroupPerm__Permi__71D1E811">
+          <End Role="Permission" Type="Self.Permission" Multiplicity="1" />
+          <End Role="GroupPermission" Type="Self.GroupPermission" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CHUCNANG">
-              <PropertyRef Name="MaChucNang" />
+            <Principal Role="Permission">
+              <PropertyRef Name="PermissionId" />
             </Principal>
-            <Dependent Role="PHANQUYEN">
-              <PropertyRef Name="MaChucNang" />
+            <Dependent Role="GroupPermission">
+              <PropertyRef Name="PermissionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHANQUYEN__MaNho__5DCAEF64">
-          <End Role="NHOMNGUOIDUNG" Type="Self.NHOMNGUOIDUNG" Multiplicity="1" />
-          <End Role="PHANQUYEN" Type="Self.PHANQUYEN" Multiplicity="*" />
+        <Association Name="FK__Hall__HallTypeId__4E88ABD4">
+          <End Role="HallType" Type="Self.HallType" Multiplicity="0..1" />
+          <End Role="Hall" Type="Self.Hall" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="NHOMNGUOIDUNG">
-              <PropertyRef Name="MaNhom" />
+            <Principal Role="HallType">
+              <PropertyRef Name="HallTypeId" />
             </Principal>
-            <Dependent Role="PHANQUYEN">
-              <PropertyRef Name="MaNhom" />
+            <Dependent Role="Hall">
+              <PropertyRef Name="HallTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHIEUDATT__MaSan__4222D4EF">
-          <End Role="SANH" Type="Self.SANH" Multiplicity="0..1" />
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="*" />
+        <Association Name="FK__Menu__BookingId__5AEE82B9">
+          <End Role="Booking" Type="Self.Booking" Multiplicity="1" />
+          <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SANH">
-              <PropertyRef Name="MaSanh" />
+            <Principal Role="Booking">
+              <PropertyRef Name="BookingId" />
             </Principal>
-            <Dependent Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaSanh" />
+            <Dependent Role="Menu">
+              <PropertyRef Name="BookingId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHIEUDATTI__MaCa__412EB0B6">
-          <End Role="CA" Type="Self.CA" Multiplicity="0..1" />
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="*" />
+        <Association Name="FK__Menu__DishId__5BE2A6F2">
+          <End Role="Dish" Type="Self.Dish" Multiplicity="1" />
+          <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CA">
-              <PropertyRef Name="MaCa" />
+            <Principal Role="Dish">
+              <PropertyRef Name="DishId" />
             </Principal>
-            <Dependent Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaCa" />
+            <Dependent Role="Menu">
+              <PropertyRef Name="DishId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SANH__MaLoaiSanh__3B75D760">
-          <End Role="LOAISANH" Type="Self.LOAISANH" Multiplicity="0..1" />
-          <End Role="SANH" Type="Self.SANH" Multiplicity="*" />
+        <Association Name="FK__RevenueReportDet__6754599E">
+          <End Role="RevenueReport" Type="Self.RevenueReport" Multiplicity="1" />
+          <End Role="RevenueReportDetail" Type="Self.RevenueReportDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="LOAISANH">
-              <PropertyRef Name="MaLoaiSanh" />
+            <Principal Role="RevenueReport">
+              <PropertyRef Name="Month" />
+              <PropertyRef Name="Year" />
             </Principal>
-            <Dependent Role="SANH">
-              <PropertyRef Name="MaLoaiSanh" />
+            <Dependent Role="RevenueReportDetail">
+              <PropertyRef Name="Month" />
+              <PropertyRef Name="Year" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__THUCDON__MaMonAn__48CFD27E">
-          <End Role="MONAN" Type="Self.MONAN" Multiplicity="1" />
-          <End Role="THUCDON" Type="Self.THUCDON" Multiplicity="*" />
+        <Association Name="FK__ServiceDe__Booki__619B8048">
+          <End Role="Booking" Type="Self.Booking" Multiplicity="1" />
+          <End Role="ServiceDetail" Type="Self.ServiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MONAN">
-              <PropertyRef Name="MaMonAn" />
+            <Principal Role="Booking">
+              <PropertyRef Name="BookingId" />
             </Principal>
-            <Dependent Role="THUCDON">
-              <PropertyRef Name="MaMonAn" />
+            <Dependent Role="ServiceDetail">
+              <PropertyRef Name="BookingId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__THUCDON__MaPhieu__47DBAE45">
-          <End Role="PHIEUDATTIEC" Type="Self.PHIEUDATTIEC" Multiplicity="1" />
-          <End Role="THUCDON" Type="Self.THUCDON" Multiplicity="*" />
+        <Association Name="FK__ServiceDe__Servi__628FA481">
+          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="ServiceDetail" Type="Self.ServiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaPhieuDat" />
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
             </Principal>
-            <Dependent Role="THUCDON">
-              <PropertyRef Name="MaPhieuDat" />
+            <Dependent Role="ServiceDetail">
+              <PropertyRef Name="ServiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="QuanLyTiecCuoiModelStoreContainer">
-          <EntitySet Name="BAOCAODS" EntityType="Self.BAOCAODS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CA" EntityType="Self.CA" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CHITIETDV" EntityType="Self.CHITIETDV" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CHUCNANG" EntityType="Self.CHUCNANG" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CTBAOCAODS" EntityType="Self.CTBAOCAODS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DICHVU" EntityType="Self.DICHVU" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="LOAISANH" EntityType="Self.LOAISANH" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MONAN" EntityType="Self.MONAN" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NGUOIDUNG" EntityType="Self.NGUOIDUNG" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NHOMNGUOIDUNG" EntityType="Self.NHOMNGUOIDUNG" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PHANQUYEN" EntityType="Self.PHANQUYEN" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PHIEUDATTIEC" EntityType="Self.PHIEUDATTIEC" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SANH" EntityType="Self.SANH" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="THAMSO" EntityType="Self.THAMSO" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="THUCDON" EntityType="Self.THUCDON" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__CHITIETDV__MaDic__4F7CD00D" Association="Self.FK__CHITIETDV__MaDic__4F7CD00D">
-            <End Role="DICHVU" EntitySet="DICHVU" />
-            <End Role="CHITIETDV" EntitySet="CHITIETDV" />
+          <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dish" EntityType="Self.Dish" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupPermission" EntityType="Self.GroupPermission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hall" EntityType="Self.Hall" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HallType" EntityType="Self.HallType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Parameter" EntityType="Self.Parameter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RevenueReport" EntityType="Self.RevenueReport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RevenueReportDetail" EntityType="Self.RevenueReportDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceDetail" EntityType="Self.ServiceDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shift" EntityType="Self.Shift" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserGroup" EntityType="Self.UserGroup" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AppUser__GroupId__75A278F5" Association="Self.FK__AppUser__GroupId__75A278F5">
+            <End Role="UserGroup" EntitySet="UserGroup" />
+            <End Role="AppUser" EntitySet="AppUser" />
           </AssociationSet>
-          <AssociationSet Name="FK__CHITIETDV__MaPhi__4E88ABD4" Association="Self.FK__CHITIETDV__MaPhi__4E88ABD4">
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIEC" />
-            <End Role="CHITIETDV" EntitySet="CHITIETDV" />
+          <AssociationSet Name="FK__Booking__HallId__5535A963" Association="Self.FK__Booking__HallId__5535A963">
+            <End Role="Hall" EntitySet="Hall" />
+            <End Role="Booking" EntitySet="Booking" />
           </AssociationSet>
-          <AssociationSet Name="FK__CTBAOCAODS__5441852A" Association="Self.FK__CTBAOCAODS__5441852A">
-            <End Role="BAOCAODS" EntitySet="BAOCAODS" />
-            <End Role="CTBAOCAODS" EntitySet="CTBAOCAODS" />
+          <AssociationSet Name="FK__Booking__ShiftId__5441852A" Association="Self.FK__Booking__ShiftId__5441852A">
+            <End Role="Shift" EntitySet="Shift" />
+            <End Role="Booking" EntitySet="Booking" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__628FA481" Association="Self.FK__NGUOIDUNG__MaNho__628FA481">
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNG" />
-            <End Role="NGUOIDUNG" EntitySet="NGUOIDUNG" />
+          <AssociationSet Name="FK__GroupPerm__Group__70DDC3D8" Association="Self.FK__GroupPerm__Group__70DDC3D8">
+            <End Role="UserGroup" EntitySet="UserGroup" />
+            <End Role="GroupPermission" EntitySet="GroupPermission" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHANQUYEN__MaChu__5EBF139D" Association="Self.FK__PHANQUYEN__MaChu__5EBF139D">
-            <End Role="CHUCNANG" EntitySet="CHUCNANG" />
-            <End Role="PHANQUYEN" EntitySet="PHANQUYEN" />
+          <AssociationSet Name="FK__GroupPerm__Permi__71D1E811" Association="Self.FK__GroupPerm__Permi__71D1E811">
+            <End Role="Permission" EntitySet="Permission" />
+            <End Role="GroupPermission" EntitySet="GroupPermission" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHANQUYEN__MaNho__5DCAEF64" Association="Self.FK__PHANQUYEN__MaNho__5DCAEF64">
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNG" />
-            <End Role="PHANQUYEN" EntitySet="PHANQUYEN" />
+          <AssociationSet Name="FK__Hall__HallTypeId__4E88ABD4" Association="Self.FK__Hall__HallTypeId__4E88ABD4">
+            <End Role="HallType" EntitySet="HallType" />
+            <End Role="Hall" EntitySet="Hall" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHIEUDATT__MaSan__4222D4EF" Association="Self.FK__PHIEUDATT__MaSan__4222D4EF">
-            <End Role="SANH" EntitySet="SANH" />
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIEC" />
+          <AssociationSet Name="FK__Menu__BookingId__5AEE82B9" Association="Self.FK__Menu__BookingId__5AEE82B9">
+            <End Role="Booking" EntitySet="Booking" />
+            <End Role="Menu" EntitySet="Menu" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHIEUDATTI__MaCa__412EB0B6" Association="Self.FK__PHIEUDATTI__MaCa__412EB0B6">
-            <End Role="CA" EntitySet="CA" />
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIEC" />
+          <AssociationSet Name="FK__Menu__DishId__5BE2A6F2" Association="Self.FK__Menu__DishId__5BE2A6F2">
+            <End Role="Dish" EntitySet="Dish" />
+            <End Role="Menu" EntitySet="Menu" />
           </AssociationSet>
-          <AssociationSet Name="FK__SANH__MaLoaiSanh__3B75D760" Association="Self.FK__SANH__MaLoaiSanh__3B75D760">
-            <End Role="LOAISANH" EntitySet="LOAISANH" />
-            <End Role="SANH" EntitySet="SANH" />
+          <AssociationSet Name="FK__RevenueReportDet__6754599E" Association="Self.FK__RevenueReportDet__6754599E">
+            <End Role="RevenueReport" EntitySet="RevenueReport" />
+            <End Role="RevenueReportDetail" EntitySet="RevenueReportDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK__THUCDON__MaMonAn__48CFD27E" Association="Self.FK__THUCDON__MaMonAn__48CFD27E">
-            <End Role="MONAN" EntitySet="MONAN" />
-            <End Role="THUCDON" EntitySet="THUCDON" />
+          <AssociationSet Name="FK__ServiceDe__Booki__619B8048" Association="Self.FK__ServiceDe__Booki__619B8048">
+            <End Role="Booking" EntitySet="Booking" />
+            <End Role="ServiceDetail" EntitySet="ServiceDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK__THUCDON__MaPhieu__47DBAE45" Association="Self.FK__THUCDON__MaPhieu__47DBAE45">
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIEC" />
-            <End Role="THUCDON" EntitySet="THUCDON" />
+          <AssociationSet Name="FK__ServiceDe__Servi__628FA481" Association="Self.FK__ServiceDe__Servi__628FA481">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="ServiceDetail" EntitySet="ServiceDetail" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -360,341 +364,345 @@
     <edmx:ConceptualModels>
       <Schema Namespace="QuanLyTiecCuoiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="QuanLyTiecCuoiEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="BAOCAODS" EntityType="QuanLyTiecCuoiModel.BAOCAOD" />
-          <EntitySet Name="CAs" EntityType="QuanLyTiecCuoiModel.CA" />
-          <EntitySet Name="CHITIETDVs" EntityType="QuanLyTiecCuoiModel.CHITIETDV" />
-          <EntitySet Name="CHUCNANGs" EntityType="QuanLyTiecCuoiModel.CHUCNANG" />
-          <EntitySet Name="CTBAOCAODS" EntityType="QuanLyTiecCuoiModel.CTBAOCAOD" />
-          <EntitySet Name="DICHVUs" EntityType="QuanLyTiecCuoiModel.DICHVU" />
-          <EntitySet Name="LOAISANHs" EntityType="QuanLyTiecCuoiModel.LOAISANH" />
-          <EntitySet Name="MONANs" EntityType="QuanLyTiecCuoiModel.MONAN" />
-          <EntitySet Name="NGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NGUOIDUNG" />
-          <EntitySet Name="NHOMNGUOIDUNGs" EntityType="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" />
-          <EntitySet Name="PHIEUDATTIECs" EntityType="QuanLyTiecCuoiModel.PHIEUDATTIEC" />
-          <EntitySet Name="SANHs" EntityType="QuanLyTiecCuoiModel.SANH" />
-          <EntitySet Name="THAMSOes" EntityType="QuanLyTiecCuoiModel.THAMSO" />
-          <EntitySet Name="THUCDONs" EntityType="QuanLyTiecCuoiModel.THUCDON" />
-          <AssociationSet Name="FK__CTBAOCAODS__5441852A" Association="QuanLyTiecCuoiModel.FK__CTBAOCAODS__5441852A">
-            <End Role="BAOCAOD" EntitySet="BAOCAODS" />
-            <End Role="CTBAOCAOD" EntitySet="CTBAOCAODS" />
+          <EntitySet Name="AppUsers" EntityType="QuanLyTiecCuoiModel.AppUser" />
+          <EntitySet Name="Bookings" EntityType="QuanLyTiecCuoiModel.Booking" />
+          <EntitySet Name="Dishes" EntityType="QuanLyTiecCuoiModel.Dish" />
+          <EntitySet Name="Halls" EntityType="QuanLyTiecCuoiModel.Hall" />
+          <EntitySet Name="HallTypes" EntityType="QuanLyTiecCuoiModel.HallType" />
+          <EntitySet Name="Menus" EntityType="QuanLyTiecCuoiModel.Menu" />
+          <EntitySet Name="Parameters" EntityType="QuanLyTiecCuoiModel.Parameter" />
+          <EntitySet Name="Permissions" EntityType="QuanLyTiecCuoiModel.Permission" />
+          <EntitySet Name="RevenueReports" EntityType="QuanLyTiecCuoiModel.RevenueReport" />
+          <EntitySet Name="RevenueReportDetails" EntityType="QuanLyTiecCuoiModel.RevenueReportDetail" />
+          <EntitySet Name="Services" EntityType="QuanLyTiecCuoiModel.Service" />
+          <EntitySet Name="ServiceDetails" EntityType="QuanLyTiecCuoiModel.ServiceDetail" />
+          <EntitySet Name="Shifts" EntityType="QuanLyTiecCuoiModel.Shift" />
+          <EntitySet Name="UserGroups" EntityType="QuanLyTiecCuoiModel.UserGroup" />
+          <AssociationSet Name="FK__AppUser__GroupId__75A278F5" Association="QuanLyTiecCuoiModel.FK__AppUser__GroupId__75A278F5">
+            <End Role="UserGroup" EntitySet="UserGroups" />
+            <End Role="AppUser" EntitySet="AppUsers" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHIEUDATTI__MaCa__412EB0B6" Association="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__412EB0B6">
-            <End Role="CA" EntitySet="CAs" />
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
+          <AssociationSet Name="FK__Booking__HallId__5535A963" Association="QuanLyTiecCuoiModel.FK__Booking__HallId__5535A963">
+            <End Role="Hall" EntitySet="Halls" />
+            <End Role="Booking" EntitySet="Bookings" />
           </AssociationSet>
-          <AssociationSet Name="FK__CHITIETDV__MaDic__4F7CD00D" Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4F7CD00D">
-            <End Role="DICHVU" EntitySet="DICHVUs" />
-            <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
+          <AssociationSet Name="FK__Booking__ShiftId__5441852A" Association="QuanLyTiecCuoiModel.FK__Booking__ShiftId__5441852A">
+            <End Role="Shift" EntitySet="Shifts" />
+            <End Role="Booking" EntitySet="Bookings" />
           </AssociationSet>
-          <AssociationSet Name="FK__CHITIETDV__MaPhi__4E88ABD4" Association="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__4E88ABD4">
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
-            <End Role="CHITIETDV" EntitySet="CHITIETDVs" />
+          <AssociationSet Name="FK__Menu__BookingId__5AEE82B9" Association="QuanLyTiecCuoiModel.FK__Menu__BookingId__5AEE82B9">
+            <End Role="Booking" EntitySet="Bookings" />
+            <End Role="Menu" EntitySet="Menus" />
           </AssociationSet>
-          <AssociationSet Name="FK__SANH__MaLoaiSanh__3B75D760" Association="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__3B75D760">
-            <End Role="LOAISANH" EntitySet="LOAISANHs" />
-            <End Role="SANH" EntitySet="SANHs" />
+          <AssociationSet Name="FK__ServiceDe__Booki__619B8048" Association="QuanLyTiecCuoiModel.FK__ServiceDe__Booki__619B8048">
+            <End Role="Booking" EntitySet="Bookings" />
+            <End Role="ServiceDetail" EntitySet="ServiceDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__THUCDON__MaMonAn__48CFD27E" Association="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__48CFD27E">
-            <End Role="MONAN" EntitySet="MONANs" />
-            <End Role="THUCDON" EntitySet="THUCDONs" />
+          <AssociationSet Name="FK__Menu__DishId__5BE2A6F2" Association="QuanLyTiecCuoiModel.FK__Menu__DishId__5BE2A6F2">
+            <End Role="Dish" EntitySet="Dishes" />
+            <End Role="Menu" EntitySet="Menus" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGUOIDUNG__MaNho__628FA481" Association="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__628FA481">
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
-            <End Role="NGUOIDUNG" EntitySet="NGUOIDUNGs" />
+          <AssociationSet Name="FK__Hall__HallTypeId__4E88ABD4" Association="QuanLyTiecCuoiModel.FK__Hall__HallTypeId__4E88ABD4">
+            <End Role="HallType" EntitySet="HallTypes" />
+            <End Role="Hall" EntitySet="Halls" />
           </AssociationSet>
-          <AssociationSet Name="FK__PHIEUDATT__MaSan__4222D4EF" Association="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__4222D4EF">
-            <End Role="SANH" EntitySet="SANHs" />
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
+          <AssociationSet Name="FK__RevenueReportDet__6754599E" Association="QuanLyTiecCuoiModel.FK__RevenueReportDet__6754599E">
+            <End Role="RevenueReport" EntitySet="RevenueReports" />
+            <End Role="RevenueReportDetail" EntitySet="RevenueReportDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__THUCDON__MaPhieu__47DBAE45" Association="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__47DBAE45">
-            <End Role="PHIEUDATTIEC" EntitySet="PHIEUDATTIECs" />
-            <End Role="THUCDON" EntitySet="THUCDONs" />
+          <AssociationSet Name="FK__ServiceDe__Servi__628FA481" Association="QuanLyTiecCuoiModel.FK__ServiceDe__Servi__628FA481">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="ServiceDetail" EntitySet="ServiceDetails" />
           </AssociationSet>
-          <AssociationSet Name="PHANQUYEN" Association="QuanLyTiecCuoiModel.PHANQUYEN">
-            <End Role="CHUCNANG" EntitySet="CHUCNANGs" />
-            <End Role="NHOMNGUOIDUNG" EntitySet="NHOMNGUOIDUNGs" />
+          <AssociationSet Name="GroupPermission" Association="QuanLyTiecCuoiModel.GroupPermission">
+            <End Role="UserGroup" EntitySet="UserGroups" />
+            <End Role="Permission" EntitySet="Permissions" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="BAOCAOD">
+        <EntityType Name="AppUser">
           <Key>
-            <PropertyRef Name="Thang" />
-            <PropertyRef Name="Nam" />
+            <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="Thang" Type="Int32" Nullable="false" />
-          <Property Name="Nam" Type="Int32" Nullable="false" />
-          <Property Name="TongDoanhThu" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="CTBAOCAODS" Relationship="QuanLyTiecCuoiModel.FK__CTBAOCAODS__5441852A" FromRole="BAOCAOD" ToRole="CTBAOCAOD" />
-        </EntityType>
-        <EntityType Name="CA">
-          <Key>
-            <PropertyRef Name="MaCa" />
-          </Key>
-          <Property Name="MaCa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenCa" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="ThoiGianBatDauCa" Type="Time" Precision="7" />
-          <Property Name="ThoiGianKetThucCa" Type="Time" Precision="7" />
-          <NavigationProperty Name="PHIEUDATTIECs" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__412EB0B6" FromRole="CA" ToRole="PHIEUDATTIEC" />
-        </EntityType>
-        <EntityType Name="CHITIETDV">
-          <Key>
-            <PropertyRef Name="MaPhieuDat" />
-            <PropertyRef Name="MaDichVu" />
-          </Key>
-          <Property Name="MaPhieuDat" Type="Int32" Nullable="false" />
-          <Property Name="MaDichVu" Type="Int32" Nullable="false" />
-          <Property Name="SoLuong" Type="Int32" />
-          <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ThanhTien" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DICHVU" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4F7CD00D" FromRole="CHITIETDV" ToRole="DICHVU" />
-          <NavigationProperty Name="PHIEUDATTIEC" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__4E88ABD4" FromRole="CHITIETDV" ToRole="PHIEUDATTIEC" />
-        </EntityType>
-        <EntityType Name="CHUCNANG">
-          <Key>
-            <PropertyRef Name="MaChucNang" />
-          </Key>
-          <Property Name="MaChucNang" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TenChucNang" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TenManHinhDuocLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="NHOMNGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.PHANQUYEN" FromRole="CHUCNANG" ToRole="NHOMNGUOIDUNG" />
-        </EntityType>
-        <EntityType Name="CTBAOCAOD">
-          <Key>
-            <PropertyRef Name="Ngay" />
-            <PropertyRef Name="Thang" />
-            <PropertyRef Name="Nam" />
-          </Key>
-          <Property Name="Ngay" Type="Int32" Nullable="false" />
-          <Property Name="Thang" Type="Int32" Nullable="false" />
-          <Property Name="Nam" Type="Int32" Nullable="false" />
-          <Property Name="SoLuongTiec" Type="Int32" />
-          <Property Name="DoanhThu" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TiLe" Type="Decimal" Precision="7" Scale="2" />
-          <NavigationProperty Name="BAOCAOD" Relationship="QuanLyTiecCuoiModel.FK__CTBAOCAODS__5441852A" FromRole="CTBAOCAOD" ToRole="BAOCAOD" />
-        </EntityType>
-        <EntityType Name="DICHVU">
-          <Key>
-            <PropertyRef Name="MaDichVu" />
-          </Key>
-          <Property Name="MaDichVu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenDichVu" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CHITIETDVs" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaDic__4F7CD00D" FromRole="DICHVU" ToRole="CHITIETDV" />
-        </EntityType>
-        <EntityType Name="LOAISANH">
-          <Key>
-            <PropertyRef Name="MaLoaiSanh" />
-          </Key>
-          <Property Name="MaLoaiSanh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenLoaiSanh" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="DonGiaBanToiThieu" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="SANHs" Relationship="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__3B75D760" FromRole="LOAISANH" ToRole="SANH" />
-        </EntityType>
-        <EntityType Name="MONAN">
-          <Key>
-            <PropertyRef Name="MaMonAn" />
-          </Key>
-          <Property Name="MaMonAn" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenMonAn" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="THUCDONs" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__48CFD27E" FromRole="MONAN" ToRole="THUCDON" />
-        </EntityType>
-        <EntityType Name="NGUOIDUNG">
-          <Key>
-            <PropertyRef Name="MaNguoiDung" />
-          </Key>
-          <Property Name="MaNguoiDung" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenDangNhap" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MatKhauHash" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
-          <Property Name="HoTen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="NHOMNGUOIDUNG" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__628FA481" FromRole="NGUOIDUNG" ToRole="NHOMNGUOIDUNG" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="GroupId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="UserGroup" Relationship="QuanLyTiecCuoiModel.FK__AppUser__GroupId__75A278F5" FromRole="AppUser" ToRole="UserGroup" />
         </EntityType>
-        <EntityType Name="NHOMNGUOIDUNG">
+        <EntityType Name="Booking">
           <Key>
-            <PropertyRef Name="MaNhom" />
+            <PropertyRef Name="BookingId" />
           </Key>
-          <Property Name="MaNhom" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TenNhom" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="NGUOIDUNGs" Relationship="QuanLyTiecCuoiModel.FK__NGUOIDUNG__MaNho__628FA481" FromRole="NHOMNGUOIDUNG" ToRole="NGUOIDUNG" />
-          <NavigationProperty Name="CHUCNANGs" Relationship="QuanLyTiecCuoiModel.PHANQUYEN" FromRole="NHOMNGUOIDUNG" ToRole="CHUCNANG" />
+          <Property Name="BookingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroomName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="BrideName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="BookingDate" Type="DateTime" Precision="0" />
+          <Property Name="WeddingDate" Type="DateTime" Precision="0" />
+          <Property Name="ShiftId" Type="Int32" />
+          <Property Name="HallId" Type="Int32" />
+          <Property Name="Deposit" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TableCount" Type="Int32" />
+          <Property Name="ReserveTableCount" Type="Int32" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="0" />
+          <Property Name="TablePrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalTableAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalServiceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalInvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RemainingAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AdditionalCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PenaltyAmount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Hall" Relationship="QuanLyTiecCuoiModel.FK__Booking__HallId__5535A963" FromRole="Booking" ToRole="Hall" />
+          <NavigationProperty Name="Shift" Relationship="QuanLyTiecCuoiModel.FK__Booking__ShiftId__5441852A" FromRole="Booking" ToRole="Shift" />
+          <NavigationProperty Name="Menus" Relationship="QuanLyTiecCuoiModel.FK__Menu__BookingId__5AEE82B9" FromRole="Booking" ToRole="Menu" />
+          <NavigationProperty Name="ServiceDetails" Relationship="QuanLyTiecCuoiModel.FK__ServiceDe__Booki__619B8048" FromRole="Booking" ToRole="ServiceDetail" />
         </EntityType>
-        <EntityType Name="PHIEUDATTIEC">
+        <EntityType Name="Dish">
           <Key>
-            <PropertyRef Name="MaPhieuDat" />
+            <PropertyRef Name="DishId" />
           </Key>
-          <Property Name="MaPhieuDat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenChuRe" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="TenCoDau" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="DienThoai" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="NgayDatTiec" Type="DateTime" Precision="0" />
-          <Property Name="NgayDaiTiec" Type="DateTime" Precision="0" />
-          <Property Name="MaCa" Type="Int32" />
-          <Property Name="MaSanh" Type="Int32" />
-          <Property Name="TienDatCoc" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="SoLuongBan" Type="Int32" />
-          <Property Name="SoBanDuTru" Type="Int32" />
-          <Property Name="NgayThanhToan" Type="DateTime" Precision="0" />
-          <Property Name="DonGiaBanTiec" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TongTienBan" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TongTienDV" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TongTienHoaDon" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TienConLai" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ChiPhiPhatSinh" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TienPhat" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="CA" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATTI__MaCa__412EB0B6" FromRole="PHIEUDATTIEC" ToRole="CA" />
-          <NavigationProperty Name="CHITIETDVs" Relationship="QuanLyTiecCuoiModel.FK__CHITIETDV__MaPhi__4E88ABD4" FromRole="PHIEUDATTIEC" ToRole="CHITIETDV" />
-          <NavigationProperty Name="SANH" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__4222D4EF" FromRole="PHIEUDATTIEC" ToRole="SANH" />
-          <NavigationProperty Name="THUCDONs" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__47DBAE45" FromRole="PHIEUDATTIEC" ToRole="THUCDON" />
+          <Property Name="DishId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DishName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Menus" Relationship="QuanLyTiecCuoiModel.FK__Menu__DishId__5BE2A6F2" FromRole="Dish" ToRole="Menu" />
         </EntityType>
-        <EntityType Name="SANH">
+        <EntityType Name="Hall">
           <Key>
-            <PropertyRef Name="MaSanh" />
+            <PropertyRef Name="HallId" />
           </Key>
-          <Property Name="MaSanh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MaLoaiSanh" Type="Int32" />
-          <Property Name="TenSanh" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="SoLuongBanToiDa" Type="Int32" />
-          <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="LOAISANH" Relationship="QuanLyTiecCuoiModel.FK__SANH__MaLoaiSanh__3B75D760" FromRole="SANH" ToRole="LOAISANH" />
-          <NavigationProperty Name="PHIEUDATTIECs" Relationship="QuanLyTiecCuoiModel.FK__PHIEUDATT__MaSan__4222D4EF" FromRole="SANH" ToRole="PHIEUDATTIEC" />
+          <Property Name="HallId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HallTypeId" Type="Int32" />
+          <Property Name="HallName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="MaxTableCount" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Bookings" Relationship="QuanLyTiecCuoiModel.FK__Booking__HallId__5535A963" FromRole="Hall" ToRole="Booking" />
+          <NavigationProperty Name="HallType" Relationship="QuanLyTiecCuoiModel.FK__Hall__HallTypeId__4E88ABD4" FromRole="Hall" ToRole="HallType" />
         </EntityType>
-        <EntityType Name="THAMSO">
+        <EntityType Name="HallType">
           <Key>
-            <PropertyRef Name="TenThamSo" />
+            <PropertyRef Name="HallTypeId" />
           </Key>
-          <Property Name="TenThamSo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="GiaTri" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="HallTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HallTypeName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="MinTablePrice" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Halls" Relationship="QuanLyTiecCuoiModel.FK__Hall__HallTypeId__4E88ABD4" FromRole="HallType" ToRole="Hall" />
         </EntityType>
-        <EntityType Name="THUCDON">
+        <EntityType Name="Menu">
           <Key>
-            <PropertyRef Name="MaPhieuDat" />
-            <PropertyRef Name="MaMonAn" />
+            <PropertyRef Name="BookingId" />
+            <PropertyRef Name="DishId" />
           </Key>
-          <Property Name="MaPhieuDat" Type="Int32" Nullable="false" />
-          <Property Name="MaMonAn" Type="Int32" Nullable="false" />
-          <Property Name="SoLuong" Type="Int32" />
-          <Property Name="DonGia" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MONAN" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaMonAn__48CFD27E" FromRole="THUCDON" ToRole="MONAN" />
-          <NavigationProperty Name="PHIEUDATTIEC" Relationship="QuanLyTiecCuoiModel.FK__THUCDON__MaPhieu__47DBAE45" FromRole="THUCDON" ToRole="PHIEUDATTIEC" />
+          <Property Name="BookingId" Type="Int32" Nullable="false" />
+          <Property Name="DishId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Booking" Relationship="QuanLyTiecCuoiModel.FK__Menu__BookingId__5AEE82B9" FromRole="Menu" ToRole="Booking" />
+          <NavigationProperty Name="Dish" Relationship="QuanLyTiecCuoiModel.FK__Menu__DishId__5BE2A6F2" FromRole="Menu" ToRole="Dish" />
         </EntityType>
-        <Association Name="FK__CTBAOCAODS__5441852A">
-          <End Type="QuanLyTiecCuoiModel.BAOCAOD" Role="BAOCAOD" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.CTBAOCAOD" Role="CTBAOCAOD" Multiplicity="*" />
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="ParameterName" />
+          </Key>
+          <Property Name="ParameterName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="PermissionId" />
+          </Key>
+          <Property Name="PermissionId" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PermissionName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LoadedScreenName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserGroups" Relationship="QuanLyTiecCuoiModel.GroupPermission" FromRole="Permission" ToRole="UserGroup" />
+        </EntityType>
+        <EntityType Name="RevenueReport">
+          <Key>
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="TotalRevenue" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="RevenueReportDetails" Relationship="QuanLyTiecCuoiModel.FK__RevenueReportDet__6754599E" FromRole="RevenueReport" ToRole="RevenueReportDetail" />
+        </EntityType>
+        <EntityType Name="RevenueReportDetail">
+          <Key>
+            <PropertyRef Name="Day" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="Day" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="WeddingCount" Type="Int32" />
+          <Property Name="Revenue" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Ratio" Type="Decimal" Precision="7" Scale="2" />
+          <NavigationProperty Name="RevenueReport" Relationship="QuanLyTiecCuoiModel.FK__RevenueReportDet__6754599E" FromRole="RevenueReportDetail" ToRole="RevenueReport" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ServiceDetails" Relationship="QuanLyTiecCuoiModel.FK__ServiceDe__Servi__628FA481" FromRole="Service" ToRole="ServiceDetail" />
+        </EntityType>
+        <EntityType Name="ServiceDetail">
+          <Key>
+            <PropertyRef Name="BookingId" />
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="BookingId" Type="Int32" Nullable="false" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Booking" Relationship="QuanLyTiecCuoiModel.FK__ServiceDe__Booki__619B8048" FromRole="ServiceDetail" ToRole="Booking" />
+          <NavigationProperty Name="Service" Relationship="QuanLyTiecCuoiModel.FK__ServiceDe__Servi__628FA481" FromRole="ServiceDetail" ToRole="Service" />
+        </EntityType>
+        <EntityType Name="Shift">
+          <Key>
+            <PropertyRef Name="ShiftId" />
+          </Key>
+          <Property Name="ShiftId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShiftName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="StartTime" Type="Time" Precision="7" />
+          <Property Name="EndTime" Type="Time" Precision="7" />
+          <NavigationProperty Name="Bookings" Relationship="QuanLyTiecCuoiModel.FK__Booking__ShiftId__5441852A" FromRole="Shift" ToRole="Booking" />
+        </EntityType>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="GroupName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AppUsers" Relationship="QuanLyTiecCuoiModel.FK__AppUser__GroupId__75A278F5" FromRole="UserGroup" ToRole="AppUser" />
+          <NavigationProperty Name="Permissions" Relationship="QuanLyTiecCuoiModel.GroupPermission" FromRole="UserGroup" ToRole="Permission" />
+        </EntityType>
+        <Association Name="FK__AppUser__GroupId__75A278F5">
+          <End Type="QuanLyTiecCuoiModel.UserGroup" Role="UserGroup" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.AppUser" Role="AppUser" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="BAOCAOD">
-              <PropertyRef Name="Thang" />
-              <PropertyRef Name="Nam" />
+            <Principal Role="UserGroup">
+              <PropertyRef Name="GroupId" />
             </Principal>
-            <Dependent Role="CTBAOCAOD">
-              <PropertyRef Name="Thang" />
-              <PropertyRef Name="Nam" />
+            <Dependent Role="AppUser">
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHIEUDATTI__MaCa__412EB0B6">
-          <End Type="QuanLyTiecCuoiModel.CA" Role="CA" Multiplicity="0..1" />
-          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="*" />
+        <Association Name="FK__Booking__HallId__5535A963">
+          <End Type="QuanLyTiecCuoiModel.Hall" Role="Hall" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.Booking" Role="Booking" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CA">
-              <PropertyRef Name="MaCa" />
+            <Principal Role="Hall">
+              <PropertyRef Name="HallId" />
             </Principal>
-            <Dependent Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaCa" />
+            <Dependent Role="Booking">
+              <PropertyRef Name="HallId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CHITIETDV__MaDic__4F7CD00D">
-          <End Type="QuanLyTiecCuoiModel.DICHVU" Role="DICHVU" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.CHITIETDV" Role="CHITIETDV" Multiplicity="*" />
+        <Association Name="FK__Booking__ShiftId__5441852A">
+          <End Type="QuanLyTiecCuoiModel.Shift" Role="Shift" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.Booking" Role="Booking" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DICHVU">
-              <PropertyRef Name="MaDichVu" />
+            <Principal Role="Shift">
+              <PropertyRef Name="ShiftId" />
             </Principal>
-            <Dependent Role="CHITIETDV">
-              <PropertyRef Name="MaDichVu" />
+            <Dependent Role="Booking">
+              <PropertyRef Name="ShiftId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CHITIETDV__MaPhi__4E88ABD4">
-          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.CHITIETDV" Role="CHITIETDV" Multiplicity="*" />
+        <Association Name="FK__Menu__BookingId__5AEE82B9">
+          <End Type="QuanLyTiecCuoiModel.Booking" Role="Booking" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.Menu" Role="Menu" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaPhieuDat" />
+            <Principal Role="Booking">
+              <PropertyRef Name="BookingId" />
             </Principal>
-            <Dependent Role="CHITIETDV">
-              <PropertyRef Name="MaPhieuDat" />
+            <Dependent Role="Menu">
+              <PropertyRef Name="BookingId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SANH__MaLoaiSanh__3B75D760">
-          <End Type="QuanLyTiecCuoiModel.LOAISANH" Role="LOAISANH" Multiplicity="0..1" />
-          <End Type="QuanLyTiecCuoiModel.SANH" Role="SANH" Multiplicity="*" />
+        <Association Name="FK__ServiceDe__Booki__619B8048">
+          <End Type="QuanLyTiecCuoiModel.Booking" Role="Booking" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.ServiceDetail" Role="ServiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="LOAISANH">
-              <PropertyRef Name="MaLoaiSanh" />
+            <Principal Role="Booking">
+              <PropertyRef Name="BookingId" />
             </Principal>
-            <Dependent Role="SANH">
-              <PropertyRef Name="MaLoaiSanh" />
+            <Dependent Role="ServiceDetail">
+              <PropertyRef Name="BookingId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__THUCDON__MaMonAn__48CFD27E">
-          <End Type="QuanLyTiecCuoiModel.MONAN" Role="MONAN" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.THUCDON" Role="THUCDON" Multiplicity="*" />
+        <Association Name="FK__Menu__DishId__5BE2A6F2">
+          <End Type="QuanLyTiecCuoiModel.Dish" Role="Dish" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.Menu" Role="Menu" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MONAN">
-              <PropertyRef Name="MaMonAn" />
+            <Principal Role="Dish">
+              <PropertyRef Name="DishId" />
             </Principal>
-            <Dependent Role="THUCDON">
-              <PropertyRef Name="MaMonAn" />
+            <Dependent Role="Menu">
+              <PropertyRef Name="DishId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGUOIDUNG__MaNho__628FA481">
-          <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="0..1" />
-          <End Type="QuanLyTiecCuoiModel.NGUOIDUNG" Role="NGUOIDUNG" Multiplicity="*" />
+        <Association Name="FK__Hall__HallTypeId__4E88ABD4">
+          <End Type="QuanLyTiecCuoiModel.HallType" Role="HallType" Multiplicity="0..1" />
+          <End Type="QuanLyTiecCuoiModel.Hall" Role="Hall" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="NHOMNGUOIDUNG">
-              <PropertyRef Name="MaNhom" />
+            <Principal Role="HallType">
+              <PropertyRef Name="HallTypeId" />
             </Principal>
-            <Dependent Role="NGUOIDUNG">
-              <PropertyRef Name="MaNhom" />
+            <Dependent Role="Hall">
+              <PropertyRef Name="HallTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PHIEUDATT__MaSan__4222D4EF">
-          <End Type="QuanLyTiecCuoiModel.SANH" Role="SANH" Multiplicity="0..1" />
-          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="*" />
+        <Association Name="FK__RevenueReportDet__6754599E">
+          <End Type="QuanLyTiecCuoiModel.RevenueReport" Role="RevenueReport" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.RevenueReportDetail" Role="RevenueReportDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SANH">
-              <PropertyRef Name="MaSanh" />
+            <Principal Role="RevenueReport">
+              <PropertyRef Name="Month" />
+              <PropertyRef Name="Year" />
             </Principal>
-            <Dependent Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaSanh" />
+            <Dependent Role="RevenueReportDetail">
+              <PropertyRef Name="Month" />
+              <PropertyRef Name="Year" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__THUCDON__MaPhieu__47DBAE45">
-          <End Type="QuanLyTiecCuoiModel.PHIEUDATTIEC" Role="PHIEUDATTIEC" Multiplicity="1" />
-          <End Type="QuanLyTiecCuoiModel.THUCDON" Role="THUCDON" Multiplicity="*" />
+        <Association Name="FK__ServiceDe__Servi__628FA481">
+          <End Type="QuanLyTiecCuoiModel.Service" Role="Service" Multiplicity="1" />
+          <End Type="QuanLyTiecCuoiModel.ServiceDetail" Role="ServiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PHIEUDATTIEC">
-              <PropertyRef Name="MaPhieuDat" />
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
             </Principal>
-            <Dependent Role="THUCDON">
-              <PropertyRef Name="MaPhieuDat" />
+            <Dependent Role="ServiceDetail">
+              <PropertyRef Name="ServiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PHANQUYEN">
-          <End Type="QuanLyTiecCuoiModel.CHUCNANG" Role="CHUCNANG" Multiplicity="*" />
-          <End Type="QuanLyTiecCuoiModel.NHOMNGUOIDUNG" Role="NHOMNGUOIDUNG" Multiplicity="*" />
+        <Association Name="GroupPermission">
+          <End Type="QuanLyTiecCuoiModel.UserGroup" Role="UserGroup" Multiplicity="*" />
+          <End Type="QuanLyTiecCuoiModel.Permission" Role="Permission" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -702,168 +710,172 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="QuanLyTiecCuoiModelStoreContainer" CdmEntityContainer="QuanLyTiecCuoiEntities">
-          <EntitySetMapping Name="BAOCAODS">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.BAOCAOD">
-              <MappingFragment StoreEntitySet="BAOCAODS">
-                <ScalarProperty Name="TongDoanhThu" ColumnName="TongDoanhThu" />
-                <ScalarProperty Name="Nam" ColumnName="Nam" />
-                <ScalarProperty Name="Thang" ColumnName="Thang" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CAs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CA">
-              <MappingFragment StoreEntitySet="CA">
-                <ScalarProperty Name="ThoiGianKetThucCa" ColumnName="ThoiGianKetThucCa" />
-                <ScalarProperty Name="ThoiGianBatDauCa" ColumnName="ThoiGianBatDauCa" />
-                <ScalarProperty Name="TenCa" ColumnName="TenCa" />
-                <ScalarProperty Name="MaCa" ColumnName="MaCa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CHITIETDVs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CHITIETDV">
-              <MappingFragment StoreEntitySet="CHITIETDV">
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="ThanhTien" ColumnName="ThanhTien" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="MaDichVu" ColumnName="MaDichVu" />
-                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CHUCNANGs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CHUCNANG">
-              <MappingFragment StoreEntitySet="CHUCNANG">
-                <ScalarProperty Name="TenManHinhDuocLoad" ColumnName="TenManHinhDuocLoad" />
-                <ScalarProperty Name="TenChucNang" ColumnName="TenChucNang" />
-                <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CTBAOCAODS">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.CTBAOCAOD">
-              <MappingFragment StoreEntitySet="CTBAOCAODS">
-                <ScalarProperty Name="TiLe" ColumnName="TiLe" />
-                <ScalarProperty Name="DoanhThu" ColumnName="DoanhThu" />
-                <ScalarProperty Name="SoLuongTiec" ColumnName="SoLuongTiec" />
-                <ScalarProperty Name="Nam" ColumnName="Nam" />
-                <ScalarProperty Name="Thang" ColumnName="Thang" />
-                <ScalarProperty Name="Ngay" ColumnName="Ngay" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DICHVUs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.DICHVU">
-              <MappingFragment StoreEntitySet="DICHVU">
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="TenDichVu" ColumnName="TenDichVu" />
-                <ScalarProperty Name="MaDichVu" ColumnName="MaDichVu" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LOAISANHs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.LOAISANH">
-              <MappingFragment StoreEntitySet="LOAISANH">
-                <ScalarProperty Name="DonGiaBanToiThieu" ColumnName="DonGiaBanToiThieu" />
-                <ScalarProperty Name="TenLoaiSanh" ColumnName="TenLoaiSanh" />
-                <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MONANs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.MONAN">
-              <MappingFragment StoreEntitySet="MONAN">
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="TenMonAn" ColumnName="TenMonAn" />
-                <ScalarProperty Name="MaMonAn" ColumnName="MaMonAn" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NGUOIDUNGs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.NGUOIDUNG">
-              <MappingFragment StoreEntitySet="NGUOIDUNG">
-                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+          <EntitySetMapping Name="AppUsers">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.AppUser">
+              <MappingFragment StoreEntitySet="AppUser">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="HoTen" ColumnName="HoTen" />
-                <ScalarProperty Name="MatKhauHash" ColumnName="MatKhauHash" />
-                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
-                <ScalarProperty Name="MaNguoiDung" ColumnName="MaNguoiDung" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="NHOMNGUOIDUNGs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.NHOMNGUOIDUNG">
-              <MappingFragment StoreEntitySet="NHOMNGUOIDUNG">
-                <ScalarProperty Name="TenNhom" ColumnName="TenNhom" />
-                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+          <EntitySetMapping Name="Bookings">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Booking">
+              <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
+                <ScalarProperty Name="AdditionalCost" ColumnName="AdditionalCost" />
+                <ScalarProperty Name="RemainingAmount" ColumnName="RemainingAmount" />
+                <ScalarProperty Name="TotalInvoiceAmount" ColumnName="TotalInvoiceAmount" />
+                <ScalarProperty Name="TotalServiceAmount" ColumnName="TotalServiceAmount" />
+                <ScalarProperty Name="TotalTableAmount" ColumnName="TotalTableAmount" />
+                <ScalarProperty Name="TablePrice" ColumnName="TablePrice" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="ReserveTableCount" ColumnName="ReserveTableCount" />
+                <ScalarProperty Name="TableCount" ColumnName="TableCount" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="HallId" ColumnName="HallId" />
+                <ScalarProperty Name="ShiftId" ColumnName="ShiftId" />
+                <ScalarProperty Name="WeddingDate" ColumnName="WeddingDate" />
+                <ScalarProperty Name="BookingDate" ColumnName="BookingDate" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="BrideName" ColumnName="BrideName" />
+                <ScalarProperty Name="GroomName" ColumnName="GroomName" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PHIEUDATTIECs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.PHIEUDATTIEC">
-              <MappingFragment StoreEntitySet="PHIEUDATTIEC">
-                <ScalarProperty Name="TienPhat" ColumnName="TienPhat" />
-                <ScalarProperty Name="ChiPhiPhatSinh" ColumnName="ChiPhiPhatSinh" />
-                <ScalarProperty Name="TienConLai" ColumnName="TienConLai" />
-                <ScalarProperty Name="TongTienHoaDon" ColumnName="TongTienHoaDon" />
-                <ScalarProperty Name="TongTienDV" ColumnName="TongTienDV" />
-                <ScalarProperty Name="TongTienBan" ColumnName="TongTienBan" />
-                <ScalarProperty Name="DonGiaBanTiec" ColumnName="DonGiaBanTiec" />
-                <ScalarProperty Name="NgayThanhToan" ColumnName="NgayThanhToan" />
-                <ScalarProperty Name="SoBanDuTru" ColumnName="SoBanDuTru" />
-                <ScalarProperty Name="SoLuongBan" ColumnName="SoLuongBan" />
-                <ScalarProperty Name="TienDatCoc" ColumnName="TienDatCoc" />
-                <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
-                <ScalarProperty Name="MaCa" ColumnName="MaCa" />
-                <ScalarProperty Name="NgayDaiTiec" ColumnName="NgayDaiTiec" />
-                <ScalarProperty Name="NgayDatTiec" ColumnName="NgayDatTiec" />
-                <ScalarProperty Name="DienThoai" ColumnName="DienThoai" />
-                <ScalarProperty Name="TenCoDau" ColumnName="TenCoDau" />
-                <ScalarProperty Name="TenChuRe" ColumnName="TenChuRe" />
-                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
+          <EntitySetMapping Name="Dishes">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Dish">
+              <MappingFragment StoreEntitySet="Dish">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="DishName" ColumnName="DishName" />
+                <ScalarProperty Name="DishId" ColumnName="DishId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SANHs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.SANH">
-              <MappingFragment StoreEntitySet="SANH">
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="SoLuongBanToiDa" ColumnName="SoLuongBanToiDa" />
-                <ScalarProperty Name="TenSanh" ColumnName="TenSanh" />
-                <ScalarProperty Name="MaLoaiSanh" ColumnName="MaLoaiSanh" />
-                <ScalarProperty Name="MaSanh" ColumnName="MaSanh" />
+          <EntitySetMapping Name="Halls">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Hall">
+              <MappingFragment StoreEntitySet="Hall">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="MaxTableCount" ColumnName="MaxTableCount" />
+                <ScalarProperty Name="HallName" ColumnName="HallName" />
+                <ScalarProperty Name="HallTypeId" ColumnName="HallTypeId" />
+                <ScalarProperty Name="HallId" ColumnName="HallId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="THAMSOes">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.THAMSO">
-              <MappingFragment StoreEntitySet="THAMSO">
-                <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
-                <ScalarProperty Name="TenThamSo" ColumnName="TenThamSo" />
+          <EntitySetMapping Name="HallTypes">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.HallType">
+              <MappingFragment StoreEntitySet="HallType">
+                <ScalarProperty Name="MinTablePrice" ColumnName="MinTablePrice" />
+                <ScalarProperty Name="HallTypeName" ColumnName="HallTypeName" />
+                <ScalarProperty Name="HallTypeId" ColumnName="HallTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="THUCDONs">
-            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.THUCDON">
-              <MappingFragment StoreEntitySet="THUCDON">
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="MaMonAn" ColumnName="MaMonAn" />
-                <ScalarProperty Name="MaPhieuDat" ColumnName="MaPhieuDat" />
+          <EntitySetMapping Name="Menus">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Menu">
+              <MappingFragment StoreEntitySet="Menu">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DishId" ColumnName="DishId" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="PHANQUYEN" TypeName="QuanLyTiecCuoiModel.PHANQUYEN" StoreEntitySet="PHANQUYEN">
-            <EndProperty Name="NHOMNGUOIDUNG">
-              <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+          <EntitySetMapping Name="Parameters">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Parameter">
+              <MappingFragment StoreEntitySet="Parameter">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Permission">
+              <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="LoadedScreenName" ColumnName="LoadedScreenName" />
+                <ScalarProperty Name="PermissionName" ColumnName="PermissionName" />
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RevenueReports">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.RevenueReport">
+              <MappingFragment StoreEntitySet="RevenueReport">
+                <ScalarProperty Name="TotalRevenue" ColumnName="TotalRevenue" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RevenueReportDetails">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.RevenueReportDetail">
+              <MappingFragment StoreEntitySet="RevenueReportDetail">
+                <ScalarProperty Name="Ratio" ColumnName="Ratio" />
+                <ScalarProperty Name="Revenue" ColumnName="Revenue" />
+                <ScalarProperty Name="WeddingCount" ColumnName="WeddingCount" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Service">
+              <MappingFragment StoreEntitySet="Service">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceDetails">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.ServiceDetail">
+              <MappingFragment StoreEntitySet="ServiceDetail">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shifts">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.Shift">
+              <MappingFragment StoreEntitySet="Shift">
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="ShiftName" ColumnName="ShiftName" />
+                <ScalarProperty Name="ShiftId" ColumnName="ShiftId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserGroups">
+            <EntityTypeMapping TypeName="QuanLyTiecCuoiModel.UserGroup">
+              <MappingFragment StoreEntitySet="UserGroup">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="GroupPermission" TypeName="QuanLyTiecCuoiModel.GroupPermission" StoreEntitySet="GroupPermission">
+            <EndProperty Name="Permission">
+              <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
             </EndProperty>
-            <EndProperty Name="CHUCNANG">
-              <ScalarProperty Name="MaChucNang" ColumnName="MaChucNang" />
+            <EndProperty Name="UserGroup">
+              <ScalarProperty Name="GroupId" ColumnName="GroupId" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

@@ -12,20 +12,20 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class DICHVU
+    public partial class Dish
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DICHVU()
+        public Dish()
         {
-            this.CHITIETDVs = new HashSet<CHITIETDV>();
+            this.Menus = new HashSet<Menu>();
         }
     
-        public int MaDichVu { get; set; }
-        public string TenDichVu { get; set; }
-        public Nullable<decimal> DonGia { get; set; }
-        public string GhiChu { get; set; }
+        public int DishId { get; set; }
+        public string DishName { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
+        public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CHITIETDV> CHITIETDVs { get; set; }
+        public virtual ICollection<Menu> Menus { get; set; }
     }
 }

@@ -12,22 +12,19 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SANH
+    public partial class RevenueReport
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SANH()
+        public RevenueReport()
         {
-            this.PHIEUDATTIECs = new HashSet<PHIEUDATTIEC>();
+            this.RevenueReportDetails = new HashSet<RevenueReportDetail>();
         }
     
-        public int MaSanh { get; set; }
-        public Nullable<int> MaLoaiSanh { get; set; }
-        public string TenSanh { get; set; }
-        public Nullable<int> SoLuongBanToiDa { get; set; }
-        public string GhiChu { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public Nullable<decimal> TotalRevenue { get; set; }
     
-        public virtual LOAISANH LOAISANH { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PHIEUDATTIEC> PHIEUDATTIECs { get; set; }
+        public virtual ICollection<RevenueReportDetail> RevenueReportDetails { get; set; }
     }
 }

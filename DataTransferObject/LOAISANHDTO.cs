@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace QuanLyTiecCuoi.DataTransferObject
 {
-    public class LOAISANHDTO
+    public class HallTypeDTO
     {
-        public int MaLoaiSanh { get; set; }
-        public string TenLoaiSanh { get; set; }
-        public decimal? DonGiaBanToiThieu { get; set; }
+        public int HallTypeId { get; set; }
+        public string HallTypeName { get; set; }
+        public decimal? MinTablePrice { get; set; }
     }
 }

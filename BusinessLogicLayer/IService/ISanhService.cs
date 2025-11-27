@@ -3,12 +3,12 @@ using QuanLyTiecCuoi.DataTransferObject;
 
 namespace QuanLyTiecCuoi.BusinessLogicLayer.IService
 {
-    public interface ISanhService
+    public interface IHallService
     {
-        IEnumerable<SANHDTO> GetAll();
-        SANHDTO GetById(int maSanh);
-        void Create(SANHDTO sanhDto);
-        void Update(SANHDTO sanhDto);
-        void Delete(int maSanh);
+        IEnumerable<HallDTO> GetAll();
+        HallDTO GetById(int hallId);
+        void Create(HallDTO hallDto);
+        void Update(HallDTO hallDto);
+        void Delete(int hallId);
     }
 }

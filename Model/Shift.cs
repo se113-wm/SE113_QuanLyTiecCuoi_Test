@@ -12,21 +12,20 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class NHOMNGUOIDUNG
+    public partial class Shift
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public NHOMNGUOIDUNG()
+        public Shift()
         {
-            this.NGUOIDUNGs = new HashSet<NGUOIDUNG>();
-            this.CHUCNANGs = new HashSet<CHUCNANG>();
+            this.Bookings = new HashSet<Booking>();
         }
     
-        public string MaNhom { get; set; }
-        public string TenNhom { get; set; }
+        public int ShiftId { get; set; }
+        public string ShiftName { get; set; }
+        public Nullable<System.TimeSpan> StartTime { get; set; }
+        public Nullable<System.TimeSpan> EndTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NGUOIDUNG> NGUOIDUNGs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CHUCNANG> CHUCNANGs { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

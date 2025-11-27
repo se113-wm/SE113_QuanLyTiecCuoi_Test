@@ -12,15 +12,15 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CTBAOCAOD
+    public partial class Menu
     {
-        public int Ngay { get; set; }
-        public int Thang { get; set; }
-        public int Nam { get; set; }
-        public Nullable<int> SoLuongTiec { get; set; }
-        public Nullable<decimal> DoanhThu { get; set; }
-        public Nullable<decimal> TiLe { get; set; }
+        public int BookingId { get; set; }
+        public int DishId { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
+        public string Note { get; set; }
     
-        public virtual BAOCAOD BAOCAOD { get; set; }
+        public virtual Booking Booking { get; set; }
+        public virtual Dish Dish { get; set; }
     }
 }

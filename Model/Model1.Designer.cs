@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\SE104_QLTC\PhuThien2005\QuanLyTiecCuoi\Model\Model1.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\1. UIT\HK5\SE113.Q12\SE113_QuanLyTiecCuoi_Test\Model\Model1.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

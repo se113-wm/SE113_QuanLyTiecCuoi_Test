@@ -12,15 +12,16 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class THUCDON
+    public partial class ServiceDetail
     {
-        public int MaPhieuDat { get; set; }
-        public int MaMonAn { get; set; }
-        public Nullable<int> SoLuong { get; set; }
-        public Nullable<decimal> DonGia { get; set; }
-        public string GhiChu { get; set; }
+        public int BookingId { get; set; }
+        public int ServiceId { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
+        public Nullable<decimal> TotalAmount { get; set; }
+        public string Note { get; set; }
     
-        public virtual MONAN MONAN { get; set; }
-        public virtual PHIEUDATTIEC PHIEUDATTIEC { get; set; }
+        public virtual Booking Booking { get; set; }
+        public virtual Service Service { get; set; }
     }
 }

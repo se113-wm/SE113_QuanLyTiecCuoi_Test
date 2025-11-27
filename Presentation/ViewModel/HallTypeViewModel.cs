@@ -13,7 +13,7 @@ namespace QuanLyTiecCuoi.ViewModel
     public class HallTypeViewModel : BaseViewModel
     {
         private readonly ILoaiSanhService _loaiSanhService;
-        private readonly ISanhService _sanhService;
+        private readonly IHallService _hallService;
 
         private ObservableCollection<LOAISANHDTO> _List;
         public ObservableCollection<LOAISANHDTO> List { get => _List; set { _List = value; OnPropertyChanged(); } }
@@ -222,10 +222,10 @@ namespace QuanLyTiecCuoi.ViewModel
             }
         }
 
-        public HallTypeViewModel(ILoaiSanhService loaiSanhService, ISanhService sanhService )
+        public HallTypeViewModel(ILoaiSanhService loaiSanhService, IHallService hallService )
         {
             _loaiSanhService = loaiSanhService;
-            _sanhService = sanhService;
+            _hallService = hallService;
 
             List = new ObservableCollection<LOAISANHDTO>(_loaiSanhService.GetAll().ToList());
             OriginalList = new ObservableCollection<LOAISANHDTO>(List);
@@ -359,7 +359,7 @@ namespace QuanLyTiecCuoi.ViewModel
                 if (SelectedItem == null)
                     return false;
                 // Tìm xem có sảnh nào có mã loại sảnh này không, bằng cách gọi sảnh service để lấy danh sách sảnh
-                var hasSanh = _sanhService.GetAll().Any(s => s.MaLoaiSanh == SelectedItem.MaLoaiSanh);
+                var hasSanh = _hallService.GetAll().Any(s => s.MaLoaiSanh == SelectedItem.MaLoaiSanh);
                 if (hasSanh)
                 {
                     DeleteMessage = "Đang có sảnh thuộc loại sảnh này";
@@ -393,7 +393,6 @@ namespace QuanLyTiecCuoi.ViewModel
                 }
             });
             ExportToExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
-            _sanhService = sanhService;
         }
         //Exporting excel function
         private void ExportToExcel()
@@ -472,4 +471,4 @@ namespace QuanLyTiecCuoi.ViewModel
             SearchText = string.Empty;
         }
     }
-}
+}}

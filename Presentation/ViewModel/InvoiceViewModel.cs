@@ -33,7 +33,7 @@ namespace QuanLyTiecCuoi.ViewModel {
         private  IPhieuDatTiecService _phieuDatTiecService;
         private readonly IDichVuService _dichVuService;
         private readonly ICaService _caService;
-        private readonly ISanhService _sanhService;
+        private readonly IHallService _hallService;
         private readonly IChiTietDVService _chiTietDichVuService;
         private readonly IThucDonService _thucDonService;
         private readonly IThamSoService _thamSoService;
@@ -118,7 +118,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             int invoiceId,
             IPhieuDatTiecService phieuDatTiecService,
             ICaService caService,
-            ISanhService sanhService,
+            IHallService hallService,
             IChiTietDVService chiTietDichVuService,
             IThucDonService thucDonService,
             IThamSoService thamSoService)
@@ -128,7 +128,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             // Inject services
             _phieuDatTiecService = phieuDatTiecService;
             _caService = caService;
-            _sanhService = sanhService;
+            _hallService = hallService;
             _chiTietDichVuService = chiTietDichVuService;
             _thucDonService = thucDonService;
             _thamSoService = thamSoService;
@@ -288,7 +288,7 @@ namespace QuanLyTiecCuoi.ViewModel {
             damageEquipmentCost = decimal.Parse(DamageEquipmentCost);
             try {
                 var ca = _caService.GetById(SelectedInvoice.MaCa.GetValueOrDefault());
-                var sanh = _sanhService.GetById(SelectedInvoice.MaSanh.GetValueOrDefault());
+                var sanh = _hallService.GetById(SelectedInvoice.MaSanh.GetValueOrDefault());
                 
                 // Lấy lại thông tin mới nhất từ database
                 SelectedInvoice = _phieuDatTiecService.GetById(_InvoiceId);
@@ -366,7 +366,7 @@ namespace QuanLyTiecCuoi.ViewModel {
                 ("Ngày đãi tiệc:", bill.NgayDaiTiec?.ToString("dd'/'MM'/'yyyy") ?? ""),
                 ("Số lượng bàn:", bill.SoLuongBan?.ToString() ?? ""),
                 ("Ca:", _caService.GetById(bill.MaCa ?? 1).TenCa),
-                ("Sảnh:", _sanhService.GetById(bill.MaSanh ?? 1).TenSanh),
+                ("Sảnh:", _hallService.GetById(bill.MaSanh ?? 1).TenSanh),
             }, regularFont));
             document.Add(new Paragraph("\n")); // Line break
             // Danh sách dịch vụ

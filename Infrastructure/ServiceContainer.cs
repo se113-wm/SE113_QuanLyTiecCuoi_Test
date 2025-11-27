@@ -49,7 +49,7 @@ namespace QuanLyTiecCuoi.Infrastructure
             services.AddTransient<IMonAnRepository, MonAnRepository>();
             services.AddTransient<INguoiDungRepository, NguoiDungRepository>();
             services.AddTransient<IPhieuDatTiecRepository, PhieuDatTiecRepository>();
-            services.AddTransient<ISanhRepository, SanhRepository>();
+            services.AddTransient<IHallRepository, HallRepository>();
             services.AddTransient<IThamSoRepository, ThamSoRepository>();
             services.AddTransient<IThucDonRepository, ThucDonRepository>();
 
@@ -63,7 +63,7 @@ namespace QuanLyTiecCuoi.Infrastructure
             services.AddTransient<IMonAnService, MonAnService>();
             services.AddTransient<INguoiDungService, NguoiDungService>();
             services.AddTransient<IPhieuDatTiecService, PhieuDatTiecService>();
-            services.AddTransient<ISanhService, SanhService>();
+            services.AddTransient<IHallService, HallService>();
             services.AddTransient<IThamSoService, ThamSoService>();
             services.AddTransient<IThucDonService, ThucDonService>();
 
@@ -98,7 +98,7 @@ namespace QuanLyTiecCuoi.Infrastructure
         }
 
         /// <summary>
-        /// T?o scope m?i cho m?t ph?m vi ho?t ??ng
+        /// T?o scope m?i cho m?t ph?m vi ho&t ??ng
         /// </summary>
         public static IServiceScope CreateScope()
         {
@@ -116,7 +116,7 @@ namespace QuanLyTiecCuoi.Infrastructure
         {
             return new WeddingDetailViewModel(
                 maPhieuDat,
-                GetService<ISanhService>(),
+                GetService<IHallService>(),
                 GetService<ICaService>(),
                 GetService<IPhieuDatTiecService>(),
                 GetService<IMonAnService>(),
@@ -133,7 +133,7 @@ namespace QuanLyTiecCuoi.Infrastructure
         public static AddWeddingViewModel CreateAddWeddingViewModel()
         {
             return new AddWeddingViewModel(
-                GetService<ISanhService>(),
+                GetService<IHallService>(),
                 GetService<ICaService>(),
                 GetService<IPhieuDatTiecService>(),
                 GetService<IMonAnService>(),
@@ -153,7 +153,7 @@ namespace QuanLyTiecCuoi.Infrastructure
                 invoiceId,
                 GetService<IPhieuDatTiecService>(),
                 GetService<ICaService>(),
-                GetService<ISanhService>(),
+                GetService<IHallService>(),
                 GetService<IChiTietDVService>(),
                 GetService<IThucDonService>(),
                 GetService<IThamSoService>()

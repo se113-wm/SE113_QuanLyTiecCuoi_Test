@@ -12,20 +12,20 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class MONAN
+    public partial class Service
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MONAN()
+        public Service()
         {
-            this.THUCDONs = new HashSet<THUCDON>();
+            this.ServiceDetails = new HashSet<ServiceDetail>();
         }
     
-        public int MaMonAn { get; set; }
-        public string TenMonAn { get; set; }
-        public Nullable<decimal> DonGia { get; set; }
-        public string GhiChu { get; set; }
+        public int ServiceId { get; set; }
+        public string ServiceName { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
+        public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<THUCDON> THUCDONs { get; set; }
+        public virtual ICollection<ServiceDetail> ServiceDetails { get; set; }
     }
 }

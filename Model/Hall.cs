@@ -12,19 +12,22 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class BAOCAOD
+    public partial class Hall
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public BAOCAOD()
+        public Hall()
         {
-            this.CTBAOCAODS = new HashSet<CTBAOCAOD>();
+            this.Bookings = new HashSet<Booking>();
         }
     
-        public int Thang { get; set; }
-        public int Nam { get; set; }
-        public Nullable<decimal> TongDoanhThu { get; set; }
+        public int HallId { get; set; }
+        public Nullable<int> HallTypeId { get; set; }
+        public string HallName { get; set; }
+        public Nullable<int> MaxTableCount { get; set; }
+        public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CTBAOCAOD> CTBAOCAODS { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual HallType HallType { get; set; }
     }
 }

@@ -25,19 +25,19 @@ namespace QuanLyTiecCuoi.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<BAOCAOD> BAOCAODS { get; set; }
-        public virtual DbSet<CA> CAs { get; set; }
-        public virtual DbSet<CHITIETDV> CHITIETDVs { get; set; }
-        public virtual DbSet<CHUCNANG> CHUCNANGs { get; set; }
-        public virtual DbSet<CTBAOCAOD> CTBAOCAODS { get; set; }
-        public virtual DbSet<DICHVU> DICHVUs { get; set; }
-        public virtual DbSet<LOAISANH> LOAISANHs { get; set; }
-        public virtual DbSet<MONAN> MONANs { get; set; }
-        public virtual DbSet<NGUOIDUNG> NGUOIDUNGs { get; set; }
-        public virtual DbSet<NHOMNGUOIDUNG> NHOMNGUOIDUNGs { get; set; }
-        public virtual DbSet<PHIEUDATTIEC> PHIEUDATTIECs { get; set; }
-        public virtual DbSet<SANH> SANHs { get; set; }
-        public virtual DbSet<THAMSO> THAMSOes { get; set; }
-        public virtual DbSet<THUCDON> THUCDONs { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<Dish> Dishes { get; set; }
+        public virtual DbSet<Hall> Halls { get; set; }
+        public virtual DbSet<HallType> HallTypes { get; set; }
+        public virtual DbSet<Menu> Menus { get; set; }
+        public virtual DbSet<Parameter> Parameters { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<RevenueReport> RevenueReports { get; set; }
+        public virtual DbSet<RevenueReportDetail> RevenueReportDetails { get; set; }
+        public virtual DbSet<Service> Services { get; set; }
+        public virtual DbSet<ServiceDetail> ServiceDetails { get; set; }
+        public virtual DbSet<Shift> Shifts { get; set; }
+        public virtual DbSet<UserGroup> UserGroups { get; set; }
     }
 }

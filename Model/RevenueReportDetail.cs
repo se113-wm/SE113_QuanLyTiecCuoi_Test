@@ -12,9 +12,15 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class THAMSO
+    public partial class RevenueReportDetail
     {
-        public string TenThamSo { get; set; }
-        public Nullable<decimal> GiaTri { get; set; }
+        public int Day { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public Nullable<int> WeddingCount { get; set; }
+        public Nullable<decimal> Revenue { get; set; }
+        public Nullable<decimal> Ratio { get; set; }
+    
+        public virtual RevenueReport RevenueReport { get; set; }
     }
 }

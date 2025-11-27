@@ -12,20 +12,21 @@ namespace QuanLyTiecCuoi.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CA
+    public partial class UserGroup
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CA()
+        public UserGroup()
         {
-            this.PHIEUDATTIECs = new HashSet<PHIEUDATTIEC>();
+            this.AppUsers = new HashSet<AppUser>();
+            this.Permissions = new HashSet<Permission>();
         }
     
-        public int MaCa { get; set; }
-        public string TenCa { get; set; }
-        public Nullable<System.TimeSpan> ThoiGianBatDauCa { get; set; }
-        public Nullable<System.TimeSpan> ThoiGianKetThucCa { get; set; }
+        public string GroupId { get; set; }
+        public string GroupName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PHIEUDATTIEC> PHIEUDATTIECs { get; set; }
+        public virtual ICollection<AppUser> AppUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Permission> Permissions { get; set; }
     }
 }

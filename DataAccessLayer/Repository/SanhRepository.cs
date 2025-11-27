@@ -5,52 +5,52 @@ using System.Linq;
 
 namespace QuanLyTiecCuoi.DataAccessLayer.Repository
 {
-    public class SanhRepository : ISanhRepository
+    public class HallRepository : IHallRepository
     {
         private readonly QuanLyTiecCuoiEntities _context;
 
-        public SanhRepository()
+        public HallRepository()
         {
             _context = new QuanLyTiecCuoiEntities();
         }
 
-        public IEnumerable<SANH> GetAll()
+        public IEnumerable<Hall> GetAll()
         {
-            return _context.SANHs.ToList();
+            return _context.Halls.ToList();
         }
 
-        public SANH GetById(int maSanh)
+        public Hall GetById(int hallId)
         {
-            return _context.SANHs.Find(maSanh);
+            return _context.Halls.Find(hallId);
         }
 
-        public void Create(SANH sanh)
+        public void Create(Hall hall)
         {
-            _context.SANHs.Add(sanh);
+            _context.Halls.Add(hall);
             _context.SaveChanges();
-            // reload sanh to get the generated ID if applicable
-            _context.Entry(sanh).Reload();
+            // reload hall to get the generated ID if applicable
+            _context.Entry(hall).Reload();
         }
 
-        public void Update(SANH sanh)
+        public void Update(Hall hall)
         {
-            var existing = _context.SANHs.Find(sanh.MaSanh);
+            var existing = _context.Halls.Find(hall.HallId);
             if (existing != null)
             {
-                existing.TenSanh = sanh.TenSanh;
-                existing.MaLoaiSanh = sanh.MaLoaiSanh;
-                existing.SoLuongBanToiDa = sanh.SoLuongBanToiDa;
-                existing.GhiChu = sanh.GhiChu;
+                existing.HallName = hall.HallName;
+                existing.HallTypeId = hall.HallTypeId;
+                existing.MaxTableCount = hall.MaxTableCount;
+                existing.Note = hall.Note;
                 _context.SaveChanges();
             }
         }
 
-        public void Delete(int maSanh)
+        public void Delete(int hallId)
         {
-            var sanh = _context.SANHs.Find(maSanh);
-            if (sanh != null)
+            var hall = _context.Halls.Find(hallId);
+            if (hall != null)
             {
-                _context.SANHs.Remove(sanh);
+                _context.Halls.Remove(hall);
                 _context.SaveChanges();
             }
         }
