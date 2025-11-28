@@ -91,7 +91,7 @@
                                 Margin="0,0,0,2"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="{Binding TenDichVu}"
+                                Text="{Binding ServiceName}"
                                 TextAlignment="Center" />
                             <TextBlock
                                 Margin="0,0,0,2"
@@ -103,7 +103,7 @@
                             <TextBlock
                                 FontSize="13"
                                 Foreground="Gray"
-                                Text="{Binding GhiChu}"
+                                Text="{Binding Note}"
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
                         </StackPanel>

@@ -51,7 +51,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <ComboBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedComboBox}" MinWidth="100" Height="64" Margin="0 0 10 10" Text="{Binding KiemTraPhatText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Kiểm tra phạt">
+                    <ComboBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedComboBox}" MinWidth="100" Height="64" Margin="0 0 10 10" Text="{Binding EnablePenaltyText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Kiểm tra phạt">
                         <ComboBoxItem Content="Có" />
                         <ComboBoxItem Content="Không" />
                     </ComboBox>
@@ -61,21 +61,21 @@
                         MinWidth="200"
                         materialDesign:HintAssist.Hint="Tỉ lệ phạt"
                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding TiLePhat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding PenaltyRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBox Grid.Column="2"
                         Margin="0 0 10 10"
                         MinWidth="200"
                         materialDesign:HintAssist.Hint="Tỉ lệ tiền đặt cọc tối thiểu"
                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding TiLeTienDatCocToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding MinDepositRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBox Grid.Column="3"
                         Margin="0 0 10 10"
                         MinWidth="200"
                         materialDesign:HintAssist.Hint="Tỉ lệ số bàn đặt trước tối thiểu"
                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding TiLeSoBanDatTruocToiThieu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding MinAdvanceBookingRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <StackPanel MinWidth="110" Grid.Column="4">
                         <Button

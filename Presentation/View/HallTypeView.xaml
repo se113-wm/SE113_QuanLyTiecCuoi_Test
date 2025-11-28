@@ -245,7 +245,7 @@
                     Margin="0"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
-                    ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding HallTypeList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                     <ListView.View>
                         <GridView>
@@ -276,7 +276,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenLoaiSanh}"
+                                            Text="{Binding HallTypeName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

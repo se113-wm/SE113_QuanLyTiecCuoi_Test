@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\SixLabors.ImageSharp.3.1.10\build\SixLabors.ImageSharp.props" Condition="Exists('packages\SixLabors.ImageSharp.3.1.10\build\SixLabors.ImageSharp.props')" />
+  <Import Project="packages\SixLabors.ImageSharp.3.1.12\build\SixLabors.ImageSharp.props" Condition="Exists('packages\SixLabors.ImageSharp.3.1.12\build\SixLabors.ImageSharp.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -558,39 +558,39 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="ACCOUNT_VIEW_REFACTOR_COMPLETE.md" />
-    <None Include="COMPLETE_REFACTORING_GUIDE.md" />
-    <None Include="COMPLETE_REFACTORING_SESSION_FINAL.md" />
-    <None Include="COMPLETE_REFACTORING_SUMMARY_FINAL.md" />
-    <None Include="FINAL_REFACTORING_COMPLETE_100_PERCENT.md" />
-    <None Include="FINAL_REFACTORING_STATUS.md" />
-    <None Include="FixWeddingModules.ps1" />
-    <None Include="FOOD_VIEW_REFACTOR_COMPLETE.md" />
-    <None Include="INVOICE_METHOD_FIXES_COMPLETE.md" />
-    <None Include="INVOICE_VIEW_REFACTOR_COMPLETE.md" />
-    <None Include="LOGIN_MAIN_PERMISSION_VIEWMODELS_COMPLETE.md" />
-    <None Include="PERMISSION_VIEW_REFACTOR_COMPLETE.md" />
-    <None Include="QuickCodeRefactor.ps1" />
-    <None Include="RefactorAllEntities.ps1" />
-    <None Include="REFACTORING_COMPLETE_SUMMARY.md" />
-    <None Include="REFACTORING_ISSUES.md" />
-    <None Include="REFACTORING_SESSION_UPDATE.md" />
-    <None Include="RefactorToEnglish.ps1" />
-    <None Include="RefactorViewModels.ps1" />
-    <None Include="REFACTOR_GUIDE.md" />
-    <None Include="RenameFiles.ps1" />
-    <None Include="RunCompleteRefactor.ps1" />
-    <None Include="RunMasterRefactor.ps1" />
-    <None Include="SERVICE_REPOSITORY_DI_COMPLETE.md" />
-    <None Include="SERVICE_VIEW_REFACTOR_PROGRESS.md" />
-    <None Include="UpdateProjectFile.ps1" />
-    <None Include="USER_VIEW_REFACTOR_COMPLETE.md" />
-    <None Include="VerifyInvoiceFixes.ps1" />
-    <None Include="VIEWMODEL_REFACTORING_100_COMPLETE.md" />
-    <None Include="VIEWMODEL_REFACTORING_PROGRESS.md" />
-    <None Include="WEDDING_DETAIL_VIEWMODEL_REFACTOR_COMPLETE.md" />
-    <None Include="WEDDING_MODULES_REFACTOR_PROGRESS.md" />
-    <None Include="WEDDING_MODULE_COMPLETE_REFACTOR.md" />
+    <None Include="Refactor\ACCOUNT_VIEW_REFACTOR_COMPLETE.md" />
+    <None Include="Refactor\COMPLETE_REFACTORING_GUIDE.md" />
+    <None Include="Refactor\COMPLETE_REFACTORING_SESSION_FINAL.md" />
+    <None Include="Refactor\COMPLETE_REFACTORING_SUMMARY_FINAL.md" />
+    <None Include="Refactor\FINAL_REFACTORING_COMPLETE_100_PERCENT.md" />
+    <None Include="Refactor\FINAL_REFACTORING_STATUS.md" />
+    <None Include="Refactor\FixWeddingModules.ps1" />
+    <None Include="Refactor\FOOD_VIEW_REFACTOR_COMPLETE.md" />
+    <None Include="Refactor\INVOICE_METHOD_FIXES_COMPLETE.md" />
+    <None Include="Refactor\INVOICE_VIEW_REFACTOR_COMPLETE.md" />
+    <None Include="Refactor\LOGIN_MAIN_PERMISSION_VIEWMODELS_COMPLETE.md" />
+    <None Include="Refactor\PERMISSION_VIEW_REFACTOR_COMPLETE.md" />
+    <None Include="Refactor\QuickCodeRefactor.ps1" />
+    <None Include="Refactor\RefactorAllEntities.ps1" />
+    <None Include="Refactor\REFACTORING_COMPLETE_SUMMARY.md" />
+    <None Include="Refactor\REFACTORING_ISSUES.md" />
+    <None Include="Refactor\REFACTORING_SESSION_UPDATE.md" />
+    <None Include="Refactor\RefactorToEnglish.ps1" />
+    <None Include="Refactor\RefactorViewModels.ps1" />
+    <None Include="Refactor\REFACTOR_GUIDE.md" />
+    <None Include="Refactor\RenameFiles.ps1" />
+    <None Include="Refactor\RunCompleteRefactor.ps1" />
+    <None Include="Refactor\RunMasterRefactor.ps1" />
+    <None Include="Refactor\SERVICE_REPOSITORY_DI_COMPLETE.md" />
+    <None Include="Refactor\SERVICE_VIEW_REFACTOR_PROGRESS.md" />
+    <None Include="Refactor\UpdateProjectFile.ps1" />
+    <None Include="Refactor\USER_VIEW_REFACTOR_COMPLETE.md" />
+    <None Include="Refactor\VerifyInvoiceFixes.ps1" />
+    <None Include="Refactor\VIEWMODEL_REFACTORING_100_COMPLETE.md" />
+    <None Include="Refactor\VIEWMODEL_REFACTORING_PROGRESS.md" />
+    <None Include="Refactor\WEDDING_DETAIL_VIEWMODEL_REFACTOR_COMPLETE.md" />
+    <None Include="Refactor\WEDDING_MODULES_REFACTOR_PROGRESS.md" />
+    <None Include="Refactor\WEDDING_MODULE_COMPLETE_REFACTOR.md" />
     <Resource Include="Presentation\View\Assets\icon_addwedding.ico" />
     <Resource Include="Presentation\View\Assets\icon_invoice.ico" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -613,8 +613,8 @@
     <Content Include="Fonts\TIMESI.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="DEPENDENCY_INJECTION_GUIDE.md" />
-    <None Include="DI_MIGRATION_PROGRESS.md" />
+    <None Include="Refactor\DEPENDENCY_INJECTION_GUIDE.md" />
+    <None Include="Refactor\DI_MIGRATION_PROGRESS.md" />
     <None Include="Model\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </None>
@@ -655,6 +655,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\MaterialDesignThemes.5.2.1\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\MaterialDesignThemes.5.2.1\build\MaterialDesignThemes.targets'))" />
-    <Error Condition="!Exists('packages\SixLabors.ImageSharp.3.1.10\build\SixLabors.ImageSharp.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\SixLabors.ImageSharp.3.1.10\build\SixLabors.ImageSharp.props'))" />
+    <Error Condition="!Exists('packages\SixLabors.ImageSharp.3.1.12\build\SixLabors.ImageSharp.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\SixLabors.ImageSharp.3.1.12\build\SixLabors.ImageSharp.props'))" />
   </Target>
 </Project>

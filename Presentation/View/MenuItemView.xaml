@@ -88,10 +88,10 @@
                                 Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}"
                                 Stretch="UniformToFill" />
                             <TextBlock
-                                Margin="0,0,0,2"
+                                Margin="0,0,0,8"
                                 FontSize="16"
                                 FontWeight="Bold"
-                                Text="{Binding TenMonAn}"
+                                Text="{Binding DishName}"
                                 TextAlignment="Center" />
                             <TextBlock
                                 Margin="0,0,0,2"
@@ -103,7 +103,7 @@
                             <TextBlock
                                 FontSize="13"
                                 Foreground="Gray"
-                                Text="{Binding GhiChu}"
+                                Text="{Binding Note}"
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
                         </StackPanel>

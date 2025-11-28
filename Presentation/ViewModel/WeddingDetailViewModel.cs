@@ -767,7 +767,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             }
 
             // 3. Kiểm tra số lượng bàn hợp lệ
-            var minTableRatio = _parameterService.GetByName("TiLeSoBanDatTruocToiThieu")?.Value ?? 0.5m;
+            var minTableRatio = _parameterService.GetByName("MinReserveTableRate")?.Value ?? 0.5m;
             var maxTableCount = _hallService.GetById(SelectedHall.HallId)?.MaxTableCount ?? 0;
             
             if (!int.TryParse(TableCount, out int tableCount) || tableCount <= 0)
@@ -809,7 +809,7 @@ namespace QuanLyTiecCuoi.Presentation.ViewModel
             var totalServicePrice = ServiceList.Sum(s => (s.UnitPrice ?? 0) * (s.Quantity ?? 0));
             var minTablePrice = existingWedding.TablePrice ?? 0;
             var estimatedTotal = tableCount * (minTablePrice + totalDishPrice) + totalServicePrice;
-            var minDepositRatio = _parameterService.GetByName("TiLeTienDatCocToiThieu")?.Value ?? 0.3m;
+            var minDepositRatio = _parameterService.GetByName("MinDepositRate")?.Value ?? 0.3m;
 
             var minDeposit = (decimal)Math.Ceiling(minDepositRatio * estimatedTotal);
             var maxDeposit = (decimal)Math.Ceiling(estimatedTotal);

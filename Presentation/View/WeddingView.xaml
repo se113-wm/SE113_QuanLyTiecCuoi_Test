@@ -75,8 +75,8 @@
                         materialDesign:HintAssist.Hint="Tên chú rể"
                         IsEditable="True"
                         IsTextSearchEnabled="True"
-                        ItemsSource="{Binding TenChuReFilterList}"
-                        SelectedItem="{Binding SelectedTenChuRe, Mode=TwoWay}"
+                        ItemsSource="{Binding GroomNameFilterList}"
+                        SelectedItem="{Binding SelectedGroomName, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
                     <!--  Tên cô dâu  -->
@@ -87,8 +87,8 @@
                         materialDesign:HintAssist.Hint="Tên cô dâu"
                         IsEditable="True"
                         IsTextSearchEnabled="True"
-                        ItemsSource="{Binding TenCoDauFilterList}"
-                        SelectedItem="{Binding SelectedTenCoDau, Mode=TwoWay}"
+                        ItemsSource="{Binding BrideNameFilterList}"
+                        SelectedItem="{Binding SelectedBrideName, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
                     <!--  Tên sảnh  -->
@@ -99,18 +99,10 @@
                         materialDesign:HintAssist.Hint="Tên sảnh"
                         IsEditable="True"
                         IsTextSearchEnabled="True"
-                        ItemsSource="{Binding TenSanhFilterList}"
-                        SelectedItem="{Binding SelectedTenSanh, Mode=TwoWay}"
+                        ItemsSource="{Binding HallNameFilterList}"
+                        SelectedItem="{Binding SelectedHallName, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
-                    <!--  Ngày đãi tiệc (DatePicker)  -->
-                    <!--<Border
-                        Grid.Row="0"
-                        Grid.Column="4"
-                        Margin="5"
-                        BorderBrush="Black"
-                        BorderThickness="0.7"
-                        CornerRadius="4">-->
                     <!--  Ngày đãi tiệc (DatePicker)  -->
                     <DatePicker
                         Grid.Row="0"
@@ -118,9 +110,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Ngày đãi tiệc"
                         Language="Vi-vn"
-                        SelectedDate="{Binding SelectedNgayDaiTiec, Mode=TwoWay}"
+                        SelectedDate="{Binding SelectedWeddingDate, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-                    <!--</Border>-->
 
                     <!--  Số lượng bàn  -->
                     <ComboBox
@@ -130,8 +121,8 @@
                         materialDesign:HintAssist.Hint="Số lượng bàn"
                         IsEditable="True"
                         IsTextSearchEnabled="True"
-                        ItemsSource="{Binding SoLuongBanFilterList}"
-                        SelectedItem="{Binding SelectedSoLuongBan, Mode=TwoWay}"
+                        ItemsSource="{Binding TableCountFilterList}"
+                        SelectedItem="{Binding SelectedTableCount, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
                     <ComboBox
                         Grid.Row="0"
@@ -139,8 +130,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Trạng thái"
                         IsEditable="False"
-                        ItemsSource="{Binding TrangThaiFilterList}"
-                        SelectedItem="{Binding SelectedTrangThai, Mode=TwoWay}"
+                        ItemsSource="{Binding StatusFilterList}"
+                        SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}" />
                 </Grid>
             </StackPanel>
@@ -280,7 +271,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenChuRe}"
+                                            Text="{Binding GroomName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -292,7 +283,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenCoDau}"
+                                            Text="{Binding BrideName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -304,7 +295,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding Sanh.HallName}"
+                                            Text="{Binding Hall.HallName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -340,7 +331,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding SoLuongBan}"
+                                            Text="{Binding TableCount}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -352,15 +343,15 @@
                                         <Border
                                             Margin="20,0,0,0"
                                             Padding="6,2"
-                                            BorderBrush="{Binding TrangThaiBrush}"
+                                            BorderBrush="{Binding StatusBrush}"
                                             BorderThickness="1.2"
                                             CornerRadius="6">
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontWeight="Bold"
-                                                Foreground="{Binding TrangThaiBrush}"
-                                                Text="{Binding TrangThai}"
+                                                Foreground="{Binding StatusBrush}"
+                                                Text="{Binding Status}"
                                                 TextAlignment="Center" />
                                         </Border>
                                     </DataTemplate>

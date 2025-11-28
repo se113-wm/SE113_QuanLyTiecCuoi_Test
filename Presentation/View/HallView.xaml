@@ -111,7 +111,7 @@
                                     VerticalAlignment="Center"
                                     Foreground="#888"
                                     Kind="Camera"
-                                    Visibility="{Binding nullImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    Visibility="{Binding HasNoImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </Button>
                         </Grid>
                     </Border>
@@ -130,7 +130,7 @@
                         Grid.Column="2"
                         Margin="0,0,0,-12"
                         materialDesign:HintAssist.Hint="Loại sảnh"
-                        DisplayMemberPath="TenLoaiSanh"
+                        DisplayMemberPath="HallTypeName"
                         ItemsSource="{Binding HallTypes}"
                         SelectedItem="{Binding SelectedHallType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
@@ -329,7 +329,7 @@
                     Margin="0"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
-                    ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding HallList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                     <ListView.View>
                         <GridView>
@@ -359,7 +359,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenSanh}"
+                                            Text="{Binding HallName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -371,7 +371,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding LoaiSanh.HallTypeName}"
+                                            Text="{Binding HallType.HallTypeName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -383,7 +383,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding LoaiSanh.MinTablePrice, StringFormat=N0}"
+                                            Text="{Binding HallType.MinTablePrice, StringFormat=N0}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -395,7 +395,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding SoLuongBanToiDa}"
+                                            Text="{Binding MaxTableCount}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -407,7 +407,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding GhiChu}"
+                                            Text="{Binding Note}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

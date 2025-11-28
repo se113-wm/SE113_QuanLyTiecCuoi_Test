@@ -74,7 +74,7 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Thời gian bắt đầu ca"
                         Is24Hours="True"
-                        SelectedTime="{Binding ThoiGianBatDauCaDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedTime="{Binding StartTimeDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
 
                     <!--  Thời gian kết thúc ca  -->
@@ -83,7 +83,7 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Thời gian kết thúc ca"
                         Is24Hours="True"
-                        SelectedTime="{Binding ThoiGianKetThucCaDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedTime="{Binding EndTimeDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
                 </Grid>
             </StackPanel>
@@ -235,7 +235,7 @@
                     Margin="0"
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
-                    ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding ShiftList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                     <ListView.View>
                         <GridView>
@@ -266,7 +266,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding TenCa}"
+                                            Text="{Binding ShiftName}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -279,7 +279,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding ThoiGianBatDauCa}"
+                                            Text="{Binding StartTime, StringFormat={}{0:hh\:mm}}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -292,7 +292,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding ThoiGianKetThucCa}"
+                                            Text="{Binding EndTime, StringFormat={}{0:hh\:mm}}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

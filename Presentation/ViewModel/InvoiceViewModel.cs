@@ -31,7 +31,6 @@ using System.Windows.Input;
 namespace QuanLyTiecCuoi.ViewModel {
     public class InvoiceViewModel : BaseViewModel {
         private readonly IBookingService _bookingService;
-        private readonly IServiceService _serviceService;
         private readonly IShiftService _shiftService;
         private readonly IHallService _hallService;
         private readonly IServiceDetailService _serviceDetailService;
@@ -193,8 +192,9 @@ namespace QuanLyTiecCuoi.ViewModel {
             }
             else {
                 decimal? tmpTotalInvoiceAmount = TotalInvoiceAmount;
-                decimal? penaltyRate = _parameterService.GetByName("TiLePhat").Value;
-                decimal? penaltyCheck = _parameterService.GetByName("KiemTraPhat").Value;
+                // Read parameter values using database names
+                decimal? penaltyRate = _parameterService.GetByName("PenaltyRate")?.Value ?? 0m;
+                decimal? penaltyCheck = _parameterService.GetByName("EnablePenalty")?.Value ?? 0m;
                 int dayDiff = (DateTime.Now - SelectedInvoice.WeddingDate.GetValueOrDefault()).Days;
                 if (dayDiff < 0) {
                     dayDiff = 0;
