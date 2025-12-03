@@ -558,6 +558,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Refactor\AUTOMATION_ID_COVERAGE_REPORT.md" />
     <None Include="Refactor\ACCOUNT_VIEW_REFACTOR_COMPLETE.md" />
     <None Include="Refactor\COMPLETE_REFACTORING_GUIDE.md" />
     <None Include="Refactor\COMPLETE_REFACTORING_SESSION_FINAL.md" />

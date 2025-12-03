@@ -7,10 +7,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!--  Page Title  -->
@@ -20,14 +20,16 @@
             HorizontalAlignment="Center"
             FontSize="20"
             FontWeight="Bold"
-            Text="Quản lý danh sách tiệc cưới" />
+            Text="Quản lý danh sách tiệc cưới"
+            AutomationProperties.AutomationId="WeddingPageTitle"/>
 
         <!--  Bộ lọc tìm kiếm  -->
         <materialDesign:Card
             Grid.Row="1"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="FilterCard">
             <StackPanel>
                 <StackPanel
                     Margin="0,0,0,0"
@@ -37,7 +39,7 @@
                         VerticalAlignment="Center"
                         FontSize="14"
                         FontWeight="Bold"
-                        Text="Bộ lọc tìm kiếm" />
+                        Text="Bộ lọc tìm kiếm"/>
                     <Button
                         Width="36"
                         Height="36"
@@ -46,25 +48,26 @@
                         Command="{Binding ResetCommand}"
                         Foreground="Purple"
                         Style="{StaticResource MaterialDesignToolButton}"
-                        ToolTip="Làm mới bộ lọc">
+                        ToolTip="Làm mới bộ lọc"
+                        AutomationProperties.AutomationId="ResetFilterButton">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"
-                            Kind="Restore" />
+                            Kind="Restore"/>
                     </Button>
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!--  Tên chú rể  -->
@@ -77,7 +80,8 @@
                         IsTextSearchEnabled="True"
                         ItemsSource="{Binding GroomNameFilterList}"
                         SelectedItem="{Binding SelectedGroomName, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        AutomationProperties.AutomationId="GroomNameFilterComboBox"/>
 
                     <!--  Tên cô dâu  -->
                     <ComboBox
@@ -89,7 +93,8 @@
                         IsTextSearchEnabled="True"
                         ItemsSource="{Binding BrideNameFilterList}"
                         SelectedItem="{Binding SelectedBrideName, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        AutomationProperties.AutomationId="BrideNameFilterComboBox"/>
 
                     <!--  Tên sảnh  -->
                     <ComboBox
@@ -101,7 +106,8 @@
                         IsTextSearchEnabled="True"
                         ItemsSource="{Binding HallNameFilterList}"
                         SelectedItem="{Binding SelectedHallName, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        AutomationProperties.AutomationId="HallNameFilterComboBox"/>
 
                     <!--  Ngày đãi tiệc (DatePicker)  -->
                     <DatePicker
@@ -111,7 +117,8 @@
                         materialDesign:HintAssist.Hint="Ngày đãi tiệc"
                         Language="Vi-vn"
                         SelectedDate="{Binding SelectedWeddingDate, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        AutomationProperties.AutomationId="WeddingDateFilterPicker"/>
 
                     <!--  Số lượng bàn  -->
                     <ComboBox
@@ -123,7 +130,8 @@
                         IsTextSearchEnabled="True"
                         ItemsSource="{Binding TableCountFilterList}"
                         SelectedItem="{Binding SelectedTableCount, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        AutomationProperties.AutomationId="TableCountFilterComboBox"/>
                     <ComboBox
                         Grid.Row="0"
                         Grid.Column="5"
@@ -132,7 +140,8 @@
                         IsEditable="False"
                         ItemsSource="{Binding StatusFilterList}"
                         SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        AutomationProperties.AutomationId="StatusFilterComboBox"/>
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -142,14 +151,16 @@
             Grid.Row="2"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="ActionsCard">
             <StackPanel>
                 <TextBlock
                     Margin="0,0,10,0"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Thao tác" />
-                <DockPanel VerticalAlignment="Top" LastChildFill="False">
+                    Text="Thao tác"/>
+                <DockPanel VerticalAlignment="Top"
+                        LastChildFill="False">
                     <!--  Tìm kiếm  -->
                     <StackPanel
                         VerticalAlignment="Top"
@@ -161,13 +172,15 @@
                             materialDesign:HintAssist.Hint="Tìm theo"
                             ItemsSource="{Binding SearchProperties}"
                             SelectedItem="{Binding SelectedSearchProperty, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="SearchPropertyComboBox"/>
                         <TextBox
                             Width="300"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                            AutomationProperties.AutomationId="SearchTextBox"/>
                     </StackPanel>
 
                     <StackPanel
@@ -176,21 +189,25 @@
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right"
                         Orientation="Horizontal">
-                        <StackPanel Width="110" Margin="0,0,20,0">
+                        <StackPanel Width="110"
+                                Margin="0,0,20,0">
                             <Button
                                 Width="100"
                                 Margin="5"
                                 Command="{Binding AddCommand}"
                                 Content="Thêm"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                AutomationProperties.AutomationId="AddButton"/>
                         </StackPanel>
-                        <StackPanel Width="120" Margin="0,0,20,0">
+                        <StackPanel Width="120"
+                                Margin="0,0,20,0">
                             <Button
                                 Width="110"
                                 Margin="5"
                                 Command="{Binding DetailCommand}"
                                 Content="Xem chi tiết"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                AutomationProperties.AutomationId="DetailButton"/>
                         </StackPanel>
                         <StackPanel Width="150">
                             <Button
@@ -198,14 +215,16 @@
                                 Margin="5"
                                 Command="{Binding DeleteCommand}"
                                 Content="Xóa"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                AutomationProperties.AutomationId="DeleteButton"/>
                             <TextBlock
                                 Height="32"
                                 VerticalAlignment="Top"
                                 FontSize="10"
                                 Foreground="Gray"
                                 Text="{Binding DeleteMessage}"
-                                TextWrapping="Wrap" />
+                                TextWrapping="Wrap"
+                                AutomationProperties.AutomationId="DeleteMessage"/>
                         </StackPanel>
 
                     </StackPanel>
@@ -220,11 +239,12 @@
             Margin="10"
             Padding="5"
             VerticalAlignment="Stretch"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="WeddingListCard">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock
@@ -232,7 +252,7 @@
                     Margin="0,0,10,0"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Danh sách tiệc cưới" />
+                    Text="Danh sách tiệc cưới"/>
 
                 <ListView
                     x:Name="WeddingListView"
@@ -242,14 +262,15 @@
                     HorizontalContentAlignment="Left"
                     GridViewColumnHeader.Click="WeddingListView_ColumnHeaderClick"
                     ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    AutomationProperties.AutomationId="WeddingListView">
                     <ListView.View>
                         <GridView>
                             <!--  Icon  -->
                             <GridViewColumn Width="50">
                                 <GridViewColumn.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="" />
+                                        <TextBlock Text=""/>
                                     </DataTemplate>
                                 </GridViewColumn.HeaderTemplate>
                                 <GridViewColumn.CellTemplate>
@@ -260,84 +281,91 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Foreground="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BoolToBrushConverter}}"
-                                            Kind="RadioboxMarked" />
+                                            Kind="RadioboxMarked"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Groom Name  -->
-                            <GridViewColumn Width="150" Header="Tên chú rể">
+                            <GridViewColumn Width="150"
+                                    Header="Tên chú rể">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding GroomName}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Bride Name  -->
-                            <GridViewColumn Width="150" Header="Tên cô dâu">
+                            <GridViewColumn Width="150"
+                                    Header="Tên cô dâu">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding BrideName}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Hall Name  -->
-                            <GridViewColumn Width="150" Header="Tên sảnh">
+                            <GridViewColumn Width="150"
+                                    Header="Tên sảnh">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding Hall.HallName}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Wedding Date  -->
-                            <GridViewColumn Width="150" Header="Ngày đãi tiệc">
+                            <GridViewColumn Width="150"
+                                    Header="Ngày đãi tiệc">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding WeddingDate, StringFormat='dd/MM/yyyy'}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Wedding Time (CA)  -->
-                            <GridViewColumn Width="150" Header="Giờ đãi tiệc">
+                            <GridViewColumn Width="150"
+                                    Header="Giờ đãi tiệc">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding WeddingDate, StringFormat='HH:mm:ss'}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Table Count  -->
-                            <GridViewColumn Width="150" Header="Số lượng bàn">
+                            <GridViewColumn Width="150"
+                                    Header="Số lượng bàn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding TableCount}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Status Column  -->
-                            <GridViewColumn Width="150" Header="Trạng thái">
+                            <GridViewColumn Width="150"
+                                    Header="Trạng thái">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border
@@ -352,7 +380,7 @@
                                                 FontWeight="Bold"
                                                 Foreground="{Binding StatusBrush}"
                                                 Text="{Binding Status}"
-                                                TextAlignment="Center" />
+                                                TextAlignment="Center"/>
                                         </Border>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

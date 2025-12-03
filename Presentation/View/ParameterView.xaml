@@ -7,8 +7,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -16,84 +16,102 @@
             HorizontalAlignment="Center"
             FontSize="20"
             FontWeight="Bold"
-            Text="Quản lý tham số" />
+            Text="Quản lý tham số"
+            AutomationProperties.AutomationId="ParameterPageTitle"/>
 
         <!--  Nút & tìm kiếm  -->
         <materialDesign:Card
             Grid.Row="1"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="ParameterDetailsCard">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         VerticalAlignment="Center"
                         FontSize="14"
                         FontWeight="Bold"
-                        Text="Chỉnh sửa" />
+                        Text="Chỉnh sửa"/>
                     <Button Width="36"
-                        Height="36"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Command="{Binding ResetCommand}"
-                        Foreground="Purple"
-                        Style="{StaticResource MaterialDesignToolButton}"
-                        ToolTip="Reset thông tin">
-                        <materialDesign:PackIcon Width="20" Height="20" Kind="Restore" />
+                            Height="36"
+                            Background="{DynamicResource PrimaryHueMidBrush}"
+                            Command="{Binding ResetCommand}"
+                            Foreground="Purple"
+                            Style="{StaticResource MaterialDesignToolButton}"
+                            ToolTip="Reset thông tin"
+                            AutomationProperties.AutomationId="ResetButton">
+                        <materialDesign:PackIcon Width="20"
+                                Height="20"
+                                Kind="Restore"/>
                     </Button>
                 </StackPanel>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <ComboBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedComboBox}" MinWidth="100" Height="64" Margin="0 0 10 10" Text="{Binding EnablePenaltyText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Kiểm tra phạt">
-                        <ComboBoxItem Content="Có" />
-                        <ComboBoxItem Content="Không" />
+                    <ComboBox Grid.Column="0"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            MinWidth="100"
+                            Height="64"
+                            Margin="0 0 10 10"
+                            Text="{Binding EnablePenaltyText, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Kiểm tra phạt"
+                            AutomationProperties.AutomationId="EnablePenaltyComboBox">
+                        <ComboBoxItem Content="Có"/>
+                        <ComboBoxItem Content="Không"/>
                     </ComboBox>
 
                     <TextBox Grid.Column="1"
-                        Margin="0 0 10 10"
-                        MinWidth="200"
-                        materialDesign:HintAssist.Hint="Tỉ lệ phạt"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding PenaltyRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                             Margin="0 0 10 10"
+                             MinWidth="200"
+                             materialDesign:HintAssist.Hint="Tỉ lệ phạt"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Text="{Binding PenaltyRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             AutomationProperties.AutomationId="PenaltyRateTextBox"/>
 
                     <TextBox Grid.Column="2"
-                        Margin="0 0 10 10"
-                        MinWidth="200"
-                        materialDesign:HintAssist.Hint="Tỉ lệ tiền đặt cọc tối thiểu"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding MinDepositRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                             Margin="0 0 10 10"
+                             MinWidth="200"
+                             materialDesign:HintAssist.Hint="Tỉ lệ tiền đặt cọc tối thiểu"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Text="{Binding MinDepositRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             AutomationProperties.AutomationId="MinDepositRateTextBox"/>
 
                     <TextBox Grid.Column="3"
-                        Margin="0 0 10 10"
-                        MinWidth="200"
-                        materialDesign:HintAssist.Hint="Tỉ lệ số bàn đặt trước tối thiểu"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding MinAdvanceBookingRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                             Margin="0 0 10 10"
+                             MinWidth="200"
+                             materialDesign:HintAssist.Hint="Tỉ lệ số bàn đặt trước tối thiểu"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Text="{Binding MinAdvanceBookingRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             AutomationProperties.AutomationId="MinAdvanceBookingRateTextBox"/>
 
-                    <StackPanel MinWidth="110" Grid.Column="4">
+                    <StackPanel MinWidth="110"
+                            Grid.Column="4">
                         <Button
-                                Margin="5"
-                                Command="{Binding EditCommand}"
-                                Content="Sửa"
-                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                            Margin="5"
+                            Command="{Binding EditCommand}"
+                            Content="Sửa"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            AutomationProperties.AutomationId="EditButton"/>
                         <TextBlock
-                                Height="32"
-                                VerticalAlignment="Top"
+                            Height="32"
+                            VerticalAlignment="Top"
                             HorizontalAlignment="Center"
-                                FontSize="10"
-                                Foreground="Red"
-                                Text="{Binding EditMessage}"
-                                TextWrapping="Wrap" />
+                            FontSize="10"
+                            Foreground="Red"
+                            Text="{Binding EditMessage}"
+                            TextWrapping="Wrap"
+                            AutomationProperties.AutomationId="EditMessage"/>
                     </StackPanel>
                 </Grid>
-                
+
                 <ScrollViewer
                     Margin="0 10 0 0"
                     FontSize="15"

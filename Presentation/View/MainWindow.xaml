@@ -23,11 +23,12 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d"
     AutomationProperties.AutomationId="MainWindow">
-    
-    <Grid Margin="0,0,0,0" AutomationProperties.AutomationId="MainGrid">
+
+    <Grid Margin="0,0,0,0"
+            AutomationProperties.AutomationId="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!--  Navigation Panel  -->
@@ -38,9 +39,9 @@
             AutomationProperties.AutomationId="NavigationPanel">
             <Grid Background="#6a7eee">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!--  Header  -->
@@ -62,41 +63,45 @@
                             VerticalAlignment="Center"
                             Foreground="White"
                             Kind="Storefront"
-                            AutomationProperties.AutomationId="LogoIcon" />
-                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            AutomationProperties.AutomationId="LogoIcon"/>
+                        <StackPanel VerticalAlignment="Center"
+                                Orientation="Vertical">
                             <TextBlock
                                 FontSize="16"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="Wedding Center"
+                                Text="Trung Tâm Tiệc Cưới"
                                 TextAlignment="Center"
-                                AutomationProperties.AutomationId="AppTitle1" />
+                                AutomationProperties.AutomationId="AppTitle1"/>
                             <TextBlock
                                 FontSize="16"
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Text="UIT"
                                 TextAlignment="Left"
-                                AutomationProperties.AutomationId="AppTitle2" />
+                                AutomationProperties.AutomationId="AppTitle2"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
 
                 <!--  Navigation Items  -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" AutomationProperties.AutomationId="MenuScrollViewer">
-                    <Grid Margin="10,0" AutomationProperties.AutomationId="MenuGrid">
+                <ScrollViewer Grid.Row="1"
+                        VerticalScrollBarVisibility="Auto"
+                        AutomationProperties.AutomationId="MenuScrollViewer">
+                    <Grid Margin="10,0"
+                            AutomationProperties.AutomationId="MenuGrid">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!--  Home  -->
@@ -109,16 +114,17 @@
                             Command="{Binding HomeCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Home"
+                            ToolTip="Trang chủ"
                             Visibility="Visible"
                             AutomationProperties.AutomationId="HomeButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Home" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Home"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Home" />
+                                    Text="Trang chủ"/>
                             </StackPanel>
                         </Button>
 
@@ -132,16 +138,17 @@
                             Command="{Binding HallTypeCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Hall Type"
+                            ToolTip="Loại sảnh"
                             Visibility="{Binding ButtonVisibilities[HallType]}"
                             AutomationProperties.AutomationId="HallTypeButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Domain" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Domain"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Hall Type" />
+                                    Text="Loại sảnh"/>
                             </StackPanel>
                         </Button>
 
@@ -155,16 +162,17 @@
                             Command="{Binding HallCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Hall"
+                            ToolTip="Sảnh"
                             Visibility="{Binding ButtonVisibilities[Hall]}"
                             AutomationProperties.AutomationId="HallButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="City" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="City"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Hall" />
+                                    Text="Sảnh"/>
                             </StackPanel>
                         </Button>
 
@@ -178,16 +186,17 @@
                             Command="{Binding ShiftCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Shift"
+                            ToolTip="Ca"
                             Visibility="{Binding ButtonVisibilities[Shift]}"
                             AutomationProperties.AutomationId="ShiftButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Clock" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Clock"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Shift" />
+                                    Text="Ca"/>
                             </StackPanel>
                         </Button>
 
@@ -201,16 +210,17 @@
                             Command="{Binding FoodCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Food"
+                            ToolTip="Món ăn"
                             Visibility="{Binding ButtonVisibilities[Food]}"
                             AutomationProperties.AutomationId="FoodButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Food" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Food"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Food" />
+                                    Text="Món ăn"/>
                             </StackPanel>
                         </Button>
 
@@ -224,16 +234,17 @@
                             Command="{Binding ServiceCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Service"
+                            ToolTip="Dịch vụ"
                             Visibility="{Binding ButtonVisibilities[Service]}"
                             AutomationProperties.AutomationId="ServiceButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Tools" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Tools"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Service" />
+                                    Text="Dịch vụ"/>
                             </StackPanel>
                         </Button>
 
@@ -247,16 +258,17 @@
                             Command="{Binding WeddingCommand}"
                             Foreground="White"
                             Style="{StaticResource MaterialDesignFlatButton}"
-                            ToolTip="Wedding"
+                            ToolTip="Tiệc cưới"
                             Visibility="{Binding ButtonVisibilities[Wedding]}"
                             AutomationProperties.AutomationId="WeddingButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Cake" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Cake"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Wedding" />
+                                    Text="Tiệc cưới"/>
                             </StackPanel>
                         </Button>
 
@@ -274,12 +286,13 @@
                             Visibility="{Binding ButtonVisibilities[Report]}"
                             AutomationProperties.AutomationId="ReportButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="FileChart" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="FileChart"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Report" />
+                                    Text="Report"/>
                             </StackPanel>
                         </Button>
 
@@ -297,12 +310,13 @@
                             Visibility="{Binding ButtonVisibilities[Parameter]}"
                             AutomationProperties.AutomationId="ParameterButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Tune" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Tune"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Parameter" />
+                                    Text="Parameter"/>
                             </StackPanel>
                         </Button>
 
@@ -320,12 +334,13 @@
                             Visibility="{Binding ButtonVisibilities[Permission]}"
                             AutomationProperties.AutomationId="PermissionButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="ShieldAccount" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="ShieldAccount"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="Permission" />
+                                    Text="Permission"/>
                             </StackPanel>
                         </Button>
 
@@ -343,12 +358,13 @@
                             Visibility="{Binding ButtonVisibilities[User]}"
                             AutomationProperties.AutomationId="UserButton">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Margin="5" Kind="Account" />
+                                <materialDesign:PackIcon Margin="5"
+                                        Kind="Account"/>
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
-                                    Text="User" />
+                                    Text="User"/>
                             </StackPanel>
                         </Button>
 
@@ -361,7 +377,7 @@
                     Margin="10"
                     VerticalAlignment="Bottom"
                     AutomationProperties.AutomationId="FooterPanel">
-                    
+
                     <!--  Account  -->
                     <Button
                         HorizontalAlignment="Stretch"
@@ -373,12 +389,13 @@
                         ToolTip="Account"
                         AutomationProperties.AutomationId="AccountButton">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Margin="5" Kind="AccountCircle" />
+                            <materialDesign:PackIcon Margin="5"
+                                    Kind="AccountCircle"/>
                             <TextBlock
                                 Margin="5,0"
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="Account" />
+                                Text="Account"/>
                         </StackPanel>
                     </Button>
 
@@ -394,22 +411,26 @@
                         ToolTip="Logout"
                         AutomationProperties.AutomationId="LogoutButton">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Margin="5" Kind="Logout" />
+                            <materialDesign:PackIcon Margin="5"
+                                    Kind="Logout"/>
                             <TextBlock
                                 Margin="5,0"
                                 VerticalAlignment="Center"
                                 FontSize="14"
-                                Text="Logout" />
+                                Text="Logout"/>
                         </StackPanel>
                     </Button>
 
                 </StackPanel>
             </Grid>
         </Grid>
-        
+
         <!--  Main Content  -->
-        <Grid Grid.Column="1" Background="White" AutomationProperties.AutomationId="ContentPanel">
-            <ContentControl Content="{Binding CurrentView}" AutomationProperties.AutomationId="MainContentControl" />
+        <Grid Grid.Column="1"
+                Background="White"
+                AutomationProperties.AutomationId="ContentPanel">
+            <ContentControl Content="{Binding CurrentView}"
+                    AutomationProperties.AutomationId="MainContentControl"/>
         </Grid>
     </Grid>
 

@@ -7,10 +7,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!--  Tên trang  -->
@@ -20,14 +20,16 @@
             HorizontalAlignment="Center"
             FontSize="20"
             FontWeight="Bold"
-            Text="Quản lý danh sách sảnh" />
+            Text="Quản lý danh sách sảnh"
+            AutomationProperties.AutomationId="HallPageTitle"/>
 
         <!--  Thông tin chi tiết  -->
         <materialDesign:Card
             Grid.Row="1"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="HallDetailsCard">
             <StackPanel>
                 <!--  Tiêu đề + Nút Reset sát nhau  -->
                 <StackPanel
@@ -38,7 +40,7 @@
                         VerticalAlignment="Center"
                         FontSize="14"
                         FontWeight="Bold"
-                        Text="Thông tin chi tiết" />
+                        Text="Thông tin chi tiết"/>
                     <Button
                         Width="36"
                         Height="36"
@@ -47,24 +49,25 @@
                         Command="{Binding ResetCommand}"
                         Foreground="Purple"
                         Style="{StaticResource MaterialDesignToolButton}"
-                        ToolTip="Reset thông tin">
+                        ToolTip="Reset thông tin"
+                        AutomationProperties.AutomationId="ResetButton">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"
-                            Kind="Restore" />
+                            Kind="Restore"/>
                     </Button>
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto"/>
                         <!--  Image column  -->
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!--  Image square (spans 2 rows)  -->
@@ -79,7 +82,8 @@
                         Background="#FFF0F0F0"
                         BorderBrush="Gray"
                         BorderThickness="1"
-                        CornerRadius="8">
+                        CornerRadius="8"
+                        AutomationProperties.AutomationId="HallImageBorder">
                         <Grid>
                             <Image
                                 Width="100"
@@ -87,12 +91,13 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Source="{Binding Image}"
-                                Stretch="UniformToFill">
+                                Stretch="UniformToFill"
+                                AutomationProperties.AutomationId="HallImage">
                                 <Image.Clip>
                                     <RectangleGeometry
                                         RadiusX="8"
                                         RadiusY="8"
-                                        Rect="0,0,100,100" />
+                                        Rect="0,0,100,100"/>
                                 </Image.Clip>
                             </Image>
                             <Button
@@ -103,7 +108,8 @@
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Command="{Binding SelectImageCommand}"
-                                ToolTip="{Binding ImageBtnToolTip}">
+                                ToolTip="{Binding ImageBtnToolTip}"
+                                AutomationProperties.AutomationId="SelectHallImageButton">
                                 <materialDesign:PackIcon
                                     Width="36"
                                     Height="36"
@@ -111,7 +117,7 @@
                                     VerticalAlignment="Center"
                                     Foreground="#888"
                                     Kind="Camera"
-                                    Visibility="{Binding HasNoImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    Visibility="{Binding HasNoImage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             </Button>
                         </Grid>
                     </Border>
@@ -123,7 +129,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Tên sảnh"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding HallName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding HallName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="HallNameTextBox"/>
 
                     <ComboBox
                         Grid.Row="0"
@@ -133,7 +140,8 @@
                         DisplayMemberPath="HallTypeName"
                         ItemsSource="{Binding HallTypes}"
                         SelectedItem="{Binding SelectedHallType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        AutomationProperties.AutomationId="HallTypeComboBox"/>
 
                     <TextBox
                         Grid.Row="0"
@@ -142,7 +150,8 @@
                         materialDesign:HintAssist.Hint="Đơn giá bàn tối thiểu"
                         IsReadOnly="True"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding SelectedHallType.MinTablePrice, StringFormat=N0}" />
+                        Text="{Binding SelectedHallType.MinTablePrice, StringFormat=N0}"
+                        AutomationProperties.AutomationId="MinTablePriceTextBox"/>
 
                     <!--  Row 1: 2 controls  -->
                     <TextBox
@@ -151,7 +160,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Số lượng bàn tối đa"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding MaxTableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                        Text="{Binding MaxTableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                        AutomationProperties.AutomationId="MaxTableCountTextBox"/>
 
                     <TextBox
                         Grid.Row="1"
@@ -160,7 +170,8 @@
                         Margin="5"
                         materialDesign:HintAssist.Hint="Ghi chú"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutomationProperties.AutomationId="NoteTextBox"/>
                 </Grid>
             </StackPanel>
         </materialDesign:Card>
@@ -170,14 +181,16 @@
             Grid.Row="2"
             Margin="10"
             Padding="10"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="ActionsCard">
             <StackPanel>
                 <TextBlock
                     Margin="0,0,10,0"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Thao tác" />
-                <DockPanel VerticalAlignment="Top" LastChildFill="False">
+                    Text="Thao tác"/>
+                <DockPanel VerticalAlignment="Top"
+                        LastChildFill="False">
                     <!--  Tìm kiếm  -->
                     <StackPanel
                         VerticalAlignment="Top"
@@ -189,13 +202,15 @@
                             materialDesign:HintAssist.Hint="Tìm theo"
                             ItemsSource="{Binding SearchProperties}"
                             SelectedItem="{Binding SelectedSearchProperty, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="SearchPropertyComboBox"/>
                         <TextBox
                             Width="300"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tìm kiếm..."
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                            AutomationProperties.AutomationId="SearchTextBox"/>
                     </StackPanel>
 
                     <StackPanel
@@ -212,12 +227,13 @@
                             materialDesign:HintAssist.Hint="Chọn thao tác"
                             ItemsSource="{Binding ActionList}"
                             SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                            AutomationProperties.AutomationId="ActionComboBox"/>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <!--  Nút Thêm  -->
                             <StackPanel
@@ -229,13 +245,15 @@
                                     Margin="5"
                                     Command="{Binding AddCommand}"
                                     Content="Thêm"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="AddButton"/>
                                 <TextBlock
                                     Height="32"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding AddMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="AddMessage"/>
                             </StackPanel>
 
                             <!--  Nút Sửa  -->
@@ -248,14 +266,16 @@
                                     Margin="5"
                                     Command="{Binding EditCommand}"
                                     Content="Sửa"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="EditButton"/>
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding EditMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="EditMessage"/>
                             </StackPanel>
 
                             <!--  Nút Xóa  -->
@@ -268,14 +288,16 @@
                                     Margin="5"
                                     Command="{Binding DeleteCommand}"
                                     Content="Xóa"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="DeleteButton"/>
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="{Binding DeleteMessage}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="DeleteMessage"/>
                             </StackPanel>
                             <!--  Nút Xuất Excel  -->
                             <StackPanel
@@ -287,14 +309,15 @@
                                     Margin="5"
                                     Command="{Binding ExportToExcelCommand}"
                                     Content="Xuất Excel"
-                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    AutomationProperties.AutomationId="ExportExcelButton"/>
                                 <TextBlock
                                     Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="10"
                                     Foreground="Gray"
                                     Text="Xuất danh sách ra Excel"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -309,11 +332,12 @@
             Margin="10"
             Padding="5"
             VerticalAlignment="Stretch"
-            BorderThickness="0.5">
+            BorderThickness="0.5"
+            AutomationProperties.AutomationId="HallListCard">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <!--  Danh sách sẽ chiếm phần còn lại và scroll  -->
                 </Grid.RowDefinitions>
 
@@ -322,7 +346,7 @@
                     Margin="0,0,10,0"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Danh sách sảnh" />
+                    Text="Danh sách sảnh"/>
 
                 <ListView
                     Grid.Row="1"
@@ -330,14 +354,15 @@
                     VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     ItemsSource="{Binding HallList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    AutomationProperties.AutomationId="HallListView">
                     <ListView.View>
                         <GridView>
                             <!--  Icon  -->
                             <GridViewColumn Width="50">
                                 <GridViewColumn.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="" />
+                                        <TextBlock Text=""/>
                                     </DataTemplate>
                                 </GridViewColumn.HeaderTemplate>
                                 <GridViewColumn.CellTemplate>
@@ -348,67 +373,72 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Foreground="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BoolToBrushConverter}}"
-                                            Kind="RadioboxMarked" />
+                                            Kind="RadioboxMarked"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Tên sảnh  -->
-                            <GridViewColumn Width="150" Header="Tên sảnh">
+                            <GridViewColumn Width="150"
+                                    Header="Tên sảnh">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding HallName}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Loại sảnh  -->
-                            <GridViewColumn Width="200" Header="Loại sảnh">
+                            <GridViewColumn Width="200"
+                                    Header="Loại sảnh">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding HallType.HallTypeName}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Đơn giá bàn tối thiểu  -->
-                            <GridViewColumn Width="200" Header="Đơn giá bàn tối thiểu">
+                            <GridViewColumn Width="200"
+                                    Header="Đơn giá bàn tối thiểu">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding HallType.MinTablePrice, StringFormat=N0}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Số lượng bàn tối đa  -->
-                            <GridViewColumn Width="200" Header="Số lượng bàn tối đa">
+                            <GridViewColumn Width="200"
+                                    Header="Số lượng bàn tối đa">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding MaxTableCount}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <!--  Ghi chú  -->
-                            <GridViewColumn Width="200" Header="Ghi chú">
+                            <GridViewColumn Width="200"
+                                    Header="Ghi chú">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
                                             Text="{Binding Note}"
-                                            TextAlignment="Left" />
+                                            TextAlignment="Left"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

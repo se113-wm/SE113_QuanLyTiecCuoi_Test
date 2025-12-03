@@ -8,10 +8,10 @@
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <!--  Title  -->
             <TextBlock
@@ -20,21 +20,24 @@
                 HorizontalAlignment="Center"
                 FontSize="24"
                 FontWeight="Bold"
-                Text="Thông tin chi tiết tiệc cưới" />
+                Text="Thông tin chi tiết tiệc cưới"
+                AutomationProperties.AutomationId="WeddingDetailPageTitle"/>
             <materialDesign:Card
                 Grid.Row="1"
                 Margin="0,0,0,20"
-                Padding="0,0,0,20">
+                Padding="0,0,0,20"
+                AutomationProperties.AutomationId="WeddingInfoCard">
                 <StackPanel>
                     <!--  Header with Edit Icon  -->
-                    <Grid Margin="0,0,0,0" VerticalAlignment="Center">
+                    <Grid Margin="0,0,0,0"
+                            VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <!--  Title  -->
                         <TextBlock
@@ -42,7 +45,7 @@
                             VerticalAlignment="Center"
                             FontSize="18"
                             FontWeight="Bold"
-                            Text="Chi tiết tiệc cưới" />
+                            Text="Chi tiết tiệc cưới"/>
                         <!--  Reset Button  -->
                         <Button
                             Grid.Column="1"
@@ -53,11 +56,12 @@
                             Command="{Binding ResetTCCommand}"
                             Foreground="Purple"
                             Style="{StaticResource MaterialDesignToolButton}"
-                            ToolTip="Reset thông tin">
+                            ToolTip="Reset thông tin"
+                            AutomationProperties.AutomationId="ResetWeddingButton">
                             <materialDesign:PackIcon
                                 Width="15"
                                 Height="15"
-                                Kind="Restore" />
+                                Kind="Restore"/>
                         </Button>
                         <!--  "Chỉnh sửa" label  -->
                         <TextBlock
@@ -66,7 +70,7 @@
                             VerticalAlignment="Center"
                             FontSize="14"
                             Foreground="Gray"
-                            Text="Chỉnh sửa" />
+                            Text="Chỉnh sửa"/>
                         <!--  Edit Toggle  -->
                         <ToggleButton
                             x:Name="EditToggle"
@@ -76,12 +80,13 @@
                             Margin="10,0,0,0"
                             VerticalAlignment="Center"
                             IsChecked="{Binding IsEditing, Mode=TwoWay}"
-                            ToolTip="Chỉnh sửa">
+                            ToolTip="Chỉnh sửa"
+                            AutomationProperties.AutomationId="EditToggleButton">
                             <materialDesign:PackIcon
                                 Width="20"
                                 Height="20"
                                 Foreground="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BoolToBrushConverter}}"
-                                Kind="Pencil" />
+                                Kind="Pencil"/>
                         </ToggleButton>
                         <!--  Xem hóa đơn Button  -->
                         <Button
@@ -89,21 +94,22 @@
                             Margin="10,0,5,0"
                             Command="{Binding ShowInvoiceCommand}"
                             Content="Xem hóa đơn"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" />
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            AutomationProperties.AutomationId="ShowInvoiceButton"/>
                     </Grid>
 
                     <!--  Wedding Info Grid  -->
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!--  Groom Name  -->
@@ -112,13 +118,18 @@
                             Grid.Column="0"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tên chú rể"
-                            Text="{Binding GroomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding GroomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="GroomNameTextBox">
                             <TextBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
-                                    <Setter Property="IsReadOnly" Value="True" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        TargetType="TextBox">
+                                    <Setter Property="IsReadOnly"
+                                            Value="True"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsReadOnly" Value="False" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsReadOnly"
+                                                    Value="False"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -130,13 +141,18 @@
                             Grid.Column="1"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tên cô dâu"
-                            Text="{Binding BrideName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding BrideName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="BrideNameTextBox">
                             <TextBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
-                                    <Setter Property="IsReadOnly" Value="True" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        TargetType="TextBox">
+                                    <Setter Property="IsReadOnly"
+                                            Value="True"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsReadOnly" Value="False" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsReadOnly"
+                                                    Value="False"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -148,13 +164,18 @@
                             Grid.Column="0"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Điện thoại"
-                            Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="PhoneTextBox">
                             <TextBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
-                                    <Setter Property="IsReadOnly" Value="True" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        TargetType="TextBox">
+                                    <Setter Property="IsReadOnly"
+                                            Value="True"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsReadOnly" Value="False" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsReadOnly"
+                                                    Value="False"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -167,13 +188,18 @@
                             Margin="5"
                             helper:DatePickerHelper.BlackoutDatesSource="{Binding UnavailableDates}"
                             materialDesign:HintAssist.Hint="Ngày đãi tiệc"
-                            Language="vi-VN">
+                            Language="vi-VN"
+                            AutomationProperties.AutomationId="WeddingDatePicker">
                             <DatePicker.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}" TargetType="DatePicker">
-                                    <Setter Property="IsEnabled" Value="False" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                        TargetType="DatePicker">
+                                    <Setter Property="IsEnabled"
+                                            Value="False"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsEnabled" Value="True" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsEnabled"
+                                                    Value="True"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -184,36 +210,52 @@
                                     x:Key="CustomCalendarDayButton"
                                     BasedOn="{StaticResource MaterialDesignCalendarDayButton}"
                                     TargetType="CalendarDayButton">
-                                    <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#A2E9FF" />
-                                    <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
-                                    <Setter Property="Background" Value="White" />
-                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="materialDesign:CalendarAssist.SelectionColor"
+                                            Value="#A2E9FF"/>
+                                    <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor"
+                                            Value="Black"/>
+                                    <Setter Property="Background"
+                                            Value="White"/>
+                                    <Setter Property="Foreground"
+                                            Value="Black"/>
                                 </Style>
                                 <!--  Custom Calendar Button Style  -->
                                 <Style
                                     x:Key="CustomCalendarButton"
                                     BasedOn="{StaticResource MaterialDesignCalendarButton}"
                                     TargetType="CalendarButton">
-                                    <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#A2E9FF" />
-                                    <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
-                                    <Setter Property="Background" Value="White" />
-                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="materialDesign:CalendarAssist.SelectionColor"
+                                            Value="#A2E9FF"/>
+                                    <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor"
+                                            Value="Black"/>
+                                    <Setter Property="Background"
+                                            Value="White"/>
+                                    <Setter Property="Foreground"
+                                            Value="Black"/>
                                 </Style>
                                 <!--  Custom Calendar Style  -->
                                 <Style
                                     x:Key="CustomCalendar"
                                     BasedOn="{StaticResource MaterialDesignDatePickerCalendarPortrait}"
                                     TargetType="{x:Type Calendar}">
-                                    <Setter Property="Background" Value="White" />
-                                    <Setter Property="CalendarButtonStyle" Value="{StaticResource CustomCalendarButton}" />
-                                    <Setter Property="CalendarDayButtonStyle" Value="{StaticResource CustomCalendarDayButton}" />
-                                    <Setter Property="Foreground" Value="Black" />
-                                    <Setter Property="materialDesign:CalendarAssist.HeaderBackground" Value="#6a7eee" />
-                                    <Setter Property="materialDesign:CalendarAssist.HeaderForeground" Value="Black" />
+                                    <Setter Property="Background"
+                                            Value="White"/>
+                                    <Setter Property="CalendarButtonStyle"
+                                            Value="{StaticResource CustomCalendarButton}"/>
+                                    <Setter Property="CalendarDayButtonStyle"
+                                            Value="{StaticResource CustomCalendarDayButton}"/>
+                                    <Setter Property="Foreground"
+                                            Value="Black"/>
+                                    <Setter Property="materialDesign:CalendarAssist.HeaderBackground"
+                                            Value="#6a7eee"/>
+                                    <Setter Property="materialDesign:CalendarAssist.HeaderForeground"
+                                            Value="Black"/>
                                 </Style>
                                 <!--  DatePicker Style to use Custom Calendar  -->
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}" TargetType="DatePicker">
-                                    <Setter Property="CalendarStyle" Value="{StaticResource CustomCalendar}" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                        TargetType="DatePicker">
+                                    <Setter Property="CalendarStyle"
+                                            Value="{StaticResource CustomCalendar}"/>
                                 </Style>
                             </DatePicker.Resources>
                             <DatePicker.SelectedDate>
@@ -235,7 +277,8 @@
                             materialDesign:HintAssist.Hint="Ngày đặt tiệc"
                             IsReadOnly="True"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding BookingDate, Mode=OneWay}" />
+                            Text="{Binding BookingDate, Mode=OneWay}"
+                            AutomationProperties.AutomationId="BookingDateTextBox"/>
 
                         <!--  Session  -->
                         <ComboBox
@@ -245,13 +288,18 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Ca"
                             ItemsSource="{Binding ShiftList}"
-                            SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="ShiftComboBox">
                             <ComboBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}" TargetType="ComboBox">
-                                    <Setter Property="IsEnabled" Value="False" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                        TargetType="ComboBox">
+                                    <Setter Property="IsEnabled"
+                                            Value="False"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsEnabled" Value="True" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsEnabled"
+                                                    Value="True"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -259,12 +307,17 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding TenCa}" />
-                                        <TextBlock Foreground="Gray" Text=" (" />
-                                        <TextBlock Foreground="Gray" Text="{Binding ThoiGianBatDauCa}" />
-                                        <TextBlock Foreground="Gray" Text=" - " />
-                                        <TextBlock Foreground="Gray" Text="{Binding ThoiGianKetThucCa}" />
-                                        <TextBlock Foreground="Gray" Text=")" />
+                                        <TextBlock Text="{Binding TenCa}"/>
+                                        <TextBlock Foreground="Gray"
+                                                Text=" ("/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="{Binding ThoiGianBatDauCa}"/>
+                                        <TextBlock Foreground="Gray"
+                                                Text=" - "/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="{Binding ThoiGianKetThucCa}"/>
+                                        <TextBlock Foreground="Gray"
+                                                Text=")"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -277,13 +330,18 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Sảnh"
                             ItemsSource="{Binding HallList}"
-                            SelectedItem="{Binding SelectedHall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            SelectedItem="{Binding SelectedHall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="HallComboBox">
                             <ComboBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}" TargetType="ComboBox">
-                                    <Setter Property="IsEnabled" Value="False" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                        TargetType="ComboBox">
+                                    <Setter Property="IsEnabled"
+                                            Value="False"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsEnabled" Value="True" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsEnabled"
+                                                    Value="True"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -291,14 +349,21 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding TenSanh}" />
-                                        <TextBlock Foreground="Gray" Text=" | " />
-                                        <TextBlock Foreground="Gray" Text="Tối đa: " />
-                                        <TextBlock Foreground="Gray" Text="{Binding SoLuongBanToiDa}" />
-                                        <TextBlock Foreground="Gray" Text=" bàn | " />
-                                        <TextBlock Foreground="Gray" Text="Đơn giá: " />
-                                        <TextBlock Foreground="Gray" Text="{Binding LoaiSanh.MinTablePrice, StringFormat=N0}" />
-                                        <TextBlock Foreground="Gray" Text="đ" />
+                                        <TextBlock Text="{Binding TenSanh}"/>
+                                        <TextBlock Foreground="Gray"
+                                                Text=" | "/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="Tối đa: "/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="{Binding SoLuongBanToiDa}"/>
+                                        <TextBlock Foreground="Gray"
+                                                Text=" bàn | "/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="Đơn giá: "/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="{Binding LoaiSanh.MinTablePrice, StringFormat=N0}"/>
+                                        <TextBlock Foreground="Gray"
+                                                Text="đ"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -309,13 +374,18 @@
                             Grid.Column="1"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Tiền đặt cọc"
-                            Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}">
+                            Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                            AutomationProperties.AutomationId="DepositTextBox">
                             <TextBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
-                                    <Setter Property="IsReadOnly" Value="True" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        TargetType="TextBox">
+                                    <Setter Property="IsReadOnly"
+                                            Value="True"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsReadOnly" Value="False" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsReadOnly"
+                                                    Value="False"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -327,13 +397,18 @@
                             Grid.Column="0"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Số lượng bàn"
-                            Text="{Binding TableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding TableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="TableCountTextBox">
                             <TextBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
-                                    <Setter Property="IsReadOnly" Value="True" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        TargetType="TextBox">
+                                    <Setter Property="IsReadOnly"
+                                            Value="True"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsReadOnly" Value="False" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsReadOnly"
+                                                    Value="False"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -345,13 +420,18 @@
                             Grid.Column="1"
                             Margin="5"
                             materialDesign:HintAssist.Hint="Số bàn dự trữ"
-                            Text="{Binding ReserveTableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding ReserveTableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AutomationProperties.AutomationId="ReserveTableCountTextBox">
                             <TextBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="TextBox">
-                                    <Setter Property="IsReadOnly" Value="True" />
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        TargetType="TextBox">
+                                    <Setter Property="IsReadOnly"
+                                            Value="True"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}" Value="True">
-                                            <Setter Property="IsReadOnly" Value="False" />
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=EditToggle}"
+                                                Value="True">
+                                            <Setter Property="IsReadOnly"
+                                                    Value="False"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -367,14 +447,14 @@
             <!--  Menu & Service Details  -->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5*" />
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!--  Section Titles  -->
@@ -384,14 +464,14 @@
                     Margin="5,0,0,5"
                     FontSize="16"
                     FontWeight="Bold"
-                    Text="Chi tiết thực đơn" />
+                    Text="Chi tiết thực đơn"/>
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="1"
                     Margin="5,0,0,5"
                     FontSize="16"
                     FontWeight="Bold"
-                    Text="Chi tiết dịch vụ" />
+                    Text="Chi tiết dịch vụ"/>
 
 
                 <!--  Menu Section  -->
@@ -402,11 +482,11 @@
                     Padding="0">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
                             <!--  Thông tin chi tiết thực đơn  -->
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
                             <!--  Thao tác  -->
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*"/>
                             <!--  Danh sách thực đơn  -->
                         </Grid.RowDefinitions>
 
@@ -417,14 +497,14 @@
                             Padding="0">
                             <Grid VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel
                                     Margin="0,0,0,0"
@@ -433,7 +513,7 @@
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
-                                        Text="Thông tin chi tiết thực đơn" />
+                                        Text="Thông tin chi tiết thực đơn"/>
                                     <Button
                                         Width="24"
                                         Height="24"
@@ -442,11 +522,12 @@
                                         Command="{Binding ResetMenuCommand}"
                                         Foreground="Purple"
                                         Style="{StaticResource MaterialDesignToolButton}"
-                                        ToolTip="Reset thông tin">
+                                        ToolTip="Reset thông tin"
+                                        AutomationProperties.AutomationId="ResetMenuButton">
                                         <materialDesign:PackIcon
                                             Width="15"
                                             Height="15"
-                                            Kind="Restore" />
+                                            Kind="Restore"/>
                                     </Button>
                                 </StackPanel>
                                 <TextBox
@@ -457,7 +538,8 @@
                                     materialDesign:HintAssist.Hint="Tên món ăn"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding Dish.DishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Dish.DishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    AutomationProperties.AutomationId="DishNameTextBox"/>
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="0"
@@ -465,7 +547,8 @@
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Số lượng"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding MenuQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding MenuQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                                    AutomationProperties.AutomationId="MenuQuantityTextBox"/>
                                 <TextBox
                                     Grid.Row="1"
                                     Grid.Column="1"
@@ -474,7 +557,8 @@
                                     materialDesign:HintAssist.Hint="Đơn giá"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding TD_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding TD_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                                    AutomationProperties.AutomationId="DishUnitPriceTextBox"/>
                                 <Button
                                     Grid.Row="1"
                                     Grid.Column="2"
@@ -482,7 +566,8 @@
                                     Command="{Binding SelectDishCommand}"
                                     Content="Chọn món"
                                     Style="{StaticResource MaterialDesignOutlinedButton}"
-                                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    AutomationProperties.AutomationId="SelectDishButton"/>
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="1"
@@ -492,7 +577,8 @@
                                     AcceptsReturn="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                     Text="{Binding MenuNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="MenuNoteTextBox"/>
                             </Grid>
                         </materialDesign:Card>
 
@@ -502,15 +588,15 @@
                             Margin="10"
                             Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 FontSize="14"
                                 FontWeight="SemiBold"
-                                Text="Thao tác" />
+                                Text="Thao tác"/>
                             <StackPanel
                                 Grid.Column="1"
                                 HorizontalAlignment="Right"
@@ -519,17 +605,20 @@
                                     Margin="0,0,10,0"
                                     Command="{Binding AddMenuCommand}"
                                     Content="Thêm"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    AutomationProperties.AutomationId="AddMenuButton"/>
                                 <Button
                                     Margin="0,0,10,0"
                                     Command="{Binding EditMenuCommand}"
                                     Content="Sửa"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    AutomationProperties.AutomationId="EditMenuButton"/>
                                 <Button
                                     Margin="0,0,10,0"
                                     Command="{Binding DeleteMenuCommand}"
                                     Content="Xóa"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    AutomationProperties.AutomationId="DeleteMenuButton"/>
                             </StackPanel>
                         </Grid>
 
@@ -537,18 +626,19 @@
                         <materialDesign:Card
                             Grid.Row="2"
                             Margin="5"
-                            Padding="0">
+                            Padding="0"
+                            AutomationProperties.AutomationId="MenuListCard">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock
                                     Grid.Row="0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
                                     FontWeight="SemiBold"
-                                    Text="Danh sách thực đơn" />
+                                    Text="Danh sách thực đơn"/>
                                 <TextBlock
                                     Grid.Row="0"
                                     Margin="10,0,0,0"
@@ -556,7 +646,8 @@
                                     FontSize="14"
                                     FontWeight="SemiBold"
                                     Foreground="DarkGreen"
-                                    Text="{Binding MenuTotal, StringFormat=' {0:N0} đ'}" />
+                                    Text="{Binding MenuTotal, StringFormat=' {0:N0} đ'}"
+                                    AutomationProperties.AutomationId="MenuTotalTextBlock"/>
                                 <ListView
                                     Grid.Row="1"
                                     Margin="0"
@@ -565,14 +656,15 @@
                                     AlternationCount="1000"
                                     FontSize="12"
                                     ItemsSource="{Binding MenuList}"
-                                    SelectedItem="{Binding SelectedMenuItem}">
+                                    SelectedItem="{Binding SelectedMenuItem}"
+                                    AutomationProperties.AutomationId="MenuListView">
                                     <ListView.View>
                                         <GridView>
                                             <!--  Icon hình tròn  -->
                                             <GridViewColumn Width="30">
                                                 <GridViewColumn.HeaderTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="" />
+                                                        <TextBlock Text=""/>
                                                     </DataTemplate>
                                                 </GridViewColumn.HeaderTemplate>
                                                 <GridViewColumn.CellTemplate>
@@ -583,67 +675,72 @@
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Center"
                                                             Foreground="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BoolToBrushConverter}}"
-                                                            Kind="RadioboxMarked" />
+                                                            Kind="RadioboxMarked"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  STT (AlternationIndex + 1)  -->
-                                            <GridViewColumn Width="90" Header="STT">
+                                            <GridViewColumn Width="90"
+                                                    Header="STT">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource AddConverter}, ConverterParameter=1}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Tên món ăn  -->
-                                            <GridViewColumn Width="150" Header="Tên Món Ăn">
+                                            <GridViewColumn Width="150"
+                                                    Header="Tên Món Ăn">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding Dish.DishName}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Số lượng  -->
-                                            <GridViewColumn Width="80" Header="SL">
+                                            <GridViewColumn Width="80"
+                                                    Header="SL">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding SoLuong}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Đơn giá  -->
-                                            <GridViewColumn Width="120" Header="Đơn giá">
+                                            <GridViewColumn Width="120"
+                                                    Header="Đơn giá">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding UnitPrice, StringFormat=N0}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Ghi chú  -->
-                                            <GridViewColumn Width="120" Header="Ghi chú">
+                                            <GridViewColumn Width="120"
+                                                    Header="Ghi chú">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding GhiChu}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
@@ -663,11 +760,11 @@
                     Padding="0">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
                             <!--  Thông tin chi tiết dịch vụ  -->
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
                             <!--  Thao tác  -->
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*"/>
                             <!--  Danh sách dịch vụ  -->
                         </Grid.RowDefinitions>
 
@@ -678,14 +775,14 @@
                             Padding="0">
                             <Grid VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel
                                     Margin="0,0,0,0"
@@ -694,7 +791,7 @@
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
-                                        Text="Thông tin chi tiết dịch vụ" />
+                                        Text="Thông tin chi tiết dịch vụ"/>
                                     <Button
                                         Width="24"
                                         Height="24"
@@ -703,11 +800,12 @@
                                         Command="{Binding ResetServiceCommand}"
                                         Foreground="Purple"
                                         Style="{StaticResource MaterialDesignToolButton}"
-                                        ToolTip="Reset thông tin">
+                                        ToolTip="Reset thông tin"
+                                        AutomationProperties.AutomationId="ResetServiceButton">
                                         <materialDesign:PackIcon
                                             Width="15"
                                             Height="15"
-                                            Kind="Restore" />
+                                            Kind="Restore"/>
                                     </Button>
                                 </StackPanel>
                                 <TextBox
@@ -718,7 +816,8 @@
                                     materialDesign:HintAssist.Hint="Tên dịch vụ"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding Service.ServiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Service.ServiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    AutomationProperties.AutomationId="ServiceNameTextBox"/>
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="0"
@@ -726,7 +825,8 @@
                                     Margin="5,0"
                                     materialDesign:HintAssist.Hint="Số lượng"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding ServiceQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding ServiceQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                                    AutomationProperties.AutomationId="ServiceQuantityTextBox"/>
                                 <TextBox
                                     Grid.Row="1"
                                     Grid.Column="1"
@@ -735,7 +835,8 @@
                                     materialDesign:HintAssist.Hint="Đơn giá"
                                     IsReadOnly="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding DV_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}" />
+                                    Text="{Binding DV_DonGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyFormatConverter}}"
+                                    AutomationProperties.AutomationId="ServiceUnitPriceTextBox"/>
                                 <Button
                                     Grid.Row="1"
                                     Grid.Column="2"
@@ -743,7 +844,8 @@
                                     Command="{Binding SelectServiceCommand}"
                                     Content="Chọn dịch vụ"
                                     Style="{StaticResource MaterialDesignOutlinedButton}"
-                                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    AutomationProperties.AutomationId="SelectServiceButton"/>
                                 <TextBox
                                     Grid.Row="2"
                                     Grid.Column="1"
@@ -753,7 +855,8 @@
                                     AcceptsReturn="True"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                     Text="{Binding ServiceNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                    AutomationProperties.AutomationId="ServiceNoteTextBox"/>
                             </Grid>
                         </materialDesign:Card>
 
@@ -763,15 +866,15 @@
                             Margin="10"
                             Visibility="{Binding IsChecked, ElementName=EditToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 FontSize="14"
                                 FontWeight="SemiBold"
-                                Text="Thao tác" />
+                                Text="Thao tác"/>
                             <StackPanel
                                 Grid.Column="1"
                                 HorizontalAlignment="Right"
@@ -780,17 +883,20 @@
                                     Margin="0,0,10,0"
                                     Command="{Binding AddServiceCommand}"
                                     Content="Thêm"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    AutomationProperties.AutomationId="AddServiceButton"/>
                                 <Button
                                     Margin="0,0,10,0"
                                     Command="{Binding EditServiceCommand}"
                                     Content="Sửa"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    AutomationProperties.AutomationId="EditServiceButton"/>
                                 <Button
                                     Margin="0,0,10,0"
                                     Command="{Binding DeleteServiceCommand}"
                                     Content="Xóa"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    AutomationProperties.AutomationId="DeleteServiceButton"/>
                             </StackPanel>
                         </Grid>
 
@@ -799,18 +905,19 @@
                         <materialDesign:Card
                             Grid.Row="2"
                             Margin="5"
-                            Padding="0">
+                            Padding="0"
+                            AutomationProperties.AutomationId="ServiceListCard">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock
                                     Grid.Row="0"
                                     VerticalAlignment="Center"
                                     FontSize="14"
                                     FontWeight="SemiBold"
-                                    Text="Danh sách dịch vụ" />
+                                    Text="Danh sách dịch vụ"/>
                                 <TextBlock
                                     Grid.Row="0"
                                     Margin="10,0,0,0"
@@ -818,7 +925,8 @@
                                     FontSize="14"
                                     FontWeight="SemiBold"
                                     Foreground="DarkGreen"
-                                    Text="{Binding ServiceTotal, StringFormat=' {0:N0} đ'}" />
+                                    Text="{Binding ServiceTotal, StringFormat=' {0:N0} đ'}"
+                                    AutomationProperties.AutomationId="ServiceTotalTextBlock"/>
                                 <ListView
                                     Grid.Row="1"
                                     Margin="0"
@@ -827,14 +935,15 @@
                                     AlternationCount="1000"
                                     FontSize="12"
                                     ItemsSource="{Binding ServiceList}"
-                                    SelectedItem="{Binding SelectedServiceItem}">
+                                    SelectedItem="{Binding SelectedServiceItem}"
+                                    AutomationProperties.AutomationId="ServiceListView">
                                     <ListView.View>
                                         <GridView>
                                             <!--  Icon hình tròn  -->
                                             <GridViewColumn Width="30">
                                                 <GridViewColumn.HeaderTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="" />
+                                                        <TextBlock Text=""/>
                                                     </DataTemplate>
                                                 </GridViewColumn.HeaderTemplate>
                                                 <GridViewColumn.CellTemplate>
@@ -845,67 +954,72 @@
                                                             HorizontalAlignment="Left"
                                                             VerticalAlignment="Center"
                                                             Foreground="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BoolToBrushConverter}}"
-                                                            Kind="RadioboxMarked" />
+                                                            Kind="RadioboxMarked"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  STT  -->
-                                            <GridViewColumn Width="90" Header="STT">
+                                            <GridViewColumn Width="90"
+                                                    Header="STT">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource AddConverter}, ConverterParameter=1}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Tên dịch vụ  -->
-                                            <GridViewColumn Width="150" Header="Tên Dịch Vụ">
+                                            <GridViewColumn Width="150"
+                                                    Header="Tên Dịch Vụ">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding Service.ServiceName}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Số lượng  -->
-                                            <GridViewColumn Width="80" Header="SL">
+                                            <GridViewColumn Width="80"
+                                                    Header="SL">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding SoLuong}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Đơn giá  -->
-                                            <GridViewColumn Width="120" Header="Đơn giá">
+                                            <GridViewColumn Width="120"
+                                                    Header="Đơn giá">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding UnitPrice, StringFormat=N0}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <!--  Ghi chú  -->
-                                            <GridViewColumn Width="120" Header="Ghi chú">
+                                            <GridViewColumn Width="120"
+                                                    Header="Ghi chú">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
                                                             Margin="20,0,0,0"
                                                             HorizontalAlignment="Left"
                                                             Text="{Binding GhiChu}"
-                                                            TextAlignment="Left" />
+                                                            TextAlignment="Left"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
@@ -929,12 +1043,14 @@
                         Margin="0,0,10,0"
                         Command="{Binding ConfirmEditCommand}"
                         Content="Xác nhận"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        AutomationProperties.AutomationId="ConfirmEditButton"/>
                     <Button
                         Width="120"
                         Command="{Binding CancelEditCommand}"
                         Content="Hủy"
-                        Style="{StaticResource MaterialDesignOutlinedButton}" />
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        AutomationProperties.AutomationId="CancelEditButton"/>
                 </StackPanel>
             </Grid>
         </Grid>
