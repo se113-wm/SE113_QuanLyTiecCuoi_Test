@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<RunConfiguration>
+		<ResultsDirectory>.\TestResults</ResultsDirectory>
+		<TargetFrameworkVersion>.NETFramework,Version=v4.8</TargetFrameworkVersion>
+	</RunConfiguration>
+	<MSTest>
+		<Parallelize>
+			<Workers>4</Workers>
+			<Scope>MethodLevel</Scope>
+		</Parallelize>
+	</MSTest>
+</RunSettings>

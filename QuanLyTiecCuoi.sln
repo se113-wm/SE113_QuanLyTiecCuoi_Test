@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyTiecCuoi", "QuanLyTiecCuoi.csproj", "{144D1483-B0E1-44F8-8622-10C60047BD51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyTiecCuoi.Tests", "QuanLyTiecCuoi.Tests\QuanLyTiecCuoi.Tests.csproj", "{43C263AB-64DE-43F8-A143-11B722486486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{144D1483-B0E1-44F8-8622-10C60047BD51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{144D1483-B0E1-44F8-8622-10C60047BD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{144D1483-B0E1-44F8-8622-10C60047BD51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43C263AB-64DE-43F8-A143-11B722486486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C263AB-64DE-43F8-A143-11B722486486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C263AB-64DE-43F8-A143-11B722486486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C263AB-64DE-43F8-A143-11B722486486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
