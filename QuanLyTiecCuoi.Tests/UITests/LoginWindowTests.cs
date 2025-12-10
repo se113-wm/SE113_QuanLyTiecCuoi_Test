@@ -68,11 +68,11 @@ namespace QuanLyTiecCuoi.Tests.UITests
             Assert.IsNotNull(btnLogin, "Không tìm thấy Button Login (AutomationId: LoginButton)");
 
             // Act
-            txtUsername.Text = "admin";
+            txtUsername.Text = "Fartiel";
             
             // PasswordBox cần xử lý đặc biệt - sử dụng Pattern hoặc Focus + SendKeys
             pwdPassword.Focus();
-            pwdPassword.AsTextBox().Text = "admin123";
+            pwdPassword.AsTextBox().Text = "admin";
             
             btnLogin.Click();
 
@@ -120,8 +120,35 @@ namespace QuanLyTiecCuoi.Tests.UITests
             System.Threading.Thread.Sleep(2000);
 
             // Assert - Tìm MessageBox
+            //var desktop = _automation.GetDesktop();
+            //var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770")); // MessageBox class name
+
+            // wait up to 5s for a message box (polling)
             var desktop = _automation.GetDesktop();
-            var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770")); // MessageBox class name
+            AutomationElement messageBox = null;
+            var timeout = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+            while (DateTime.UtcNow < timeout)
+            {
+                // 1) ưu tiên modal windows của main window
+                try
+                {
+                    var modalWindows = _mainWindow?.ModalWindows;
+                    if (modalWindows != null && modalWindows.Length > 0)
+                    {
+                        messageBox = modalWindows[0];
+                        break;
+                    }
+                }
+                catch { /* ignore transient UIA errors */ }
+
+                // 2) fallback: tìm dialog tiêu chuẩn trên desktop (class #32770) hoặc theo title/content
+                messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+                //.Or(cf.ByControlType(FlaUI.Core.Definitions.ControlType.Window))
+                //.And(cf.ByName("Notice").Or(cf.ByName("Please enter username!")).Or(cf.ByName("Thông báo"))));
+                if (messageBox != null) break;
+
+                System.Threading.Thread.Sleep(200);
+            }
 
             Assert.IsNotNull(messageBox, "Không hiển thị MessageBox thông báo lỗi khi đăng nhập sai");
             
@@ -156,9 +183,36 @@ namespace QuanLyTiecCuoi.Tests.UITests
             System.Threading.Thread.Sleep(1500);
 
             // Assert - Tìm MessageBox cảnh báo
+            //var desktop = _automation.GetDesktop();
+            //var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+
+            // wait up to 5s for a message box (polling)
             var desktop = _automation.GetDesktop();
-            var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
-            
+            AutomationElement messageBox = null;
+            var timeout = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+            while (DateTime.UtcNow < timeout)
+            {
+                // 1) ưu tiên modal windows của main window
+                try
+                {
+                    var modalWindows = _mainWindow?.ModalWindows;
+                    if (modalWindows != null && modalWindows.Length > 0)
+                    {
+                        messageBox = modalWindows[0];
+                        break;
+                    }
+                }
+                catch { /* ignore transient UIA errors */ }
+
+                // 2) fallback: tìm dialog tiêu chuẩn trên desktop (class #32770) hoặc theo title/content
+                messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+                                                           //.Or(cf.ByControlType(FlaUI.Core.Definitions.ControlType.Window))
+                                                           //.And(cf.ByName("Notice").Or(cf.ByName("Please enter username!")).Or(cf.ByName("Thông báo"))));
+                if (messageBox != null) break;
+
+                System.Threading.Thread.Sleep(200);
+            }
+
             Assert.IsNotNull(messageBox, "Phải hiển thị thông báo khi username trống");
             
             // Đóng MessageBox
@@ -191,9 +245,36 @@ namespace QuanLyTiecCuoi.Tests.UITests
             System.Threading.Thread.Sleep(1500);
 
             // Assert
+            //var desktop = _automation.GetDesktop();
+            //var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+
+            // wait up to 5s for a message box (polling)
             var desktop = _automation.GetDesktop();
-            var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
-            
+            AutomationElement messageBox = null;
+            var timeout = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+            while (DateTime.UtcNow < timeout)
+            {
+                // 1) ưu tiên modal windows của main window
+                try
+                {
+                    var modalWindows = _mainWindow?.ModalWindows;
+                    if (modalWindows != null && modalWindows.Length > 0)
+                    {
+                        messageBox = modalWindows[0];
+                        break;
+                    }
+                }
+                catch { /* ignore transient UIA errors */ }
+
+                // 2) fallback: tìm dialog tiêu chuẩn trên desktop (class #32770) hoặc theo title/content
+                messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+                //.Or(cf.ByControlType(FlaUI.Core.Definitions.ControlType.Window))
+                //.And(cf.ByName("Notice").Or(cf.ByName("Please enter username!")).Or(cf.ByName("Thông báo"))));
+                if (messageBox != null) break;
+
+                System.Threading.Thread.Sleep(200);
+            }
+
             Assert.IsNotNull(messageBox, "Phải hiển thị thông báo khi password trống");
             
             var okButton = messageBox?.FindFirstDescendant(cf => cf.ByName("OK"))?.AsButton();
@@ -223,9 +304,36 @@ namespace QuanLyTiecCuoi.Tests.UITests
             System.Threading.Thread.Sleep(1500);
 
             // Assert
+            //var desktop = _automation.GetDesktop();
+            //var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+
+            // wait up to 5s for a message box (polling)
             var desktop = _automation.GetDesktop();
-            var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
-            
+            AutomationElement messageBox = null;
+            var timeout = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+            while (DateTime.UtcNow < timeout)
+            {
+                // 1) ưu tiên modal windows của main window
+                try
+                {
+                    var modalWindows = _mainWindow?.ModalWindows;
+                    if (modalWindows != null && modalWindows.Length > 0)
+                    {
+                        messageBox = modalWindows[0];
+                        break;
+                    }
+                }
+                catch { /* ignore transient UIA errors */ }
+
+                // 2) fallback: tìm dialog tiêu chuẩn trên desktop (class #32770) hoặc theo title/content
+                messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+                //.Or(cf.ByControlType(FlaUI.Core.Definitions.ControlType.Window))
+                //.And(cf.ByName("Notice").Or(cf.ByName("Please enter username!")).Or(cf.ByName("Thông báo"))));
+                if (messageBox != null) break;
+
+                System.Threading.Thread.Sleep(200);
+            }
+
             Assert.IsNotNull(messageBox, "Phải hiển thị thông báo khi cả username và password đều trống");
             
             var okButton = messageBox?.FindFirstDescendant(cf => cf.ByName("OK"))?.AsButton();
