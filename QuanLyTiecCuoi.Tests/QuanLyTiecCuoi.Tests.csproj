@@ -89,7 +89,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\TestHelper.cs" />
+    <Compile Include="IntegrationTests\BookingManagementIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UITests\BookingManagementWindowTests.cs" />
+    <Compile Include="UITests\Helpers\UITestHelper.cs" />
     <Compile Include="UITests\LoginWindowTests.cs" />
     <Compile Include="UnitTests\DTOs\BookingDTOTests.cs" />
     <Compile Include="UnitTests\Helpers\EmailValidationHelperTests.cs" />
@@ -98,12 +101,95 @@
     <Compile Include="UnitTests\Services\BookingServiceTests.cs" />
     <Compile Include="UnitTests\Services\HallServiceTests.cs" />
     <Compile Include="UnitTests\Validators\InputValidatorTests.cs" />
+    <Compile Include="UnitTests\ViewModels\AddWeddingViewModelTests.cs" />
     <Compile Include="UnitTests\ViewModels\LoginViewModelTests.cs" />
+    <Compile Include="UnitTests\ViewModels\WeddingViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="BR137_BR138_TEST_SUITE_README.md" />
+    <None Include="IMPLEMENTATION_SUMMARY.md" />
+    <None Include="INDEX.md" />
+    <None Include="manage-bookings-doc\TC_BR137_001.md" />
+    <None Include="manage-bookings-doc\TC_BR137_002.md" />
+    <None Include="manage-bookings-doc\TC_BR137_003.md" />
+    <None Include="manage-bookings-doc\TC_BR137_004.md" />
+    <None Include="manage-bookings-doc\TC_BR138_001.md" />
+    <None Include="manage-bookings-doc\TC_BR138_002.md" />
+    <None Include="manage-bookings-doc\TC_BR138_003.md" />
+    <None Include="manage-bookings-doc\TC_BR138_004.md" />
+    <None Include="manage-bookings-doc\TC_BR138_005.md" />
+    <None Include="manage-bookings-doc\TC_BR139_001.md" />
+    <None Include="manage-bookings-doc\TC_BR139_002.md" />
+    <None Include="manage-bookings-doc\TC_BR139_003.md" />
+    <None Include="manage-bookings-doc\TC_BR139_004.md" />
+    <None Include="manage-bookings-doc\TC_BR139_005.md" />
+    <None Include="manage-bookings-doc\TC_BR140_001.md" />
+    <None Include="manage-bookings-doc\TC_BR140_002.md" />
+    <None Include="manage-bookings-doc\TC_BR140_003.md" />
+    <None Include="manage-bookings-doc\TC_BR140_004.md" />
+    <None Include="manage-bookings-doc\TC_BR140_005.md" />
+    <None Include="manage-bookings-doc\TC_BR141_001.md" />
+    <None Include="manage-bookings-doc\TC_BR141_002.md" />
+    <None Include="manage-bookings-doc\TC_BR141_003.md" />
+    <None Include="manage-bookings-doc\TC_BR141_004.md" />
+    <None Include="manage-bookings-doc\TC_BR141_005.md" />
+    <None Include="manage-bookings-doc\TC_BR142_001.md" />
+    <None Include="manage-bookings-doc\TC_BR142_002.md" />
+    <None Include="manage-bookings-doc\TC_BR142_003.md" />
+    <None Include="manage-bookings-doc\TC_BR143_001.md" />
+    <None Include="manage-bookings-doc\TC_BR143_002.md" />
+    <None Include="manage-bookings-doc\TC_BR143_003.md" />
+    <None Include="manage-bookings-doc\TC_BR143_004.md" />
+    <None Include="manage-bookings-doc\TC_BR144_001.md" />
+    <None Include="manage-bookings-doc\TC_BR144_002.md" />
+    <None Include="manage-bookings-doc\TC_BR144_003.md" />
+    <None Include="manage-bookings-doc\TC_BR144_004.md" />
+    <None Include="manage-bookings-doc\TC_BR144_005.md" />
+    <None Include="manage-bookings-doc\TC_BR145_001.md" />
+    <None Include="manage-bookings-doc\TC_BR145_002.md" />
+    <None Include="manage-bookings-doc\TC_BR145_003.md" />
+    <None Include="manage-bookings-doc\TC_BR145_004.md" />
+    <None Include="manage-bookings-doc\TC_BR146_001.md" />
+    <None Include="manage-bookings-doc\TC_BR146_002.md" />
+    <None Include="manage-bookings-doc\TC_BR146_003.md" />
+    <None Include="manage-bookings-doc\TC_BR146_004.md" />
+    <None Include="manage-bookings-doc\TC_BR146_005.md" />
+    <None Include="manage-bookings-doc\TC_BR146_006.md" />
+    <None Include="manage-bookings-doc\TC_BR147_001.md" />
+    <None Include="manage-bookings-doc\TC_BR147_002.md" />
+    <None Include="manage-bookings-doc\TC_BR147_003.md" />
+    <None Include="manage-bookings-doc\TC_BR147_004.md" />
+    <None Include="manage-bookings-doc\TC_BR147_005.md" />
+    <None Include="manage-bookings-doc\TC_BR148_001.md" />
+    <None Include="manage-bookings-doc\TC_BR148_002.md" />
+    <None Include="manage-bookings-doc\TC_BR148_003.md" />
+    <None Include="manage-bookings-doc\TC_BR148_004.md" />
+    <None Include="manage-bookings-doc\TC_BR148_005.md" />
+    <None Include="manage-bookings-doc\TC_BR149_001.md" />
+    <None Include="manage-bookings-doc\TC_BR149_002.md" />
+    <None Include="manage-bookings-doc\TC_BR149_003.md" />
+    <None Include="manage-bookings-doc\TC_BR149_004.md" />
+    <None Include="manage-bookings-doc\TC_BR149_005.md" />
+    <None Include="manage-bookings-doc\TC_BR150_001.md" />
+    <None Include="manage-bookings-doc\TC_BR150_002.md" />
+    <None Include="manage-bookings-doc\TC_BR150_003.md" />
+    <None Include="manage-bookings-doc\TC_BR150_004.md" />
+    <None Include="manage-bookings-doc\TC_BR151_001.md" />
+    <None Include="manage-bookings-doc\TC_BR151_002.md" />
+    <None Include="manage-bookings-doc\TC_BR151_003.md" />
+    <None Include="manage-bookings-doc\TC_BR151_004.md" />
+    <None Include="manage-bookings-doc\TC_BR151_005.md" />
     <None Include="packages.config" />
     <None Include="test.runsettings" />
+    <None Include="test_case_list.md" />
+    <None Include="TEST_STRATEGY_BR137_BR138.md" />
+    <None Include="UITests\BOOKING_TESTS_FIX_STATUS.md" />
+    <None Include="UITests\BR137_BR138_UI_Test_Scenarios.md" />
+    <None Include="UITests\LOGIN_FIX_FINAL_SOLUTION.md" />
+    <None Include="UITests\MATERIALDESIGN_UI_TESTING_ISSUES.md" />
+    <None Include="UITests\QUICK_FIX_REFERENCE.md" />
+    <None Include="UITests\RUNNING_UI_TESTS.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuanLyTiecCuoi.csproj">
@@ -112,7 +198,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IntegrationTests\" />
     <Folder Include="TestData\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

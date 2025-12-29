@@ -433,5 +433,231 @@ namespace QuanLyTiecCuoi.Tests.UnitTests.Services
         }
 
         #endregion
+
+        #region BR137 - Staff Hall Availability Tests
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR137")]
+        [Description("TC_BR137_001: Verify GetAll returns halls for availability check")]
+        public void TC_BR137_001_GetAll_ReturnsHallsForAvailabilityCheck()
+        {
+            // Arrange
+            var halls = CreateSampleHalls();
+            _mockRepository.Setup(r => r.GetAll()).Returns(halls);
+
+            // Act
+            var result = _service.GetAll().ToList();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+            _mockRepository.Verify(r => r.GetAll(), Times.Once);
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR137")]
+        [Description("TC_BR137_004: Verify halls have capacity info for filter")]
+        public void TC_BR137_004_GetAll_HallsHaveCapacityInfo()
+        {
+            // Arrange
+            var halls = CreateSampleHalls();
+            _mockRepository.Setup(r => r.GetAll()).Returns(halls);
+
+            // Act
+            var result = _service.GetAll().ToList();
+
+            // Assert
+            foreach (var hall in result)
+            {
+                Assert.IsNotNull(hall.MaxTableCount);
+                Assert.IsTrue(hall.MaxTableCount > 0);
+            }
+        }
+
+        #endregion
+
+        #region BR138 - Query Available Halls Tests
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR138")]
+        [Description("TC_BR138_002: Verify hall details include name, type, capacity, pricing")]
+        public void TC_BR138_002_GetAll_ReturnsHallDetailsWithAllInfo()
+        {
+            // Arrange
+            var halls = CreateSampleHalls();
+            _mockRepository.Setup(r => r.GetAll()).Returns(halls);
+
+            // Act
+            var result = _service.GetAll().ToList();
+            var vipHall = result.FirstOrDefault(h => h.HallName == "S?nh Diamond");
+
+            // Assert
+            Assert.IsNotNull(vipHall);
+            Assert.AreEqual("S?nh Diamond", vipHall.HallName);
+            Assert.AreEqual(50, vipHall.MaxTableCount);
+            Assert.IsNotNull(vipHall.HallType);
+            Assert.AreEqual("VIP", vipHall.HallType.HallTypeName);
+            Assert.AreEqual(2000000, vipHall.HallType.MinTablePrice);
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR138")]
+        [Description("TC_BR138_002: Verify all halls have HallType and pricing")]
+        public void TC_BR138_002_GetAll_AllHallsHavePricing()
+        {
+            // Arrange
+            var halls = CreateSampleHalls();
+            _mockRepository.Setup(r => r.GetAll()).Returns(halls);
+
+            // Act
+            var result = _service.GetAll().ToList();
+
+            // Assert
+            foreach (var hall in result)
+            {
+                Assert.IsNotNull(hall.HallType, $"Hall {hall.HallName} should have HallType");
+                Assert.IsNotNull(hall.HallType.MinTablePrice, $"Hall {hall.HallName} should have MinTablePrice");
+                Assert.IsTrue(hall.HallType.MinTablePrice > 0, $"Hall {hall.HallName} MinTablePrice should be > 0");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR138")]
+        [Description("TC_BR138_003: Verify empty list when no halls exist")]
+        public void TC_BR138_003_GetAll_EmptyWhenNoHalls()
+        {
+            // Arrange
+            _mockRepository.Setup(r => r.GetAll()).Returns(new List<Hall>());
+
+            // Act
+            var result = _service.GetAll().ToList();
+
+            // Assert
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR138")]
+        [Description("TC_BR138_004: Verify GetById returns hall for booking creation")]
+        public void TC_BR138_004_GetById_ReturnsHallForBooking()
+        {
+            // Arrange
+            var hall = new Hall
+            {
+                HallId = 1,
+                HallName = "S?nh Diamond",
+                MaxTableCount = 50,
+                HallTypeId = 1,
+                HallType = new HallType
+                {
+                    HallTypeId = 1,
+                    HallTypeName = "VIP",
+                    MinTablePrice = 2000000
+                }
+            };
+            _mockRepository.Setup(r => r.GetById(1)).Returns(hall);
+
+            // Act
+            var result = _service.GetById(1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("S?nh Diamond", result.HallName);
+            Assert.AreEqual(50, result.MaxTableCount);
+            Assert.IsNotNull(result.HallType);
+            Assert.AreEqual(2000000, result.HallType.MinTablePrice);
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        [TestCategory("HallService")]
+        [TestCategory("BR138")]
+        [Description("TC_BR138_005: Verify hall info is complete for booking display")]
+        public void TC_BR138_005_GetAll_HallInfoCompleteForBookingDisplay()
+        {
+            // Arrange
+            var halls = CreateSampleHalls();
+            _mockRepository.Setup(r => r.GetAll()).Returns(halls);
+
+            // Act
+            var result = _service.GetAll().ToList();
+
+            // Assert
+            foreach (var hall in result)
+            {
+                // Verify all required fields for booking display are present
+                Assert.IsFalse(string.IsNullOrEmpty(hall.HallName), "HallName should not be empty");
+                Assert.IsNotNull(hall.MaxTableCount, "MaxTableCount should not be null");
+                Assert.IsNotNull(hall.HallType, "HallType should not be null");
+                Assert.IsFalse(string.IsNullOrEmpty(hall.HallType.HallTypeName), "HallTypeName should not be empty");
+            }
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private List<Hall> CreateSampleHalls()
+        {
+            return new List<Hall>
+            {
+                new Hall
+                {
+                    HallId = 1,
+                    HallName = "S?nh Diamond",
+                    MaxTableCount = 50,
+                    HallTypeId = 1,
+                    Note = "S?nh cao c?p nh?t",
+                    HallType = new HallType
+                    {
+                        HallTypeId = 1,
+                        HallTypeName = "VIP",
+                        MinTablePrice = 2000000
+                    }
+                },
+                new Hall
+                {
+                    HallId = 2,
+                    HallName = "S?nh Gold",
+                    MaxTableCount = 40,
+                    HallTypeId = 2,
+                    Note = "S?nh trung c?p",
+                    HallType = new HallType
+                    {
+                        HallTypeId = 2,
+                        HallTypeName = "Standard",
+                        MinTablePrice = 1500000
+                    }
+                },
+                new Hall
+                {
+                    HallId = 3,
+                    HallName = "S?nh Silver",
+                    MaxTableCount = 30,
+                    HallTypeId = 2,
+                    Note = "S?nh tiêu chu?n",
+                    HallType = new HallType
+                    {
+                        HallTypeId = 2,
+                        HallTypeName = "Standard",
+                        MinTablePrice = 1500000
+                    }
+                }
+            };
+        }
+
+        #endregion
     }
 }
