@@ -369,7 +369,7 @@
                                         <TextBlock
                                             Margin="20,0,0,0"
                                             HorizontalAlignment="Left"
-                                            Text="{Binding UnitPrice, StringFormat=N0}"
+                                            Text="{Binding UnitPrice}"
                                             TextAlignment="Left" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

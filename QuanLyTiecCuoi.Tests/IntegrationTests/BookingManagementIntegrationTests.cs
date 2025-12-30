@@ -45,6 +45,28 @@ namespace QuanLyTiecCuoi.Tests.IntegrationTests
             // DataProvider will be disposed by garbage collector
         }
 
+        private AddWeddingViewModel CreateAddWeddingViewModel()
+        {
+            var hallService = new HallService(new HallRepository());
+            var shiftService = new ShiftService(new ShiftRepository());
+            var bookingService = new BookingService(new BookingRepository());
+            var dishService = new DishService(new DishRepository());
+            var serviceService = new ServiceService(new ServiceRepository());
+            var menuService = new MenuService(new MenuRepository());
+            var serviceDetailService = new ServiceDetailService(new ServiceDetailRepository());
+            var parameterService = new ParameterService(new ParameterRepository());
+
+            return new AddWeddingViewModel(
+                hallService,
+                shiftService,
+                bookingService,
+                dishService,
+                serviceService,
+                menuService,
+                serviceDetailService,
+                parameterService);
+        }
+
         #region BR137 - Display Integration Tests
 
         [TestMethod]
@@ -264,6 +286,136 @@ namespace QuanLyTiecCuoi.Tests.IntegrationTests
                     Assert.IsFalse(string.IsNullOrEmpty(booking.Shift.ShiftName), "ShiftName should be present");
                 }
             }
+        }
+
+        #endregion
+
+        #region BR139 - Booking Creation Integration Tests
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [TestCategory("BR139")]
+        [Description("TC_BR139_001: Integration - Booking form loads hall and shift selections from availability context")]
+        public void TC_BR139_001_Integration_BookingForm_LoadsHallAndShiftSelections()
+        {
+            var viewModel = CreateAddWeddingViewModel();
+
+            if (viewModel.HallList.Count == 0 || viewModel.ShiftList.Count == 0)
+            {
+                Assert.Inconclusive("Hall or shift data not available in database");
+                return;
+            }
+
+            var hall = viewModel.HallList.First();
+            var shift = viewModel.ShiftList.First();
+            var targetDate = DateTime.Today.AddDays(7);
+
+            viewModel.SelectedHall = hall;
+            viewModel.SelectedShift = shift;
+            viewModel.WeddingDate = targetDate;
+
+            Assert.AreEqual(hall.HallId, viewModel.SelectedHall.HallId, "Selected hall should be pre-filled");
+            Assert.AreEqual(shift.ShiftId, viewModel.SelectedShift.ShiftId, "Selected shift should be pre-filled");
+            Assert.AreEqual(targetDate.Date, viewModel.WeddingDate.Value.Date, "Wedding date should be set");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [TestCategory("BR139")]
+        [Description("TC_BR139_002: Integration - Customer info fields exist and accept input")]
+        public void TC_BR139_002_Integration_BookingForm_HasCustomerInfoFields()
+        {
+            var viewModel = CreateAddWeddingViewModel();
+
+            viewModel.GroomName = "Groom Test";
+            viewModel.BrideName = "Bride Test";
+            viewModel.Phone = "0123456789";
+
+            Assert.AreEqual("Groom Test", viewModel.GroomName, "Groom name should be captured");
+            Assert.AreEqual("Bride Test", viewModel.BrideName, "Bride name should be captured");
+            Assert.AreEqual("0123456789", viewModel.Phone, "Phone should be captured");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [TestCategory("BR139")]
+        [Description("TC_BR139_003: Integration - Event section fields are available and can be pre-filled")]
+        public void TC_BR139_003_Integration_BookingForm_EventFields_CanBePrefilled()
+        {
+            var viewModel = CreateAddWeddingViewModel();
+
+            if (viewModel.HallList.Count == 0 || viewModel.ShiftList.Count == 0)
+            {
+                Assert.Inconclusive("Hall or shift data not available in database");
+                return;
+            }
+
+            var hall = viewModel.HallList.First();
+            var shift = viewModel.ShiftList.First();
+            var targetDate = DateTime.Today.AddDays(14);
+
+            viewModel.SelectedHall = hall;
+            viewModel.SelectedShift = shift;
+            viewModel.WeddingDate = targetDate;
+
+            Assert.IsNotNull(viewModel.SelectedHall, "Hall selection should be available");
+            Assert.IsNotNull(viewModel.SelectedShift, "Shift selection should be available");
+            Assert.IsTrue(viewModel.WeddingDate.HasValue, "Wedding date should be set");
+            Assert.AreEqual(hall.HallName, viewModel.SelectedHall.HallName, "Hall name should stay pre-filled");
+            Assert.AreEqual(shift.ShiftName, viewModel.SelectedShift.ShiftName, "Shift name should stay pre-filled");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [TestCategory("BR139")]
+        [Description("TC_BR139_004: Integration - Booking detail section supports table count, menu and service selection")]
+        public void TC_BR139_004_Integration_BookingForm_DetailsSection_AllowsSelections()
+        {
+            var viewModel = CreateAddWeddingViewModel();
+
+            viewModel.TableCount = "15";
+            viewModel.ReserveTableCount = "3";
+
+            viewModel.Dish = new DishDTO { DishId = 9991, DishName = "Integration Dish", UnitPrice = 150000m };
+            viewModel.MenuQuantity = "2";
+            viewModel.MenuNote = "No peanuts";
+
+            Assert.IsTrue(viewModel.AddMenuCommand.CanExecute(null), "Should be able to add menu item");
+            viewModel.AddMenuCommand.Execute(null);
+
+            viewModel.Service = new ServiceDTO { ServiceId = 8881, ServiceName = "Integration Service", UnitPrice = 500000m };
+            viewModel.ServiceQuantity = "1";
+            viewModel.ServiceNote = "Extra lighting";
+
+            Assert.IsTrue(viewModel.AddServiceCommand.CanExecute(null), "Should be able to add service item");
+            viewModel.AddServiceCommand.Execute(null);
+
+            Assert.AreEqual("15", viewModel.TableCount, "Table count should be captured");
+            Assert.AreEqual(1, viewModel.MenuList.Count, "Menu selection should be added");
+            Assert.AreEqual(1, viewModel.ServiceList.Count, "Service selection should be added");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [TestCategory("BR139")]
+        [Description("TC_BR139_005: Integration - Menu and service totals auto-calculate after selection")]
+        public void TC_BR139_005_Integration_BookingForm_Totals_AutoCalculate()
+        {
+            var viewModel = CreateAddWeddingViewModel();
+
+            viewModel.Dish = new DishDTO { DishId = 9992, DishName = "Dish Total", UnitPrice = 200000m };
+            viewModel.MenuQuantity = "3";
+            viewModel.AddMenuCommand.Execute(null);
+
+            viewModel.Service = new ServiceDTO { ServiceId = 8882, ServiceName = "Service Total", UnitPrice = 300000m };
+            viewModel.ServiceQuantity = "2";
+            viewModel.AddServiceCommand.Execute(null);
+
+            var expectedMenuTotal = 200000m * 3;
+            var expectedServiceTotal = 300000m * 2;
+
+            Assert.AreEqual(expectedMenuTotal, viewModel.MenuTotal, "Menu total should auto-calculate");
+            Assert.AreEqual(expectedServiceTotal, viewModel.ServiceTotal, "Service total should auto-calculate");
         }
 
         #endregion

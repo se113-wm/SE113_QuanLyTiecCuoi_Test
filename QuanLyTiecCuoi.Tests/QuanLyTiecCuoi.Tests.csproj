@@ -92,6 +92,9 @@
     <Compile Include="IntegrationTests\BookingManagementIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UITests\BookingManagementWindowTests.cs" />
+    <Compile Include="UITests\CreateBookingForCustomerUITests.cs" />
+    <Compile Include="UITests\FoodViewSearchUITests.cs" />
+    <Compile Include="UITests\FoodViewUITests.cs" />
     <Compile Include="UITests\Helpers\UITestHelper.cs" />
     <Compile Include="UITests\LoginWindowTests.cs" />
     <Compile Include="UnitTests\DTOs\BookingDTOTests.cs" />
@@ -108,6 +111,84 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="BR137_BR138_TEST_SUITE_README.md" />
+    <None Include="food-manage-doc\TC_BR73_001.md" />
+    <None Include="food-manage-doc\TC_BR73_002.md" />
+    <None Include="food-manage-doc\TC_BR73_003.md" />
+    <None Include="food-manage-doc\TC_BR73_004.md" />
+    <None Include="food-manage-doc\TC_BR73_005.md" />
+    <None Include="food-manage-doc\TC_BR74_001.md" />
+    <None Include="food-manage-doc\TC_BR74_002.md" />
+    <None Include="food-manage-doc\TC_BR74_003.md" />
+    <None Include="food-manage-doc\TC_BR74_004.md" />
+    <None Include="food-manage-doc\TC_BR74_005.md" />
+    <None Include="food-manage-doc\TC_BR75_001.md" />
+    <None Include="food-manage-doc\TC_BR75_002.md" />
+    <None Include="food-manage-doc\TC_BR75_003.md" />
+    <None Include="food-manage-doc\TC_BR75_004.md" />
+    <None Include="food-manage-doc\TC_BR75_005.md" />
+    <None Include="food-manage-doc\TC_BR76_001.md" />
+    <None Include="food-manage-doc\TC_BR76_002.md" />
+    <None Include="food-manage-doc\TC_BR76_003.md" />
+    <None Include="food-manage-doc\TC_BR76_004.md" />
+    <None Include="food-manage-doc\TC_BR77_001.md" />
+    <None Include="food-manage-doc\TC_BR77_002.md" />
+    <None Include="food-manage-doc\TC_BR77_003.md" />
+    <None Include="food-manage-doc\TC_BR77_004.md" />
+    <None Include="food-manage-doc\TC_BR77_005.md" />
+    <None Include="food-manage-doc\TC_BR77_006.md" />
+    <None Include="food-manage-doc\TC_BR78_001.md" />
+    <None Include="food-manage-doc\TC_BR78_002.md" />
+    <None Include="food-manage-doc\TC_BR78_003.md" />
+    <None Include="food-manage-doc\TC_BR78_004.md" />
+    <None Include="food-manage-doc\TC_BR78_005.md" />
+    <None Include="food-manage-doc\TC_BR78_006.md" />
+    <None Include="food-manage-doc\TC_BR79_001.md" />
+    <None Include="food-manage-doc\TC_BR79_002.md" />
+    <None Include="food-manage-doc\TC_BR79_003.md" />
+    <None Include="food-manage-doc\TC_BR79_004.md" />
+    <None Include="food-manage-doc\TC_BR80_001.md" />
+    <None Include="food-manage-doc\TC_BR80_002.md" />
+    <None Include="food-manage-doc\TC_BR80_003.md" />
+    <None Include="food-manage-doc\TC_BR80_004.md" />
+    <None Include="food-manage-doc\TC_BR80_005.md" />
+    <None Include="food-manage-doc\TC_BR80_006.md" />
+    <None Include="food-manage-doc\TC_BR81_001.md" />
+    <None Include="food-manage-doc\TC_BR81_002.md" />
+    <None Include="food-manage-doc\TC_BR81_003.md" />
+    <None Include="food-manage-doc\TC_BR81_004.md" />
+    <None Include="food-manage-doc\TC_BR81_005.md" />
+    <None Include="food-manage-doc\TC_BR81_006.md" />
+    <None Include="food-manage-doc\TC_BR82_001.md" />
+    <None Include="food-manage-doc\TC_BR82_002.md" />
+    <None Include="food-manage-doc\TC_BR82_003.md" />
+    <None Include="food-manage-doc\TC_BR82_004.md" />
+    <None Include="food-manage-doc\TC_BR83_001.md" />
+    <None Include="food-manage-doc\TC_BR83_002.md" />
+    <None Include="food-manage-doc\TC_BR83_003.md" />
+    <None Include="food-manage-doc\TC_BR83_004.md" />
+    <None Include="food-manage-doc\TC_BR84_001.md" />
+    <None Include="food-manage-doc\TC_BR84_002.md" />
+    <None Include="food-manage-doc\TC_BR84_003.md" />
+    <None Include="food-manage-doc\TC_BR85_001.md" />
+    <None Include="food-manage-doc\TC_BR85_002.md" />
+    <None Include="food-manage-doc\TC_BR85_003.md" />
+    <None Include="food-manage-doc\TC_BR85_004.md" />
+    <None Include="food-manage-doc\TC_BR85_005.md" />
+    <None Include="food-manage-doc\TC_BR86_001.md" />
+    <None Include="food-manage-doc\TC_BR86_002.md" />
+    <None Include="food-manage-doc\TC_BR86_003.md" />
+    <None Include="food-manage-doc\TC_BR86_004.md" />
+    <None Include="food-manage-doc\TC_BR87_001.md" />
+    <None Include="food-manage-doc\TC_BR87_002.md" />
+    <None Include="food-manage-doc\TC_BR87_003.md" />
+    <None Include="food-manage-doc\TC_BR87_004.md" />
+    <None Include="food-manage-doc\TC_BR88_001.md" />
+    <None Include="food-manage-doc\TC_BR88_002.md" />
+    <None Include="food-manage-doc\TC_BR88_003.md" />
+    <None Include="food-manage-doc\TC_BR88_004.md" />
+    <None Include="food-manage-doc\TC_BR88_005.md" />
+    <None Include="food-manage-doc\TC_BR88_006.md" />
+    <None Include="food-manage-doc\TC_BR88_007.md" />
     <None Include="IMPLEMENTATION_SUMMARY.md" />
     <None Include="INDEX.md" />
     <None Include="manage-bookings-doc\TC_BR137_001.md" />
@@ -199,6 +280,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestData\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="QuanLyTiecCuoi.sql" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
