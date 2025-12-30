@@ -12,7 +12,12 @@ namespace QuanLyTiecCuoi.Tests.UnitTests.ViewModels
 {
     /// <summary>
     /// Unit Tests for AddWeddingViewModel
-    /// Covers BR137/BR138 - Staff Hall Availability and Booking Creation
+    /// Covers BR137/BR138 - 
+    /// 
+    /// 
+    /// 
+    /// 
+    /// Hall Availability and Booking Creation
     /// </summary>
     [TestClass]
     public class AddWeddingViewModelTests
