@@ -543,10 +543,10 @@ namespace QuanLyTiecCuoi.ViewModel
 
         private void Reset()
         {
-            SelectedItem = null;
-            HallTypeName = string.Empty;
-            MinTablePrice = null;
-            SearchText = string.Empty;
+            //SelectedItem = null;
+            //HallTypeName = string.Empty;
+            //MinTablePrice = null;
+            //SearchText = string.Empty;
         }
         #endregion
     }
