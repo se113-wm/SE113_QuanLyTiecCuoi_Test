@@ -610,7 +610,7 @@ namespace QuanLyTiecCuoi.ViewModel
             {
                 if (SelectedItem != null)
                 {
-                    AddMessage = "Vui lòng nhập tên sảnh";
+                    //AddMessage = "Vui lòng nhập tên sảnh";
                 }
                 else
                 {

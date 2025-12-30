@@ -863,7 +863,7 @@ namespace QuanLyTiecCuoi.ViewModel
                     DishList = new ObservableCollection<DishDTO>(OriginalList.Where(x => !string.IsNullOrEmpty(x.DishName) && x.DishName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));
                     break;
                 case "Đơn giá":
-                    DishList = new ObservableCollection<DishDTO>(OriginalList.Where(x => x.UnitPrice.HasValue && x.UnitPrice.Value.ToString().Contains(SearchText)));
+                    DishList = OriginalList;
                     break;
                 case "Ghi chú":
                     DishList = new ObservableCollection<DishDTO>(OriginalList.Where(x => !string.IsNullOrEmpty(x.Note) && x.Note.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0));

@@ -125,14 +125,16 @@
                 CommandParameter="{Binding ElementName=MenuItemWindow}"
                 Content="Xác nhận"
                 IsDefault="True"
-                Style="{StaticResource MaterialDesignRaisedButton}" />
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                AutomationProperties.AutomationId="ConfirmSelectionButton" />
             <Button
                 Width="120"
                 Command="{Binding CancelCommand}"
                 CommandParameter="{Binding ElementName=MenuItemWindow}"
                 Content="Hủy"
                 IsCancel="True"
-                Style="{StaticResource MaterialDesignOutlinedButton}" />
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                AutomationProperties.AutomationId="CancelSelectionButton" />
         </StackPanel>
     </Grid>
 </Window>

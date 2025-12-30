@@ -201,15 +201,15 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding TenCa}"/>
+                                        <TextBlock Text="{Binding ShiftName}"/>
                                         <TextBlock Foreground="Gray"
                                                 Text=" ("/>
                                         <TextBlock Foreground="Gray"
-                                                Text="{Binding ThoiGianBatDauCa}"/>
+                                                Text="{Binding StartTime}"/>
                                         <TextBlock Foreground="Gray"
                                                 Text=" - "/>
                                         <TextBlock Foreground="Gray"
-                                                Text="{Binding ThoiGianKetThucCa}"/>
+                                                Text="{Binding EndTime}"/>
                                         <TextBlock Foreground="Gray"
                                                 Text=")"/>
                                     </StackPanel>
@@ -229,19 +229,19 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding TenSanh}"/>
+                                        <TextBlock Text="{Binding HallName}"/>
                                         <TextBlock Foreground="Gray"
                                                 Text=" | "/>
                                         <TextBlock Foreground="Gray"
                                                 Text="Tối đa: "/>
                                         <TextBlock Foreground="Gray"
-                                                Text="{Binding SoLuongBanToiDa}"/>
+                                                Text="{Binding MaxTableCount}"/>
                                         <TextBlock Foreground="Gray"
                                                 Text=" bàn | "/>
                                         <TextBlock Foreground="Gray"
                                                 Text="Đơn giá: "/>
                                         <TextBlock Foreground="Gray"
-                                                Text="{Binding LoaiSanh.MinTablePrice, StringFormat=N0}"/>
+                                                Text="{Binding HallType.MinTablePrice, StringFormat=N0}"/>
                                         <TextBlock Foreground="Gray"
                                                 Text="đ"/>
 
