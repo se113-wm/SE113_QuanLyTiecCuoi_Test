@@ -187,6 +187,125 @@ namespace QuanLyTiecCuoi.Tests.UITests.Helpers
         }
 
         /// <summary>
+        /// Perform login with credentials and handle success MessageBox + window re-acquisition
+        /// CRITICAL: After login success, the Login window closes and Main window opens
+        /// We MUST re-acquire the Main window reference!
+        /// </summary>
+        /// <returns>Main window after login, or null if failed</returns>
+        public Window PerformLoginAndReacquireMainWindow(Window loginWindow, string username, string password)
+        {
+            try
+            {
+                // 1. Find login controls
+                var txtUsername = loginWindow.FindFirstDescendant(cf => 
+                    cf.ByAutomationId("UsernameTextBox"))?.AsTextBox();
+                
+                var pwdPassword = loginWindow.FindFirstDescendant(cf => 
+                    cf.ByAutomationId("PasswordBox"));
+                
+                var btnLogin = loginWindow.FindFirstDescendant(cf => 
+                    cf.ByAutomationId("LoginButton"))?.AsButton();
+
+                // Check if already on main window (edge case)
+                if (txtUsername == null || pwdPassword == null || btnLogin == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Login controls not found - checking if already on main window");
+                    return loginWindow.FindFirstDescendant(cf => cf.ByAutomationId("WeddingButton")) != null 
+                        ? loginWindow : null;
+                }
+
+                // 2. Enter credentials
+                txtUsername.Text = username;
+                
+                // PasswordBox special handling
+                pwdPassword.Focus();
+                Thread.Sleep(200);
+                try
+                {
+                    var pwdTextBox = pwdPassword.AsTextBox();
+                    if (pwdTextBox != null)
+                    {
+                        pwdTextBox.Text = password;
+                    }
+                }
+                catch
+                {
+                    // Fallback
+                    System.Windows.Forms.SendKeys.SendWait(password);
+                }
+                
+                Thread.Sleep(500);
+                
+                // 3. Click login
+                btnLogin.Click();
+                Thread.Sleep(2000);
+
+                // 4. Handle Success MessageBox "Login successful!"
+                var messageBox = WaitForMessageBox(loginWindow, TimeSpan.FromSeconds(5));
+                if (messageBox != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("MessageBox found after login - clicking OK");
+                    CloseMessageBox(messageBox, "OK");
+                    Thread.Sleep(1000);
+                }
+
+                // 5. CRITICAL: Wait for Window Transition
+                // The Login window is closing; Main window is opening
+                Thread.Sleep(2000);
+
+                // 6. Re-acquire Main Window by finding WeddingButton
+                System.Diagnostics.Debug.WriteLine("Re-acquiring Main Window...");
+                var desktop = _automation.GetDesktop();
+                var appWindows = desktop.FindAllChildren(cf => cf.ByProcessId(_app.ProcessId));
+                
+                System.Diagnostics.Debug.WriteLine($"Found {appWindows.Length} windows for process");
+                
+                foreach (var window in appWindows)
+                {
+                    try
+                    {
+                        // Verify this is Main Window by finding WeddingButton
+                        var weddingButton = window.FindFirstDescendant(cf => cf.ByAutomationId("WeddingButton"));
+                        if (weddingButton != null)
+                        {
+                            var mainWindow = window.AsWindow();
+                            System.Diagnostics.Debug.WriteLine("Main Window re-acquired successfully!");
+                            return mainWindow;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error checking window: {ex.Message}");
+                    }
+                }
+
+                // Fallback: Try GetMainWindow
+                try
+                {
+                    var mainWindow = _app.GetMainWindow(_automation, TimeSpan.FromSeconds(3));
+                    var weddingButton = mainWindow.FindFirstDescendant(cf => cf.ByAutomationId("WeddingButton"));
+                    if (weddingButton != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Main Window acquired via GetMainWindow fallback");
+                        return mainWindow;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"GetMainWindow fallback failed: {ex.Message}");
+                }
+
+                System.Diagnostics.Debug.WriteLine("Could not re-acquire Main Window after login");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Login failed: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Set text in PasswordBox (requires special handling)
         /// </summary>
         public void SetPasswordBoxText(AutomationElement passwordBox, string password)
