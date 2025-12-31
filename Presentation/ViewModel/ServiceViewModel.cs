@@ -667,7 +667,7 @@ namespace QuanLyTiecCuoi.ViewModel
             var exists = OriginalList.Any(x => x.ServiceName == ServiceName && x.ServiceId != SelectedItem.ServiceId);
             if (exists)
             {
-                EditMessage = "Tên dịch vụ đã tồn tại";
+                //EditMessage = "Tên dịch vụ đã tồn tại";
                 return false;
             }
 
