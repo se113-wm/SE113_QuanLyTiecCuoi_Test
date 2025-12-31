@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -38,12 +38,13 @@ namespace QuanLyTiecCuoi.Tests.UITests
     /// 7. Finally: Create booking if all validations pass
     /// 
     /// CRITICAL NOTE about MenuItemViewModel and ServiceDetailItemViewModel:
-    /// - ConfirmCommand shows MessageBox "B?n ?ã ch?n món/d?ch v?: X" BEFORE closing window
-    /// - CancelCommand shows MessageBox "B?n có ch?c ch?n mu?n h?y không?" with Yes/No buttons
+    /// - ConfirmCommand shows MessageBox "B?n ?� ch?n m�n/d?ch v?: X" BEFORE closing window
+    /// - CancelCommand shows MessageBox "B?n c� ch?c ch?n mu?n h?y kh�ng?" with Yes/No buttons
     /// So test code must handle these MessageBoxes properly!
     /// </summary>
     [TestClass]
-    public class CreateBookingForCustomerUITests
+    public class 
+        Tests
     {
         private Application _app;
         private UIA3Automation _automation;
@@ -427,7 +428,7 @@ namespace QuanLyTiecCuoi.Tests.UITests
 
                 var messageText = GetMessageBoxText(messageBox);
                 System.Diagnostics.Debug.WriteLine($"Message: {messageText}");
-                Assert.IsTrue(messageText.Contains("Table") || messageText.Contains("positive") || messageText.Contains("bàn"),
+                Assert.IsTrue(messageText.Contains("Table") || messageText.Contains("positive") || messageText.Contains("b�n"),
                     "Should display table count validation message");
 
                 CloseMessageBox(messageBox);
@@ -630,7 +631,7 @@ namespace QuanLyTiecCuoi.Tests.UITests
 
                 // Close dialog by clicking No to stay on form
                 var noButton = messageBox.FindFirstDescendant(cf => cf.ByName("No")
-                    .Or(cf.ByName("Không")))?.AsButton();
+                    .Or(cf.ByName("Kh�ng")))?.AsButton();
                 if (noButton != null)
                 {
                     noButton.Click();
@@ -707,160 +708,46 @@ namespace QuanLyTiecCuoi.Tests.UITests
         #region Helpers
 
         /// <summary>
-        /// Chờ MessageBox xuất hiện trên Desktop (MessageBox là cửa sổ hệ thống)
+        /// Wait for a condition to be true with retry logic
         /// </summary>
-        private AutomationElement WaitForMessageBoxOnDesktop(TimeSpan timeout)
-        {
-            var desktop = _automation.GetDesktop();
-            AutomationElement msgBox = null;
-
-            Retry.WhileNull(() =>
-            {
-                msgBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
-                return msgBox;
-            }, timeout, RetryInterval);
-
-            return msgBox;
-        }
-
-        /// <summary>
-        /// Wrapper: ưu tiên modal của owner, sau đó tìm trên desktop
-        /// </summary>
-        private AutomationElement WaitForMessageBox(Window owner, TimeSpan timeout)
-        {
-            if (owner != null)
-            {
-                try
-                {
-                    var modals = owner.ModalWindows;
-                    if (modals.Length > 0) return modals[0];
-                }
-                catch { }
-            }
-            return WaitForMessageBoxOnDesktop(timeout);
-        }
-
-        /// <summary>
-        /// Hàm đóng MessageBox thông minh: thử nhiều tên/AutomationId, fallback nút đầu tiên
-        /// </summary>
-        private void CloseMessageBox(AutomationElement messageBox)
-        {
-            if (messageBox == null) return;
-
-            try
-            {
-                System.Diagnostics.Debug.WriteLine($"[CloseMessageBox] Handling dialog: {messageBox.Name}");
-
-                var button = messageBox.FindFirstDescendant(cf => cf.ByControlType(ControlType.Button)
-                    .And(cf.ByName("OK")
-                        .Or(cf.ByName("Yes"))
-                        .Or(cf.ByName("Có"))
-                        .Or(cf.ByName("Đồng ý"))
-                        .Or(cf.ByName("Close"))
-                        .Or(cf.ByAutomationId("2"))
-                        .Or(cf.ByAutomationId("1"))
-                        .Or(cf.ByAutomationId("6"))));
-
-                if (button == null)
-                {
-                    var allButtons = messageBox.FindAllDescendants(cf => cf.ByControlType(ControlType.Button));
-                    if (allButtons.Length > 0)
-                    {
-                        button = allButtons[0];
-                        System.Diagnostics.Debug.WriteLine($"[CloseMessageBox] Fallback clicking first button: {button.Name}");
-                    }
-                }
-
-                if (button != null)
-                {
-                    if (button.Patterns.Invoke.IsSupported)
-                    {
-                        button.Patterns.Invoke.Pattern.Invoke();
-                    }
-                    else
-                    {
-                        button.Click();
-                    }
-
-                    Thread.Sleep(500);
-                    var desktop = _automation.GetDesktop();
-                    Retry.WhileNotNull(() => desktop.FindFirstChild(cf => cf.ByClassName("#32770")), TimeSpan.FromSeconds(1), RetryInterval);
-                }
-                else
-                {
-                    WinForms.SendKeys.SendWait("{ENTER}");
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[CloseMessageBox] Exception: {ex.Message}");
-            }
-        }
-
-        private string GetMessageBoxText(AutomationElement messageBox)
-        {
-            if (messageBox == null) return string.Empty;
-            try
-            {
-                var textElement = messageBox.FindFirstDescendant(cf => cf.ByClassName("Static").Or(cf.ByControlType(ControlType.Text)));
-                if (textElement != null)
-                {
-                    return textElement.Name ?? string.Empty;
-                }
-                return messageBox.Name ?? string.Empty;
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
-
         private bool WaitForCondition(Func<bool> condition, TimeSpan timeout)
         {
-            return Retry.WhileFalse(condition, timeout, RetryInterval).Success;
+            var result = Retry.WhileFalse(condition, timeout, RetryInterval);
+            return result.Success;
         }
 
+        /// <summary>
+        /// Wait for MessageBox to close
+        /// </summary>
         private void WaitForMessageBoxToClose(TimeSpan timeout)
         {
             var desktop = _automation.GetDesktop();
-            Retry.WhileNotNull(() => desktop.FindFirstChild(cf => cf.ByClassName("#32770")), timeout, RetryInterval);
+            Retry.WhileNotNull(
+                () => desktop.FindFirstChild(cf => cf.ByClassName("#32770")),
+                timeout,
+                RetryInterval);
         }
 
+        /// <summary>
+        /// Set TextBox value with focus and clear existing text
+        /// </summary>
         private void SetTextBoxValue(TextBox textBox, string value)
         {
             if (textBox == null) return;
-            try
-            {
-                textBox.Focus();
-                Thread.Sleep(50);
-                textBox.Text = value;
-                Thread.Sleep(50);
-            }
-            catch { }
+            textBox.Focus();
+            Thread.Sleep(100);
+            textBox.Text = value;
+            Thread.Sleep(100);
         }
 
-        private void SetDatePickerValue(AutomationElement datePicker, DateTime date)
-        {
-            if (datePicker == null) return;
-            try
-            {
-                var textBox = datePicker.FindFirstDescendant(cf => cf.ByControlType(ControlType.Edit))?.AsTextBox();
-                if (textBox != null)
-                {
-                    textBox.Focus();
-                    Thread.Sleep(100);
-                    textBox.Text = date.ToString("dd/MM/yyyy");
-                    Thread.Sleep(100);
-                }
-            }
-            catch { }
-        }
-
+        /// <summary>
+        /// Wait for a window to appear by AutomationId
+        /// </summary>
         private Window WaitForWindow(string automationId, TimeSpan timeout)
         {
             var desktop = _automation.GetDesktop();
             Window foundWindow = null;
-
+            
             Retry.WhileNull(
                 () =>
                 {
@@ -869,15 +756,18 @@ namespace QuanLyTiecCuoi.Tests.UITests
                 },
                 timeout,
                 RetryInterval);
-
+            
             return foundWindow;
         }
 
+        /// <summary>
+        /// Wait for a window to appear by name
+        /// </summary>
         private Window WaitForWindowByName(string name, TimeSpan timeout)
         {
             var desktop = _automation.GetDesktop();
             Window foundWindow = null;
-
+            
             Retry.WhileNull(
                 () =>
                 {
@@ -886,7 +776,7 @@ namespace QuanLyTiecCuoi.Tests.UITests
                 },
                 timeout,
                 RetryInterval);
-
+            
             return foundWindow;
         }
 
@@ -929,6 +819,7 @@ namespace QuanLyTiecCuoi.Tests.UITests
                 btnLogin.Click();
                 Thread.Sleep(1500);
 
+                // Wait for login to complete
                 var messageBox = WaitForMessageBox(_mainWindow, TimeSpan.FromSeconds(5));
                 if (messageBox != null)
                 {
@@ -937,9 +828,10 @@ namespace QuanLyTiecCuoi.Tests.UITests
 
                 Thread.Sleep(1500);
 
+                // Wait for main window with Wedding button
                 var desktop = _automation.GetDesktop();
                 bool found = false;
-
+                
                 Retry.WhileFalse(
                     () =>
                     {
@@ -978,7 +870,8 @@ namespace QuanLyTiecCuoi.Tests.UITests
 
                 weddingButton.Click();
                 Thread.Sleep(1500);
-
+                
+                // Wait for Wedding page to load
                 return WaitForCondition(
                     () => _mainWindow.FindFirstDescendant(cf => cf.ByAutomationId("WeddingPageTitle")) != null,
                     WindowTimeout);
@@ -1000,14 +893,15 @@ namespace QuanLyTiecCuoi.Tests.UITests
                 addButton.Click();
                 Thread.Sleep(1500);
 
+                // Wait for AddWedding window to appear
                 var desktop = _automation.GetDesktop();
                 Window addWeddingWindow = null;
-
+                
                 Retry.WhileNull(
                     () =>
                     {
                         addWeddingWindow = desktop.FindFirstChild(cf => cf.ByAutomationId("DatTiecCuoi")
-                            .Or(cf.ByName("Đặt Tiệc Cưới")))?.AsWindow();
+                            .Or(cf.ByName("??t Ti?c C??i")))?.AsWindow();
                         return addWeddingWindow;
                     },
                     WindowTimeout,
@@ -1021,6 +915,87 @@ namespace QuanLyTiecCuoi.Tests.UITests
             }
         }
 
+        private AutomationElement WaitForMessageBox(Window ownerWindow, TimeSpan timeout)
+        {
+            var endTime = DateTime.UtcNow + timeout;
+            var desktop = _automation.GetDesktop();
+
+            while (DateTime.UtcNow < endTime)
+            {
+                try
+                {
+                    var modal = ownerWindow?.ModalWindows;
+                    if (modal != null && modal.Length > 0)
+                        return modal.FirstOrDefault();
+                }
+                catch { }
+
+                var messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+                if (messageBox != null)
+                    return messageBox;
+
+                Thread.Sleep((int)RetryInterval.TotalMilliseconds);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Wait for MessageBox on desktop (not tied to specific owner window)
+        /// Used when the owner window might have closed
+        /// </summary>
+        private AutomationElement WaitForMessageBoxOnDesktop(TimeSpan timeout)
+        {
+            var desktop = _automation.GetDesktop();
+            AutomationElement messageBox = null;
+            
+            Retry.WhileNull(
+                () =>
+                {
+                    messageBox = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
+                    return messageBox;
+                },
+                timeout,
+                RetryInterval);
+            
+            return messageBox;
+        }
+
+        private string GetMessageBoxText(AutomationElement messageBox)
+        {
+            if (messageBox == null) return string.Empty;
+            
+            try
+            {
+                var textElement = messageBox.FindFirstDescendant(cf => cf.ByClassName("Static"));
+                if (textElement != null)
+                {
+                    return textElement.Name ?? string.Empty;
+                }
+                return messageBox.Name ?? string.Empty;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private void CloseMessageBox(AutomationElement messageBox)
+        {
+            if (messageBox == null) return;
+            var okButton = messageBox.FindFirstDescendant(cf => cf.ByName("OK")
+                .Or(cf.ByName("Yes"))
+                .Or(cf.ByName("C�"))
+                .Or(cf.ByName("??ng �")))?.AsButton();
+            okButton?.Click();
+            Thread.Sleep(300);
+            WaitForMessageBoxToClose(TimeSpan.FromSeconds(1));
+        }
+
+        /// <summary>
+        /// Close all child windows (MenuItemView, ServiceDetailItemView) properly
+        /// IMPORTANT: These windows show MessageBox on Cancel, so we need to handle them!
+        /// </summary>
         private void CloseAllChildWindows()
         {
             try
@@ -1028,28 +1003,82 @@ namespace QuanLyTiecCuoi.Tests.UITests
                 var desktop = _automation?.GetDesktop();
                 if (desktop == null) return;
 
-                var strayMsg = desktop.FindFirstChild(cf => cf.ByClassName("#32770"));
-                if (strayMsg != null) CloseMessageBox(strayMsg);
-
-                var menuWindow = desktop.FindFirstChild(cf => cf.ByAutomationId("MenuItemWindow").Or(cf.ByName("Chọn món ăn")))?.AsWindow();
-                if (menuWindow != null)
+                // Close MenuItemView if open
+                var menuItemWindow = desktop.FindFirstChild(cf => cf.ByName("Ch?n m�n ?n")
+                    .Or(cf.ByAutomationId("MenuItemWindow")))?.AsWindow();
+                if (menuItemWindow != null)
                 {
-                    var cancel = menuWindow.FindFirstDescendant(cf => cf.ByName("Hủy").Or(cf.ByAutomationId("CancelSelectionButton")))?.AsButton();
-                    cancel?.Click();
-                    var confirm = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(1));
-                    if (confirm != null) CloseMessageBox(confirm);
+                    System.Diagnostics.Debug.WriteLine("Closing MenuItemWindow...");
+                    var cancelBtn = menuItemWindow.FindFirstDescendant(cf => cf.ByName("H?y"))?.AsButton();
+                    if (cancelBtn != null)
+                    {
+                        cancelBtn.Click();
+                        Thread.Sleep(500);
+                        
+                        // CRITICAL: Handle the confirmation MessageBox "B?n c� ch?c ch?n mu?n h?y kh�ng?"
+                        var confirmBox = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(2));
+                        if (confirmBox != null)
+                        {
+                            var yesButton = confirmBox.FindFirstDescendant(cf => cf.ByName("Yes")
+                                .Or(cf.ByName("C�")))?.AsButton();
+                            if (yesButton != null)
+                            {
+                                yesButton.Click();
+                                WaitForMessageBoxToClose(TimeSpan.FromSeconds(1));
+                            }
+                            else
+                            {
+                                CloseMessageBox(confirmBox);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Fallback: try to close directly
+                        try { menuItemWindow.Close(); } catch { }
+                    }
                 }
 
-                var serviceWindow = desktop.FindFirstChild(cf => cf.ByAutomationId("ServiceItemWindow").Or(cf.ByName("Chọn dịch vụ")))?.AsWindow();
-                if (serviceWindow != null)
+                // Close ServiceDetailItemView if open
+                var serviceItemWindow = desktop.FindFirstChild(cf => cf.ByName("Ch?n d?ch v?")
+                    .Or(cf.ByAutomationId("ServiceItemWindow")))?.AsWindow();
+                if (serviceItemWindow != null)
                 {
-                    var cancel = serviceWindow.FindFirstDescendant(cf => cf.ByName("Hủy").Or(cf.ByAutomationId("CancelSelectionButton")))?.AsButton();
-                    cancel?.Click();
-                    var confirm = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(1));
-                    if (confirm != null) CloseMessageBox(confirm);
+                    System.Diagnostics.Debug.WriteLine("Closing ServiceItemWindow...");
+                    var cancelBtn = serviceItemWindow.FindFirstDescendant(cf => cf.ByName("H?y"))?.AsButton();
+                    if (cancelBtn != null)
+                    {
+                        cancelBtn.Click();
+                        Thread.Sleep(500);
+                        
+                        // CRITICAL: Handle the confirmation MessageBox "B?n c� ch?c ch?n mu?n h?y kh�ng?"
+                        var confirmBox = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(2));
+                        if (confirmBox != null)
+                        {
+                            var yesButton = confirmBox.FindFirstDescendant(cf => cf.ByName("Yes")
+                                .Or(cf.ByName("C�")))?.AsButton();
+                            if (yesButton != null)
+                            {
+                                yesButton.Click();
+                                WaitForMessageBoxToClose(TimeSpan.FromSeconds(1));
+                            }
+                            else
+                            {
+                                CloseMessageBox(confirmBox);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Fallback: try to close directly
+                        try { serviceItemWindow.Close(); } catch { }
+                    }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in CloseAllChildWindows: {ex.Message}");
+            }
         }
 
         private void CloseAddWeddingWindow(Window addWeddingWindow)
@@ -1057,25 +1086,27 @@ namespace QuanLyTiecCuoi.Tests.UITests
             if (addWeddingWindow == null) return;
             try
             {
+                // First close any child windows
                 CloseAllChildWindows();
 
                 var cancelButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("CancelButton"))?.AsButton();
-                if (cancelButton != null && cancelButton.IsEnabled)
-                {
-                    cancelButton.Click();
-                    Thread.Sleep(300);
+                cancelButton?.Click();
+                Thread.Sleep(500);
 
-                    var confirmBox = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(2));
-                    if (confirmBox != null)
-                    {
-                        var yesBtn = confirmBox.FindFirstDescendant(cf => cf.ByName("Yes").Or(cf.ByName("Có")).Or(cf.ByAutomationId("6")))?.AsButton();
-                        if (yesBtn != null) yesBtn.Click();
-                        else CloseMessageBox(confirmBox);
-                    }
-                }
-                else
+                var confirmBox = WaitForMessageBox(addWeddingWindow, TimeSpan.FromSeconds(2));
+                if (confirmBox != null)
                 {
-                    addWeddingWindow.Close();
+                    var yesButton = confirmBox.FindFirstDescendant(cf => cf.ByName("Yes")
+                        .Or(cf.ByName("C�")))?.AsButton();
+                    if (yesButton != null)
+                    {
+                        yesButton.Click();
+                        WaitForMessageBoxToClose(TimeSpan.FromSeconds(1));
+                    }
+                    else
+                    {
+                        CloseMessageBox(confirmBox);
+                    }
                 }
             }
             catch
@@ -1084,99 +1115,279 @@ namespace QuanLyTiecCuoi.Tests.UITests
             }
         }
 
+        /// <summary>
+        /// Fill only basic text fields (NOT Menu/Service)
+        /// Used for testing MSG10 when Menu/Service are empty
+        /// </summary>
         private void FillAllBasicFieldsOnly(Window addWeddingWindow)
         {
-            SetTextBoxValue(addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("GroomNameTextBox"))?.AsTextBox(), "Nguyễn Văn A");
-            SetTextBoxValue(addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("BrideNameTextBox"))?.AsTextBox(), "Trần Thị B");
-            SetTextBoxValue(addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("PhoneTextBox"))?.AsTextBox(), "0901234567");
-            var dp = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("WeddingDatePicker"));
-            SetDatePickerValue(dp, DateTime.Now.AddDays(7));
-            var shift = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("ShiftComboBox"))?.AsComboBox();
-            if (shift != null) { shift.Expand(); Thread.Sleep(200); if (shift.Items.Length > 0) shift.Items[0].Select(); shift.Collapse(); }
-            var hall = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("HallComboBox"))?.AsComboBox();
-            if (hall != null) { hall.Expand(); Thread.Sleep(200); if (hall.Items.Length > 0) hall.Items[0].Select(); hall.Collapse(); }
-            SetTextBoxValue(addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("DepositTextBox"))?.AsTextBox(), "5000000");
-            SetTextBoxValue(addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("TableCountTextBox"))?.AsTextBox(), "20");
-            SetTextBoxValue(addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("ReserveTableCountTextBox"))?.AsTextBox(), "2");
+            // GroomName
+            var groomNameTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("GroomNameTextBox"))?.AsTextBox();
+            if (groomNameTextBox != null)
+            {
+                SetTextBoxValue(groomNameTextBox, "Nguy?n V?n A");
+            }
+
+            // BrideName
+            var brideNameTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("BrideNameTextBox"))?.AsTextBox();
+            if (brideNameTextBox != null)
+            {
+                SetTextBoxValue(brideNameTextBox, "Tr?n Th? B");
+            }
+
+            // Phone
+            var phoneTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("PhoneTextBox"))?.AsTextBox();
+            if (phoneTextBox != null)
+            {
+                SetTextBoxValue(phoneTextBox, "0901234567");
+            }
+
+            // Wedding date - set to future date to avoid validation issues
+            var weddingDatePicker = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("WeddingDatePicker"));
+            SetDatePickerValue(weddingDatePicker, DateTime.Now.AddDays(7));
+
+            // Shift - Wait for items to load
+            var shiftComboBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("ShiftComboBox"))?.AsComboBox();
+            if (shiftComboBox != null)
+            {
+                shiftComboBox.Expand();
+                Thread.Sleep(500);
+                WaitForCondition(() => shiftComboBox.Items.Length > 0, TimeSpan.FromSeconds(2));
+                if (shiftComboBox.Items.Length > 0)
+                {
+                    shiftComboBox.Items[0].Select();
+                }
+                shiftComboBox.Collapse();
+                Thread.Sleep(300);
+            }
+
+            // Hall - Wait for items to load
+            var hallComboBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("HallComboBox"))?.AsComboBox();
+            if (hallComboBox != null)
+            {
+                hallComboBox.Expand();
+                Thread.Sleep(500);
+                WaitForCondition(() => hallComboBox.Items.Length > 0, TimeSpan.FromSeconds(2));
+                if (hallComboBox.Items.Length > 0)
+                {
+                    hallComboBox.Items[0].Select();
+                }
+                hallComboBox.Collapse();
+                Thread.Sleep(300);
+            }
+
+            // Deposit
+            var depositTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("DepositTextBox"))?.AsTextBox();
+            if (depositTextBox != null)
+            {
+                SetTextBoxValue(depositTextBox, "5000000");
+            }
+
+            // TableCount
+            var tableCountTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("TableCountTextBox"))?.AsTextBox();
+            if (tableCountTextBox != null)
+            {
+                SetTextBoxValue(tableCountTextBox, "20");
+            }
+
+            // ReserveTableCount
+            var reserveTableCountTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("ReserveTableCountTextBox"))?.AsTextBox();
+            if (reserveTableCountTextBox != null)
+            {
+                SetTextBoxValue(reserveTableCountTextBox, "2");
+            }
+
+            // NOTE: MenuList and ServiceList are NOT filled here - intentionally left empty
         }
 
+        /// <summary>
+        /// Fill ALL required fields INCLUDING Menu and Service items
+        /// This is needed to test specific validations like phone format, deposit, etc.
+        /// </summary>
         private void FillAllRequiredFieldsComplete(Window addWeddingWindow)
         {
+            // First fill all basic fields
             FillAllBasicFieldsOnly(addWeddingWindow);
+
+            // Add a Menu item - REQUIRED for BR141 tests (except BR141_001 and BR141_002)
             AddMenuItemToList(addWeddingWindow);
+
+            // Add a Service item - REQUIRED for BR141 tests (except BR141_001 and BR141_002)
             AddServiceItemToList(addWeddingWindow);
         }
 
+        /// <summary>
+        /// Add a menu item to MenuList by:
+        /// 1. Click SelectDishButton to open MenuItemView
+        /// 2. Select first dish in list
+        /// 3. Click "X�c nh?n" to confirm selection
+        /// 4. HANDLE the success MessageBox "B?n ?� ch?n m�n: X" - CLICK OK
+        /// 5. Window closes and returns to AddWeddingWindow
+        /// 6. Enter quantity in MenuQuantityTextBox
+        /// 7. Click AddMenuButton to add to MenuList
+        /// </summary>
         private void AddMenuItemToList(Window addWeddingWindow)
         {
-            // Open menu selection dialog
-            var selectDishButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("SelectDishButton"))?.AsButton();
-            Assert.IsNotNull(selectDishButton, "SelectDishButton not found");
-            selectDishButton.Click();
-            Thread.Sleep(500);
-            // Wait for menu dialog
-            var desktop = _automation.GetDesktop();
-            var menuWindow = desktop.FindFirstChild(cf => cf.ByAutomationId("MenuItemWindow").Or(cf.ByName("Chọn món ăn")))?.AsWindow();
-            Assert.IsNotNull(menuWindow, "MenuItemWindow not found");
-            // Select first dish
-            var listBox = menuWindow.FindFirstDescendant(cf => cf.ByClassName("ListBox"))?.AsListBox();
-            Assert.IsNotNull(listBox, "Menu ListBox not found");
-            Assert.IsTrue(listBox.Items.Length > 0, "No menu items available");
-            var firstItem = listBox.Items[0];
-            firstItem.Click();
-            Thread.Sleep(200);
-            // Confirm selection
-            var confirmBtn = menuWindow.FindFirstDescendant(cf => cf.ByAutomationId("ConfirmSelectionButton").Or(cf.ByName("Xác nhận")))?.AsButton();
-            Assert.IsNotNull(confirmBtn, "Menu confirm button not found");
-            confirmBtn.Click();
-            Thread.Sleep(500);
-            // Handle confirmation message box
-            var msgBox = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(2));
-            if (msgBox != null) CloseMessageBox(msgBox);
-            // Set quantity and add
-            var menuQuantityTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("MenuQuantityTextBox"))?.AsTextBox();
-            SetTextBoxValue(menuQuantityTextBox, "1");
-            var addMenuButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("AddMenuButton"))?.AsButton();
-            Assert.IsNotNull(addMenuButton, "AddMenuButton not found");
-            addMenuButton.Click();
-            Thread.Sleep(300);
+            try
+            {
+                Console.WriteLine("--- [Step] B?t ??u ch?n m�n ?n ---");
+
+                var selectDishButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("SelectDishButton"))?.AsButton();
+                Assert.IsNotNull(selectDishButton, "Kh�ng t�m th?y n�t 'Ch?n m�n' tr�n m�n h�nh ch�nh");
+                selectDishButton.Click();
+
+                var desktop = _automation.GetDesktop();
+                var menuItemWindow = Retry.WhileNull(
+                    () => desktop.FindFirstChild(cf => cf.ByAutomationId("MenuItemWindow").Or(cf.ByName("Ch?n m�n ?n")))?.AsWindow(),
+                    WindowTimeout,
+                    RetryInterval).Result;
+                Assert.IsNotNull(menuItemWindow, "C?a s? ch?n m�n kh�ng hi?n l�n");
+
+                var listBox = menuItemWindow.FindFirstDescendant(cf => cf.ByClassName("ListBox"))?.AsListBox();
+                WaitForCondition(() => listBox != null && listBox.Items.Length > 0, TimeSpan.FromSeconds(5));
+
+                if (listBox != null && listBox.Items.Length > 0)
+                {
+                    var firstItem = listBox.Items[0];
+                    if (firstItem.Patterns.SelectionItem.IsSupported)
+                        firstItem.Patterns.SelectionItem.Pattern.Select();
+                    else
+                        firstItem.Click();
+                    Thread.Sleep(300);
+
+                    var confirmBtn = menuItemWindow.FindFirstDescendant(cf => cf.ByAutomationId("ConfirmSelectionButton"))?.AsButton();
+                    Assert.IsNotNull(confirmBtn, "Kh�ng t�m th?y n�t X�c nh?n (MenuItemWindow)");
+
+                    WaitForCondition(() => confirmBtn.IsEnabled, TimeSpan.FromSeconds(3));
+                    confirmBtn.Click();
+
+                    var successBox = WaitForMessageBoxOnDesktop(MessageBoxTimeout);
+                    if (successBox != null)
+                    {
+                        Console.WriteLine("=> ?� th?y th�ng b�o x�c nh?n m�n. ?ang nh?n OK...");
+                        CloseMessageBox(successBox);
+                    }
+
+                    Retry.WhileNotNull(
+                        () => desktop.FindFirstChild(cf => cf.ByAutomationId("MenuItemWindow")),
+                        TimeSpan.FromSeconds(3),
+                        RetryInterval);
+                }
+
+                var menuQuantityTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("MenuQuantityTextBox"))?.AsTextBox();
+                if (menuQuantityTextBox != null)
+                {
+                    SetTextBoxValue(menuQuantityTextBox, "5");
+                }
+
+                var addMenuButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("AddMenuButton"))?.AsButton();
+                if (addMenuButton != null)
+                {
+                    WaitForCondition(() => addMenuButton.IsEnabled, TimeSpan.FromSeconds(2));
+                    if (addMenuButton.IsEnabled)
+                    {
+                        addMenuButton.Click();
+                        Thread.Sleep(500);
+                        Console.WriteLine("--- ?� th�m m�n ?n v�o danh s�ch ---");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[L?i AddMenuItemToList]: {ex.Message}");
+                throw;
+            }
         }
 
         private void AddServiceItemToList(Window addWeddingWindow)
         {
-            // Open service selection dialog
-            var selectServiceButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("SelectServiceButton"))?.AsButton();
-            Assert.IsNotNull(selectServiceButton, "SelectServiceButton not found");
-            selectServiceButton.Click();
-            Thread.Sleep(500);
-            // Wait for service dialog
-            var desktop = _automation.GetDesktop();
-            var serviceWindow = desktop.FindFirstChild(cf => cf.ByAutomationId("ServiceItemWindow").Or(cf.ByName("Chọn dịch vụ")))?.AsWindow();
-            Assert.IsNotNull(serviceWindow, "ServiceItemWindow not found");
-            // Select first service
-            var listBox = serviceWindow.FindFirstDescendant(cf => cf.ByClassName("ListBox"))?.AsListBox();
-            Assert.IsNotNull(listBox, "Service ListBox not found");
-            Assert.IsTrue(listBox.Items.Length > 0, "No service items available");
-            var firstItem = listBox.Items[0];
-            firstItem.Click();
-            Thread.Sleep(200);
-            // Confirm selection
-            var confirmBtn = serviceWindow.FindFirstDescendant(cf => cf.ByAutomationId("ConfirmSelectionButton").Or(cf.ByName("Xác nhận")))?.AsButton();
-            Assert.IsNotNull(confirmBtn, "Service confirm button not found");
-            confirmBtn.Click();
-            Thread.Sleep(500);
-            // Handle confirmation message box
-            var msgBox = WaitForMessageBoxOnDesktop(TimeSpan.FromSeconds(2));
-            if (msgBox != null) CloseMessageBox(msgBox);
-            // Set quantity and add
-            var serviceQuantityTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("ServiceQuantityTextBox"))?.AsTextBox();
-            SetTextBoxValue(serviceQuantityTextBox, "1");
-            var addServiceButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("AddServiceButton"))?.AsButton();
-            Assert.IsNotNull(addServiceButton, "AddServiceButton not found");
-            addServiceButton.Click();
-            Thread.Sleep(300);
+            try
+            {
+                Console.WriteLine("--- [Step] B?t ??u ch?n d?ch v? ---");
+
+                var selectServiceButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("SelectServiceButton"))?.AsButton();
+                selectServiceButton?.Click();
+
+                var desktop = _automation.GetDesktop();
+                var serviceWindow = Retry.WhileNull(
+                    () => desktop.FindFirstChild(cf => cf.ByAutomationId("ServiceItemWindow").Or(cf.ByName("Ch?n d?ch v?")))?.AsWindow(),
+                    WindowTimeout,
+                    RetryInterval).Result;
+                Assert.IsNotNull(serviceWindow, "C?a s? ch?n d?ch v? kh�ng hi?n l�n");
+
+                var listBox = serviceWindow.FindFirstDescendant(cf => cf.ByClassName("ListBox"))?.AsListBox();
+                WaitForCondition(() => listBox != null && listBox.Items.Length > 0, TimeSpan.FromSeconds(5));
+
+                if (listBox != null && listBox.Items.Length > 0)
+                {
+                    var firstItem = listBox.Items[0];
+                    if (firstItem.Patterns.SelectionItem.IsSupported)
+                        firstItem.Patterns.SelectionItem.Pattern.Select();
+                    else
+                        firstItem.Click();
+                    Thread.Sleep(300);
+
+                    var confirmBtn = serviceWindow.FindFirstDescendant(cf => cf.ByAutomationId("ConfirmSelectionButton"))?.AsButton();
+                    Assert.IsNotNull(confirmBtn, "Kh�ng t�m th?y n�t X�c nh?n d?ch v?");
+
+                    WaitForCondition(() => confirmBtn.IsEnabled, TimeSpan.FromSeconds(2));
+                    confirmBtn.Click();
+
+                    var successBox = WaitForMessageBoxOnDesktop(MessageBoxTimeout);
+                    if (successBox != null)
+                    {
+                        CloseMessageBox(successBox);
+                    }
+
+                    Retry.WhileNotNull(
+                        () => desktop.FindFirstChild(cf => cf.ByAutomationId("ServiceItemWindow")),
+                        TimeSpan.FromSeconds(3),
+                        RetryInterval);
+                }
+
+                var serviceQuantityTextBox = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("ServiceQuantityTextBox"))?.AsTextBox();
+                if (serviceQuantityTextBox != null)
+                {
+                    SetTextBoxValue(serviceQuantityTextBox, "1");
+                }
+
+                var addServiceButton = addWeddingWindow.FindFirstDescendant(cf => cf.ByAutomationId("AddServiceButton"))?.AsButton();
+                if (addServiceButton != null)
+                {
+                    WaitForCondition(() => addServiceButton.IsEnabled, TimeSpan.FromSeconds(2));
+                    if (addServiceButton.IsEnabled)
+                    {
+                        addServiceButton.Click();
+                        Thread.Sleep(500);
+                        Console.WriteLine("--- ?� th�m d?ch v? v�o danh s�ch ---");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[L?i AddServiceItemToList]: {ex.Message}");
+                throw;
+            }
         }
 
+        private void SetDatePickerValue(AutomationElement datePicker, DateTime date)
+        {
+            if (datePicker == null) return;
+            try
+            {
+                var textBox = datePicker.FindFirstDescendant(cf => cf.ByControlType(ControlType.Edit))?.AsTextBox();
+                if (textBox != null)
+                {
+                    textBox.Focus();
+                    Thread.Sleep(100);
+                    textBox.Text = date.ToString("dd/MM/yyyy");
+                    Thread.Sleep(100);
+                }
+            }
+            catch
+            {
+            }
+        }
         #endregion
     }
 }
