@@ -88,6 +88,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateBookingForCustomerUITests.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="IntegrationTests\BookingManagementIntegrationTests.cs" />
     <Compile Include="IntegrationTests\DishManagementIntegrationTests.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="SystemTests\Scenario2_BookingValidation_SystemTest.cs" />
     <Compile Include="SystemTests\Scenario3_CancellationPenalty_SystemTest.cs" />
     <Compile Include="SystemTests\Scenario4_DataIntegration_SystemTest.cs" />
+    <Compile Include="UITests\BookingManagementTests_BR146_151.cs" />
     <Compile Include="UITests\BookingManagementWindowTests.cs" />
     <Compile Include="UITests\DishManagementWindowTests.cs" />
     <Compile Include="UITests\HallManagementWindowTests.cs" />
